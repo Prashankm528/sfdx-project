@@ -5,6 +5,9 @@
         "paths": {
             "c/contactCreator": [
                 "contactCreator/contactCreator.js"
+            ],
+            "c/contactList": [
+                "contactList/contactList.js"
             ]
         }
     },
