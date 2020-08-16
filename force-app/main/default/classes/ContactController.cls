@@ -4,7 +4,8 @@ public with sharing class ContactController {
     }
 
     @AuraEnabled(cacheable = true)
-    public static List<contact> getContacts(){
-        return [SELECT Id,  FirstName, LastName, Email From Contact WITH SECURITY_ENFORCED];
+    public static List<contact> getContacts(string ContactId){
+        // return [SELECT Id,  FirstName, LastName, Email From Contact WITH SECURITY_ENFORCED];
+        throw new AuraHandledException('Forced error');
     }
 }
