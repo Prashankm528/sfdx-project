@@ -1,0 +1,56 @@
+step1 : create messageChannels folder in default
+
+step 2: Record_Selected.messageChannel-meta.xml
+
+step3: <?xml version="1.0" encoding="UTF-8" ?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <masterLabel>RecordSelected</masterLabel>
+    <isExposed>true</isExposed>
+    <description>Message Channel to pass a record Id</description>
+    <lightningMessageFields>
+        <fieldName>recordId</fieldName>
+        <description>This is the record Id that changed</description>
+    </lightningMessageFields>
+</LightningMessageChannel>
+
+step 4: Publish :
+		import { publish, MessageContext } from 'lightning/messageService';
+		import RECORD_SELECTED_CHANNEL from '@salesforce/messageChannel/Record_Selected__c';
+		
+		@wire(MessageContext)
+		messageContext;
+		
+		handleContactSelect(event) {
+        const payload = { recordId: event.target.contact.Id };
+
+        publish(this.messageContext, RECORD_SELECTED_CHANNEL, payload);
+    }
+	
+step 4 : subscribe:
+		import {subscribe,unsubscribe,APPLICATION_SCOPE,MessageContext} from 'lightning/messageService';
+		import recordSelected from '@salesforce/messageChannel/Record_Selected__c';
+		
+		 @wire(MessageContext)
+		  messageContext;
+		  
+		  connectedCallback() {
+			this.subscribeToMessageChannel();
+    }
+	disconnectedCallback() {
+        this.unsubscribeToMessageChannel();
+    }
+	
+	subscribeToMessageChannel() {
+        if (!this.subscription) {
+            this.subscription = subscribe(
+                this.messageContext,
+                recordSelected,
+                (message) => this.handleMessage(message),
+                { scope: APPLICATION_SCOPE }
+            );
+        }
+    }
+	
+	handleMessage(message) {
+        this.recordId = message.recordId;
+    }
