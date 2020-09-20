@@ -1,0 +1,8 @@
+<template>
+    <lightning-card title="lmsPublisher">
+        
+        <template for:each={conlist} for:item="con">
+            <a key={con.Id} data-recordid={con.Id} onclick={handleRecordId}>{con.FirstName}</a>
+        </template>
+    </lightning-card>
+</template>
