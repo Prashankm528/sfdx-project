@@ -1,0 +1,44 @@
+<template>
+    <div>
+        <lightning-input label="Contact" value={contactName} ></lightning-input>
+        
+    </div>
+    <br/><br/>
+    <div class=" slds-box_xx-small">
+        <p style="background-color: grey;">Create Contact</p>
+      </div>
+    <div class="slds-align_absolute-center">
+        <lightning-layout>
+            <lightning-layout-item padding="around-small">
+                <div class="header-column">
+                    <p >First Name</p>
+                    <lightning-input class="inp" name="firstName" onchange={handleFirstName} ></lightning-input>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small">
+                <div class="header-column">
+                    <p >Last Name</p>
+                    <lightning-input class="inp" type="text" name="lastName" onchange={handleLastName}></lightning-input>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small">
+                <div class="header-column">
+                    <p >email</p>
+                    <lightning-input class="inp" type="Email" name="emailValue" onchange={handleEmail} ></lightning-input>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small">
+                <div class="header-column">
+                    <p >Phone</p>
+                    <lightning-input  class="inp" type="phone" name="Phone" onchange={handlePhone} ></lightning-input>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+
+    <div class="slds-align_absolute-center">
+        <lightning-button variant="brand" label="Next" onclick={handleClick} ></lightning-button>
+    </div>
+   
+
+</template>

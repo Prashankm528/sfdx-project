@@ -1,0 +1,14 @@
+<template>
+    <lightning-tabset active-tab-value = "">
+        <lightning-tab label="Customer Details" icon-name="standard:client" value="one">
+            <c-customer-details case-id={recordId} onnext={nextHandler}></c-customer-details>
+        </lightning-tab>
+       
+        <lightning-tab label="Shipping Details" icon-name="standard:address" value="two" >
+           <c-shipping-details ></c-shipping-details>
+        </lightning-tab>
+        <lightning-tab label="Review Order" icon-name="standard:approval" >
+           
+        </lightning-tab>
+    </lightning-tabset>
+</template>

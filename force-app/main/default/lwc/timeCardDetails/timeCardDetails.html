@@ -1,0 +1,22 @@
+<template>
+    <div class="slds-p-bottom_large slds-p-left_large" style="background-color: white">
+
+     
+        <div class="slds-box">
+            <p>ERP Portal</p>
+            </div>
+    
+        <lightning-input type="date" label="Date" onchange={fromChangeDateHandler}></lightning-input> 
+        <lightning-input type="text" label="Employee" value={emp} disabled></lightning-input> 
+        <lightning-input type="text" label="Month" onchange={month} disabled></lightning-input>
+        <lightning-input type="number" label="Time" onchange={getTime} ></lightning-input>
+        <lightning-combobox
+                name="progress"
+                label="Type"
+                value={value}
+                placeholder="Select Progress"
+                options={options}
+                onchange={typehandleChange} ></lightning-combobox> <br/>
+        <lightning-button variant="brand" label="Submit"  onclick={handleClick} ></lightning-button>
+        </div>
+</template>

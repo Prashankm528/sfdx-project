@@ -1,0 +1,53 @@
+<template>
+    <div class="slds-align_absolute-center">
+           
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+           
+             <thead>
+                 <tr >
+                     <th class="" scope="col">
+                         <div class="slds-truncate" title="">FirstName</div>
+                     </th>
+                     <th class="" scope="col">
+                         <div class="slds-truncate" title="case no">Last Name</div>
+                     </th>
+                     <th class="" scope="col">
+                        <div class="slds-truncate" title="">Email</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="">Gender</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="">Department</div>
+                    </th>
+                 </tr>
+             </thead>
+             <tbody>
+                 <template for:each={xyz} for:item="item" for:index="index">
+                     <tr key={item.Id}  >
+                        
+                         <td >
+                            <div>{item.FirstName}</div>
+                         </td>
+                         <td >
+                             <div>{item.LastName}</div>
+                         </td>
+                         <td >
+                            <div>{item.Email}</div>
+                        </td>
+                        <td >
+                            <div>{item.Gender}</div>
+                        </td>
+                        <td >
+                            <div>{item.Department}</div>
+                            
+                        </td>
+                        
+ 
+                     </tr>
+                 </template>
+             </tbody>
+         </table>
+         
+         </div>
+</template>

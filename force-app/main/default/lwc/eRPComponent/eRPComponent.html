@@ -1,0 +1,33 @@
+<template>
+    
+      
+   <lightning-tabset active-tab-value = "">
+        <lightning-tab label="TimeSheet" icon-name="custom:custom25" value="one">
+           <c-time-card  emp={recordId}></c-time-card>
+        </lightning-tab>
+       
+        <lightning-tab label="Apply Leave" icon-name="custom:custom53" value="two" >
+           <c-leave-planner emp={recordId}></c-leave-planner>
+        </lightning-tab>
+        <template if:true={areDetailsVisible}>
+        <lightning-tab label="Manager view" icon-name="standard:process" >
+           <c-manager-view emp={recordId}></c-manager-view>
+        </lightning-tab>
+      </template>
+        <lightning-tab label="Leave History" icon-name="standard:report" >
+           <c-leave-history emp={recordId}></c-leave-history>
+        </lightning-tab>
+        <template if:true={areDetailsVisible}>
+        <lightning-tab label="Leave Approvals" icon-name="standard:service_report" >
+           
+        </lightning-tab>
+      </template>
+        <lightning-tab label="Holidays" icon-name="standard:approval" >
+           
+            <c-holiday-component></c-holiday-component>
+       
+        </lightning-tab>
+    </lightning-tabset> 
+ 
+
+</template>

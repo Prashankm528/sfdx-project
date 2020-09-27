@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+  <types>
+    <name>ApexClass</name>
+    <members>ContactController</members>
+    <members>getContacts</members>
+    <members>getDetails</members>
+    <members>testClass</members>
+  </types>
+  <types>
+    <name>LightningComponentBundle</name>
+    <members>caseswithCheckbox</members>
+    <members>customerDetails</members>
+    <members>dataTableExample</members>  
+    <members>oldTaxRegime</members>
+    <members>shippingDetails</members>
+    <members>taxCalculationchild</members>
+    <members>taxCalculatorParent</members>
+    <members>taxExemptionDetails</members>
+  </types>
+  <version>48.0</version>
+</Package>

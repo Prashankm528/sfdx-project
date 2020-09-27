@@ -1,0 +1,59 @@
+<template>
+    <lightning-card  title="TimeCard Details">
+        <lightning-button label="New" slot="actions" onclick={handleTime}></lightning-button>
+        <div class="slds-align_absolute-center">
+           
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+               
+                 <thead>
+                     <tr >
+                         <th class="" scope="col">
+                             <div class="slds-truncate" title="TimeSheet">TimeSheet</div>
+                         </th>
+                         <th class="" scope="col">
+                             <div class="slds-truncate" title="Month">Month</div>
+                         </th>
+                         <th class="" scope="col">
+                            <div class="slds-truncate" title="Type">Type</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Hours">Hours</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Project">Project</div>
+                        </th>
+                        
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <template for:each={data} for:item="item" for:index="index">
+                         <tr key={item.Id}>
+                            
+                            <td >
+                              <!-- <div>{item.Employee_Detail__r.Name}</div> --> 
+                            </td>
+                            <td >
+                                <div></div>
+                            </td>
+                            <td >
+                               <div>{item.Type__c}</div>
+                           </td>
+                           <td >
+                               <div>{item.Time__c}</div>
+                           </td>
+                           <td >
+                             <!--  <div>{item.Project__r.Name}</div> -->
+                           </td>
+                           
+                            
+     
+                         </tr>
+                     </template>
+                 </tbody>
+             </table>
+             
+             </div>
+</lightning-card>
+
+    
+</template>

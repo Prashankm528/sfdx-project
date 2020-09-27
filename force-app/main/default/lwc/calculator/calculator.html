@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="calculator" icon-name ="utility:advanced_function">
+         <div>
+             <lightning-input type="number" name="FirstNumber" label="FirstNumber" onchange={numberHandler}></lightning-input>
+             <lightning-input type="number" name="LastNumber" label="LastNumber"  onchange={numberHandler}></lightning-input>
+
+             <lightning-button-group>
+                <lightning-button label="Addition" icon-name="utility:add" icon-position ="left" onclick={addNumber}></lightning-button>
+                <lightning-button label="Subtraction" icon-name="utility:dash" icon-position ="left" onclick={subNumber}></lightning-button>
+                <lightning-button label="Multiplication" icon-name="utility:close" icon-position ="left" onclick={mulNumber}></lightning-button>
+                <lightning-button label="Division" icon-name="utility:magicwand" icon-position ="left" onclick={divnumber}></lightning-button>
+            </lightning-button-group>
+         </div>
+         <p>Result is : {result}</p>
+    </lightning-card>
+</template>

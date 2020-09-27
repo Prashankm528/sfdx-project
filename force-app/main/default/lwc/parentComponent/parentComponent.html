@@ -1,0 +1,17 @@
+<template>
+    <lightning-card title="Child to Parent" >
+        <c-child-to-parent onselected={callDetails}></c-child-to-parent>
+    </lightning-card>
+<lightning-record-view-form record-id={ContactId} object-api-name="Contact">
+    <lightning-messages>
+    </lightning-messages>
+    <lightning-output-field field-name="Name">
+    </lightning-output-field>
+    <lightning-output-field field-name="Email">
+    </lightning-output-field>
+    <lightning-output-field field-name="Phone">
+    </lightning-output-field>
+    
+</lightning-record-view-form>
+<lightning-button label="call child Method"  onclick={childmethod}></lightning-button>
+</template>

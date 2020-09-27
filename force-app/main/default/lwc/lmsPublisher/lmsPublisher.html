@@ -1,0 +1,12 @@
+<template>
+    <lightning-card title="lmsPublisher" >
+            
+            <template for:each={contacts} for:item="con">
+             
+               <li key={con.Id}>
+               <a  data-recordid={con.Id} onclick ={handleRecordId}>{con.Name} </a> 
+            </li>
+            </template>
+       
+    </lightning-card>
+</template>

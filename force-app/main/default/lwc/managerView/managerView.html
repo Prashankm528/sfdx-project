@@ -1,0 +1,87 @@
+<template>
+    <lightning-card title="Direct Reportee">
+        <div class="slds-align_absolute-center">
+           
+           
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                   
+                     <thead>
+                         <tr >
+                             <th class="" scope="col">
+                                 <div class="slds-truncate" title="">Name</div>
+                             </th>
+                             
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <template for:each={reportee} for:item="item" for:index="index">
+                             <tr key={item.Name}>
+                                
+                                 <td >
+                                     <div><a onclick={test}>{item.Name}</a></div>
+                                 </td>
+                                
+         
+                             </tr>
+                         </template>
+                     </tbody>
+                 </table>
+                 
+                 </div>
+        <template if:true={showData}>
+            <div class="slds-m-around_medium">
+               
+                    <lightning-datatable
+                        key-field="Id"
+                        data={empRecords}
+                        columns={columns}
+                        onsave={handleSave}
+                        draft-values={draftValues}>
+                    </lightning-datatable>
+               
+                <template if:true={contact.error}>
+                    
+                </template>
+            </div>
+            </template>
+    </lightning-card>
+
+    <lightning-card title="Leave to Approve" >
+        <div class="slds-align_absolute-center">
+           
+           
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+               
+                 <thead>
+                     <tr >
+                         <th class="" scope="col">
+                             <div class="slds-truncate" title="">Leaves</div>
+                         </th>
+                         <th class="" scope="col">
+                            <div class="slds-truncate" title="">Employee Name</div>
+                        </th>
+                         
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <template for:each={leaveEmpRecords} for:item="item" for:index="index">
+                         <tr key={item.Id}>
+                            
+                             <td >
+                                 <div><a onclick={leaveRecord}  data-id={item.Id}>{item.Name}</a></div>
+                             </td>
+
+                             <td >
+                                <div>{item.Employee_Detail__r.Name}</a></div>
+                            </td>
+                            
+     
+                         </tr>
+                     </template>
+                 </tbody>
+             </table>
+             
+             </div>
+    </lightning-card> 
+    <c-modal-pop-up-lwc leave-id ={leaveId}></c-modal-pop-up-lwc>
+</template>

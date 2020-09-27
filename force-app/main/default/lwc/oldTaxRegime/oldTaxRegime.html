@@ -1,0 +1,33 @@
+<template>
+    <div>
+        <lightning-accordion class="example-accordion">
+            <lightning-accordion-section name="c" label="Salary Details">
+                <lightning-input type="number" name="input1" label="Total Annual Salary" onchange={annsalary} required  ></lightning-input>
+                <lightning-input type="number" name="input2" label="Variable Component" onchange={varCmp} required></lightning-input>
+                <lightning-input type="number" name="input3" label="Fixed Component" value={fixCmp} required disabled></lightning-input>
+                <lightning-input type="number" name="input4" label="Basic Salary" required onchange={basSalary} ></lightning-input>
+                <lightning-input type="checkbox" label="PF Amount is Diffrent?" onclick={enablebtn} name="input1"></lightning-input>
+                <lightning-helptext content="Note: This is the employer's contribution to PF. An equivalent amount is deducted from your salary in equal installments every month."></lightning-helptext>
+                <lightning-input type="number" name="calPF" label="Calculated PF Amount" value={calPF} disabled={disablePf}  ></lightning-input>
+                <lightning-input type="number" name="AmtPF" label="PF Amount/Month" disabled={monthAmt} value={calPFMonth}></lightning-input>
+                <lightning-input type="number" name="Sd" label="Standard Deduction" value={sd} disabled ></lightning-input>
+            </lightning-accordion-section>
+            <lightning-accordion-section name="A" label="HRA Details">
+                <lightning-input type="number" name="HraM" label="House rent per Month" ></lightning-input>
+                <lightning-input type="number" name="Hra" label="Annual House rent" onchange={hadleHRA}  ></lightning-input>
+                <lightning-input  name="owner" label="Owner Pan Card Details"  ></lightning-input>
+                <lightning-textarea name="Address" label="Address of Rented Property" ></lightning-textarea>
+            </lightning-accordion-section>
+            <lightning-accordion-section name="B" label="Add Tax Exemption details" >
+                <c-tax-exemption-details></c-tax-exemption-details><br></br>
+            </lightning-accordion-section>
+        </lightning-accordion>
+    </div>
+    <br/>
+ <!--   <lightning-button  label="Add Tax Exemption details"  onclick={exmpDetails}  ></lightning-button><br></br>
+    <template if:true={showExemp}>
+        <c-tax-exemption-details></c-tax-exemption-details><br></br>
+    </template> -->
+    <lightning-button  label="Show tax calculation" onclick={taxCalc} ></lightning-button>
+    <c-tax-calculationchild ></c-tax-calculationchild><br></br>
+</template>

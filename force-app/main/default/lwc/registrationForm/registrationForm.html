@@ -1,0 +1,25 @@
+<template>
+    <lightning-card title="Registration Form">
+        <div>
+        <lightning-input label="fName"  name="fName" onchange={ChangeHandler}></lightning-input>
+        <lightning-input label="LName" name="LName" onchange={ChangeHandler}></lightning-input>
+        <lightning-input type="email"  label="email"  name="email" onchange={ChangeHandler}></lightning-input>
+        <lightning-radio-group name="radioGroup"
+                          label="Radio Group"
+                          options={options}
+                          value={value}
+                          type="radio"
+                          onchange={ChangeHandler}></lightning-radio-group>
+        <lightning-combobox
+                            name="progress"
+                            label="Status"
+                            value={value}
+                            placeholder="Select Progress"
+                            options={deptOptions}
+                            onchange={ChangeHandler} ></lightning-combobox>
+              
+    </div>
+    <lightning-button variant="brand" label="submit" onclick={save}></lightning-button>
+    </lightning-card>
+    <c-child-component-registration xyz ={details}></c-child-component-registration>
+</template>
