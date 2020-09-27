@@ -1,8 +1,12 @@
 
 <template>
+    
     <lightning-card title="Navigation Example">
+        {cliendId}<br/>
+       <p> {label.label1}</p>
+        {label.label2}
         <div class="slds-p-around_medium">
-            <lightning-button label="Open SFDCFacts" onclick={openGoogle}></lightning-button>
+            <lightning-button label="Open Google" onclick={openGoogle}></lightning-button>
         </div>
         <div class="slds-p-around_medium">
             <lightning-button label="Account Home" onclick={openAccountHome}></lightning-button>

@@ -1,7 +1,14 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, track } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
+import label1 from '@salesforce/label/c.clientId';
+import label2 from '@salesforce/label/c.clientsecret';
 export default class NavigationToSevice extends NavigationMixin(LightningElement) {
+    @track  cliendId = label1;
 
+    label = {
+        label1,
+        label2,
+    };
 
 
     openGoogle(){
@@ -18,7 +25,7 @@ export default class NavigationToSevice extends NavigationMixin(LightningElement
             type : 'standard__objectPage',
             attributes: {
                 objectApiName: 'Account',
-                actionName: 'home'
+                actionName: 'new'
             }
         });
     }
@@ -47,18 +54,18 @@ export default class NavigationToSevice extends NavigationMixin(LightningElement
         this[NavigationMixin.Navigate]({
             type : 'standard__recordPage',
             attributes: {
-                recordId: "5006D0000011U9mQAE",
+                recordId: "5006F00002lKTzEQAW",
                 objectApiName: 'Case', // objectApiName is optional
                 actionName: 'view'
             }
         });
     }
 
-    openMeetingRoom(){
+    openContact(){
         this[NavigationMixin.Navigate]({
-            type : 'standard__navItemPage',
+            type : 'standard__navItemPage', 
             attributes: {
-                apiName: 'Contact'
+                apiName: 'Contacts'
             }
         });
     }
