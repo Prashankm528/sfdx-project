@@ -1,6 +1,7 @@
 <template>
     
     <div style="background-color: white;" class="slds-m-around_medium">
+        <template if:true={ShowBoard}>
         <lightning-layout multiple-rows="true">
             <lightning-layout-item padding="around-small" size="12">
                 <lightning-layout>
@@ -71,7 +72,8 @@
                             <lightning-card  class='slds-m-around_medium' >
                             <li><h1 ><a onclick={handleStory}  data-id={progress.Id}>{progress.Name}</a> </h1></li> 
                             <li><h2 >{progress.Title__c}</h2></li> 
-                            <li><h3 class="slds-badge slds-theme_success" >{progress.Project__r.Name}</h3></li> 
+                             {progress.Project__r.Color__c};
+                            <li><h3 class="slds-badge slds-theme_success" style= "background:'+{progress.Project__r.Color__c}+';" data-id={progress.Project__r.Color__c}>{progress.Project__r.Name}</h3></li> 
                             <li><h4 >{progress.AssignedTo__r.Name}</h4></li> 
                             
                             </lightning-card>
@@ -95,9 +97,17 @@
                 <p>Done</p>
                 </div>
             </lightning-layout-item>
-           
+          
+          
              </lightning-layout>
+
        </lightning-layout-item>
+      
     </lightning-layout>
+</template>
+<template if:true={createStory}>
+    <c-create-user-story onback={openBoard}></c-create-user-story>
+</template>
 </div>
+
 </template>

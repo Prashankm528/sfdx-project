@@ -1,6 +1,7 @@
 import { LightningElement, wire } from 'lwc';
 import My_Resource from '@salesforce/resourceUrl/Rocket';
 import { NavigationMixin } from 'lightning/navigation';
+import { refreshApex } from '@salesforce/apex';
 import AllUserStory from '@salesforce/apex/UserStoryClass.getUserStory';
 
 export default class JiraNavigationMenu extends  NavigationMixin(LightningElement) {
@@ -15,6 +16,25 @@ export default class JiraNavigationMenu extends  NavigationMixin(LightningElemen
     progressId;
     countInProgress;
     countDevelopment;
+    createStory = false;
+    ShowBoard = true;
+    
+
+    openBoard(event){
+        event.preventDefault();
+        alert('Board');
+       
+        this.ShowBoard = true;
+        this.createStory = false;
+       return refreshApex(this.AllUserStory1);
+    }
+
+    CreateStory(event){
+        event.preventDefault();
+        alert('in story');
+        this.ShowBoard = false;
+        this.createStory = true;
+    }
 
     @wire(AllUserStory)
     userStoryType(value){
