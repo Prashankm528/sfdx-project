@@ -1,3 +1,97 @@
 <template>
+    <div class="slds-p-around_small">
+    <div class="slds-m-around_medium">
+    <lightning-button-icon icon-name="utility:back" alternative-text="Back" title="Back" onclick={boardBack}></lightning-button-icon>
+    <lightning-record-edit-form
+            record-id={recordId}
+            object-api-name="User_Story__c"
+            onsuccess={handleSuccess}>
+        <div class="slds-box slds-box_xx-small" style="background-color:grey">The Story</div> <br/>
+         <div>
+            <lightning-output-field field-name="Name">
+            </lightning-output-field>
+            <lightning-output-field field-name="Title">
+            </lightning-output-field>
+            <lightning-output-field field-name="Project__c">
+            </lightning-output-field>
+         </div>
+         <div class="slds-box slds-box_xx-small" style="background-color:grey">Details</div> <br/>
+         <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-output-field field-name="Project__c">
+                </lightning-output-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-output-field field-name="AssignedTo__c">
+                </lightning-output-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-output-field field-name="Priorty__c">
+                </lightning-output-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-output-field field-name="Status__c">
+                </lightning-output-field>
+            </div>
+          
+          <div class="slds-col slds-size_1-of-2">
+            <lightning-output-field field-name="Type__c">
+            </lightning-output-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-output-field field-name="Story_Points__c">
+            </lightning-output-field>
+        </div>
+    </div>
+      <div class="slds-box slds-box_xx-small" style="background-color:grey">Requirement</div><br/>
+      <div>
+         <lightning-output-field field-name="Description__c">
+         </lightning-output-field>
+         <lightning-output-field field-name="Replication_Step__c">
+         </lightning-output-field>
+         
+      </div>
+      <div class="slds-box slds-box_xx-small" style="background-color:grey">Solutions</div><br/>
+      <div>
+         <lightning-output-field field-name="Solution__c">
+         </lightning-output-field>
+         <lightning-input-field field-name="Comments__c">
+         </lightning-input-field>
+         
+      </div> <br/>
+      
+        <div style="width: auto;">
+            
+                    <lightning-datatable
+                            data={data}
+                            columns={columns}
+                            key-field="id"
+                            onrowselection={getSelectedRecords}>
+                    </lightning-datatable>
+           
+        </div> <br/>
     
+      <div class="slds-box slds-box_xx-small" style="background-color:grey">FileUpload</div>
+        <div>
+            <lightning-input label="" name="file uploader" onchange={handleFilesChange} type="file" multiple></lightning-input>
+        </div><br/>
+        <div class="slds-text-body_small slds-text-color_error">{fileName}
+        <template if:true={showLoadingSpinner}>
+                <lightning-spinner alternative-text="Uploading......" size="medium"></lightning-spinner>
+            </template>
+        </div><br/>
+        <div>
+            <lightning-button class="slds-m-top--medium" label={UploadFile} onclick={handleSave} variant="brand" disabled={isTrue}></lightning-button>
+        </div> 
+      <lightning-button
+                class="slds-align_absolute-center"
+                variant="brand"
+                type="submit"
+                name="Upadte story"
+                label="update story">
+            </lightning-button>      
+    
+    </lightning-record-edit-form>
+</div>
+</div>
 </template>

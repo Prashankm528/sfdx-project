@@ -1,0 +1,9 @@
+a:hover {
+    background: #504f4c07;
+    color: red;
+}
+img {
+    width: 30px;
+    height: 30px;
+    border-radius: 30%;
+}

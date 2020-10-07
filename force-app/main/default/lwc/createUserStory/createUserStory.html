@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a onclick = {boardBack}>Back</a>
+        <lightning-button-icon icon-name="utility:back" alternative-text="Back" title="Back" onclick={boardBack}></lightning-button-icon><br/>
         <lightning-record-edit-form object-api-name="User_Story__c" onsuccess={handleSuccess}>
         
             <lightning-messages>
@@ -25,7 +25,7 @@
             </lightning-input-field>
             <lightning-input-field field-name="Comments__c">
             </lightning-input-field>
-            <lightning-input type="file" onchange={onFileUpload} required name="uploadFile" label="Upload File">  
+            <lightning-input type="file" onchange={onFileUpload}  name="uploadFile" label="Upload File">  
             </lightning-input>  
             <lightning-button
                 class="slds-align_absolute-center"

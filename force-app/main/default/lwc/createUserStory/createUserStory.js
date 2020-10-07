@@ -21,7 +21,7 @@ export default class CreateUserStory extends LightningElement {
           this.saveRecord1();  
         });  
         this.fileReader.readAsDataURL(this.file);
-        this.boardBack();
+        
 
     }
 
@@ -38,7 +38,7 @@ export default class CreateUserStory extends LightningElement {
                 new ShowToastEvent({  
                   title: 'Success',  
                   variant: 'success',  
-                  message: 'story Successfully created',  
+                  message: 'story Successfully created'  
                 }),  
               );  
             

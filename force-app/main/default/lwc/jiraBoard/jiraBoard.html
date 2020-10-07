@@ -1,3 +1,77 @@
-<template>
-    
+<template>  
+    <div style="background-color: white;" >
+    <strong><h1 class="slds-m-around_medium">Board</h1></strong>
+        <lightning-layout multiple-rows="true">
+            <lightning-layout-item padding="around-small" size="12">
+                <lightning-layout>
+                    <lightning-layout-item padding="around-small" size="3">
+                        <div class="slds-box ">
+                        <p class="slds-badge" style="background-color:blueviolet;">To Do- {countDevelopment} </p>
+                        <ul>
+                            <li>
+                                <template for:each={BacklogUserStory} for:item="progress">
+                                <ul key={progress.Id}>
+                                    <lightning-card  class='slds-m-around_medium' >
+                                    <li><h1 ><a onclick={handleStory}  data-id={progress.Id}>{progress.Name}</a> </h1></li> 
+                                    <li><h2 >{progress.Title__c}</h2></li> 
+                                    <li><h3 class="slds-badge slds-theme_success" >{progress.Project__r.Name}</h3></li> 
+                                    <li><h4 >{progress.AssignedTo__r.Name}</h4></li> 
+                                    
+                                    </lightning-card>
+                                </ul> 
+                                </template>
+                               
+                            </li>
+                            
+                        </ul>
+                        </div>
+                    </lightning-layout-item>
+                    
+                    <lightning-layout-item padding="around-small" size="3">
+                        <div class="slds-box">
+                        <p class="slds-badge">In progress - {countInProgress}</p>
+                        <ul>
+                            <li>
+                                <template for:each={InProgressUserStory} for:item="progress">
+                                <ul key={progress.Id}>
+                                    <lightning-card  class='slds-m-around_medium' >
+                                    <li><h1 ><a onclick={handleStory}  data-id={progress.Id}>{progress.Name}</a> </h1></li> 
+                                    <li><h2 >{progress.Title__c}</h2></li> 
+                                     {progress.Project__r.Color__c};
+                                    <li><h3 class="slds-badge slds-theme_success" style= "background:'+{progress.Project__r.Color__c}+';" data-id={progress.Project__r.Color__c}>{progress.Project__r.Name}</h3></li> 
+                                    <li><h4 >{progress.AssignedTo__r.Name}</h4></li> 
+                                    
+                                    </lightning-card>
+                                </ul> 
+                                </template>
+                               
+                            </li>
+                            
+                        </ul>
+                        </div>
+                    </lightning-layout-item>
+                    
+                    <lightning-layout-item padding="around-small" size="2">
+                        <div class="slds-box">
+                        <p>Code Review</p>
+                        </div>
+                    </lightning-layout-item>
+                   
+                    <lightning-layout-item padding="around-small" size="2">
+                        <div class="slds-box">
+                        <p>Done</p>
+                        </div>
+                    </lightning-layout-item>
+                  
+                  
+                     </lightning-layout>
+        
+               </lightning-layout-item>
+              
+            </lightning-layout>
+       
+        </div>
+            
+             
+
 </template>
