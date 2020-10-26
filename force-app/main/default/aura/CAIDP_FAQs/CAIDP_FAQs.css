@@ -1,0 +1,4 @@
+.THIS .slds-accordion__summary-action:hover, .THIS .slds-accordion__summary-action:focus {
+	color: #018b46 !important;
+    text-decoration: none;
+}

@@ -1,0 +1,1935 @@
+<html>
+
+<head>
+
+    <style>
+        .messages-interactions-view .messages-scroll-pane {
+            max-height: 400px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .messages-interactions-view .messages-message.customer {
+            flex-direction: row;
+        }
+
+        .messages-interactions-view .messages-message {
+            margin: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .person-img.person-img-small {
+            height: 40px;
+            width: 40px;
+        }
+
+        .messages-interactions-view .customer .message-body {
+            margin-left: 15px;
+        }
+
+        .messages-interactions-view .message-body {
+            max-width: 70%;
+        }
+
+        .messages-interactions-view .customer .message-bubble {
+            background-color: #faebd7;
+        }
+
+        .messages-interactions-view .message-bubble {
+            min-height: 50px;
+            border-radius: 6px;
+            position: relative;
+            padding: 15px;
+        }
+
+        .messages-interactions-view .customer .tail {
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 10px solid transparent;
+            border-right: 10px solid #faebd7;
+            width: 10px;
+            position: absolute;
+            left: -20px;
+            top: 15px;
+        }
+
+        .messages-interactions-view .message-text-body {
+            overflow-wrap: break-word;
+            align-self: center;
+        }
+
+        .messages-interactions-view .customer .message-footer {
+            align-items: flex-start;
+        }
+
+        .messages-interactions-view .message-footer {
+            color: #b8b8b8;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages-interactions-view .messages-message.agent {
+            flex-direction: row-reverse;
+        }
+
+        .messages-interactions-view .messages-message {
+            margin: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .messages-interactions-view .agent .message-bubble {
+            background-color: #f0f8ff;
+        }
+
+        .playback-container .playback-data-waveform {
+            position: relative;
+            height: 100px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 700px
+        }
+
+        .playback-container .playback-played-underlay {
+            position: absolute;
+            background-color: #56aac6;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .playback-container .playback-total-underlay {
+            position: absolute;
+            background-color: #b8b8b8;
+            width: 90%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .profile.icon,
+        .profile.icon:before {
+            position: absolute;
+            background-color: currentColor
+        }
+
+        .profile.icon.small {
+            color: #FFF;
+            margin-left: -20px;
+            margin-top: 25px;
+            width: 42px;
+            height: 26px;
+            border-left: solid 1px currentColor;
+            border-right: solid 1px currentColor;
+            border-top: solid 1px currentColor;
+            border-bottom: solid 1px transparent;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .profile.icon.small:before {
+            content: '';
+            left: 11px;
+            top: -25px;
+            width: 15px;
+            height: 17px;
+            border-radius: 50%;
+            border: 1px solid currentColor;
+        }
+
+        input,
+        textarea {
+            outline: 0;
+            display: block
+        }
+
+        a:focus,
+        button {
+            outline: 0 !important
+        }
+
+        .pc-form,
+        .phonecall-container {
+            -webkit-box-orient: horizontal
+        }
+
+        .btn,
+        button:hover {
+            cursor: pointer
+        }
+
+        a,
+        a:hover {
+            text-decoration: none
+        }
+
+        .chat-transcript-view,
+        .pc-form {
+            -webkit-box-direction: normal;
+            -box-direction: normal;
+            direction: normal;
+        }
+
+        .profile.icon {
+            color: #FFF;
+            margin-left: -20px;
+            margin-top: 65px;
+            width: 42px;
+            height: 26px;
+            border-left: solid 1px currentColor;
+            border-right: solid 1px currentColor;
+            border-top: solid 1px currentColor;
+            border-bottom: solid 1px transparent;
+            border-radius: 6px 6px 0 0
+        }
+
+        .profile.icon:before {
+            content: '';
+            left: 8px;
+            top: -30px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid currentColor
+        }
+
+        .h1,
+        .h2,
+        .h3,
+        h1,
+        h2,
+        h3 {
+            margin-top: 22px;
+            margin-bottom: 11px
+        }
+
+        .h1,
+        .h2,
+        .h3,
+        .h4,
+        .h5,
+        .h6,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-weight: 500;
+            line-height: 1.1;
+            color: inherit
+        }
+
+        h3 {
+            display: block;
+            font-size: 1.17em;
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+            margin-inline-start: 0;
+            margin-inline-end: 0;
+            font-weight: 700
+        }
+
+        .lds-roller {
+            display: inline-block;
+            position: relative;
+            width: 64px;
+            height: 64px
+        }
+
+        .lds-roller div {
+            animation: lds-roller 1.2s cubic-bezier(.5, 0, .5, 1) infinite;
+            transform-origin: 32px 32px
+        }
+
+        .lds-roller div:after {
+            content: " ";
+            display: block;
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #cef;
+            margin: -3px 0 0 -3px
+        }
+
+        iframe,
+        input {
+            border: none !important
+        }
+
+        *,
+        a,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        li,
+        p,
+        ul {
+            margin: 0
+        }
+
+        .lds-roller div:nth-child(1) {
+            animation-delay: -36ms
+        }
+
+        .lds-roller div:nth-child(1):after {
+            top: 50px;
+            left: 50px
+        }
+
+        .lds-roller div:nth-child(2) {
+            animation-delay: -72ms
+        }
+
+        .lds-roller div:nth-child(2):after {
+            top: 54px;
+            left: 45px
+        }
+
+        .lds-roller div:nth-child(3) {
+            animation-delay: -108ms
+        }
+
+        .lds-roller div:nth-child(3):after {
+            top: 57px;
+            left: 39px
+        }
+
+        .lds-roller div:nth-child(4) {
+            animation-delay: -144ms
+        }
+
+        .lds-roller div:nth-child(4):after {
+            top: 58px;
+            left: 32px
+        }
+
+        .lds-roller div:nth-child(5) {
+            animation-delay: -.18s
+        }
+
+        .lds-roller div:nth-child(5):after {
+            top: 57px;
+            left: 25px
+        }
+
+        .lds-roller div:nth-child(6) {
+            animation-delay: -216ms
+        }
+
+        .lds-roller div:nth-child(6):after {
+            top: 54px;
+            left: 19px
+        }
+
+        .lds-roller div:nth-child(7) {
+            animation-delay: -252ms
+        }
+
+        .lds-roller div:nth-child(7):after {
+            top: 50px;
+            left: 14px
+        }
+
+        .lds-roller div:nth-child(8) {
+            animation-delay: -288ms
+        }
+
+        .lds-roller div:nth-child(8):after {
+            top: 45px;
+            left: 10px
+        }
+
+        @keyframes lds-roller {
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        * {
+            -ms-flex: 0 1 auto;
+            flex: 0 1 auto;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body,
+        html {
+            height: 100%;
+            font-family: sans-serif
+        }
+
+        a {
+            transition: all .4s;
+            -webkit-transition: all .4s;
+            -o-transition: all .4s;
+            -moz-transition: all .4s
+        }
+
+        li,
+        ul {
+            list-style-type: none
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: transparent !important
+        }
+
+        button {
+            border: none;
+            background: 0 0
+        }
+
+        .js-pscroll {
+            position: relative;
+            overflow: hidden
+        }
+
+        .table100 .ps__rail-y .ps__thumb-y::before,
+        .table100 .ps__rail-y::before {
+            content: "";
+            display: block;
+            position: absolute;
+            border-radius: 5px;
+            height: calc(100% - 30px);
+            top: 15px;
+            left: 0
+        }
+
+        .table100 .ps__rail-y {
+            width: 9px;
+            background-color: transparent;
+            opacity: 1 !important;
+            right: 5px
+        }
+
+        .table100 .ps__rail-y::before {
+            background-color: #ebebeb;
+            width: 100%
+        }
+
+        .table100 .ps__rail-y .ps__thumb-y {
+            width: 100%;
+            right: 0;
+            background-color: transparent;
+            opacity: 1 !important
+        }
+
+        .table100 .ps__rail-y .ps__thumb-y::before {
+            background-color: #ccc;
+            width: 100%
+        }
+
+        .limiter {
+            width: 1366px;
+            margin: 0 auto
+        }
+
+        .container-table100 {
+            width: 100%;
+            min-height: 100vh;
+            background: #fff;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 33px 30px
+        }
+
+        .wrap-table100 {
+            width: 1170px
+        }
+
+        table {
+            width: 100%
+        }
+
+        td,
+        th {
+            font-weight: unset;
+            padding-right: 10px
+        }
+
+        .column1 {
+            width: 33%;
+            padding-left: 40px
+        }
+
+        .column2 {
+            width: 13%
+        }
+
+        .column3 {
+            width: 22%
+        }
+
+        .column4 {
+            width: 19%
+        }
+
+        .column5 {
+            width: 13%
+        }
+
+        .table100-head th {
+            padding-top: 18px;
+            padding-bottom: 18px
+        }
+
+        .table100-body td {
+            padding-top: 16px;
+            padding-bottom: 16px
+        }
+
+        .table100 {
+            background-color: #fff;
+            position: relative;
+            padding-top: 60px
+        }
+
+        .table100-head {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0
+        }
+
+        .btn,
+        .dropdown,
+        .dropup {
+            position: relative
+        }
+
+        .table100-body {
+            max-height: 585px;
+            overflow: auto
+        }
+
+        .table100.ver1 th {
+            font-family: Lato-Bold;
+            font-size: 18px;
+            color: #fff;
+            line-height: 1.4;
+            background-color: #6c7ae0
+        }
+
+        .table100.ver1 td {
+            font-family: Lato-Regular;
+            font-size: 15px;
+            color: grey;
+            line-height: 1.4
+        }
+
+        .table100.ver1 .table100-body tr:nth-child(even) {
+            background-color: #f8f6ff
+        }
+
+        .table100.ver1 {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+            -moz-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+            -webkit-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+            -o-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+            -ms-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15)
+        }
+
+        .table100.ver1 .ps__rail-y {
+            right: 5px
+        }
+
+        .table100.ver1 .ps__rail-y::before {
+            background-color: #ebebeb
+        }
+
+        .table100.ver1 .ps__rail-y .ps__thumb-y::before {
+            background-color: #ccc
+        }
+
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .2);
+            transition: .3s;
+            width: 40%
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, .2)
+        }
+
+        .container {
+            padding: 2px 16px
+        }
+
+        .playback-container {
+            flex-direction: column;
+            flex-shrink: 0;
+            flex-grow: 1;
+            overflow: visible;
+            padding: 20px
+        }
+
+        .phonecall-container {
+            display: flex;
+            -webkit-box-direction: normal;
+            flex-direction: row;
+            background-color: #f6f6f6;
+            border: 1px solid #b8b8b8;
+            border-radius: 6px
+        }
+
+        .conversation-participant-container {
+            display: flex;
+            -webkit-box-direction: normal;
+            -webkit-box-orient: vertical;
+            flex-direction: column;
+            flex-shrink: 0;
+            -webkit-box-flex: 0;
+            flex-grow: 0
+        }
+
+        .playback-container .conversation-participant-container .participant-heading {
+            border-bottom: 1px solid #b8b8b8;
+            -webkit-box-flex: 0;
+            -ms-flex-positive: 0;
+            -webkit-flex-grow: 0;
+            -moz-flex-grow: 0;
+            flex-grow: 0;
+            text-align: center;
+            width: 100%;
+            padding: 0 20px
+        }
+
+        .playback-container .conversation-participant-container .participant-body .person-img {
+            margin-bottom: 20px
+        }
+
+        .playback-container .conversation-participant-container .participant-body {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -ms-flex-positive: 1;
+            -webkit-flex-grow: 1;
+            -moz-flex-grow: 1;
+            flex-grow: 1;
+            -webkit-box-flex: 0;
+            -ms-flex-negative: 0;
+            -webkit-flex-shrink: 0;
+            -moz-flex-shrink: 0;
+            flex-shrink: 0;
+            -webkit-box-direction: normal;
+            -webkit-box-orient: vertical;
+            -webkit-flex-direction: column;
+            -moz-flex-direction: column;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            -moz-align-items: center;
+            align-items: center;
+            padding: 20px;
+            width: 200px
+        }
+
+        .playback-container .conversation-participant-container .participant-footer {
+            border-top: 1px solid #b8b8b8;
+            -webkit-box-flex: 0;
+            -ms-flex-positive: 0;
+            -webkit-flex-grow: 0;
+            -moz-flex-grow: 0;
+            flex-grow: 0;
+            padding: 10px;
+            text-align: center;
+            width: 100%
+        }
+
+        .open>a {
+            outline: 0
+        }
+
+        .btn {
+            overflow: hidden;
+            display: inline-block;
+            margin-bottom: 0;
+            font-weight: 400;
+            text-align: center;
+            vertical-align: middle;
+            touch-action: manipulation;
+            background-image: none;
+            border: 1px solid transparent;
+            white-space: nowrap;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.6;
+            border-radius: 6px;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none
+        }
+
+        a {
+            color: #56aac6;
+            background-color: transparent
+        }
+
+        .open>.dropdown-menu {
+            display: block
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            display: none;
+            float: left;
+            min-width: 160px;
+            padding: 5px 0;
+            margin: 2px 0 0;
+            list-style: none;
+            font-size: 14px;
+            text-align: left;
+            background-color: #fff;
+            border: 1px solid #b8b8b8;
+            border-radius: 6px;
+            -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+            background-clip: padding-box
+        }
+
+        .playback-container .multiple-participants-list .participant-item {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            -moz-align-items: center;
+            align-items: center;
+            border-bottom: 1px solid #b8b8b8;
+            padding: 10px;
+            white-space: nowrap
+        }
+
+        .person-img.person-img-small {
+            height: 40px;
+            width: 40px
+        }
+
+        .playback-container .multiple-participants-list .participant-name {
+            margin: 0 10px
+        }
+
+        .img-circle {
+            border-radius: 50%
+        }
+
+        .carousel-inner>.item>a>img,
+        .carousel-inner>.item>img,
+        .img-responsive,
+        .thumbnail a>img,
+        .thumbnail>img {
+            display: block;
+            max-width: 100%;
+            height: auto
+        }
+
+        .person-img.person-img-small .person-icon {
+            font-size: 40px;
+            height: 40px;
+            width: 40px
+        }
+
+        .person-img .missing-participant,
+        .person-img .person-icon {
+            display: inline-block;
+            height: 90px;
+            text-align: center;
+            width: 90px;
+            position: relative
+        }
+
+        .person-img .person-icon {
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            -ms-border-radius: 50%;
+            border-radius: 50%;
+            background-color: #195f7a;
+            color: #f6f6f6;
+            font-size: 75px;
+            overflow: hidden
+        }
+
+        .person-img .missing-participant {
+            color: #b8b8b8;
+            font-size: 90px;
+            line-height: 90px
+        }
+
+        [class*=" pc-icon-"]:before,
+        [class^=pc-icon-]:before {
+            font-family: purecloud-fonts !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+            font-variant: normal !important;
+            text-transform: none !important;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: relative;
+            top: 2px
+        }
+
+        .playback-container .playback-center {
+            -webkit-box-flex: 1;
+            -ms-flex-positive: 1;
+            -webkit-flex-grow: 1;
+            -moz-flex-grow: 1;
+            flex-grow: 1;
+            background-color: #fff;
+            border-radius: 6px;
+            border: 1px solid #b8b8b8;
+            box-shadow: 0 0 5px #b8b8b8;
+            padding: 5px;
+            width: calc(-300%)
+        }
+
+        .playback-container .recording-views-container {
+            flex-grow: 1;
+            flex-shrink: 0
+        }
+
+        .chat-transcript-view {
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -box-orient: vertical;
+            -webkit-flex-direction: column;
+            -moz-flex-direction: column;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            -webkit-box-flex: 1;
+            -ms-flex-positive: 1;
+            -webkit-flex-grow: 1;
+            -moz-flex-grow: 1;
+            flex-grow: 1;
+            -ms-flex-align: stretch;
+            -webkit-align-items: stretch;
+            -moz-align-items: stretch;
+            align-items: stretch
+        }
+
+        .panel {
+            margin-bottom: 22px;
+            background-color: #fff;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+            box-shadow: 0 1px 1px rgba(0, 0, 0, .05)
+        }
+
+        .panel .panel-heading {
+            background: #fbfbfb;
+            background: linear-gradient(to bottom, #f7f7f7 0, #e2e2e2 100%);
+            border-top-right-radius: 8px;
+            border-top-left-radius: 8px;
+            border-top: 1px solid #b8b8b8;
+            border-left: 1px solid #bbb;
+            border-right: 1px solid #bbb;
+            border-bottom: 1px solid #bbb;
+            font-weight: 700
+        }
+
+        .panel-heading {
+            padding: 10px 15px;
+            border-bottom: 1px solid transparent;
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px
+        }
+
+        .chat-transcript-view .chat-log {
+            overflow-y: auto;
+            -ms-flex-positive: 1;
+            -webkit-flex-grow: 1;
+            -moz-flex-grow: 1;
+            flex-grow: 1;
+            -webkit-box-flex: 1;
+            -ms-flex-negative: 1;
+            -webkit-flex-shrink: 1;
+            -moz-flex-shrink: 1;
+            flex-shrink: 1;
+            border: 1px solid #b8b8b8
+        }
+
+        .chat-transcript-view .chat-message-row {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            border-bottom: 1px solid #b8b8b8
+        }
+
+        .chat-transcript-view .chat-cell.name {
+            font-weight: 500;
+            -ms-flex-positive: 1;
+            -webkit-flex-grow: 1;
+            -moz-flex-grow: 1;
+            flex-grow: 1;
+            -webkit-box-flex: 1;
+            -ms-flex-negative: 1;
+            -webkit-flex-shrink: 1;
+            -moz-flex-shrink: 1;
+            flex-shrink: 1;
+            max-width: 150px;
+            min-width: 150px;
+            border-right: 1px solid #b8b8b8;
+            text-align: right
+        }
+
+        .pull-right {
+            float: right !important
+        }
+
+        .chat-transcript-view .chat-cell.message {
+            -ms-flex-positive: 4;
+            -webkit-flex-grow: 4;
+            -moz-flex-grow: 4;
+            flex-grow: 4;
+            -webkit-box-flex: 4;
+            -ms-flex-negative: 4;
+            -webkit-flex-shrink: 4;
+            -moz-flex-shrink: 4;
+            flex-shrink: 4;
+            word-break: break-word
+        }
+
+        .chat-transcript-view .chat-cell {
+            padding: 5px 20px
+        }
+
+        .chat-transcript-view .chat-cell.time {
+            color: #c5c5c5;
+            -ms-flex-positive: 1;
+            -webkit-flex-grow: 1;
+            -moz-flex-grow: 1;
+            flex-grow: 1;
+            -webkit-box-flex: 1;
+            -ms-flex-negative: 1;
+            -webkit-flex-shrink: 1;
+            -moz-flex-shrink: 1;
+            flex-shrink: 1;
+            max-width: 140px;
+            min-width: 140px
+        }
+
+        .playback-container .details-tab-content {
+            -ms-flex-positive: 1;
+            -webkit-flex-grow: 1;
+            -moz-flex-grow: 1;
+            flex-grow: 1;
+            -webkit-box-flex: 0;
+            -ms-flex-negative: 0;
+            -webkit-flex-shrink: 0;
+            -moz-flex-shrink: 0;
+            flex-shrink: 0;
+            border-bottom: 1px solid #ddd;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column
+        }
+
+        .conversation-details-container .conversation-keywords-header,
+        .conversation-details-container .conversation-metrics-header,
+        .conversation-details-container .conversation-retention-header,
+        .conversation-details-container .conversation-wrapup-header {
+            border-bottom: 1px solid #b8b8b8
+        }
+
+        .conversation-details-container .details-row,
+        .pc-form {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex
+        }
+
+        .panel-body {
+            padding: 15px
+        }
+
+        .conversation-details-container {
+            width: 100%
+        }
+
+        .pc-form {
+            display: flex;
+            -box-orient: horizontal;
+            -webkit-flex-direction: row;
+            -moz-flex-direction: row;
+            -ms-flex-direction: row;
+            flex-direction: row;
+            -webkit-flex-wrap: wrap;
+            -moz-flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            -webkit-justify-content: space-between;
+            -moz-justify-content: space-between;
+            justify-content: space-between;
+            -ms-flex-pack: justify;
+            max-width: 1000px
+        }
+
+        .conversation-details-container .details-row,
+        .conversation-details-container .retention-details-header {
+            -webkit-box-direction: normal;
+            -box-direction: normal;
+            direction: normal;
+            -webkit-box-orient: horizontal;
+            -box-orient: horizontal;
+            -webkit-flex-direction: row;
+            flex-direction: row;
+        }
+
+        .conversation-details-container .details-row {
+            display: flex;
+            -moz-flex-direction: row;
+            -ms-flex-direction: row;
+            flex-direction: row;
+            padding-top: 10px
+        }
+
+        .conversation-details-container .details-header {
+            font-weight: 700;
+            -webkit-flex: 1 0 50%;
+            -moz-flex: 1 0 50%;
+            -ms-flex: 1 0 50%;
+            flex: 1 0 50%
+        }
+
+        .conversation-details-container .details-value {
+            -webkit-flex: 1 0 50%;
+            -moz-flex: 1 0 50%;
+            -ms-flex: 1 0 50%;
+            flex: 1 0 50%
+        }
+
+        .conversation-details-container .right-side {
+            padding-left: 10px
+        }
+
+        .conversation-details-container .form-group {
+            padding: 10px
+        }
+
+        .pc-form .form-group {
+            width: calc(50% - 10px);
+            vertical-align: top
+        }
+
+        .form-group {
+            margin-bottom: 15px
+        }
+
+        .conversation-details-container .retention-details-header {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -moz-flex-direction: row;
+            -ms-flex-direction: row;
+            flex-direction: row
+        }
+
+        .conversation-details-container .details-subrow {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-direction: normal;
+            -box-direction: normal;
+            direction: normal;
+            -webkit-box-orient: horizontal;
+            -box-orient: horizontal;
+            -webkit-flex-direction: row;
+            -moz-flex-direction: row;
+            -ms-flex-direction: row;
+            flex-direction: row;
+            padding-top: 10px;
+            padding-left: 30px
+        }
+
+        .conversation-details-container .details-row-2,
+        .playback-container .empty-interaction-indicator {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            -webkit-box-orient: horizontal;
+            -box-orient: horizontal;
+            -webkit-box-direction: normal;
+            -box-direction: normal;
+            direction: normal;
+        }
+
+        .pc-form .form-group.spanning {
+            width: 100%;
+            flex-basis: 100%
+        }
+
+        .conversation-details-container .details-external-participants,
+        .conversation-details-container .details-internal-participants,
+        .conversation-details-container .details-wrapup {
+            padding-left: 0;
+            list-style: none;
+            margin: 0
+        }
+
+        .conversation-details-container .details-row-2 {
+            display: flex;
+            -webkit-flex-direction: row;
+            -moz-flex-direction: row;
+            -ms-flex-direction: row;
+            flex-direction: row;
+            padding-top: 10px
+        }
+
+        .conversation-details-container .details-header-2 {
+            font-weight: 700;
+            -webkit-flex: 1 0 15%;
+            -moz-flex: 1 0 15%;
+            -ms-flex: 1 0 15%;
+            flex: 1 0 15%
+        }
+
+        .conversation-details-container .details-value-2 {
+            -webkit-flex: 1 0 85%;
+            -moz-flex: 1 0 85%;
+            -ms-flex: 1 0 85%;
+            flex: 1 0 85%
+        }
+
+        .playback-container .empty-interaction-indicator {
+            display: flex;
+            -webkit-flex-direction: row;
+            -moz-flex-direction: row;
+            -ms-flex-direction: row;
+            flex-direction: row;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            -moz-align-items: center;
+            align-items: center;
+            background-color: #fff
+        }
+
+        .playback-container .empty-interaction-indicator .empty-interaction-icon {
+            color: #b8b8b8;
+            font-size: 30px;
+            padding: 30px
+        }
+
+        .email-interactions-view {
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-direction: normal;
+            -box-direction: normal;
+            direction: normal;
+            -webkit-box-orient: vertical;
+            -box-orient: vertical;
+            -webkit-flex-direction: column;
+            -moz-flex-direction: column;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            -webkit-box-flex: 1;
+            -ms-flex-positive: 1;
+            -webkit-flex-grow: 1;
+            -moz-flex-grow: 1;
+            flex-grow: 1;
+            -ms-flex-align: stretch;
+            -webkit-align-items: stretch;
+            -moz-align-items: stretch;
+            align-items: stretch
+        }
+
+        .email-interactions-view .email-messages {
+            overflow-y: auto;
+            -ms-flex-positive: 1;
+            -webkit-flex-grow: 1;
+            -moz-flex-grow: 1;
+            flex-grow: 1;
+            -webkit-box-flex: 1;
+            -ms-flex-negative: 1;
+            -webkit-flex-shrink: 1;
+            -moz-flex-shrink: 1;
+            flex-shrink: 1
+        }
+
+        .email-interactions-view .email-message {
+            padding: 5px;
+            border-bottom: 1px solid #b8b8b8
+        }
+
+        .email-interactions-view .email-header-parent,
+        .email-interactions-view .email-subject,
+        .email-interactions-view .email-to {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex
+        }
+
+        .email-interactions-view .email-attachments {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #f6f6f6
+        }
+
+        .email-attachment-label {
+            margin-right: 10px;
+            color: #b8b8b8;
+        }
+
+        .email-interactions-view .email-time {
+            margin-left: auto;
+            color: #b8b8b8
+        }
+
+        .email-interactions-view .email-header-label,
+        .email-interactions-view .email-subject-label,
+        .email-interactions-view .email-to-label {
+            margin-right: 10px;
+            color: #b8b8b8
+        }
+
+        p {
+            display: block;
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+            margin-inline-start: 0;
+            margin-inline-end: 0;
+            margin: 0 0 11px
+        }
+    </style>
+    <script type="text/javascript">
+
+        var Pureclient;
+        var interactionId, intervalAudioPlayer, purePath, substring, environment = undefined,
+            currentInteraction = undefined, unit, y, redirectUri, platformClient;
+        var pureCloudToken;
+       
+        var LoggerIxn = /** @class */ (function () {
+            function LoggerIxn() {
+            }
+            LoggerIxn.prototype.info = function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i] = arguments[_i];
+                }
+                var originalLog = console.info;
+                originalLog.apply(console.info, [this.getCurrentDate()].concat(args));
+            };
+            LoggerIxn.prototype.getCurrentDate = function () { return "[" + new Date().toISOString() + "] pureClientIXN *** "; };
+            return LoggerIxn;
+        }());
+        var loggerIxn = new LoggerIxn();
+
+        function customParseURL(skey, sdefault) {
+            if (!window.customUrlParams) {
+                window.customUrlParams = [];
+                var hash;
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for (var i = 0; i < hashes.length; i++) {
+                    hash = hashes[i].split('=');
+                    window.customUrlParams.push(hash[0]);
+                    window.customUrlParams[hash[0]] = hash[1];
+                }
+            }
+            var retval = window.customUrlParams[skey];
+            return (retval ? retval : sdefault);
+        }
+
+        function init() {
+            pureCloudToken = localStorage.getItem("pureCloudToken");
+            if ( !pureCloudToken ){
+                printError("You are not authorized, login with your embeddable widget and retry.");
+                return;
+            }
+            interactionId = customParseURL('id', null);
+            environment = customParseURL('env', null);
+            purePath = customParseURL('purePath', null) ;
+            redirectUri = window.location.origin + window.location.pathname;
+
+            loggerIxn.info("params : interactionId : " + interactionId + " environment : " + environment + " redirectUri : " + redirectUri);
+            if (!interactionId) {
+                printError("The interaction id is mandatory");
+                return;
+            } 
+
+            if (!purePath) {
+                printError("The pure path is mandatory");
+                return;
+            } 
+            var head = document.getElementsByTagName('head')[0];
+            var pureScript = document.createElement('script');
+            pureScript.type = 'text/javascript';
+            pureScript.src = purePath;
+            head.appendChild(pureScript);
+            pureScript.onload = function () { loadPure(); }
+        }
+
+        function loadPure() {
+            loggerIxn.info("LoadPure ok!")
+            Pureclient = new PureClientSdk();
+            platformClient = Pureclient.platformClient;
+            
+            Pureclient.client.setEnvironment(environment);
+            if ( !pureCloudToken ){
+                printError("Cannot authorize, login with your embeddable widget and retry");
+                return;
+            }
+            
+            Pureclient.client.setAccessToken(pureCloudToken);
+            checkTokenAndLoadPromises();
+        }
+
+        function checkTokenAndLoadPromises() {
+            Pureclient.usersApi.getUsersMe()
+                .then(function (userMe) {
+                    loggerIxn.info("userMe :", userMe);
+                    startPromises();
+                }).catch(function (err) {
+                    loggerIxn.info("error in userME", err);
+                    printError("Cannot authorize, login with your embeddable widget and retry");
+                });
+        }
+
+        function startPromises() {
+            getInteractionDetail();
+            getInteractionInfo();
+            getConversation();
+        }
+
+        function login() {
+            var id = clientIds[environment];
+
+            return Pureclient.client.loginImplicitGrant(id, redirectUri,
+                { state: ('pcEnvironment=' + environment) }).then(function (res) {
+                    loggerIxn.info("login succesful , ", res);
+                    localStorage.setItem("pureCloudToken", res.accessToken);
+                    startPromises();
+                    //      getInteractionDetail();
+                    //      getInteractionInfo();
+                    //      getConversation();
+                })
+        }
+        function getConversation() {
+            loggerIxn.info("getConversation");
+            var api = Pureclient.conversationApi;
+            var conversationId = interactionId;
+
+            api.getConversation(conversationId).then(function (result) {
+                loggerIxn.info("Result getConversation", result)
+                var numParticipantInternal = 0;
+                for (var index = 0; index < result.participants.length; index++) {
+                    var participant = result.participants[index];
+
+                    if (participant.participantType == "External") {
+                        document.getElementById("externalParticipanName").innerText = participant.name;
+
+                    } else if (participant.participantType == "Internal") {
+                        numParticipantInternal++;
+                        document.getElementById("internalParticipanName").innerText = participant.name;
+                    }
+
+                    if (participant.participantType == undefined && participant.purpose == "customer") {
+                        document.getElementById("externalParticipanName").innerText = participant.name;
+                    }
+
+                    if (participant.participantType == undefined && participant.purpose == "agent") {
+                        numParticipantInternal++;
+                        document.getElementById("internalParticipanName").innerText = participant.name;
+                    }
+
+                    loggerIxn.info("participant.wrapup", participant.wrapup)
+
+                    if (participant.wrapupRequired) {
+                        document.getElementById("wrapUpName").innerHTML = "" + participant.name
+                        if (participant.wrapup.name != undefined) {
+                            document.getElementById("wrapUpCode").innerHTML = "" + participant.wrapup.name
+                        } else {
+                            document.getElementById("wrapUpCode").innerHTML = " - ";
+                        }
+
+                        if (participant.wrapup.notes != undefined) {
+                            document.getElementById("wrapUpNotes").innerHTML = "" + participant.wrapup.notes
+                        } else {
+                            document.getElementById("wrapUpNotes").innerHTML = " - "
+                        }
+                    }
+                }
+
+                if (numParticipantInternal == 0) {
+                    document.getElementById("participantBody").innerHTML = '<div class="person-img"><span class="missing-participant"><i class="fas fa-times"></i></span></div><div class="participant-name"><span>No Participants</span></div>'
+                }
+                if (numParticipantInternal > 1) {//multipleCall
+                    document.getElementById("iconInternalParticipant").innerHTML = '<i class="profile icon"></i>';
+                    document.getElementById("footerInternalParticipant").style.display = "block";
+                    var html = "";
+                    for (var index = 0; index < result.participants.length; index++) {
+                        var participant = result.participants[index];
+                        if (participant.participantType == "Internal") {
+                            html += ' <div class="participant-item"><div class="person-img person-img-small">';
+                            html += ' <span class="person-icon"><i class="profile icon"></i></span></div><div class="participant-name"><span>' + participant.name + '</span></div>';
+                            html += ' <div><div><div class="participant-address"><span>' + participant.ani + '</span></div></div></div></div>'
+                        }
+                    }
+                    document.getElementById("dropMenu").innerHTML = html;
+                    document.getElementById("internalParticipanName").innerText = "Multiple";
+                }
+            }).catch(function (error) {
+                //manageError(error, interactionId);
+                loggerIxn.info("error in get conversation ", error);
+                
+            });
+
+        }
+
+        function dropMenu() {
+            loggerIxn.info("dropMenu", document.getElementById("dropMenu").style.display);
+
+            if (document.getElementById("dropMenu").style.display == "none") {
+                document.getElementById("dropMenu").style.display = "block"
+            } else {
+                document.getElementById("dropMenu").style.display = "none"
+            }
+
+        }
+
+        function getInteractionDetail() {
+            loggerIxn.info("getInteractionDetail");
+            var api = new platformClient.AnalyticsApi();
+            var conversationId = interactionId;
+            api.getAnalyticsConversationDetails(conversationId).then(function (result) {
+
+                var startTimeString = new Date(result.conversationStart).toLocaleDateString() + " " + (new Date(result.conversationStart).toLocaleTimeString())
+                var endTimeString = new Date(result.conversationEnd).toLocaleDateString() + " " + (new Date(result.conversationEnd).toLocaleTimeString())
+                var duration = new Date(result.conversationEnd).getTime() - new Date(result.conversationStart).getTime();
+                var durationTimeString = new Date(duration).getMinutes() + ":" + new Date(duration).getSeconds()
+                loggerIxn.info("successful call getInteractionDetail", result, duration);
+                document.getElementById("startTimeValue").innerHTML = startTimeString;
+                document.getElementById("endTimeValue").innerHTML = endTimeString;
+                document.getElementById("durationTimeValue").innerHTML = durationTimeString;
+
+            }).catch(function (error) {
+                // manageError(error,interactionId);
+                loggerIxn.info("error in get conversation ", error);
+            });
+        }
+
+        var bretry = false;
+        var attempt = 0;
+
+        function getInteractionInfo() {
+            loggerIxn.info("getInteractionInfo");
+            var api = new platformClient.RecordingApi();
+            var conversationId = interactionId;
+            var opts = {
+                'maxWaitMs': 10000,
+                'formatId': "MP3"
+            };
+            loggerIxn.info("successful call getInteractionInfo", conversationId);
+            api.getConversationRecordings(conversationId, opts).then(function (result) {
+                if ((!bretry) && ((!result) || (result.length < 1))) {
+                    loggerIxn.info("getInteractionInfo no result!");
+                    attempt++;
+                    if (attempt < 5) {
+                        loggerIxn.info("getInteractionInfo no result retry!");
+                        setTimeout(getInteractionInfo, 1000);
+                    }
+                    return;
+                }
+
+                for (var index = 0; index < result.length; index++) {
+                    currentInteraction = result[index];
+                    if (currentInteraction == undefined) {
+                        document.getElementById("Error").innerHTML = "<span style='color:red;font-size:4em;top:150px;position:relative;'>" + "Email transcript not found" + "</span>";
+                        document.getElementById("Error").style.display = "block";
+                        document.getElementById("loader").style.display = "none";
+                        return;
+                    } else {
+                        var mediaType = currentInteraction.media;
+                        document.getElementById("interactionType").innerText = " " + mediaType.toUpperCase();
+                        switch (mediaType) {
+                            case "chat":
+                                var chatTranscript = currentInteraction.transcript;
+                                var html = "";
+                                if (chatTranscript !== undefined) {
+                                    document.getElementById("titleTranscript").innerHTML = "Chat Log"
+                                    for (var i = 0; i < chatTranscript.length; i++) {
+                                        if (chatTranscript[i].body) {
+                                            html += "<div class='chat-message-row'>";
+                                            html += "<div class='chat-cell name'><div class='pull-right'>" + chatTranscript[i].from + "</div></div>";
+                                            html += "<div class='chat-cell message'>" + chatTranscript[i].body + "</div>"
+                                            var startTimeString = (new Date(chatTranscript[i].utc).toLocaleTimeString())
+                                            html += "<div class='chat-cell time'> <div class='pull-right'>" + startTimeString + "</div></div>";
+                                            loggerIxn.info("i:", chatTranscript[i])
+                                            html += "</div>";
+                                        }
+
+                                    }
+                                    document.getElementById("chatTranscriptContainer").innerHTML = html;
+                                    document.getElementById("chatTranscriptContainer").style.display = "block";
+                                    document.getElementById("playback-container").style.display = "block";
+                                    document.getElementById("loader").style.display = "none";
+                                } else {
+                                    var htmlError = "";
+                                    htmlError += '<div class="empty-interaction-indicator"><div class="empty-interaction-icon"><i class="fas fa-times"></i><div>'
+                                    htmlError += '<div><h3">Empty Chat Recording</h3><span>There are no messages in this chat.</span></div></div>'
+                                    document.getElementById("chatTranscriptContainer").innerHTML = htmlError;
+                                    document.getElementById("chatTranscriptContainer").style.display = "block";
+                                    document.getElementById("playback-container").style.display = "block";
+                                    document.getElementById("loader").style.display = "none";
+                                }
+                                break;
+                            case "audio":
+                                var uriAudio = currentInteraction.mediaUris[0].mediaUri;
+                                document.getElementById("titleTranscript").innerHTML = ""
+                                if (uriAudio !== undefined) {
+                                    document.getElementById("audioPlayer").innerHTML = "<source src='" + uriAudio + "' type='audio/webm'>";
+                                    //window.location.href = uriAudio;
+                                    document.getElementById("audioPlayer").style.display = "block";
+                                    document.getElementById("audioTranscriptContainer").style.display = "block";
+                                    document.getElementById("playback-container").style.display = "block";
+                                    document.getElementById("loader").style.display = "none";
+                                    var waveData = currentInteraction.mediaUris[0].waveformData;
+                                    var canvas = document.getElementsByTagName("canvas")[0];
+                                    var context = canvas.getContext('2d');
+                                    var audio = document.getElementById("audioPlayer")
+                                    context.beginPath();
+
+                                    for (var i = 1; i < waveData.length; i++) {
+                                        context.moveTo(i, 50 - (50 - (waveData[i] * 100)));
+                                        context.lineTo(i, 50 + (50 - (waveData[i] * 100)));
+                                    }
+                                    context.strokeStyle = "#b8b8b8";
+                                    context.stroke();
+
+                                    audio.onplay = function (event) {
+                                        //context.beginPath();
+                                        if (isNaN(unit) && isNaN(y)) {
+                                            unit = 639 / audio.duration
+                                            y = 639 / audio.duration;
+                                        }
+                                        loggerIxn.info("Unit 1", unit, y)
+                                        intervalAudioPlayer = setInterval(function () {
+                                            document.getElementById("progressAudio").style.width = y + "px"
+                                            y = y + unit;
+                                            loggerIxn.info("Unit", unit, y)
+                                        }, 1000);
+                                        //context.strokeStyle = "#5AAAC4"
+                                        //context.stroke();
+                                    }
+
+                                    audio.onpause = function () {
+                                        loggerIxn.info("audio.onpause", audio.duration, audio.currentTime, y)
+                                        clearInterval(intervalAudioPlayer)
+                                    }
+
+                                    // audio.onseeking = function(){
+                                    //     loggerIxn.info("audio.onseeking")
+                                    // }
+
+                                    audio.onseeked = function () {
+                                        loggerIxn.info("audio.onseeked", audio.currentTime)
+                                        unit = 639 / audio.duration
+                                        y = unit * audio.currentTime;
+                                        document.getElementById("progressAudio").style.width = y + "px"
+                                    }
+                                } else {
+                                    document.getElementById("Error").innerHTML = "<span style='color:red;font-size:4em;top:150px;position:relative;'>" + "Audio transcript not found" + "</span>";
+                                    document.getElementById("Error").style.display = "block";
+                                    document.getElementById("loader").style.display = "none";
+                                }
+
+                                break;
+                            case "email":
+                                var emailTranscript = currentInteraction.emailTranscript[0];
+                                document.getElementById("titleTranscript").innerHTML = ""
+                                if (emailTranscript !== undefined) {
+                                    var centerContainer = document.getElementById("emailTranscriptContainer");
+                                    var lastChild = centerContainer.lastElementChild;
+                                    var containerTemp = document.createElement("div");
+                                    var attachments = "";
+                                    if (emailTranscript.attachments) {
+                                        emailTranscript.attachments.forEach(function (a)  {
+                                            attachments += '<a class="email-attachment" style="margin-right:10px" data-bind="text: name,attr: {href: contentPath ,download: name}" href=' + a.contentPath + ' download=' + a.name + ' >' + a.name + '</a>';
+                                        })
+                                    }
+                                    var htmlTemp = '<div class="email-interactions-view"><div class="email-messages"><div class="email-message"><div class="email-header-parent">' +
+                                        '<span class="email-header-label">From</span><div class="email-header">' + (emailTranscript.from.email) + '</div>' +
+                                        '<div class="email-time">' + new Date(emailTranscript.time).toLocaleDateString() + " " + (new Date(emailTranscript.time).toLocaleTimeString()) + '</div></div>' +
+                                        '<div class="email-body slide-panel" style="display: block;"><div class="email-to"><span class="email-to-label">To</span><div><div>' + (emailTranscript.to[0].email) + '</div></div></div>' +
+                                        '<div class="email-subject"><span class="email-subject-label">Subject</span><div>' + (emailTranscript.subject) + '</div></div>' +
+                                        '<div class="email-attachments"><div class="email-attachment-label">Attachments</div>' + attachments + '</div>';
+                                    if (emailTranscript.htmlBody != undefined) {
+                                        htmlTemp += "<p id='BodyEmail'>" + (emailTranscript.htmlBody) + "</p>";
+                                    } else {
+                                        htmlTemp += "<p id='BodyEmail'>" + (emailTranscript.textBody) + "</p>";
+                                    }
+
+                                    htmlTemp += '</div></div></div></div></div>';
+                                    containerTemp.innerHTML = htmlTemp;
+                                    centerContainer.insertBefore(containerTemp, lastChild);
+
+
+                                } else {
+                                    document.getElementById("Error").innerHTML = "<span style='color:red;font-size:4em;top:150px;position:relative;'>" + "Email transcript not found" + "</span>";
+                                    document.getElementById("Error").style.display = "block"; document.getElementById("loader").style.display = "none";
+                                    return;
+                                }
+                                break;
+                            case "message":
+                                loggerIxn.info("Message type")
+                                document.getElementById("titleTranscript").innerHTML = ""
+                                var messagingTranscript = currentInteraction.messagingTranscript;
+                                var messaginPane = document.getElementById("messaginPane");
+                                var lastChild = messaginPane.lastElementChild;
+                                if (messagingTranscript !== undefined) {
+                                    messagingTranscript.forEach(function (element) {
+                                        loggerIxn.info("Element", element)
+
+                                        if (element.fromUser !== undefined) {
+                                            var containerTemp = document.createElement("div");
+                                            var htmlTemp = '<div class="messages-message agent">';
+                                            htmlTemp += '<div class="person-img person-img-small"><span class="person-icon"><i class="profile icon small" style="line-height: 1.5;"></i></span></div>';
+                                            htmlTemp += '<div class="message-body">';
+                                            htmlTemp += '<div class="message-bubble"><div class="tail"></div><span class="message-text-body">' + element.messageText + '</span></div>';
+                                            htmlTemp += '<div class="message-footer"><div class="message-time">' +
+                                                new Date(element.timestamp).toDateString() + ' ' + new Date(element.timestamp).getMinutes() + ":" + new Date(element.timestamp).getSeconds() + '</div>';
+                                            htmlTemp += '<div class="message-time">' + element.fromUser.name + '</div></div></div>';
+                                            containerTemp.innerHTML = htmlTemp;
+                                            messaginPane.insertBefore(containerTemp, lastChild);
+                                            lastChild = containerTemp;
+                                        } else if (element.fromExternalContact !== undefined) {
+
+                                            document.getElementById("externalParticipanName").innerText = element.fromExternalContact.lastName + ", " + element.fromExternalContact.firstName;
+                                            var containerTempExternal = document.createElement("div");
+
+                                            var htmlTemp = '<div class="messages-message customer">';
+                                            htmlTemp += '<div class="person-img person-img-small"><span class="person-icon"><i class="profile icon small" style="line-height: 1.5;"></i></span></div>';
+                                            htmlTemp += '<div class="message-body">';
+                                            htmlTemp += '<div class="message-bubble"><div class="tail"></div><span class="message-text-body">' + element.messageText + '</span></div>';
+                                            htmlTemp += '<div class="message-footer"><div class="message-time">' +
+                                                new Date(element.timestamp).toDateString() + ' ' + new Date(element.timestamp).getMinutes() + ":" + new Date(element.timestamp).getSeconds() + '</div></div>';
+                                            htmlTemp += '</div></div>';
+                                            containerTempExternal.innerHTML = htmlTemp;
+                                            messaginPane.insertBefore(containerTempExternal, lastChild);
+                                            lastChild = containerTempExternal;
+                                        } else if (element.from !== undefined) {
+                                            document.getElementById("externalParticipanName").innerText = element.from;
+                                            var containerTempExternal = document.createElement("div");
+
+                                            var htmlTemp = '<div class="messages-message customer">';
+                                            htmlTemp += '<div class="person-img person-img-small"><span class="person-icon"><i class="profile icon small" style="line-height: 1.5;"></i></span></div>';
+                                            htmlTemp += '<div class="message-body">';
+                                            htmlTemp += '<div class="message-bubble"><div class="tail"></div><span class="message-text-body">' + element.messageText + '</span></div>';
+                                            htmlTemp += '<div class="message-footer"><div class="message-time">' +
+                                                new Date(element.timestamp).toDateString() + ' ' + new Date(element.timestamp).getMinutes() + ":" + new Date(element.timestamp).getSeconds() + '</div></div>';
+                                            htmlTemp += '</div></div>';
+                                            containerTempExternal.innerHTML = htmlTemp;
+                                            messaginPane.insertBefore(containerTempExternal, lastChild);
+                                            lastChild = containerTempExternal;
+                                        }
+                                    });
+                                    document.getElementById("messagingTranscriptContainer").style.display = "block";
+                                    document.getElementById("playback-container").style.display = "block";
+                                    document.getElementById("loader").style.display = "none";
+                                }
+                                else {
+                                    document.getElementById("Error").innerHTML = "<span style='color:red;font-size:4em;top:150px;position:relative;'>" + "Chat transcript not found" + "</span>";
+                                    document.getElementById("Error").style.display = "block"; document.getElementById("loader").style.display = "none";
+                                    return;
+                                }
+
+                                break;
+
+                        }
+                    }
+                }
+
+                if (currentInteraction != undefined && currentInteraction.media == "email") {
+                    document.getElementById("emailTranscriptContainer").style.display = "block";
+                    document.getElementById("playback-container").style.display = "block";
+                    document.getElementById("loader").style.display = "none";
+                }
+            }).catch(function (error) {
+
+                manageError(error, interactionId);
+
+            });
+        }
+
+        function manageError(error, interactionId) {
+            var msg;
+
+            switch (error.status) {
+                case 401:
+                    printError("Authorization error");
+                    break;
+                case 403:
+                    printError("You are not authorized for this interaction : " + interactionId);
+                    break;
+                case 404:
+                    printError("Interaction not found : " + interactionId);
+                    break;
+                default:
+                    printError("Error retrieving detail for this interaction : " + interactionId);
+                    break;
+            }
+        }
+        function printError(error) {
+            var htmlError = "";
+            htmlError += '<div id="errorContainer" class="empty-interaction-indicator"><div id="iconError" class="empty-interaction-icon"><i "iconTimes" class="fas fa-times"></i><div>'
+            htmlError += '<div><h5 style="color:#000">' + error + '</h5></div>'
+            document.getElementById("playback-container").innerHTML = htmlError;
+            document.getElementById("errorContainer").style.width = "100%";
+            document.getElementById("iconError").style.width = "100%";
+            document.getElementById("errorContainer").style.textAlign = "center";
+            document.getElementById("playback-container").style.display = "block";
+            document.getElementById("loader").style.display = "none";
+        }
+    </script>
+
+</head>
+
+<body onload="init()">
+    <div id="loader" style="text-align: center;margin-top: 15%">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div id="playback-container" style="display: none" class="playback-container">
+        <div id="phonecall-container" class="phonecall-container">
+            <div class="conversation-participant-container">
+                <div class="participant-heading" data-bind="lString: labelKey">Internal Participant</div>
+                <div id="participantBody" class="participant-body">
+                    <div class="person-img">
+                        <span id="iconInternalParticipant" class="person-icon">
+                            <i class="profile icon" style="line-height: 1.5;"></i>
+                        </span>
+                    </div>
+                    <div class="participant-name">
+                        <span id="internalParticipanName" data-bind="text: nameDisplayString"></span>
+                    </div>
+                </div>
+                <div id="footerInternalParticipant" style="display: none" class="participant-footer">
+                    <div class="dropdown open" data-bind="dropdown: isOpen">
+                        <a href="#" class="btn dropdown-toggle show-multiples">
+                            <span data-bind="lString: 'playback.participants'">Participants</span>
+                            <i class="fas fa-chevron-down" onclick="dropMenu()"></i>
+                        </a>
+                        <div id="dropMenu" style="display: none" class="multiple-participants-list dropdown-menu">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="playback-center" data-bind="css: { 'acdvoicemail': isVoicemailViewSelected }">
+                <div class="recording-views-container" data-bind="foreach: recordingViews">
+                    <div class="chat-details-container">
+                        <div class="panel chat-transcript-view">
+                            <div class="panel-heading" id="titleTranscript">Chat Log</div>
+                            <div id="chatTranscriptContainer" style="display: none" class="chat-log">
+                                <div class="chat-message-row">
+                                    <div class="chat-cell name">
+                                        <div class="pull-right">Guest</div>
+                                    </div>
+                                    <div class="chat-cell message">Hi</div>
+                                    <div class="chat-cell time">
+                                        <div class="pull-right">3:56 PM</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="messagingTranscriptContainer" style="display: none">
+                                <div class="messages-details-container">
+                                    <div class="messages-interactions-view">
+                                        <div id="messaginPane" class="messages-scroll-pane">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="audioTranscriptContainer" style="display: none">
+                                <div class="playback-data-waveform">
+                                    <div id="progressAudio" class="playback-played-underlay" style="width: 0px"></div>
+                                    <canvas style="position: absolute;z-index: 2;" width="639" height="100"></canvas>
+                                </div>
+                                <audio id="audioPlayer" type='audio/mp3'
+                                    style="display: none;margin-left: auto;margin-right: auto;margin-top:5%;"
+                                    controls></audio>
+                            </div>
+                            <div id="emailTranscriptContainer">
+                                <div class="email-details-container" style="display: none;">
+                                    <div class="email-interactions-view">
+                                        <div class="email-messages">
+                                            <div class="email-message">
+                                                <div class="email-header-parent">
+                                                    <span class="email-header-label">From</span>
+                                                    <div class="email-header">alessandro.iuliano@softphone.it</div>
+                                                    <div class="email-time" data-bind="lDate: time">Wednesday, December
+                                                        5, 2018 11:26 AM</div>
+                                                </div>
+
+                                                <div class="email-body slide-panel" style="display: block;">
+                                                    <div class="email-to">
+                                                        <span class="email-to-label">To</span>
+                                                        <div>
+                                                            <span
+                                                                data-bind="text: email">connector@genesys.mypurecloud.com</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="email-subject">
+                                                        <span class="email-subject-label">Subject</span>
+                                                        <div>Test Mail PureCloud</div>
+                                                    </div>
+                                                    <div class="email-attachments">
+                                                    </div>
+                                                    <p>
+                                                        <div>
+                                                            <p><span style="font-size:11pt">Test email PureCloud
+                                                                    Connector</span><span
+                                                                    style="font-size:11pt;color:black"></span></p>
+                                                        </div>
+                                                        This e-mail message including any attachments is confidential
+                                                        and may be covered by legal professional secret. The
+                                                        information transmitted is for the sole use of the intended
+                                                        recipient(s) and any unauthorized review, use, disclosure or
+                                                        distribution is prohibited.
+                                                        If you are not the intended recipient, please immediately
+                                                        contact the sender by reply e-mail and delete the original
+                                                        message and destroy all copies thereof. Any communication
+                                                        between you and a member of Softphone is not to be considered
+                                                        of personal nature
+                                                        between you and the member: Softphone may review
+                                                        correspondence. Softphone and the sender accept no liability
+                                                        for any loss, disruption or damage to your data or computer
+                                                        system that may occur while using data contained in, or
+                                                        transmitted with, this email.
+                                                        Views or opinions expressed in this message may be those of the
+                                                        author and may not necessarily represent those of Softphone.
+
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="conversation-participant-container">
+                <div class="participant-heading" data-bind="lString: labelKey">External Participant</div>
+                <div class="participant-body">
+                    <div class="person-img">
+                        <span class="person-icon">
+                            <i class="profile icon" style="line-height: 1.5;"></i>
+                        </span>
+                    </div>
+                    <div class="participant-name">
+                        <span id="externalParticipanName"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body details-tab-content">
+            <div class="conversation-details-container pc-form">
+                <div class="form-group">
+                    <h4 class="conversation-metrics-header">Interaction Metrics</h4>
+                    <div class="details-row">
+                        <span class="details-header">Interaction Type</span>
+                        <span class="details-value">
+                            <span class="details-email-type" id="interactionType"></span>
+                        </span>
+                    </div>
+                    <div class="details-row">
+                        <span class="details-header">Start Time</span>
+                        <span class="details-value details-start-time" id="startTimeValue"></span>
+                    </div>
+                    <div class="details-row">
+                        <span class="details-header">End Time</span>
+                        <span class="details-value details-end-time" id="endTimeValue"></span>
+                    </div>
+                    <div class="details-row">
+                        <span class="details-header">Duration</span>
+                        <span class="details-value details-duration" id="durationTimeValue"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="conversation-details-container pc-form">
+                <div class="form-group">
+                    <h4 class="conversation-metrics-header">Wrap-up Information</h4>
+                    <div class="details-row">
+                        <span class="details-header">Name</span>
+                        <span class="details-value">
+                            <span class="details-email-type" id="wrapUpName"></span>
+                        </span>
+                    </div>
+                    <div class="details-row">
+                        <span class="details-header">Code</span>
+                        <span class="details-value details-start-time" id="wrapUpCode"></span>
+                    </div>
+                    <div class="details-row">
+                        <span class="details-header">Notes</span>
+                        <span class="details-value details-start-time" id="wrapUpNotes"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

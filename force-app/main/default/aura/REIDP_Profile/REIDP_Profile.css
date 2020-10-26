@@ -1,0 +1,20 @@
+/* STYLE OF User Name Text Header */
+.THIS .user-name{
+    color: #99CC00;
+    font-size: 30px;
+}
+
+/* STYLE OF Sections Name Text */
+.THIS .section-name {
+    color: #666666 ;
+    font-size: 17px;
+}
+
+.THIS .slds-form-element__static {
+    font-weight: 600 !important;
+}
+
+/* STYLE OF User Profile Icon */
+.THIS .icon-color svg{
+    fill : #009900 ;
+}

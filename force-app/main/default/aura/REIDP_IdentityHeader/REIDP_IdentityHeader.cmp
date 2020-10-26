@@ -1,0 +1,107 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="REIDP_IdentityHeaderController">
+    
+    <aura:attribute name="homePageUrl" type="String" description="URL for Home Page"/>
+    <aura:attribute name="profilePageUrl" type="String" description="URL for Profile Page"/>
+    <aura:attribute name="helpPageUrl"  type="String" description="URL for Help Page"/>
+    
+    <aura:attribute name="communityPageUrl" type="String" access="private" description="Community home page URL"/>
+    
+    <aura:attribute name="network" type="String"/>
+    <aura:attribute name="isHomePage" type="Boolean" description="URL for Home Page"/>
+    <aura:attribute name="isProfilePage" type="Boolean" description="URL for Profile Page"/>
+    <aura:attribute name="isHelpPage"  type="Boolean" description="URL for Help Page"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:attribute name="headerFontColor" description="Header Font Color" type="String" default="#666"/>
+    <aura:attribute name="headerBackgroundColor" description="Header Background Color" type="String" default="#fff"/>
+    
+	
+    <aura:html tag="style">
+       :root {
+           --headerFontColor: {!v.headerFontColor};
+           --headerBackgroundColor: {!v.headerBackgroundColor};
+       }
+   </aura:html>	
+
+
+    <div class="topHeader">
+        <!-- Desktop items-->
+        <div class="desktop">
+            <aura:if isTrue="{!v.network == 'BP'}">
+                <div class="logo" style="{! 'background-image: url(' + $Resource.REIDP_BP_logo + ');' }"></div>
+                <aura:set attribute="else">
+                    <div class="ampmLogo" style="{! 'background-image: url(' + $Resource.REIDP_AMPM_logo + ');' }"></div>
+                </aura:set>
+            </aura:if>
+            
+            <nav aura:id= "navigation-menu" class="navigation-menu" role = "navigation">
+                <ul class="slds-list_horizontal navigation-links" aura:id = "navigation-links">
+                    <aura:if isTrue="{! and(v.homePageUrl != '', v.isHomePage)}">
+                        <li>
+                            <lightning:formattedUrl value="{!v.homePageUrl}" label="{!$Label.c.IDPHome}" tooltip="{!$Label.c.IDPGoToHome}"/>
+                        </li>
+                    </aura:if>
+                    <aura:if isTrue="{! and(v.profilePageUrl != '', v.isProfilePage)}">
+                        <li>
+                            <lightning:formattedUrl value="{!v.profilePageUrl}" label="{!$Label.c.IDPProfile}" tooltip="{!$Label.c.IDPGoToProfile}"/>
+                        </li>
+                    </aura:if>
+                    <aura:if isTrue="{! and(v.helpPageUrl != '', v.isHelpPage)}">
+                        <li>
+                            <lightning:formattedUrl value="{!v.communityPageUrl + v.helpPageUrl}" label="{!$Label.c.IDPHelp}" tooltip="{!$Label.c.IDPGoToHelp}"/>
+                        </li>
+                    </aura:if>
+                </ul>
+            </nav>
+            <div class="logout" >
+                <lightning:formattedUrl value="{!v.communityPageUrl + '/secur/logout.jsp'}" label="{!$Label.c.IDPLogout}" tooltip="{!$Label.c.IDPGoToLogOut}"/>
+            </div>
+        </div>
+        <!-- Mobile items-->
+        <div class="mobile">
+            <div class="slds-align_absolute-center menu-header">
+                {!$Label.c.IDPHome}
+            </div>
+            <lightning:button aura:id="menu-toggle" 
+                              class="menu-toggle" 
+                              onclick="{!c.toggleMenu}" 
+                              iconName="utility:rows"
+                              variant="base"/>
+            <!-- Top Navigation Menu -->
+            <div class="slds-hide after-toggle" aura:id="after-toggle">
+                <nav class="main-menu" role="navigation">
+                    <!--Navigation Menu Items-->
+                    <div class="close-button">
+                        <lightning:button onclick="{!c.toggleMenu}" 
+                                          iconName="utility:close" 
+                                          variant="base"/>
+                    </div>
+                    <ul>
+                        <aura:if isTrue="{! and(v.homePageUrl != '', v.isHomePage)}">
+                            <li>
+                                <lightning:formattedUrl value="{!v.homePageUrl}" label="{!$Label.c.IDPHome}" tooltip="{!$Label.c.IDPGoToHome}"/>
+                            </li>
+                        </aura:if>
+                        <aura:if isTrue="{! and(v.profilePageUrl != '', v.isProfilePage)}">
+                            <li>
+                                <lightning:formattedUrl value="{!v.profilePageUrl}" label="{!$Label.c.IDPProfile}" tooltip="{!$Label.c.IDPGoToProfile}"/>
+                            </li>
+                        </aura:if>
+                        <aura:if isTrue="{! and(v.helpPageUrl != '', v.isHelpPage)}">
+                            <li>
+                                <lightning:formattedUrl value="{!v.communityPageUrl + v.helpPageUrl}" label="{!$Label.c.IDPHelp}" tooltip="{!$Label.c.IDPGoToHelp}"/>
+                            </li>
+                        </aura:if>
+                        <li>
+                            <lightning:formattedUrl value="{!v.communityPageUrl + '/secur/logout.jsp'}" label="{!$Label.c.IDPLogout}" tooltip="{!$Label.c.IDPGoToLogOut}"/>
+                        </li>
+                    </ul>
+                </nav>
+                <lightning:button aura:id="gray-background" 
+                                  class="gray-background" 
+                                  onclick="{!c.toggleMenu}"/>
+            </div>
+        </div>
+    </div>
+</aura:component>

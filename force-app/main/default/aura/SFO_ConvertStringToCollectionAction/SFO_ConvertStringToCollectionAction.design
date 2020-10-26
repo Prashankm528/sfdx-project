@@ -1,0 +1,5 @@
+<design:component>
+    <design:attribute name="separator" label="Separator"/>
+    <design:attribute name="targetValue" label="Target Value"/>
+    <design:attribute name="collection" label="Collection"/>
+</design:component>

@@ -1,0 +1,24 @@
+<template>
+    <lightning-layout class="slds-p-top_small" horizontal-align="spread" vertical-align="center" multiple-rows>
+        <lightning-layout-item size="7">
+            <lightning-combobox label="Select a watchlist to manage" value={selectedWatchlist.value} options={myWatchlistsOptions} onchange={handleMyWatchlistsChange} variant="label-inline"></lightning-combobox>
+        </lightning-layout-item>
+        <template if:true={isNewWatchlist}>
+            <lightning-layout-item size="6">
+                <lightning-input label="Watchlist name" value={selectedWatchlist.label} required variant="label-inline" onchange={handleInputWatchlist}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="1">
+                <lightning-button class="slds-p-top_small" label="Save" onclick={upsertWatchlist} variant="brand"></lightning-button>
+            </lightning-layout-item>
+            <lightning-layout-item size="5"></lightning-layout-item>
+        </template>
+    </lightning-layout>
+
+    <div class="slds-p-top_large">
+        <lightning-button label="Remove selected items from watchlist" onclick={removeWatchlistItems} variant="brand"></lightning-button>
+    </div>
+        
+    <div class="slds-p-top_small">
+        <c-istcp_generic-l-w-c-component runtime-invocations={runtimeInvocations} onrowsselected={handleSelectedItems} search-value={selectedWatchlist.value} title={title}></c-istcp_generic-l-w-c-component>
+    </div>
+</template>

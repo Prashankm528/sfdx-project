@@ -1,0 +1,29 @@
+<template>
+    <ul>   
+        <li>
+            <a href={logout_url2} target="_top" style="font-weight: bolder;background:white;" class="Urls">Logout</a>           
+        </li>
+        <li>
+            <a href={bp_url} target="_blank" style="font-weight: bolder;background:white; " class="Urls"><strong>Portal Guide</strong></a>
+      </li>
+        <li>
+            <p>Hello,{name}</p> 
+       </li>
+        </ul>
+    <div class="slds-grid slds-wrap slds-gutters slds-m-top--x-large">
+                <div class="slds-col slds-size_9-of-12">
+            <img src={bplogo} width="160" height="235.5" alt="BPLogo"/>  
+        </div>
+   <div class="slds-col">             
+            <h2><span style="font-size:35px;">Welcome to BP Supply &amp; Trading CDD Document Portal</span></h2> 
+        </div>
+        <!--<div>
+                <lightning-combobox
+                name="language"
+                value={value}
+                options={options}
+                onchange={handleLangOptionChange} ></lightning-combobox>
+        </div>    -->
+    </div> 
+
+</template>

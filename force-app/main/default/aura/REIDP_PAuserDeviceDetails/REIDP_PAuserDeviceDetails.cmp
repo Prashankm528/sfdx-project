@@ -1,0 +1,83 @@
+<!--
+ * @author Amal Ali-Muradbeyli
+ * @company Bluewolf, an IBM Company
+ * @date 10/2017
+ *
+ * This is a child component for REIDP_PAconsumerDetails that holds device details
+ * related to user
+ *
+ -->
+
+<aura:component >
+    <aura:attribute name="deviceLookupInfo" type="REIDP_PARetrieveCustomerLookupInfo.CustomerLookUpInfo" />
+    <lightning:card title="Devices" iconName="custom:custom29">
+        <aura:if isTrue="{!empty(v.deviceLookupInfo)}">
+            <ui:outputText class="slds-form-element__static" value="User has no associated devices." />
+            <aura:set attribute="else">
+                <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal slds-table_striped">
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <th scope="col">
+                                <ui:outputText class="slds-truncate" value="Status" />
+                            </th>
+                            <th scope="col">
+                                <ui:outputText class="slds-truncate" value="Device type" />
+                            </th>
+                            <th scope="col">
+                                <ui:outputText class="slds-truncate" value="Device id" />
+                            </th>
+                            <th scope="col">
+                                <ui:outputText class="slds-truncate" value="Create date" />
+                            </th>
+                            <th scope="col">
+                                <ui:outputText class="slds-truncate" value="Last login date" />
+                            </th>
+                            <th scope="col">
+                                <ui:outputText class="slds-truncate" value="Device locked" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.deviceLookupInfo}" var="device">
+                            <tr>
+                                <aura:if isTrue="{!device.active}">
+                                    <th scope="row" data-label="Status" class="slds-align_absolute-center">
+                                        <lightning:icon iconName="standard:task2" size="x-small" alternativeText="Active"/><br/>
+                                    </th>
+                                    <aura:set attribute="else">
+                                        <th scope="row" data-label="Status" class="slds-align_absolute-center">
+                                            <lightning:icon iconName="utility:clear" size="x-small" alternativeText="Inactive"/><br/>
+                                        </th>
+                                    </aura:set>
+                                </aura:if>
+                                
+                                <td data-label="Device type">
+                                    <ui:outputText class="slds-truncate" value="{!device.deviceType}" />  
+                                </td>
+                                <td data-label="Device id">
+                                    <ui:outputText class="slds-truncate" value="{!device.deviceUniqueId}" />
+                                </td>
+                                <td data-label="Create date">
+                                    <ui:outputDateTime class="slds-truncate" value="{!device.createDateDT}" />
+                                </td>
+                                <td data-label="Last login date">
+                                    <ui:outputDateTime class="slds-truncate" value="{!device.lastLoginDateDT}" />
+                                </td>
+                                <aura:if isTrue="{!device.locked}">
+                                    <th scope="row" data-label="Device Locked" class="slds-align_absolute-center">
+                                        <lightning:icon iconName="utility:lock" variant="error" size="x-small" alternativeText="Active"/><br/>
+                                    </th>
+                                    <aura:set attribute="else">
+                                        <th scope="row" data-label="Device Locked" class="slds-align_absolute-center">
+                                            <lightning:icon iconName="utility:unlock" size="x-small" alternativeText="Inactive"/><br/>
+                                        </th>
+                                    </aura:set>
+                                </aura:if>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>    
+            </aura:set>
+        </aura:if>
+    </lightning:card>
+</aura:component>

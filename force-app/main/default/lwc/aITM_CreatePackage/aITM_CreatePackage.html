@@ -1,0 +1,103 @@
+
+<template>
+   
+    <div class="spinner">
+        <template if:true={isLoading}>
+             <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+             </lightning-spinner>
+        </template>
+    </div>
+  
+        
+    <div class="c-container" >
+       
+        <div class="slds-clearfix slds-m-around_medium slds-box slds-box_x-small" 
+        style="background-color:rgb(157, 228, 228)">
+            <div class="slds-float_left" >
+                <h1 style ="font-size: large;">Add New Package</h1>
+            </div>
+            <div class="slds-float_right">
+                <lightning-button label="Delete" ></lightning-button>
+            </div>
+          </div>
+          
+        <lightning-layout multiple-rows="true">
+            <lightning-layout-item padding="around-small" size="4">
+                <lightning-input label="Package Name" value={PackageName} onchange={handlePackageName}></lightning-input> <!--To show the Package Name if id is there-->
+                <lightning-textarea  label="Description"  value={PackageDescription} onchange={handleDescription}></lightning-textarea>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small" size="4">
+                <div class="header-column">
+                    <p class="field-title" title="Field 3">Tender</p>
+                    <p><a href="#"  data-id={recordId} onclick={getTender}>{Name}</a></p>
+                </div> <br/>
+                <lightning-textarea  label="Internal Notes" value={PackageNotes} onchange={handleNotes} ></lightning-textarea>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small" size="4">
+                <div class="header-column">
+                    <p class="Guidance" title="Field 1">Guidance for Success</p>
+                    <p>This is the guide , how to work with the packaging</p>
+                </div><br/>
+                <div class="header-column">
+                    <p class="field-title" title="Field 2">Available Actions</p>
+                <template if:false={packId}>
+                    <lightning-button label="Save Package" variant="Brand" onclick={createPackage} disabled={disableCreate}></lightning-button>
+                </template>
+                <template if:true={packId}>
+                    <lightning-button label="Edit Credit Terms" variant="Brand" ></lightning-button>
+                    <lightning-button label="Packaging Evaulation" variant="Brand"  class="slds-m-left_x-small"></lightning-button>
+                </template>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+        <br/><br/>
+        <div style="width:400px;margin-left:600px;">
+            <lightning-progress-indicator current-step={currentStep} type="base"   variant="base">
+                <lightning-progress-step label="Locations" value="1">
+                    <p>Locations</p>
+                </lightning-progress-step>
+
+                <lightning-progress-step label="Customers" value="2">Customers</lightning-progress-step>
+                
+               
+            </lightning-progress-indicator>
+       </div>
+      <br/><br/>
+
+   <!--  <div class="slds-clearfix slds-m-around_medium">
+        <div class="slds-float_left">
+            <template if:true={showSave}>
+                <lightning-button label="Previous" variant="Brand" onclick={showLocationScreen}></lightning-button>
+            </template>
+        </div>
+        <div class="slds-float_right">
+            <template if:true={showNext}>
+                <lightning-button label="Next" variant="Brand" onclick={createPackage}></lightning-button>
+            </template>
+           <template if:true={showSave}>
+                <lightning-button label="Save" variant="Brand" onclick={updatePackage} disabled={disableSave}></lightning-button>
+            </template>
+        </div>
+      </div>-->
+   
+      
+      <template if:true={name1}>
+      <!--Location starts here-->
+  <template if:true={showLocation} >
+     
+         <c-a-i-t-m_-package-location  location-items={tenderLocation} pack-id={packId} package={PackageId} onnext={showCustomerScreen} >
+
+         </c-a-i-t-m_-package-location>
+        
+      </template> 
+      <!--Location ends Here -->
+
+      <!--Customer startrs Here-->
+   <template if:true={showCustomer}>
+        <c-a-i-t-m_-package-customer location-line-item={mapkeyValueStore} onback={showLocationScreen}></c-a-i-t-m_-package-customer>
+     </template> 
+      <!--Customer ends Here-->
+    </template>
+    </div>
+
+</template>

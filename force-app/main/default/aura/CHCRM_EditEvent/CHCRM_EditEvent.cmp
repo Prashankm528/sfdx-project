@@ -1,0 +1,230 @@
+<aura:component
+                implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickActionWithoutHeader"
+                extends="c:CHCRM_EventBase" access="global" controller="CHCRM_ViewEventController">
+    
+    <aura:attribute name="evt" type="Event" access="public" />
+    <aura:attribute name="detail" type="CHCRM_Event__c" access="public" />
+    <aura:attribute name="loading" type="Boolean" default="false" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="LookupEvent" event="c:CHCRM_LookupItemSelected" action="{!c.handleItemSelected}" />
+    <aura:handler name="onNotification" event="c:CHCRM_CallBackInfo" action="{!c.handleNotification}" />
+    
+    <aura:attribute name="errorMessage" type="String" default="" />
+    <aura:attribute name="showError" type="Boolean" default="false" />
+    <aura:html tag="style">
+        <!-- set modal width-->
+        .slds-modal__container {
+        width : 800px !important;
+        max-width : 800px !important;
+        }
+        <!-- set Footer-->
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around–medium {
+        padding: 0rem !important;
+        }
+        
+    </aura:html>
+    <lightning:notificationsLibrary aura:id="notifLib" />
+    
+    <aura:if isTrue="{! v.loading }">
+        <lightning:spinner alternativeText="Loading" />
+    </aura:if>
+    
+    <div class="modal-header slds-modal__header slds-size_1-of-1">
+        <h4 class="title slds-text-heading--medium">编辑事件</h4>
+    </div>
+    
+    <div class="slds-grid slds-wrap slds-gutters">
+        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+            <lightning:input type="text" name="input1" label="主题" value="{!v.evt.Subject}" />
+            <lightning:input type="text" name="input2" label="位置" value="{!v.evt.Location}" />
+            <lightning:input type="datetime" name="input3" label="开始时间" value="{!v.evt.StartDateTime}" />
+            <lightning:input type="datetime" name="input4" label="结束时间" value="{!v.evt.EndDateTime}" />
+            <!--Need to do : dynamic picklist value-->
+            <lightning:select name="input5" label="类型" value="{!v.evt.Type}">
+                <option value="">--无--</option>
+                <aura:if isTrue="{!v.evt.RecordType.DeveloperName == 'CHCRM_Event'}">
+                    <option value="Customer Call">电话拜访</option>
+                    <option value="WeChat Contact">微信拜访</option>
+                    <option value="Customer Meeting">到店拜访</option>
+                </aura:if>
+                <aura:if isTrue="{!v.evt.RecordType.DeveloperName == 'CHCRM_Visit'}">
+                    <option value="High-Level Communication">高层沟通</option>
+                    <option value="New Product Training">新产品培训</option>
+                    <option value="Technical Exchange">技术交流</option>
+                    <option value="Rebate Plan Negotiation">返利计划洽谈</option>
+                </aura:if>
+            </lightning:select>
+            <lightning:textarea name="input6" label="内容" value="{!v.evt.Description}" />
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+            <div class="slds-form-element is-required">
+                <label class="slds-form-element__label"><abbr class="slds-required" title="required">*</abbr>
+                    <span>被分配人</span></label>
+                <div class="slds-form-element__control slds-grow">
+                    <c:CHCRM_Lookup objName="User" selectedName="{!v.evt.Owner.Name}" selectedId="{!v.evt.OwnerId}"
+                                    fieldName="OwnerId" objectItems="User"/>
+                </div>
+            </div>
+            <lightning:select name="input6" label="状态" value="{!v.evt.SOM_Status__c}">
+                <option value="">--无--</option>
+                <!-- <option value="Assigned">Assigned</option>
+                <option value="In Progress">In Progress</option> -->
+                <option value="Planned">已规划</option>
+                <option value="Completed">已完成</option>
+                <option value="Cancelled">已取消</option>
+            </lightning:select>
+        </div>
+    </div>
+    
+    <div class="slds-grid slds-wrap slds-gutters">
+        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+            <div class="slds-form-element is-required">
+                <label class="slds-form-element__label"><abbr class="slds-required" title="required">*</abbr>
+                    <span>名称</span></label>
+                <div class="slds-form-element__control slds-grow">
+                    <c:CHCRM_Lookup objName="Contact" selectedName="{!v.evt.Who.Name}" selectedId="{!v.evt.WhoId}"
+                                    fieldName="WhoId" objectItems="Contact"/>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+            <div class="slds-form-element is-required">
+                <label class="slds-form-element__label"><abbr class="slds-required" title="required">*</abbr>
+                    <span>关联项</span></label>
+                <div class="slds-form-element__control slds-grow">
+                    <c:CHCRM_Lookup objName="Account" selectedName="{!v.evt.What.Name}" selectedId="{!v.evt.WhatId}"
+                                    fieldName="WhatId" objectItems="Account,HQ Monthly Assignment,Opportunity"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <aura:if isTrue="{!v.evt.RecordType.DeveloperName == 'CHCRM_Event'}">
+        <div class="slds-grid slds-wrap slds-gutters">
+            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label">
+                        <span>处理投诉</span></label>
+                    <div class="slds-form-element__control slds-grow">
+                        <lightning:input type="checkbox" name="input7" variant="abel-hidden" checked="{!v.detail.CHCRM_Complaint_Resolved__c}" />
+                    </div>
+                </div>            
+                
+                <lightning:input type="text" name="input8" label="处理投诉备注"
+                                 value="{!v.detail.CHCRM_Complaint_Remarks__c}" />
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label">
+                        <span>客户体验日执行</span></label>
+                    <div class="slds-form-element__control slds-grow">
+                        <lightning:input type="checkbox" variant="abel-hidden" checked="{!v.detail.CHCRM_Cust_Exp_Day_Executed__c}" />                    
+                    </div>
+                </div>              
+                <lightning:input type="text" label="客户体验日备注" value="{!v.detail.CHCRM_Cust_Exp_Day_Remarks__c}" />
+                
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label">
+                        <span>潜客信息收集</span></label>
+                    <div class="slds-form-element__control slds-grow">
+                        <lightning:input type="checkbox" variant="abel-hidden" checked="{!v.detail.CHCRM_Lead_Collected__c}" />                    
+                    </div>
+                </div>              
+                <lightning:input type="text" label="潜客信息收集备注" value="{!v.detail.CHCRM_Lead_Collected_Remarks__c}" />
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label">
+                        <span>总部政策或市场活动沟通/执行/回顾</span></label>
+                    <div class="slds-form-element__control slds-grow">
+                        <lightning:input type="checkbox" variant="abel-hidden" checked="{!v.detail.CHCRM_HQ_Policy_or_Mkt_Act__c}" />                    
+                    </div>
+                </div>              
+                <lightning:input type="text" label="总部政策或市场活动备注" value="{!v.detail.CHCRM_HQ_Policy_or_Mkt_Act_Remarks__c}" />
+                
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label">
+                        <span>培训执行</span></label>
+                    <div class="slds-form-element__control slds-grow">
+                        <lightning:input type="checkbox" variant="abel-hidden" checked="{!v.detail.CHCRM_Training__c}" />                    
+                    </div>
+                </div>              
+                <lightning:input type="text" label="培训备注" value="{!v.detail.CHCRM_Training_Remarks__c}" />
+                
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label">
+                        <span>沟通执行LTT</span></label>
+                    <div class="slds-form-element__control slds-grow">
+                        <lightning:input type="checkbox" variant="abel-hidden" checked="{!v.detail.CHCRM_LTT_Exec__c}" />                    
+                    </div>
+                </div>              
+                <lightning:input type="text" label="LTT备注" value="{!v.detail.CHCRM_LTT_Remarks__c}" />
+            </div>
+            <!--<div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label">
+                        <span>Check-In Address</span></label>
+                    <div class="slds-form-element__control slds-grow">
+                        <lightning:input type="checkbox" name="input9" variant="abel-hidden" checked="{!v.detail.CHCRM_Check_In_Address__c}" disabled="true"/>                    
+                    </div>
+                </div>                  
+                <lightning:input type="datetime" name="input12" label="Check-In Time" checked="{!v.detail.CHCRM_Check_In_Time__c}" disabled="true" />
+            </div>-->
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.evt.RecordType.DeveloperName == 'CHCRM_Visit'}">
+        <div class="slds-grid slds-wrap slds-gutters">
+            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                <div class="slds-form-element">
+                    <div class="slds-form-element__control slds-grow">
+                        <lightning:input type="text" label="下一步计划" value="{!v.detail.CHCRM_Next_Step__c}" />
+                    </div>
+                </div>
+                <div class="slds-form-element">
+                    <div class="slds-form-element__control slds-grow">
+                        <lightning:input type="text" label="拜访总结" value="{!v.detail.Visit_Summary__c}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap slds-gutters">
+            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                <div class="slds-form-element">
+                    <div class="slds-form-element__control slds-grow">
+                        <lightning:input type="text" label="KAP备注" value="{!v.detail.CHCRM_KAP_Remark__c}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap slds-gutters">
+            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                <lightning:input type="datetime" name="input3" label="Actual Start Date" value="{!v.detail.CHCRM_KAP_Actual_Start_Date__c}" />
+                <lightning:input type="datetime" name="input4" label="Actual Completion Date" value="{!v.detail.CHCRM_KAP_Actual_Completion_Date__c}" />
+            </div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.showError}">
+        <br/><br/>
+        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+            <span class="slds-assistive-text">error</span>
+            <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" title="Description of icon when needed">
+            </span>
+            <h2>错误: {!v.errorMessage}</h2>
+            <div class="slds-notify__close">
+                <button class="slds-button slds-button_icon slds-button_icon-small slds-button_icon-inverse" title="Close" onclick="{! c.cancelErrorAlert}">
+                    <!--<lightning:icon iconName="utility:close" title="Close" />-->
+                    x
+                </button>
+            </div>
+        </div>
+    </aura:if>
+    <div class=" slds-size_1-of-1 slds-p-top_large" style="text-align: right;">
+        <div class="forceChangeRecordTypeFooter">
+            <lightning:button variant="brand" label="保存" onclick="{! c.handleSave }" />
+            <lightning:button label="取消" onclick="{! c.handleCancel }" />
+        </div>
+    </div>
+</aura:component>

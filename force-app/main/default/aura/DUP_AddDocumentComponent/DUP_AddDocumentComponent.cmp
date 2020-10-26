@@ -1,0 +1,109 @@
+<!--****************************************************************************************
+*   Date:           2019-08-30
+*   Author:         Mayuri Basutkar - IBM
+*   Description:    Main component to show all the document stores
+*   Updated by:     Alessandro Miele - IBM
+****************************************************************************************-->
+<aura:component controller="DUP_AddDocumentController" implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global">
+    
+    <aura:attribute name="projectDocument" type="DUP_Document_Store__c[]" access="public"/>
+    <aura:attribute name="documents" type="List" access="public"/>
+    <aura:attribute name="recordId" type="String" access="public"/>
+    <aura:attribute name="selectedCP" type="String" access="public"/>
+    <aura:attribute name="selectedCPId" type="String" access="public"/>
+    <aura:attribute name="selectedCPEmail" type="String" access="public"/>
+    <aura:attribute name="searchText" type="String" access="public"/>
+    <aura:attribute name="conList" type="list"/>
+    <aura:attribute name="modalCPChange" type="Boolean" access="public" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="LookupEventToParent" event="c:DUP_LookupEventToParent" action="{!c.handleEvent}"/>
+    
+    <div class="slds-grid slds-wrap slds-p-around_medium slds-gutters">
+        <div class="slds-col slds-size_12-of-12 slds-box slds-m-bottom--medium">
+            <div class="slds-grid slds-wrap slds-gutters">
+                <div class="slds-col slds-size_12-of-12 slds-align_absolute-center slds-m-vertical_xx-small">
+                    If you want to resend the document request notification:&nbsp; <lightning:button variant="brand" label="Reminder Email" title="Reminder Email" onclick="{!c.sendCommunication}"/>
+                </div>
+                <div class="slds-col slds-size_12-of-12 slds-align_absolute-center slds-m-vertical_xx-small">
+                    If you want to communicate your rejection comments:&nbsp; <lightning:button variant="brand" label="Rejection Email" title="Rejection Email" onclick="{!c.sendRejectionCommunication}"/>
+                </div>
+                <div class="slds-col slds-size_12-of-12 slds-align_absolute-center slds-m-vertical_xx-small">
+                    If you you want to change the counterparty contact:&nbsp; <lightning:button variant="brand" label="Change Counterparty Contact" title="Change Counterparty Contact" onclick="{!c.openModal}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <aura:iteration items="{!v.projectDocument}" var="document">        
+            <c:DUP_AddDocumentSupport document="{!document}"
+                                    recordId= "{!v.recordId}"
+                                    documentName="{!document.DUP_Document_Name__c}"
+                                    documentsOption = "{!document.DUP_Options__c}"
+                                    documentId="{!document.Id}"
+                                    documentStatus="{!document.DUP_Document_Status__c}"/>
+        </aura:iteration>    
+    </div>
+    <aura:renderIf isTrue="{!v.modalCPChange}">
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModal }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 class="slds-text-heading_medium slds-hyphenate">Change Counterparty Contact</h2>
+                    </header>
+                <div class="slds-form-element slds-modal__content slds-p-around_medium">
+                    <h2 class="slds-text-heading_small slds-m-bottom--medium slds-hyphenate">Select Counterparty Contact:</h2>
+                                    <div class="slds-form-element__control" style="width:70%;">
+                                        <div class="slds-combobox_container slds-has-selection">
+                                            <div aura:id="toOpen" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                                                <div class=" slds-input-has-icon slds-input-has-icon_right" role="none">
+                                                    <div>
+                                                        <aura:if isTrue="{!v.selectedCP!=null}">
+                                                            <div aura:id="lookup-pill" class="slds-pill-container" >
+                                                                <lightning:pill aura:id="DUP_Counterparty_Contact__c" class="pillSize" label="{!v.selectedCP}" href="{!'/'+v.selectedCPId}" onremove="{! c.handleRemoveOnly }"/>
+                                                            </div>
+                                                            <aura:set  attribute="else">
+                                                                <div aura:id="input" class="slds-p-top_none" >
+                                                                    <lightning:input aura:id="DUP_Counterparty_Contact__c" class="slds-p-top_none" variant="label-hidden" value="{!v.searchText}" onchange="{!c.onchange}" onblur="{!c.onFocusOut}"/>
+                                                                    <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right ">
+                                                                        <span class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default" aria-hidden="true">
+                                                                            <lightning:icon class="" iconName="utility:search" size="x-small" alternativeText="Search" />
+                                                                        </span>
+                                                                    </span>
+                                                                </div>
+                                                            </aura:set>
+                                                            </aura:if>
+                                                    </div>
+                                                </div>
+                                                <div id="listbox-id-1" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click dup-listTopContainer" role="listbox">
+                                                    <aura:if isTrue="{!and(v.searchText !=null,v.searchText != '')}">
+                                                        <ul class="slds-listbox slds-listbox_vertical dup-listContainer" role="presentation">
+                                                            <aura:iteration items="{!v.conList}" var="listItem">
+                                                                <c:DUP_ChildLookUp cmpName = "ChangeCP" icon="custom:custom56" myData="{!listItem}" itemId="{!item.Id}" objectName="DUP_Counterparty_Contact__c" toHide="false"/>
+                                                            </aura:iteration>
+                                                        </ul>
+                                                    </aura:if>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral"
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeModal }"/>
+                        <lightning:button variant="brand"
+                                          label="OK"
+                                          title="OK"
+                                          onclick="{!c.changeCPContact}"/>
+                    </footer>
+        </div>
+        </section>
+    </aura:renderIf>
+    <div class="{!'slds-backdrop ' + ((v.modalCPChange) ? 'slds-backdrop_open' : 'slds-backdrop_close')}"></div>
+</aura:component>

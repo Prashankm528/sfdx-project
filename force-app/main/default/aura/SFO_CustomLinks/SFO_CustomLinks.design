@@ -1,0 +1,5 @@
+<design:component>
+    <design:attribute name="title" label="Title"/>
+    <design:attribute name="config" label="Config Name" description="The link config name." default="default"/>
+    <design:attribute name="names" label="Link Names" description="Show specific links only. Use developer names, comma separated list."/>
+</design:component>

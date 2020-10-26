@@ -1,0 +1,67 @@
+<!--
+  @Component Name     : ICRM_DisplayRelatedOpps.cmp    
+  @Description        : Component to show Non owned Oppty for the user from the Org 
+  @Author             : Palash Awasthi
+  @Group              : IST
+  @Last Modified By   :  
+  @Last Modified On   :  
+  @Modification Log   : 
+  ================================================================================================================
+  Ver         Date                     Author      		      Modification
+  ================================================================================================================
+  1.0    11.09.2019                 Santosh verma             Added- BU, Phy/Fin fields and removed Oppty Name 
+-->
+
+<aura:component implements="flexipage:availableForRecordHome,force:lightningQuickActionWithoutHeader,force:hasRecordId,force:hasSObjectName"
+                controller="ICRM_RelatedOpps">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="opportunityList" type="List"/>
+    <aura:attribute name="relatedOpportunities" type="boolean" default ="false"/>
+    
+    <lightning:card title="Related Opportunities" iconName="standard:opportunity" >
+        <lightning:helptext content="This shows you the opportunities that exist in IST, but are not shared directly with you."/>
+        <aura:if isTrue="{!v.relatedOpportunities}">
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer" id="table" width="50">
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        <th scope="col">
+                            <div class="slds-truncate" title="Name">BU</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Name">Physical/Financial</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Owner Name">Owner Name</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Created Date">Created Date</div>
+                        </th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    
+                    <aura:iteration items="{!v.opportunityList}" var="opp">
+                        <tr>
+                            <td data-label="Name">
+                                <div class="slds-truncate" title="{!opp.ICRM_RBU__c}">{!opp.ICRM_RBU__c}</div>
+                            </td>
+                            <td data-label="Name">
+                                <div class="slds-truncate" title="{!opp.ICRM_Phy_Fin__c}">{!opp.ICRM_Phy_Fin__c}</div>
+                            </td>
+                            <td data-label="Owner Name">
+                                <div class="slds-truncate" title="{!opp.Owner.Name}">{!opp.Owner.Name}</div>
+                            </td>
+                            <td data-label="Created Date">
+                                <div class="slds-truncate" title="{!opp.CreatedDate}">{!opp.CreatedDate}</div>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+
+                </tbody>
+            </table>
+        </aura:if>
+    </lightning:card>
+    
+</aura:component>

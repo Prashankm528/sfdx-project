@@ -1,0 +1,21 @@
+<!--
+ - @Author: Vit Bares
+ - @Email: vit.bares@bluewolfgroup.com
+ - @Company: Bluewolf
+ - @Created: 14/12/2017
+ - @Description: Helper component, which currently implements functionality of ajax request.
+ - This code is the intellectual property of IBM GBS and is not to be used by non-GBS practitioners nor distributed outside of GBS engagements.
+ - For full usage guidelines refer to http://ibm.biz/innersourcing-consume-guidelines
+ -->
+
+<aura:component description="LEX_Utils_Network">
+    <aura:method name="callAjax" action="{!c.callAjax}">
+        <aura:attribute name="callerComponent" type="Aura.Component" description="Caller component"/>
+        <aura:attribute name="method" type="String" default="GET" description="Method can be, for example, GET or POST" />
+        <aura:attribute name="url" type="String" description="URL to call" />
+        <aura:attribute name="async" type="Boolean" default="true" description=" Whether the call should be sync or async " />
+        <aura:attribute name="responseType" type="String" default="" description="Response type"/>
+        <aura:attribute name="callbackMethod" type="Object" description="Callback method on call complete" />
+        <aura:attribute name="callbackParams" type="Object" description="Callback Parameters"/>
+    </aura:method>
+</aura:component>

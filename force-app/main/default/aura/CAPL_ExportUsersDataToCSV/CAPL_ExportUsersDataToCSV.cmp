@@ -1,0 +1,14 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:appHostable" controller="CAPL_ExportUsersDataToCSVController">
+	
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+	<aura:attribute name="userId" type="String" />
+    <aura:attribute name="isShowButton" type="String" default="false" />
+
+    <aura:if isTrue="{!v.isShowButton}">
+	    <div>
+	        <button style="width:100%; border-radius: .125rem; padding: 14px; text-transform: uppercase;" class="slds-button slds-button--brand" onclick="{!c.downloadUsersList}">Download users</button>
+	    </div>
+	</aura:if>
+
+</aura:component>

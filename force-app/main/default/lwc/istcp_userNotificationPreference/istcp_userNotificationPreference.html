@@ -1,0 +1,93 @@
+<template>
+    <lightning-card title="NOTIFICATION PREFERENCES"><br/>
+        <div class="slds-form-element">
+            <div class="slds-grid">
+                <div class= "slds-col"> 
+                    Please select your delivery preferences for each notification type.
+                </div>
+                <div class= "slds-col" style="margin-left:10%;"> 
+                    <p><lightning-formatted-url value="javascript:void(0);" label="View my account access" target="_blank" ></lightning-formatted-url></p>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <br/>      
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="unique-id-of-input">Account Notifications</label> <br/>
+            <div class="slds-grid">
+                <div class= "slds-col"> 
+                    Information related specifically to your account including invoices, document uploads and user updates
+                </div>
+                <div class= "slds-col"> 
+                    <template for:each={options} for:item="item">
+                        <fieldset key={item.value} style="display: block; float: left;" >
+                            <legend></legend>
+                            <div class="slds-form-element__control">
+                                <span class="slds-radio">
+                                    <input name="radiogroup" id={item.value} type="radio" value={item.value} onchange={handleSelected}/>
+                                    <label class="slds-radio__label" for={item.value}>
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">{item.label}</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </fieldset>
+                    </template><br/><br/>
+                </div>  
+            </div>  
+        </div>  
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="unique-id-of-input">System Alerts</label> 
+            <div class="slds-grid">
+                <div class= "slds-col"> 
+                    Notifications related to system and technical updates
+                </div>          
+                <div class= "slds-col" style="margin-left:20%;">
+                    <template for:each={sysoptions} for:item="sysitem">
+                        <fieldset key={sysitem.value} style="display: block; float: left;">
+                            <legend></legend>
+                            <div class="slds-form-element__control">
+                                <span class="slds-radio">
+                                    <input name="radiogroup1" id={sysitem.value} type="radio" value={sysitem.value} onchange={handleSystemSelected}/>
+                                    <label class="slds-radio__label" for={sysitem.value}>
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">{sysitem.label}</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </fieldset>
+                    </template><br/><br/>
+                </div>
+            </div>
+        </div>
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="unique-id-of-input">BP Announcements</label> 
+            <div class="slds-grid">
+                <div class= "slds-col"> 
+                    Information about products, services, and events
+                </div>        
+                <div class= "slds-col" style="margin-left:26%;">
+                    <template for:each={bpAnnouncementoptions} for:item="bpitem">
+                        <fieldset key={bpitem.value} style="display: block; float: left;">
+                            <legend></legend>
+                            <div class="slds-form-element__control">
+                                <span class="slds-radio">
+                                    <input name="radiogroup2" id={bpitem.value} type="radio" value={bpitem.value} onchange={handleBpSelected}/>
+                                    <label class="slds-radio__label" for={bpitem.value}>
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">{bpitem.label}</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </fieldset>
+                    </template><br/><br/>
+                </div>
+            </div>
+        </div>
+        <br/>
+        If you selected to receive notifications by email, they will be delivered to {email} as this is the email associated with your account.<br/>
+        If you need to change or update your emnail address, please  <a href="javascript:void(0);">contact us
+        </a>
+    </lightning-card>
+
+</template>

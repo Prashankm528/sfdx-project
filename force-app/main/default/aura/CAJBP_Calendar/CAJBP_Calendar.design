@@ -1,0 +1,3 @@
+<design:component label="CAJBP Calendar">
+	<design:attribute name="AllJBPs" label="All JBPs" description="If checkbox is checked then all Activities from all JBPs will be displayed" default="false" required="true"/>
+</design:component>

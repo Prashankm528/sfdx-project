@@ -1,0 +1,23 @@
+/**
+ * @author			Venkatesh Muniyasamy
+ * @date			13/08/2020
+ * @group			CAJBP
+ * @description		Edit Product Brands for Product Mix Target Item.
+ *
+ * history
+ * 13/08/2020	Venkatesh Muniyasamy	    Edit Product Brands
+ */
+
+.THIS .slds-dueling-list{
+    text-align: center;
+    place-content: space-around;
+    place-items: center;
+    }
+
+.THIS .slds-form-element__label{
+    padding-left: 15px;
+}
+
+.THIS .slds-form-element__label{
+    font-weight: bold;
+}

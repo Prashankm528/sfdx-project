@@ -1,0 +1,34 @@
+<!--
+ * @author Nazim Aliyev
+ * @company Bluewolf, an IBM Company
+ * @date 2/2018
+ *
+ * This is a component is used to search for Paydiant merchant locations and update mobile enabled status 
+ * 
+ -->
+<aura:component implements="flexipage:availableForAllPageTypes" access="global" controller="REIDP_PAStoreSearchController">
+    <aura:attribute name="buttonstate" type="Boolean" default="false"/>
+    <aura:attribute name="storeCode" type="String"/>
+    <aura:attribute name="storeConfig" type="Object" />
+    
+    <lightning:layout horizontalAlign="space">
+        <lightning:layoutItem flexibility="grow" padding="around-small">
+            <lightning:input type="search" placeholder="Store Code" value="{!v.storeCode}" label="Search" class="search-box" name="search" variant="label-hidden"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem flexibility="auto, no-shrink" padding="around-small">
+            <lightning:buttonStateful labelWhenOff="Search"
+                                      labelWhenOn="Searching"
+                                      iconNameWhenOff="utility:search"
+                                      iconNameWhenOn="utility:spinner"
+                                      state="{! v.buttonstate }"
+                                      onclick="{! c.handleSearch }"/>
+        </lightning:layoutItem>
+    </lightning:layout>
+    
+    <aura:if isTrue="{!v.storeConfig != null}">
+        <c:REIDP_PAB2BStoreInfo acceptanceLocation="{!v.storeConfig.acceptanceLocation}"
+                                mobileEnabled="{!v.storeConfig.mobileEnabled}"
+                                goLiveDate="{!v.storeConfig.goLiveDate}"/>
+    </aura:if>
+    
+</aura:component>

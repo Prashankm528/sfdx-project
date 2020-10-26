@@ -1,0 +1,66 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="CAIDP_IdentityHeaderController">
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+	<aura:attribute name="appLauncherLabel" type="String" access="public" required="true" default="Open App Launcher" />
+	<aura:attribute name="homeLabel" type="String" access="public" required="true" default="Home" />
+	<aura:attribute name="profileLabel" type="String" access="public" required="true" default="My Profile" />
+	<aura:attribute name="logoutLabel" type="String" access="public" required="true" default="Logout" />
+	<aura:attribute name="helpLabel" type="String" access="public" required="true" default="Help" />
+	<aura:attribute name="faqLabel" type="String" access="public" required="true" default="FAQ" />
+
+	<aura:attribute name="userId" type="String" access="private" default="" />
+    <aura:attribute name="userName" type="String" access="private" default="" />
+    <aura:attribute name="communityHome" type="String" access="private" default="" />
+    <aura:attribute name="communityLogout" type="String" access="private" default="" />
+
+    <div class="header">
+    	<div class="overflow-right" style="{! 'background: url(' + $Resource.CAIDP_GreenOverflow + '); background-size: 100% 60px;' }">
+    	</div>
+		<div class="roundel" style="{! 'background-image: url(' + $Resource.CAIDP_Header + ');'}">
+			<div class="logo-container">
+			  <div class="logo" style="{! 'background-image: url(' + $Resource.CAIDP_Logo_MID + ');' }"></div>
+			  <nav class="slds-context-bar__secondary navigation" role="navigation">
+			    <ul class="slds-grid">
+			      <li class="slds-context-bar__item">
+			        <a href="{!v.communityHome}" class="slds-context-bar__label-action" title="{!v.homeLabel}">
+			          <div class="slds-icon_container" title="Home">
+		                <lightning:icon iconName="utility:home" variant="home" size="x-small"/>
+		                <span class="slds-assistive-text">{!v.homeLabel}</span>
+		              </div>
+			          <span class="slds-truncate title" title="{!v.homeLabel}">{!v.homeLabel}</span>
+			        </a>
+			      </li>
+			      <li class="slds-context-bar__item">
+			        <a href="{!v.communityHome + 'profile/' + v.userId}" class="slds-context-bar__label-action" title="{!v.userName}">
+		        	  <div class="slds-icon_container" title="Home">
+		                <lightning:icon iconName="utility:user" variant="user" size="x-small"/>
+		                <span class="slds-assistive-text">{!v.userName}</span>
+		              </div>
+			          <span class="slds-truncate title" title="{!v.userName}">{!v.userName}</span>
+			        </a>
+			      </li>
+			      <li class="slds-context-bar__item slds-context-bar__dropdown-trigger slds-dropdown-trigger slds-dropdown-trigger_hover">
+			        <a href="{!v.communityHome + 'help'}" class="slds-context-bar__label-action" title="{!v.helpLabel}">
+			          <div class="slds-icon_container" title="Home">
+		                <lightning:icon iconName="utility:help" variant="help" size="x-small"/>
+		                <span class="slds-assistive-text">{!v.helpLabel}</span>
+		              </div>
+			          <span class="slds-truncate title" title="{!v.helpLabel}">{!v.helpLabel}</span>
+			        </a>
+			      </li>
+			      <li class="slds-context-bar__item">
+			      	<a href="{!v.communityLogout + '/secur/logout.jsp'}" class="slds-context-bar__label-action" title="{!v.logoutLabel}">
+			      	  <div class="slds-icon_container" title="Home">
+		                <lightning:icon iconName="utility:logout" variant="logout" size="x-small"/>
+		                <span class="slds-assistive-text">{!v.logoutLabel}</span>
+		              </div>
+	                  <span class="slds-truncate title" title="{!v.logoutLabel}">{!v.logoutLabel}</span>
+	                </a>
+			      </li>
+			    </ul>
+			  </nav>
+	 		</div>
+		</div>
+	</div>
+</aura:component>

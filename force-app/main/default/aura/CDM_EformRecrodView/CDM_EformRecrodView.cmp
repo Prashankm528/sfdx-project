@@ -1,0 +1,76 @@
+<!-- CDM_EformRecordView Component, which is using for CDM eform record view  -->
+<aura:component access="global">
+	 <aura:attribute name="fieldsMetaDatamap" type="Map"/>
+    <aura:attribute name="fieldsMetaData" type="List"/>
+    <aura:attribute name="viewRecord" type="Boolean" default="false"/>
+     <aura:attribute name="recordEditAccess" type="Boolean" default="false"/>
+    <aura:attribute name="approvalStatus" type="String"/>
+    <aura:attribute name="userRole" type="String" description="get current user role"/> 
+     <aura:attribute name="childRecords" type="Object[]"
+                    description="store map value based on key" />
+     <aura:registerEvent name="CDM_HideSubmitBtnEvt" type="c:CDM_HideSubmitBtnEvt"/>
+   
+     <aura:attribute name="cdmStatus" type="String"/>
+     <aura:attribute name="recordId" type="String"
+                    description="Record Id" />
+    <aura:attribute name="splitAmount" type="Boolean"
+                    description="it defines split true or false" />
+     <aura:attribute name="splitRequired" type="String"/>
+    <aura:attribute name="country" type="String"/>
+    <aura:attribute name="splitAmountRecs" type="Sobject[]" default="[]" />
+    <aura:attribute name="adminPermissionSet" type="Boolean" default="false" description="this is to check if Admin Permission Set is assigned to user" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+ 
+     <aura:iteration items="{!v.fieldsMetaData}" var="field">
+          <aura:if isTrue="{!field.DataType != 'Split'}">
+              <div class="slds-size_1-of-2 slds-max-small-size_1-of-1" 
+                   style="{!field.Show? if((field.FieldName == 'Profit Center' ||
+                          field.FieldName == 'GL Account' || field.FieldName == 'Tax Code' || field.FieldName == 'Tax Rate' || 
+                          field.FieldName == 'Tax Amount' || field.FieldName == 'Gross Amount' ||
+                          field.FieldName == 'Cost Center' || field.FieldName == 'Item Text') &amp;&amp; v.splitRequired == 'Yes', 'display:none;' , 'display:inline;') : 'display:none'}"
+                   >   
+                  
+                  <div class="slds-m-left_medium">
+                      <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-hint-parent">
+                          <span class="slds-form-element__label">{!field.FieldName}</span> 
+                          <div class="slds-form-element__control">
+                              <div class="slds-form-element__static"> {!field.DataType == 'REFERENCE' ? field.LookVal : field.DataType == 'PERCENT' ? field.Fieldvalue+'%' : field.Fieldvalue}</div>
+                              <button class="slds-button slds-button_icon" title="Edit: Status" onclick="{!c.editRecord}" 
+                                      style="{!and(v.recordEditAccess,(v.cdmStatus == 'Draft'|| v.userRole == 'CDM_Operations_User' || v.cdmStatus =='Failed' || v.cdmStatus =='Rejected' || v.adminPermissionSet))? 'display:inline' : 'display:none'}">
+                                  <lightning:icon iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                                  
+                                  <span class="slds-assistive-text">Edit: Status</span>
+                              </button>
+                              
+                          </div>
+                          
+                      </div>
+                  </div>
+              </div> 
+         </aura:if>
+         
+       
+         <aura:if isTrue="{!and(field.DataType == 'Split',field.Show)}">
+            
+             <aura:if isTrue="{!v.splitAmount &amp;&amp; v.splitRequired == 'Yes'}">
+                 <div class="slds-size_1-of-1 slds-max-small-size_1-of-1">
+                     <div class="slds-m-left_medium"> 
+                          <div class="slds-scrollable"  style="height: 10rem; width: 48rem">
+                         <c:CDM_AmountSplitView childRecords = "{!v.splitAmountRecs}"
+                                                splitAmount="{!v.splitAmount}"
+                                                viewRecord="{!v.viewRecord}" 
+                                                approvalStatus="{!v.approvalStatus}"
+                                                userRole="{!v.userRole}"
+                                                country="{!v.country}"
+                                                cdmStatus="{!v.cdmStatus}"
+                                                recordEditAccess="{!v.recordEditAccess}"
+                                                />
+                         </div>
+                     </div>
+                 </div>
+                 
+             </aura:if>
+         </aura:if>
+     
+    </aura:iteration>
+</aura:component>

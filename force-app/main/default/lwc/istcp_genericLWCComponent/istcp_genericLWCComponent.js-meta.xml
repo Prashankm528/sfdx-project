@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>48.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightningCommunity__Default</target>
+        <target>lightningCommunity__Page</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightningCommunity__Default">
+            <property name="title" type="String" label="Enter the component title"/>
+            <property name="specificDataService" type="String" label="Enter the data Service name"/>
+            <property name="specificUIDataService" type="String" label="Enter the UI data Service name"/>
+            <property name="UIComponentType" type="String" label="Enter the UI Component Type" datasource="Table,SearchBox,Accordion"/>
+            <property name="preProcessor" type="String" label="Enter the Pre-Processor class"/>
+            <property name="postProcessor" type="String" label="Enter the Post-Processor class"/>
+            <property name="mainFilter" type="String" label="Enter the main filter" datasource="BPnumber, EndurId"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

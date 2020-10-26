@@ -1,0 +1,28 @@
+<aura:component controller="REIDP_PhoneNumberInputController" access="global">
+    <aura:attribute name="phoneNumber" type="String"/>
+    <aura:attribute name="countryCode" type="String"/>
+    <aura:attribute name="countryCodes" type="List" access="private"/>
+    <aura:attribute name="codeColSize" type="Integer" default="4" />
+    <aura:attribute name="phoneColSize" type="Integer" default="8" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:layout>
+        <lightning:layoutItem flexibility="auto" size="{! v.codeColSize }">
+            <lightning:combobox name="selectCountry" aura:id="comboCountry"
+                                placeholder="{! v.countryCode }" 
+                                options="{! v.countryCodes }" 
+                                class="slds-combobox_addon-start country-select"
+                                onchange="{! c.handleSelectedCode }"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem flexibility="auto" size="{! v.phoneColSize }">
+            <lightning:input name="mobilePhone" 
+                             class="slds-combobox_addon-end"
+                             value="{! v.phoneNumber }" type="tel"
+                             aura:id="userFieldPhone" placeholder="Phone Number"
+                             pattern="([0-9]*)?[-. ]?([0-9]*)[-. ]?([0-9]*)[-. ]?([0-9]*)" 
+                             messageWhenBadInput="Phone number is not valid"
+                             messageWhenPatternMismatch="Phone number is not valid"/>
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

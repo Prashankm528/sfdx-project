@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="CAJBP_RecordLoadedEvent">
+    <aura:attribute name="id" type="String"/>
+    <aura:attribute name="record" type="Object"/>
+</aura:event>

@@ -1,0 +1,13 @@
+<design:component label="RE IDP Identity Header">
+    <design:attribute name="network" label="Network" description="contains Network name it is used on" />
+    <design:attribute name="isHomePage" label="Is Home Page visible?" description="URL for Home Page"/>
+    <design:attribute name="isProfilePage" label="Is Profile Page visible?" description="URL for Profile Page"/>
+    <design:attribute name="isHelpPage"  label="Is Help Page visible?" description="URL for Help Page"/>
+    
+	<design:attribute name="homePageUrl" label="Home Page URL" description="The URL to display the Home Page. If empty the link dissapears"/>
+	<design:attribute name="profilePageUrl" label="Profile Page URL" description="The URL to display the Profile Page. If empty the link dissapears"/>
+	<design:attribute name="helpPageUrl" label="Help Page URL" description="The URL to display the Help Page. If empty the link dissapears"/>
+
+    <design:attribute name="headerFontColor" label="Header Font Color"/>
+    <design:attribute name="headerBackgroundColor" label="Header Background Color"/>
+</design:component>

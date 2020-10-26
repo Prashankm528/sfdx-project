@@ -1,0 +1,95 @@
+<aura:component controller="CHCRM_LookupController">
+
+
+    <aura:attribute name="objName" required="true" type="String" />
+    <aura:attribute name="transObjName" required="true" type="String" />
+    <aura:attribute name="extId" required="true" type="String" />
+    <aura:attribute name="queryItems" type="Object[]" />
+    <aura:attribute name="objectItems" type="String[]" default="Account, User"/>
+    <aura:attribute name="transObjectItems" type="String[]" default="客户,用户"/>
+    <aura:attribute name="fieldName" type="String" />
+    <aura:attribute name="selectedId" required="true" type="String" />
+    <aura:attribute name="selectedName" required="true" type="String" />
+    <aura:attribute name="translationMap" type="Map" default="{}" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:registerEvent name="LookupEvent" type="c:CHCRM_LookupItemSelected" />
+
+    <div class="slds-form-element">
+        <div class="slds-form-element__control">
+            <div class="slds-combobox-group">
+                <div class="slds-combobox_object-switcher slds-combobox-addon_start">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label slds-assistive-text" for="combobox-id-1"></label>
+                        <div class="slds-form-element__control">
+                            <div class="slds-combobox_container">
+                                <div aura:id="objectSelectList" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
+                                    <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
+                                        <input type="text" class="slds-input slds-combobox__input slds-combobox__input-value" autoComplete="off" value="{!v.transObjName}"   onmousedown="{!c.handleOpenObjectSelect}" onblur="{!c.handleObjectSelectBlur}" />
+                                            <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+                                                <lightning:icon iconName="utility:chevrondown" size="xx-small" alternativeText="chevrondown" />
+                                            </span>
+                                    </div>
+                                    <div id="objectswitcher-listbox-id-01"
+                                         class="slds-dropdown slds-dropdown_length-5 slds-dropdown_x-small slds-dropdown_left"
+                                         role="listbox">
+                                        <ul class="slds-listbox slds-listbox_vertical">
+                                            <!--<li class="slds-listbox__item" >
+                                                <div class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small">
+                                                    <h3 class="slds-listbox__option-header" >Select One</h3>
+                                                </div>
+                                            </li>-->
+                                            <aura:iteration items="{!v.transObjectItems}" var="item" indexVar="i">
+                                                
+                                                <li class="slds-listbox__item"  onmousedown="{!c.handleSelectObject}">
+                                                    <div 
+                                                         class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small slds-is-selected">
+                                                        <span class="slds-media__body" title="{!item}">{!item}</span>
+                                                    </div>
+                                                </li>
+                                            </aura:iteration>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-combobox_container slds-combobox-addon_end">
+                    <div aura:id="lookupDropList" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
+                        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right">
+                            <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_left">
+                                <lightning:icon iconName="utility:search" size="xx-small" alternativeText="chevrondown" />
+                            </span>
+                            <input type="text" data-id="{!v.selectedId}" class="slds-input slds-combobox__input"
+                                   value="{!v.selectedName}" onkeyup="{!c.handleOnKeyUp}" onblur="{!c.handleBlur}" />
+                        </div>
+                        <div class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid">
+                            <ul class="slds-listbox slds-listbox_vertical">
+                                <aura:iteration items="{!v.queryItems}" var="item" indexVar="i">
+                                    <li class="slds-listbox__item" onmousedown="{!c.handleSelectItem}">
+                                        <div
+                                             class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta">
+                                            <span class="slds-media__figure slds-listbox__option-icon">
+                                                <span class="slds-icon_container slds-icon-standard-account">
+                                                    <lightning:icon iconName="standard:avatar" size="x-small"
+                                                                    alternativeText="chevrondown" />
+                                                </span>
+                                            </span>
+                                            <span class="slds-media__body">
+                                                <span name="DropdownItemsSpans"
+                                                      class="slds-listbox__option-text slds-listbox__option-text_entity"
+                                                      id="{!item.Id}" title="{!item.Name}">{!item.Name}</span>
+                                            </span>
+                                        </div>
+                                    </li>
+                                </aura:iteration>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

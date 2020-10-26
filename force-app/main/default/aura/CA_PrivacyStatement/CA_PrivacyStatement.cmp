@@ -1,0 +1,49 @@
+<aura:component controller="CASFO_PrivacyStatementControllerClass" implements="force:appHostable">
+    <aura:attribute name="userProfile" type="String" default="none"/>
+    <aura:attribute name="userSalesOrg" type="String" default="none"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div style="margin: auto; max-width: 900px;">
+        <article class="slds-card">
+            <div class="slds-card__body slds-card__body_inner">
+                
+                <!-- LCF Privacy statements... -->
+                
+                <aura:if isTrue="{!v.userProfile == 'Castrol_LCFUser'}">
+                	<aura:if isTrue="{!v.userSalesOrg == 'FR07'}">
+                        <c:CALCF_PrivacyStatementFR />
+                    </aura:if>
+
+                    <!-- DEFAULT FOR ALL OTHER -->
+                    
+                    <aura:if isTrue="{!v.userSalesOrg != 'FR07'}">
+                        <c:CALCF_PrivacyStatementUK />
+                    </aura:if>
+                </aura:if>
+                
+                <!-- SFO Privacy statements... -->
+                
+                <aura:if isTrue="{!and(v.userProfile != 'none', v.userProfile != 'Castrol_LCFUser')}">
+                	<aura:if isTrue="{!v.userSalesOrg == 'FR07'}">
+                        <c:CASFO_PrivacyStatementFR />
+                    </aura:if>
+
+                    <aura:if isTrue="{!v.userSalesOrg == 'CN0A'}">
+                        <c:CASFO_PrivacyStatementCN />
+                    </aura:if>
+	
+                    <aura:if isTrue="{!or(v.userSalesOrg == 'US01', empty(v.userSalesOrg))}">
+                        <c:CASFO_PrivacyStatementUS_GME />
+                    </aura:if>
+    
+                    <!-- DEFAULT FOR ALL OTHER -->
+                    
+                    <aura:if isTrue="{!v.userSalesOrg != 'FR07' &amp;&amp; v.userSalesOrg != 'CN0A' &amp;&amp; v.userSalesOrg != 'US01' &amp;&amp; not(empty(v.userSalesOrg))}">
+                        <c:CASFO_PrivacyStatementUK />
+                    </aura:if>
+                </aura:if>
+            </div>
+        </article>
+    </div>
+</aura:component>

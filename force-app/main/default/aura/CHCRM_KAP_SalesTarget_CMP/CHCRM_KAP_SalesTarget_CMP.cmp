@@ -1,0 +1,211 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller="CHCRM_KAPSalesTargetController">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    <aura:attribute name="subChannelAccountId" type="String"/>
+    <aura:attribute name="rowObjectId" type="String" />
+    
+    <aura:attribute name="fwsTableHighSize" type="Boolean" default="false"/>
+    <aura:attribute name="fwsTableList" type="Object"/>
+    <aura:attribute name="fwsAllColumns" type="List"/>
+    <aura:attribute name="isEditFWSForm" type="Boolean" default="false"/>
+    <aura:attribute name="isDeleteFWSForm" type="Boolean" default="false"/>
+    <aura:attribute name="fields_1" type="String[]" />
+    
+    
+    <aura:attribute name="otherTableHighSize" type="Boolean" default="false"/>
+    <aura:attribute name="otherTableList" type="Object"/>
+    <aura:attribute name="otherAllColumns" type="List"/>
+    <aura:attribute name="isEditotherForm" type="Boolean" default="false"/>
+    <aura:attribute name="isDeleteotherForm" type="Boolean" default="false"/>
+    <aura:attribute name="fields_2" type="String[]" />
+    
+    <aura:attribute name="isloading" type="boolean" default="false"/>
+    <aura:handler event="force:refreshView" action="{!c.init}" />
+    <aura:attribute name="isDraft" type="Boolean" default="false"/>
+    
+    <aura:attribute name="currentPage" type="Integer" default="1"/>
+    <aura:attribute name="selectedId" type="String" default=""/>
+    <aura:attribute name="selectedName" type="String" default=""/>
+    
+    <aura:attribute name="subChannleSubAccountList" type="Object"/>
+    <aura:attribute name="selectSubCode" type="String"/>
+    <aura:attribute name="billToName" type="String"/>
+    
+    <div class="slds-grid slds-grid_vertical">
+        <div class="slds-col slds-m-vertical_small">
+            <lightning:card title="目标设定-PBV" iconName="standard:sales_cadence_target"
+                            class="slds-card slds-card_boundary headerBottomBorder forceRelatedListCardDesktop">
+                <aura:set attribute="actions">
+                    <lightning:button label="Add Target" title="Add Target"
+                                      iconName="utility:add" iconPosition="left"
+                                      onclick="{! c.addFWSNewRow }" variant="Neutral" disabled="{!if(v.isDraft,'false','true')}"/>
+                </aura:set>
+                <div style="{! if(v.fwsTableHighSize, '' , 'height:150px')}">
+                    <lightning:datatable columns="{! v.fwsAllColumns }"
+                                         data="{! v.fwsTableList }"
+                                         keyField="id"
+                                         hideCheckboxColumn = "true"
+                                         onrowaction="{! c.handleFWSRowAction }"/>
+                </div>
+            </lightning:card>            
+        </div>
+        <div class="slds-col">
+            <lightning:card title="目标设定-SKU" iconName="standard:sales_cadence_target"
+                            class="slds-card slds-card_boundary headerBottomBorder forceRelatedListCardDesktop">
+                <aura:set attribute="actions">
+                    <lightning:button label="Add Target" title="Add Target"
+                                      iconName="utility:add" iconPosition="left"
+                                      onclick="{! c.addotherNewRow }" variant="Neutral" disabled="{!if(v.isDraft,'false','true')}"/>
+                </aura:set>
+                <div style="{! if(v.otherTableHighSize, '' , 'height:150px')}">
+                    <lightning:datatable 
+                                         columns="{! v.otherAllColumns }"
+                                         data="{! v.otherTableList }"
+                                         keyField="id"
+                                         hideCheckboxColumn = "true"
+                                         onrowaction="{! c.handleotherRowAction }"/>
+                </div>
+            </lightning:card>          
+        </div>
+    </div>
+    <!--Modal Window-->
+    <aura:if isTrue="{!v.isEditFWSForm}"> 
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <aura:if isTrue="{!v.isloading}"> 
+                <div class="exampleHolder">
+                    <lightning:spinner alternativeText="Loading" size="large" />
+                </div>
+            </aura:if>
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{! c.closeFWSEdit}">
+                        X
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">目标设定-PBV</h2>
+                    <aura:if isTrue="{!v.currentPage == 1}">
+                        <div style="text-align:right">
+                            <lightning:button label="下一步" title="Next"
+                                              iconName="utility:forward" iconPosition="right"
+                                              variant="Neutral" onclick="{!c.nextPage}"/> <br/>
+                        </div>
+                    </aura:if>
+                    <aura:if isTrue="{!v.currentPage == 2}">
+                        <div style="text-align:left">
+                            <lightning:button label="上一步" title="Last"
+                                              iconName="utility:back" iconPosition="left"
+                                              variant="Neutral" onclick="{!c.backPage}"/> <br/> 
+                        </div>
+                    </aura:if>
+                </header>
+                <aura:if isTrue="{!v.currentPage == 1}">
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <c:CHCRM_KAP_PBV_CMP selectedId="{!v.selectedId}" selectedName="{!v.selectedName}"/>
+                        <!--<div class="row">
+                            <lightning:input name="selectedItem" value="{! v.selectedName }" label="Product Brand Variant" disabled="true"/>
+                        </div>-->
+                    </div>                      
+                </aura:if>
+                <aura:if isTrue="{!v.currentPage == 2}">
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" >
+                        <div aura:id="container" class="slds-card">
+                            <lightning:input name="selectedItem" value="{! v.selectedName }" label="Product Brand Variant" disabled="true"/>
+                            <lightning:select name="select" label="Sub Channel Sub Account Code" value="{!v.selectSubCode}" onchange="{!c.selectSubCodeChange}">
+                                <option text="--请选择--" value=""/>
+                                <aura:iteration items="{!v.subChannleSubAccountList}" var="option">
+                                    <option text="{!option.Name}" value="{!option.Id}" selected="{!option.selected}"/>
+                                </aura:iteration>
+                            </lightning:select>
+                            <lightning:input value="{! v.billToName }" label="Bill To" disabled="true"/>
+                            <lightning:recordForm 
+                                                  aura:id="form1"
+                                                  recordId="{!v.rowObjectId}"
+                                                  objectApiName="CHCRM_KAP_Sales_Target__c"
+                                                  mode="{!if(v.isDeleteFWSForm,'readonly','edit')}"                  
+                                                  fields="{!v.fields_1}"
+                                                  columns="1"
+                                                  onsubmit = "{!c.onSubmit1}"
+                                                  onsuccess = "{!c.closeFWSEdit}"
+                                                  class="none-cancel"/>
+                        </div>
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{!v.isDeleteFWSForm}"> 
+                    <footer class="slds-modal__footer" style="text-align:center">                        
+                        <button class="slds-button slds-button_brand" onclick="{! c.delete1}">Delete</button>                        
+                    </footer>
+                </aura:if>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div> 
+    </aura:if>    
+    
+    <aura:if isTrue="{!v.isEditotherForm}"> 
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <aura:if isTrue="{!v.isloading}"> 
+                <div class="exampleHolder">
+                    <lightning:spinner alternativeText="Loading" size="large" />
+                </div>
+            </aura:if>
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{! c.closeOtherEdit}">
+                        X
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">目标设定-SKU</h2>
+                    <aura:if isTrue="{!v.currentPage == 1}">
+                        <div style="text-align:right">
+                            <lightning:button label="下一步" title="Next"
+                                              iconName="utility:forward" iconPosition="right"
+                                              variant="Neutral" onclick="{!c.nextPage}"/> <br/>
+                        </div>
+                    </aura:if>
+                    <aura:if isTrue="{!v.currentPage == 2}">
+                        <div style="text-align:left">
+                            <lightning:button label="上一步" title="Last"
+                                              iconName="utility:back" iconPosition="left"
+                                              variant="Neutral" onclick="{!c.backPage}"/> <br/> 
+                        </div>
+                    </aura:if>
+                </header>
+                <aura:if isTrue="{!v.currentPage == 1}">
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <c:CHCRM_KAP_ProductTypeTree_CMP selectedId="{!v.selectedId}" selectedName="{!v.selectedName}"/>
+                    </div>                      
+                </aura:if>
+                <aura:if isTrue="{!v.currentPage == 2}">
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" >
+                        <div aura:id="container" class="slds-card">
+                            <lightning:input name="selectedItem" value="{! v.selectedName }" label="SKU Code" disabled="true"/>
+                            <lightning:select name="select" label="Sub Channel Sub Account Code" value="{!v.selectSubCode}" onchange="{!c.selectSubCodeChange}">
+                                <option text="--请选择--" value=""/>
+                                <aura:iteration items="{!v.subChannleSubAccountList}" var="option">
+                                    <option text="{!option.Name}" value="{!option.Id}" selected="{!option.selected}"/>
+                                </aura:iteration>
+                            </lightning:select>
+                            <lightning:input value="{! v.billToName }" label="Bill To" disabled="true"/>
+                            <lightning:recordForm 
+                                                  aura:id="form2"
+                                                  recordId="{!v.rowObjectId}"
+                                                  objectApiName="CHCRM_KAP_Sales_Target__c"
+                                                  mode="{!if(v.isDeleteotherForm,'readonly','edit')}"                  
+                                                  fields="{!v.fields_2}"
+                                                  columns="1"
+                                                  onsubmit = "{!c.onSubmit2}"
+                                                  onsuccess = "{!c.closeOtherEdit}"
+                                                  class="none-cancel"/>
+                        </div>
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{!v.isDeleteotherForm}"> 
+                    <footer class="slds-modal__footer" style="text-align:center">                        
+                        <button class="slds-button slds-button_brand" onclick="{! c.delete2}">Delete</button>                        
+                    </footer>
+                </aura:if>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div> 
+    </aura:if> 
+</aura:component>

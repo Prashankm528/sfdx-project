@@ -1,0 +1,20 @@
+<aura:component >
+    <aura:attribute name="variant" type="String" default="success" description="Toast variant, available options: success, warning, error"/>
+    <aura:attribute name="title" type="String" required="true" />
+    <aura:attribute name="description" type="String"/>
+    <div class="slds-notify_container" style="top:20% !important">
+        <div class="{!'slds-notify slds-notify_toast slds-theme_' + v.variant}" role="alert">
+            <span class="slds-assistive-text">success</span>
+            <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+                <lightning:icon iconName="{!'utility:' + v.variant}" variant="inverse" size="small" alternativeText="{!v.variant}"/>
+            </span>
+            <div class="slds-notify__content">
+                <h2 class="slds-text-heading_small ">{!v.title}</h2>
+                <aura:if isTrue="{!and(v.description != null, v.description != '')}">
+                    <p>{!v.description}</p>
+                </aura:if>
+            </div>
+            <lightning:buttonIcon onclick="{!c.handleClose}" iconName="utility:close" variant="bare-inverse" class="slds-notify__close" size="large" alternativeText="Close"/>
+        </div>
+    </div>
+</aura:component>

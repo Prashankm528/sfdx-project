@@ -1,0 +1,322 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:appHostable,force:hasRecordId" controller="CAPL_CustomProfileController">
+
+	<style>
+		@media only screen and (max-width:40.063em) {
+		    .userInfo {
+		        padding: .5rem !important;
+		    }
+
+		    .userDetailCenter {
+		        padding-left: 0rem !important;
+		        padding-right: 0rem !important;
+		    }
+
+		    .userDetailRight {
+		        padding-left: 0rem !important;
+		    }
+		}
+	</style>
+	
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+	<aura:attribute name="fileToBeUploaded" type="Object[]" />
+	<aura:attribute name="userChatterActivity" type="Object" />
+	<aura:attribute name="userReputation" type="Object" />
+	<aura:attribute name="userInfo" type="Object" />
+	<aura:attribute name="numOfUserFollowers" type="Integer" />
+	<aura:attribute name="OEMBrandValues" type="List" default="[]" />
+	
+	<aura:attribute name="blobValue" type="Blob" />
+	
+	<aura:attribute name="isPreviewImageUploaded" type="Boolean" default="false" />
+	<aura:attribute name="isShowSection" type="boolean" default="false" />
+    <aura:attribute name="isChangePhotoModalOpen" type="boolean" default="false" />
+    <aura:attribute name="isEditInfoModalOpen" type="boolean" default="false" />
+
+    <aura:attribute name="userProfilePhoto" type="String" />
+    <aura:attribute name="uploadedImageURL" type="String" />
+	<aura:attribute name="uploadedImageName" type="String" />
+
+
+	<aura:attribute name="castrolProfessionalPoints" type="String" default="Castrol Professional Points" />
+	<aura:attribute name="following" type="String" default="Following" />
+	<aura:attribute name="followers" type="String" default="Followers" />
+	<aura:attribute name="posts" type="String" default="Posts" />
+	<aura:attribute name="comments" type="String" default="Comments" />
+	<aura:attribute name="likes" type="String" default="Likes" />
+	<aura:attribute name="name" type="String" default="Name" />
+	<aura:attribute name="aboutme" type="String" default="About me" />
+	<aura:attribute name="jobrole" type="String" default="Job Role" />
+	<aura:attribute name="cell" type="String" default="Cell" />
+	<aura:attribute name="email" type="String" default="Email" />
+	<aura:attribute name="birthdate" type="String" default="Birthdate" />
+	<aura:attribute name="location" type="String" default="Location" />
+	<aura:attribute name="phone" type="String" default="Phone" />
+	<aura:attribute name="oembrand" type="String" default="OEM Brand" />
+	<aura:attribute name="close" type="String" default="Close" />
+	<aura:attribute name="editpersonalinfo" type="String" default="Edit Personal Info" />
+	<aura:attribute name="cancel" type="String" default="Cancel" />
+	<aura:attribute name="save" type="String" default="Save" />
+	<aura:attribute name="edit" type="String" default="EDIT" />
+	<aura:attribute name="updatephoto" type="String" default="Update Photo" />
+	<aura:attribute name="updatephotodetails" type="String" default="You can upload a JPG, GIF or PNG file. Maximum file size is 16 MB." />
+	<aura:attribute name="currentphoto" type="String" default="Current Photo" />
+	<aura:attribute name="changeimage" type="String" default="Change image" />
+	<aura:attribute name="selectfiles" type="String" default="Select files" />
+
+	<div class="slds-grid slds-wrap userProfile">
+		<div class="slds-col slds-small-size--12-of-12 slds-medium-size--4-of-12 slds-large-size--4-of-12 photoIcon">
+    		<a class="{!v.isShowSection == true ? 'linkToUploadForceCropPhoto slds-show--inline-block slds-is-relative' : 'linkToUploadForceCropPhoto slds-show--inline-block slds-is-relative disabledLink'}" href="javascript:void(0);" onclick="{!c.openChangePhotoModal}">
+
+    			<span>
+    				<img src="{!v.userProfilePhoto}" class="profilePhoto" />
+    			</span>
+    			<span class="profilePhotoIcon">
+    				<aura:if isTrue="{!v.isShowSection}">
+    					<lightning:icon iconName="utility:photo" size="small" alternativeText="photo icon" />
+    				</aura:if>
+    			</span>
+    		</a>
+    	</div>
+    	<div class="slds-col slds-small-size--12-of-12 slds-medium-size--8-of-12 slds-large-size--8-of-12 ">
+    		<div class="userName slds-m-bottom_small">
+    			{!v.userInfo.Name}
+    		</div>
+    		<div class="userReputation slds-m-bottom_small">
+    			<span>
+    				<img src="{!v.userReputation.reputationLevel.levelImageUrl}" style="width: 20px;" />
+    			</span>
+    			<span>
+    				&nbsp;{!v.userReputation.reputationLevel.levelName}
+    			</span>
+    			<span>
+    				({!v.userReputation.reputationPoints}&nbsp;{!v.castrolProfessionalPoints})
+    			</span>
+    		</div>
+
+    		<div class="slds-grid slds-wrap userActivity">
+    			<div class="slds-col slds-small-size--2-of-10 slds-medium-size--2-of-10 slds-large-size--2-of-10 slds-m-horizontal_x-small" style="margin-left: 0px;">
+					<div class="activityName">
+						{!v.following}
+					</div>
+					<div class="activityCount">
+						{!v.userChatterActivity.InfluenceRawRank}
+					</div>
+				</div>
+    			<div class="slds-col slds-small-size--2-of-10 slds-medium-size--2-of-10 slds-large-size--2-of-10 slds-m-horizontal_x-small">
+					<div class="activityName">
+						{!v.followers}
+					</div>
+					<div class="activityCount">
+						{!v.numOfUserFollowers}
+					</div>
+				</div>
+				<div class="slds-col slds-small-size--2-of-10 slds-medium-size--2-of-10 slds-large-size--2-of-10 slds-m-horizontal_x-small">
+					<div class="activityName">
+						{!v.posts}
+					</div>
+					<div class="activityCount">
+						{!v.userChatterActivity.PostCount}
+					</div>
+				</div>
+				<div class="slds-col slds-small-size--2-of-10 slds-medium-size--2-of-10 slds-large-size--2-of-10 slds-m-horizontal_x-small">
+					<div class="activityName">
+						{!v.comments}
+					</div>
+					<div class="activityCount">
+						{!v.userChatterActivity.CommentCount}
+					</div>
+				</div>
+				<div class="slds-col slds-small-size--2-of-10 slds-medium-size--2-of-10 slds-large-size--2-of-10 slds-m-horizontal_x-small">
+					<div class="activityName">
+						{!v.likes}
+					</div>
+					<div class="activityCount">
+						{!v.userChatterActivity.LikeReceivedCount}
+					</div>
+				</div>
+    		</div>
+    	</div>
+
+    	<div class="slds-col slds-small-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12 ">
+    		<div class="slds-grid slds-wrap slds-p-around_large slds-m-top_small userInfo">
+				<div class="slds-col slds-small-size--12-of-12 slds-medium-size--4-of-12 slds-large-size--4-of-12 ">
+					<div>
+						<div class="userFieldName">
+							{!v.aboutme}
+						</div>
+						<div class="userFieldValue">
+							{!v.userInfo.AboutMe} &nbsp;
+						</div>
+					</div>
+				</div>
+				<div class="slds-col slds-small-size--12-of-12 slds-medium-size--8-of-12 slds-large-size--8-of-12 ">
+					<div class="slds-grid slds-wrap slds-grid--vertical-stretch">
+						<div class="slds-col slds-small-size--12-of-12 slds-medium-size--6-of-12 slds-large-size--6-of-12 slds-p-horizontal_medium userDetailCenter">
+							<div class="userFieldNameValuePair">
+								<div class="userFieldName">
+									{!v.jobrole}
+								</div>
+								<div class="userFieldValue">
+									{!v.userInfo.CAPL_Job_Role__c} &nbsp;
+								</div>
+							</div>
+							<div>
+								<div class="userFieldName">
+									{!v.location}
+								</div>
+								<div class="userFieldValue">
+									{!v.userInfo.CAPL_Location__c} &nbsp;
+								</div>
+							</div>
+						</div>
+						<div class="slds-col slds-small-size--12-of-12 slds-medium-size--6-of-12 slds-large-size--6-of-12 slds-p-left_xx-large userDetailRight">
+							<div class="userFieldNameValuePair">
+								<div class="userFieldName">
+									{!v.birthdate}
+								</div>
+								<div class="userFieldValue">
+									{!v.userInfo.CAPL_Birthdate__c} &nbsp;
+								</div>
+							</div>
+							<div>
+								<div class="userFieldName">
+									{!v.oembrand}
+								</div>
+								<div class="userFieldValue">
+									{!v.userInfo.CAPL_OEM_Brand__c} &nbsp;
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<aura:if isTrue="{!v.isShowSection}">
+					<div class="editButton">
+						<lightning:button variant="neutral" label="{!v.edit}" iconName="utility:edit" iconPosition="right" onclick="{!c.openEditInfoModal}" />
+					</div>
+				</aura:if>
+			</div>
+    	</div>
+
+    	<aura:if isTrue="{!v.isEditInfoModalOpen}">
+            <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open ">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.closeModal}">
+				            X
+				            <span class="slds-assistive-text">{!v.close}</span>
+				            </button>
+                        <h2 id="header99" class="slds-text-heading--medium">{!v.editpersonalinfo}</h2>
+                    </div>
+                    <div class="slds-modal__content">
+                    	<div class="slds-grid slds-wrap slds-p-around_large slds-m-top_small userDetail">
+							<div class="slds-col slds-small-size--12-of-12 slds-medium-size--6-of-12 slds-large-size--6-of-12 slds-p-horizontal_xx-small">
+								<ui:inputText label="{!v.name}" value="{!v.userInfo.Name}"/>
+								<br/>
+								<ui:inputText label="{!v.jobrole}" value="{!v.userInfo.CAPL_Job_Role__c}"/>
+								<!-- <br/>
+								<ui:inputText label="{!v.phone}" value="{!v.userInfo.MobilePhone}"/> -->
+								<br/>
+								<ui:inputTextArea label="{!v.aboutme}" value="{!v.userInfo.AboutMe}" rows="5"/>
+							</div>
+							<div class="slds-col slds-small-size--12-of-12 slds-medium-size--6-of-12 slds-large-size--6-of-12 slds-p-horizontal_xx-small">
+								<!-- <ui:inputText label="{!v.email}" value="{!v.userInfo.Email}"/>
+								<br/> -->
+								<ui:inputDate aura:id="birthdate"
+				                  label="{!v.birthdate}" displayDatePicker="true"
+				                  value="{!v.userInfo.CAPL_Birthdate__c}"/>
+				                <br/>
+				                <ui:inputText label="{!v.location}" value="{!v.userInfo.CAPL_Location__c}"/>
+				                <br/>
+				                <ui:inputSelect aura:id="OEMBrand" label="{!v.oembrand}" change="{!c.OEMBrandSelected}">
+						            <aura:iteration items="{!v.OEMBrandValues}" var="level">
+						                <ui:inputSelectOption text="{!level}" label="{!level}" 
+						                	value="{!v.userInfo.CAPL_OEM_Brand__c == level ? true : false}"/>
+						            </aura:iteration>
+						        </ui:inputSelect>
+							</div>
+						</div>
+                    </div>
+                    <div class="slds-modal__footer">
+                        <button class="slds-button slds-button--neutral" onclick="{!c.closeModal}">{!v.cancel}</button>
+                        <button class="slds-button slds-button--brand" onclick="{!c.saveUserInfoChanges}">{!v.save}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>
+        </aura:if>
+
+
+        <aura:if isTrue="{!v.isChangePhotoModalOpen}">
+            <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open ">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close" onclick="{!c.closeModal}">
+				            X
+				            <span class="slds-assistive-text">{!v.close}</span>
+				            </button>
+                        <h2 id="header99" class="slds-text-heading--medium">{!v.updatephoto}</h2>
+                    </div>
+                    <div class="slds-modal__content slds-p-around--medium slds-text-align--center">
+                    	<div class="slds-m-bottom--medium">
+                    		{!v.updatephotodetails}
+                    	</div>
+
+                    	<aura:if isTrue="{!!v.isPreviewImageUploaded}">
+							<lightning:input type="file" 
+								label="{!v.selectfiles}" 
+								files="{!v.fileToBeUploaded}"
+								name="file" 
+								multiple="false" 
+								accept=".jpg, .png, .gif" 
+								messageWhenBadInput="File type not supported"
+								onchange="{!c.uploadPreviewImage}"
+								value="{!v.blobValue}"/>
+
+			                <div class="slds-m-vertical--medium">
+	                    		{!v.currentphoto}:
+	                    	</div>
+
+	                    	<img src="{!v.userProfilePhoto}" class="profilePhotoWithoutBorderRadius" />
+			                  
+			            </aura:if>
+
+			            <aura:if isTrue="{!v.isPreviewImageUploaded}">
+			                <div style="width: 20rem; margin-left: auto; margin-right: auto;">
+							    <div class="slds-file slds-file_card">
+							        <figure>
+							            <a href="javascript:void(0);" >
+									        <img src="{!v.uploadedImageURL}" class="previewImage" alt="Description of the image" />
+									    </a>
+							            <figcaption class="slds-file__title slds-file__title_card">
+							                <div class="slds-media slds-media_small slds-media_center">
+							                    <div class="slds-media__figure slds-line-height_reset">
+							                        <span class="slds-icon_container" title="png">
+							              				<lightning:icon iconName="utility:photo" size="small" alternativeText="photo icon"/>
+							              				<span class="slds-assistive-text">png</span>
+							                        </span>
+							                    </div>
+							                    <div class="slds-media__body">
+							                        <span class="slds-file__text slds-truncate" title="{!v.uploadedImageName}">{!v.uploadedImageName}</span>
+							                    </div>
+							                </div>
+							            </figcaption>
+							        </figure>
+							    </div>
+							</div>
+						</aura:if>
+                    </div>
+                    <div class="slds-modal__footer">
+                        <button class="slds-button slds-button--neutral" onclick="{!c.closeModal}">{!v.cancel}</button>
+                        
+                        <aura:if isTrue="{!v.isPreviewImageUploaded}">
+                        	<button class="slds-button slds-button--brand" onclick="{!c.uploadImage}">{!v.changeimage}</button>
+                        </aura:if>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>
+        </aura:if>
+	</div>
+
+</aura:component>

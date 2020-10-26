@@ -1,0 +1,80 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,lightning:isUrlAddressable" access="global" controller="GEFUE_MassUploadCtrl">
+    <aura:attribute name="filetype" type="List" default="['.csv']" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="documentId" type="String" />
+    <aura:attribute name="csvDataStr" type="String" />
+    <aura:attribute name="batchJobId" type="String" />
+    <aura:attribute name="oppStagingData" type="List"/>
+    <aura:attribute name="stagingColumns" type="List"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="SpinnerQueueable" type="boolean" default="false"/>
+    <aura:attribute name="fileUploaded" type="Boolean" default="false"/>
+    <aura:attribute name="requiredFieldValid" type="Boolean" default="false"/>
+    <aura:attribute name="isComplete" type="Boolean" default="false"/>
+    <aura:attribute name="notAllValidated" type="Boolean" default="true"/>
+    <aura:attribute name="selectedDocumentId" type="String" />
+    <aura:attribute name="hasModalOpen" type="boolean" default="false"/>
+    
+    <!--<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>-->
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.SpinnerQueueable}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-align_absolute-center slds-text-heading_large">
+                <b>Please wait while your records are being processed..!</b>
+            </div>
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.fileUploaded}">
+        <div style="width:100%;">
+            <div class="slds-var-m-around_medium">
+                
+                <lightning:button variant="brand" label="Validate" title="Validate" class="slds-m-horizontal_medium" onclick="{!c.validateOppStageRows}"/>
+                <lightning:button variant="brand" label="Submit" title="Submit" class="slds-m-horizontal_medium" onclick="{!c.finalSubmit}"
+                                  disabled="{!v.notAllValidated}"/>
+                
+                <p class="slds-align_absolute-center slds-text-heading_small"> This is a preview of records in the loaded file, please verify the values once, Validate, edit if needed and Submit the records.</p>
+                
+            </div>
+            
+            <lightning:datatable aura:id="stagingTable"  
+                                 data="{!v.oppStagingData}"
+                                 columns="{!v.stagingColumns}"
+                                 keyField="Id"    
+                                 hideCheckboxColumn="true"
+                                 suppressBottomBar="true"
+                                 onrowaction="{!c.handleSelectedRowAction}"/>
+            
+            <lightning:button variant="brand" label="Save" title="Save" class="slds-m-top_medium slds-float_right slds-m-horizontal_medium" onclick="{!c.onInlineEditSave}"/>
+            <lightning:button variant="neutral" label="Cancel" title="Cancel" class="slds-m-top_medium slds-float_right" onclick="{!c.onCancel}"/>
+        
+        </div>
+        <aura:set attribute="else">
+            <lightning:fileUpload label="Bulk Upload"
+                                  name="fileUploader"
+                                  multiple="true"
+                                  accept="{!v.filetype}"
+                                  recordId="{!v.documentId}"
+                                  onuploadfinished="{!c.handleUploadFinished}"
+                                  class="slds-align_absolute-center"/>
+            
+        </aura:set>
+    </aura:if>
+</aura:component>

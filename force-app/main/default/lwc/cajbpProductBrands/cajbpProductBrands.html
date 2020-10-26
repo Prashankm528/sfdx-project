@@ -1,0 +1,21 @@
+<!--
+ * @author			Venkatesh Muniyasamy
+ * @date			13/08/2020
+ * @group			CAJBP
+ * @description		Edit Product Brands for Product Mix Target Item.
+ *
+ * history
+ * 13/08/2020	Venkatesh Muniyasamy	    Edit Product Brands
+ -->
+<template>
+    <lightning-dual-listbox name="Product Brands"
+                            label="Product Brands"
+                            source-label="Available"
+                            selected-label="Selected"
+                            field-level-help="Select your applicable product brands"
+                            disable-reordering=true
+                            options={options}
+                            onchange={handleChange}
+                            value={selected}>
+    </lightning-dual-listbox>
+</template>

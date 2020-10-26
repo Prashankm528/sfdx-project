@@ -1,0 +1,10 @@
+.THIS.content{
+    min-height: calc(70vh - 70px);
+}
+.THIS .custom-loading-text {
+    transform: rotate(-90deg);
+    position: absolute;
+    top: -1.5rem;
+    left: -1rem;
+    white-space: nowrap;
+}

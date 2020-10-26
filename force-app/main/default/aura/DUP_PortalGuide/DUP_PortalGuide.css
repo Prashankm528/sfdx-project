@@ -1,0 +1,14 @@
+.THIS.video-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.THIS .video-section {
+    padding: 15px;
+}
+
+.THIS .training-title{
+    font-family: 'univers45light' !important;
+    font-size: 30px;
+    width: 450px;
+}

@@ -1,0 +1,39 @@
+<!--
+ - @Author: Vit Bares
+ - @Email: vit.bares@bluewolfgroup.com
+ - @Company: Bluewolf
+ - @Created: 03/12/2017
+ - @Description: Helper component, which currently implements variants of helper view functionality
+ - This code is the intellectual property of IBM GBS and is not to be used by non-GBS practitioners nor distributed outside of GBS engagements.
+ - For full usage guidelines refer to http://ibm.biz/innersourcing-consume-guidelines
+ -->
+
+<aura:component description="LEX_Utils_View">
+    <aura:method name="handleError" action="{!c.handleError}" description="Calls function showToast with error configuration">
+        <aura:attribute name="errorMessage" type="String" description="Message to be displayed"/>
+    </aura:method>
+
+    <aura:method name="navigateToSObject" action="{!c.navigateToSObject}"
+                 description="Implements navigation to different sObject detail page for both lightning and classic version.">
+        <aura:attribute name="sObjectId" type="String"/>
+    </aura:method>
+
+    <aura:method name="showToast" action="{!c.showToast}"
+                 description="Displays Toast message in case it's available. If not, standard JS aler() dialog window is used instead.">
+        <aura:attribute name="title" type="String"/>
+        <aura:attribute name="message" type="String"/>
+        <aura:attribute name="type" type="String"/>
+        <aura:attribute name="mode" type="String"/>
+    </aura:method>
+
+    <aura:method name="startSpinner" action="{!c.startSpinner}" description="Standard start spinner implementation,
+    see https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/aura_compref_lightning_spinner.htm">
+        <aura:attribute name="component" type="Aura.Component" description="Caller component"/>
+    </aura:method>
+
+    <aura:method name="stopSpinner" action="{!c.stopSpinner}" description="Standard stop spinner implementation,
+    see https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/aura_compref_lightning_spinner.htm">
+        <aura:attribute name="component" type="Aura.Component" description="Caller component"/>
+    </aura:method>
+
+</aura:component>

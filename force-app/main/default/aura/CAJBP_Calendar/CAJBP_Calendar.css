@@ -1,0 +1,22 @@
+.THIS {
+}
+
+.THIS.container {
+    position: relative;
+    background-color: #16325c;
+    height: 120px;
+}
+
+.THIS .loader {
+    width: 100%;
+    margin-top: 0px;
+    top: 80px;
+}
+
+.THIS .fc-center {
+    text-transform: capitalize;
+}
+
+.THIS .btn-primary {
+    text-transform: uppercase;
+}

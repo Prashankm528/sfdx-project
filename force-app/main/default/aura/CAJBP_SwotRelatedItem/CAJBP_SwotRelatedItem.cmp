@@ -1,0 +1,43 @@
+<!--
+ - Created by amirhafeez on 18/03/2020.
+ -->
+<aura:component description="CAJBP_SwotRelatedItem">
+    <aura:attribute name="swots" type="List"/>
+
+    <ltng:require scripts="{!$Resource.CAJBP_SortableJs}" afterScriptsLoaded="{!c.doInit}" />
+
+    <aura:registerEvent name="swotRelatedEvent" type="c:CAJBP_SwotRelatedEvent"/>
+    <lightning:navigation aura:id="navService"/>
+
+    <div class="slds-card">
+        <div class="slds-grid">
+            <span>
+                <ul class="sortable slds-list_dotted" aura:id="sortable">
+                    <aura:if isTrue="{!not(empty(v.swots))}">
+                        <aura:iteration items="{!v.swots}" var="swot">
+                            <li class="list-group-item" data-id="{!swot.id}">
+                                <a style="{!'color: ' + swot.colour + ';'}" class="slds-text-title_bold" data-id="{!swot.id}" onclick="{!c.viewSwot}">{!swot.title}</a>
+                                <span class="btn-container">
+                                    <lightning:buttonGroup>
+                                        <div onclick="{!c.editSwot}" data-id="{!swot.id}">
+                                            <lightning:buttonIcon iconName="utility:edit" alternativeText="Edit" title="Edit" size="x-small" variant="border-filled"></lightning:buttonIcon>
+                                        </div>&nbsp;
+                                        <div>
+                                            <span class="slds-avatar slds-avatar_x-small">
+                                                <abbr class="slds-avatar__initials slds-icon-standard-lead" title="{!$Label.c.CAJBP_Related_Objectives}">{!swot.objectives}</abbr>
+                                            </span>
+                                        </div>
+                                        :<br/>
+                                    </lightning:buttonGroup>
+                                </span>
+                                <p class="slds-p-left_large">
+                                    <lightning:formattedText value="{!swot.description}"/>
+                                </p>
+                            </li>
+                        </aura:iteration>
+                    </aura:if>
+                </ul>
+            </span>
+        </div>
+    </div>
+</aura:component>

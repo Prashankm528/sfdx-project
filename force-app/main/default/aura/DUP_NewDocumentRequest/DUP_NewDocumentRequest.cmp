@@ -1,0 +1,99 @@
+<aura:component controller="DUP_NewDocumentRequestController" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global">
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="modalNewDocStore" type="Boolean" access="public"/>
+    <aura:attribute name="openModal" type="Boolean" access="public"/>
+    <aura:attribute name="recordId" type="String" access="public"/>
+    <aura:attribute name="selectedTemplate" type="String"/>
+    <aura:attribute name="newDocStore" type="DUP_Document_Store__c"
+        default="{ 'sobjectType': 'DUP_Document_Store__c' }" />
+    <aura:attribute name="lovList" type="DUP_List_Of_Values__c[]"/>
+    <aura:attribute name="docTemplateList" type="DUP_Document_Template__c[]"/>
+    <aura:attribute name="docStoreId" type="Id" access="public"/>
+    <aura:attribute name="contentDocument" type="ContentDocumentLink[]" access="public"/>
+    <aura:attribute name="context" type="String" default="External" access="public"/> 
+    <aura:attribute name="countDocStoreUploaded" type="Integer" access="public"/> 
+    <aura:attribute name="counterFiles" type="Integer" default="0" access="public"/>
+    <aura:attribute type="Aura.Component[]" name="body" />
+
+    <aura:handler name="removeDeletedFiles" event="c:DUP_RemoveDeletedFiles" action="{!c.handledeletedFiles}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+
+    <aura:registerEvent name="newDocumentEvent" type="c:DUP_NewDocumentRequestAdded"/>
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner />
+    </aura:if>
+    
+    <div class="slds-modal__container">
+        <div class="slds-modal__header" role="banner">
+            <h1 class="slds-page-header__title slds-m-right_small
+                slds-truncate slds-align-left">Create New Document</h1>
+        </div>
+        
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <lightning:input name="groupTitle" aura:id="fieldId" label="Group Title"
+                            value="{!v.newDocStore.DUP_Group_Title__c}" required="true" />
+            <!-- Logic on list of values -->
+            <lightning:select name="listOfValue" onchange="{!c.displayTemplate}" label="Select a template:" aura:id="listOfValueId" value="{!v.newDocStore.DUP_List_Of_Value__c}">
+                <option text="-- Select one --" value=""/>
+                <aura:iteration items="{!v.lovList}" var="lov">
+                    <option text="{!lov.DUP_Type__c}" value="{!lov.Id}"/>
+                </aura:iteration>
+            </lightning:select>
+        
+            <!-- Display the new document request form -->
+            <lightning:input name="docStoreName" aura:id="fieldId" label="Document Name"
+                            value="{!v.newDocStore.DUP_Document_Name__c}" required="true" />
+        
+            <lightning:select name="listOfTemplate" label="Select a downloadable document:" aura:id="docStoreTemplates" value="{!v.newDocStore.DUP_Document_Template__c}" onchange="{!c.changeVal}" disabled="{!v.counterFiles > 0}">
+                <option text="-- Select one --" value=""/>
+                <aura:iteration items="{!v.docTemplateList}" var="docTemplate">
+                    <option text="{!docTemplate.Name}" value="{!docTemplate.Id}"/>
+                </aura:iteration>
+            </lightning:select> 
+            <!-- Code Added by Ankit on 27thDec 2019 to add section for adding the File upload and preview option to add to the Doc Store -->
+            <div class="slds-form slds-form_stacked" aura:id="linksSection">
+                <div class="slds-grid slds-wrap slds-p-around_medium slds-gutters">
+                    <div class="slds-col slds-size_12-of-12 slds-box slds-m-bottom--medium">
+                        <div class="slds-grid slds-wrap slds-gutters">                           
+                            <div class="slds-col slds-size_3-of-12">
+                                <div class="slds-form-element">
+                                    {!v.body}
+                                     <!--<lightning:fileUpload name="fileUploader"
+                                                          aura:id="fileUploadButton"
+                                                          label="There is a 25 MB size limit per file."
+                                                          multiple="true"
+                                                          disabled="false"
+                                                          recordId="{!v.docStoreId}" 
+                                                          onuploadfinished="{!c.showUploadedDocument}"/>       
+                                --></div>
+                            </div>
+                            <div class="slds-col slds-size_9-of-12">
+                                <aura:iteration items="{!v.contentDocument}" var="file">        
+                                    <c:DUP_SingleFileView documentId="{!v.docStoreId}"
+                                                        contentDocument="{!v.contentDocument}"
+                                                        context="{!v.context}"
+                                                        fileId="{!file.ContentDocumentId}"
+                                                        fileTitle="{!file.ContentDocument.Title}"
+                                                        fileExtension="{!file.ContentDocument.FileExtension}"
+                                                        countDocStoreUploaded="{!v.countDocStoreUploaded}"
+                                                        counterFiles="{!v.counterFiles}"
+                                                        />
+                                </aura:iteration> 
+                            </div>                                                       
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- code Added by Ankit on 27th Dec 2019 ends here -->
+            <lightning:textarea name="docStoreDescription" aura:id="docStoreField" label="Description"
+            value="{!v.newDocStore.DUP_Description__c}"/>
+        </div>
+
+        <footer class="slds-modal__footer">
+            <lightning:button label="Cancel" onclick="{!c.handleCancel}" class="slds-m-top_medium" />
+            <lightning:button label="Add" onclick="{!c.handleDocStore}"
+                       variant="brand" class="slds-m-top_medium"/>
+        </footer>  
+    </div>
+</aura:component>

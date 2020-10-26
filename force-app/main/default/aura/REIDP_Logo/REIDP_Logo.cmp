@@ -1,0 +1,14 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="network" type="String"/>
+    
+    <aura:if isTrue="{!v.network == 'BP'}">
+        <div>
+            <img class="bpLogo" src="{!$Resource.REIDP_Logo_MID}" alt="bp"/>
+        </div>
+        <aura:set attribute="else">
+            <div>
+                <img class="ampmLogo" src="{!$Resource.REIDP_AMPM_logo}" alt="ampm"/>
+            </div>
+        </aura:set>
+    </aura:if>
+</aura:component>

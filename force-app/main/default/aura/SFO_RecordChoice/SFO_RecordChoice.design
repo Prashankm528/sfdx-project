@@ -1,0 +1,14 @@
+<design:component>
+    <design:attribute name="sObjectName" label="SObject Name" description="The target SObject name, please use the api name."/>
+    <design:attribute name="configFields" label="SObject Fields" description="The fields to display, please use api names."/>
+    <design:attribute name="configFilters" label="SObject Filters" description="Please use the format of a SOQL WHERE clause."/>
+    <design:attribute name="sortBy" label="Sort By" description="Please use the format of a SOQL ORDER BY clause."/>
+    <design:attribute name="limit" label="Limit Records" description="Limit the amount of choices returned."/>
+    <design:attribute name="valueField" label="Value Field" description="What field will be mapped to the value of choices." default="Id"/>
+    <design:attribute name="layoutType" label="Layout Type" dataSource="inline,horizontal,stacked" default="inline"
+        description="Determines how the choices will be rendered, valid values are: inline, horizontal, stacked."/>
+    <design:attribute name="choiceType" label="Choice Type" dataSource="single,multiple" default="single"
+        description="Determines if you can select single or multiple records."/>
+    <design:attribute name="recordIcon" label="Choice Icon"/>
+    <design:attribute name="selectedValues" label="Selected Values" description="This will store the selected values. Please use collection variable."/>
+</design:component>

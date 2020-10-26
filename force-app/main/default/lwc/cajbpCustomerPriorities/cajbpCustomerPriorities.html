@@ -1,0 +1,12 @@
+<template>
+    <lightning-datatable class="objective-priorities-table"
+        key-field="id"
+        data={data}
+        columns={columns}
+        sorted-by={sortBy}
+        sorted-direction={sortDirection}
+        onsort={handleSortData}
+        selected-rows={selectedRows}
+        resize-column-disabled>
+    </lightning-datatable>
+</template>

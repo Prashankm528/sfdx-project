@@ -1,0 +1,21 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:appHostable">
+
+	<aura:attribute name="userGuideline" type="String" access="public" default="User guideline"/>
+	<aura:attribute name="termsAndConditions" type="String" access="public" default="Terms &#38; Conditions"/>
+	<aura:attribute name="privacyStatement" type="String" access="public" default="Privacy Statement"/>
+	
+	<aura:attribute name="bpLimited" type="String" access="public" default="&#169; BP 2019 | Support email: GISTiCOSIT&#38;SSupportGroup@bp.com"/>
+
+
+    <div class="dupFooter">
+    	<div class="slds-grid_align-center slds-grid slds-wrap footerCenterContent">
+	    	<div class="slds-size--1-of-2 dup-left-text">
+	    		{!v.bpLimited}
+			</div>
+			<div class="slds-size--1-of-2 dup-right-text">
+                <a href="../s/privacy-page" class="blockLink" onclick="{!c.goToPrivacyStatement}">{!v.privacyStatement}</a>
+			</div>
+		</div>
+	</div>
+
+</aura:component>

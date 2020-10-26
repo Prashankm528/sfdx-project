@@ -1,0 +1,15 @@
+<!--
+ * @author			Jan Majling
+ * @date			09/08/2018
+ * @group			CAJBP
+ * @description		Updates to view to display the latest changes
+ *
+ * history
+ * 09/08/2018	Jan Majling			Created
+ -->
+<aura:component implements="flexipage:availableForAllPageTypes" access="global">
+	<aura:attribute name="needle" type="String" access="global" />
+	<aura:attribute name="eventType" type="String" access="global" default="SUCCESS"/>
+	<aura:attribute name="refreshEvent" type="String" default="e.force:refreshView" access="global" />
+	<aura:handler event="force:showToast" action="{!c.refreshView}"/>
+</aura:component>

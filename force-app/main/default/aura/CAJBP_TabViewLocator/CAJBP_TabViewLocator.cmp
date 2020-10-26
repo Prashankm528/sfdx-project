@@ -1,0 +1,9 @@
+<!--
+    Used in the CAJBP_JointBusinessPlanLayout to navigate the tabs.
+-->
+<aura:component description="CAJBP_TabViewLocator" implements="flexipage:availableForRecordHome">
+    <aura:attribute name="selectedTab" type="String" default="Summary"/>
+    <aura:registerEvent name="tabViewEvent" type="c:CAJBP_TabViewEvent"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.handleTabView}"/>
+</aura:component>

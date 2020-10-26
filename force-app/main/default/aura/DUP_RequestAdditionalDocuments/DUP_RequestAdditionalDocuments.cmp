@@ -1,0 +1,57 @@
+<aura:component controller="DUP_RequestAdditionalDocuments" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" >
+	<aura:attribute name="recordId" type="String" access="public"/>
+    <aura:attribute name="status" type="String" access="public"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+    </aura:html>
+    <!--Modal Header-->  
+    <div class="modal-header slds-modal__header slds-size_1-of-1">
+        <h4 class="title slds-text-heading--medium">Request Additional Documents</h4>
+    </div>
+    <!--End Modal Header-->  
+     
+    <!--Modal Body-->   
+    <div class="slds-modal__content slds-p-around--x-small slds-align_absolute-center slds-size_1-of-1 slds-is-relative">
+        <aura:renderIf isTrue="{!or(v.status=='DUP_New_Request',v.status=='DUP_Confirm_Details')}">
+            <form class="slds-form--stacked">
+                <p>Kindly add all the required documents in the current request before moving it to the next stage.
+                    </p>
+            </form> 
+                <aura:set attribute="else">
+                    <aura:renderIf isTrue="{!v.status=='DUP_Cancelled'}">
+                    	Please create a new request as this request is cancelled.
+                    <aura:set attribute="else">
+                              Are you sure you want to request additional documents?
+                      </aura:set>
+                </aura:renderIf>
+            	</aura:set>
+            </aura:renderIf>
+        
+    </div>
+    <!--End of Modal Body--> 
+     
+    <!--Modal Footer-->
+    <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+        <aura:if isTrue="{!and(v.status!='DUP_Approved',v.status!='DUP_Review_Upload')}">
+            <lightning:button variant="Neutral" class="slds-button" label="OK" onclick="{!c.handleClose}" />
+        <aura:set attribute="else">
+            <lightning:button variant="Brand" class="slds-button" label="Yes" onclick="{!c.handleSubmit}"/>
+            <lightning:button variant="Neutral" class="slds-button" label="No" onclick="{!c.handleClose}"/>
+            </aura:set>
+        </aura:if>
+        
+    </div>
+    <!--End of Modal Footer-->
+</aura:component>

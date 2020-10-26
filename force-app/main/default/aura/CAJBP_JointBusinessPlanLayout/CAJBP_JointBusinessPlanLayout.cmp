@@ -1,0 +1,267 @@
+<aura:component implements="lightning:recordHomeTemplate" description="Joint Business Plan Custom Layout">
+    <ltng:require styles="{!$Resource.AnimateCss}"/>
+
+    <aura:attribute name="record" type="Object"/>
+    <aura:attribute name="error" type="String"/>
+    <aura:attribute name="tabId" type="String" default="Summary"/>
+
+    <aura:attribute name="columnSpacing" type="String" default="slds-p-horizontal--medium"/>
+    <aura:attribute name="isConfig" type="Boolean" default="false"/>
+    <aura:attribute name="isSidebarCollapsed" type="Boolean" default="false"/>
+    <aura:attribute name="layoutType" type="String" default="large"/>
+
+    <!-- ******************** REGIONS ******************** -->
+    <aura:attribute name="loaders" type="Aura.Component[]"/>
+    <aura:attribute name="header" type="Aura.Component[]"/>
+    <aura:attribute name="path" type="Aura.Component[]"/>
+    <aura:attribute name="main" type="Aura.Component[]"/>
+    <aura:attribute name="rightPanel" type="Aura.Component[]"/>
+    <aura:attribute name="summary" type="Aura.Component[]"/>
+    <aura:attribute name="prospect" type="Aura.Component[]"/>
+    <aura:attribute name="insights" type="Aura.Component[]"/>
+    <aura:attribute name="scorecardHeader" type="Aura.Component[]"/>
+    <aura:attribute name="rebates" type="Aura.Component[]"/>
+    <aura:attribute name="productMix" type="Aura.Component[]"/>
+    <aura:attribute name="waysOfWorking" type="Aura.Component[]"/>
+    <aura:attribute name="scorecardFooter" type="Aura.Component[]"/>
+    <aura:attribute name="objectives" type="Aura.Component[]"/>
+    <aura:attribute name="activities" type="Aura.Component[]"/>
+    <aura:attribute name="activityCalendar" type="Aura.Component[]"/>
+    <aura:attribute name="jaf" type="Aura.Component[]"/>
+    <aura:attribute name="dashboard" type="Aura.Component[]"/>
+
+    <aura:attribute name="customerContact" type="Aura.Component[]"/>
+    <aura:attribute name="other" type="Aura.Component[]"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="c:CAJBP_LayoutRefreshEvent" action="{!c.handleLayoutRefresh}"/>
+    <aura:handler event="c:CAJBP_TabViewEvent" action="{!c.handleTabView}"/>
+    <aura:handler event="c:CAJBP_RecordLoadedEvent" action="{!c.handleRecordLoaded}"/>
+    <aura:registerEvent name="tabViewEvent" type="c:CAJBP_TabViewEvent"/>
+    <aura:registerEvent name="layoutToggleEvent" type="c:CAJBP_LayoutToggleEvent"/>
+
+
+    <div class="{!not(v.isConfig) ? 'hidden' : ''}">
+        {!v.loaders}
+    </div>
+
+    <aura:if isTrue="{!not(empty(v.record))}">
+        <div class="animated fadeIn">
+            <div class="slds-grid">
+                <div class="slds-col">
+                    {!v.header}
+                </div>
+            </div>
+
+            <div class="path-container slds-grid slds-m-top--small">
+                <div class="slds-col animated slideInRight">
+                    {!v.path}
+                </div>
+            </div>
+
+            <aura:if isTrue="{!equals(v.layoutType, 'large')}">
+                <div class="slds-grid slds-m-top--small slds-show_large">
+                    <div class="{!'slds-col ' + (v.isSidebarCollapsed ? 'slds-large-size_12-of-12 ' : 'slds-large-size_8-of-12') + ' animated slideInLeft middle-container'}">
+                        <lightning:tabset aura:id="cajbpTabs" selectedTabId="{!v.tabId}" onselect="{!c.onTabSelect}" class="slds-tabs_medium slds-p-top--medium tab-container">
+                            <lightning:tab label="Summary" id="Summary" aura:id="Summary" iconName="custom:custom63">
+                                <div class="animated fadeIn summary-container">
+                                    {!v.summary}
+                                </div>
+                            </lightning:tab>
+                            <c:CAJBP_LayoutRenderer expression="{!v.record.CAJBP_Account_Status__c == 'Prospect'}" onConfig="{!v.tabId == 'Prospect'}">
+                                <lightning:tab label="Prospect Overview" id="Prospect" aura:id="Prospect" iconName="standard:account">
+                                    <div class="{#'animated fadeIn scorecard-container ' + v.columnSpacing}">
+                                        <div>
+                                            {!v.prospect}
+                                        </div>
+                                    </div>
+                                </lightning:tab>
+                            </c:CAJBP_LayoutRenderer>
+                            <lightning:tab label="Insights (SWOT)" id="Insights" aura:id="Insights" iconName="custom:custom74">
+                                <div class="{#'animated fadeIn ' + v.columnSpacing}">
+                                    {!v.insights}
+                                </div>
+                            </lightning:tab>
+                            <lightning:tab label="Objectives &amp; Risks" id="Objectives" aura:id="Objectives" iconName="custom:custom18">
+                                <div class="{#'animated fadeIn ' + v.columnSpacing}">
+                                    {!v.objectives}
+                                </div>
+                            </lightning:tab>
+                            <lightning:tab label="Activities" id="Activities" aura:id="Activities" iconName="custom:custom82">
+                                <div class="{#'animated fadeIn ' + v.columnSpacing}">
+                                    <c:BPG_ExpandableSection collapsible="true" title="Calendar" open="true">
+                                        {!v.activityCalendar}
+                                    </c:BPG_ExpandableSection>
+                                    <c:BPG_ExpandableSection collapsible="true" title="Activities" open="true">
+                                        {!v.activities}
+                                    </c:BPG_ExpandableSection>
+                                </div>
+                            </lightning:tab>
+                            <c:CAJBP_LayoutRenderer expression="{!v.record.CAJBP_Account_Status__c != 'Prospect'}" onConfig="{!v.tabId == 'Scorecard'}">
+                                <lightning:tab label="Scorecard" id="Scorecard" aura:id="Scorecard" iconName="custom:custom17">
+                                    <div class="{#'animated fadeIn scorecard-container ' + v.columnSpacing}">
+                                        <div>
+                                            {!v.scorecardHeader}
+                                        </div>
+                                        <c:BPG_ExpandableSection collapsible="true" title="Rebates" open="true">
+                                            {!v.rebates}
+                                        </c:BPG_ExpandableSection>
+                                        <c:BPG_ExpandableSection collapsible="true" title="Product Mix Targets" open="true">
+                                            {!v.productMix}
+                                        </c:BPG_ExpandableSection>
+                                        <c:BPG_ExpandableSection collapsible="true" title="Ways of Working Targets" open="true">
+                                            {!v.waysOfWorking}
+                                        </c:BPG_ExpandableSection>
+                                        <div>
+                                            {!v.scorecardFooter}
+                                        </div>
+                                    </div>
+                                </lightning:tab>
+                            </c:CAJBP_LayoutRenderer>
+                            <c:CAJBP_LayoutRenderer expression="{!and(v.record.RecordType.DeveloperName == 'CAJBP_Indirect_Joint_Business_Plan', v.record.CAJBP_Account_Status__c != 'Prospect')}" onConfig="{!v.tabId == 'JAF'}">
+                                <lightning:tab label="Joint Funding" id="JAF" aura:id="JAF" iconName="custom:custom16">
+                                    <div class="{#'animated fadeIn ' + v.columnSpacing}">
+                                        {!v.jaf}
+                                    </div>
+                                </lightning:tab>
+                            </c:CAJBP_LayoutRenderer>
+                            <lightning:tab label="JBP Dashboard" id="Dashboard" aura:id="Dashboard" iconName="custom:custom102">
+                                <div class="{#'animated fadeIn ' + v.columnSpacing}">
+                                    {!v.dashboard}
+                                </div>
+                            </lightning:tab>
+                        </lightning:tabset>
+
+                        <div class="toggle-container">
+                            <lightning:buttonIcon iconName="{!v.isSidebarCollapsed ? 'utility:chevronleft' : 'utility:chevronright'}" class="toggle-slide" variant="border-filled" onclick="{!c.toggleSidebar}"/>
+                        </div>
+
+                        <div class="animated fadeIn">
+                            {!v.main}
+                        </div>
+                    </div>
+                    <div aura:id="side-panel" class="{!'animated slideInRight slds-col slds-large-size_4-of-12 slds-p-left--small panel-slide ' + (v.isSidebarCollapsed ? 'panel-close' : 'panel-open')}">
+                        {!v.rightPanel}
+                        <c:BPG_ExpandableSection  collapsible="true" title="Customer Contact" open="true">
+                            {!v.customerContact}
+                        </c:BPG_ExpandableSection>
+                        {!v.other}
+                    </div>
+                </div>
+            </aura:if>
+
+            <aura:if isTrue="{!and(equals(v.layoutType, 'small'), not(v.isConfig))}">
+                <div class="slds-grid slds-wrap slds-m-top--small slds-hide_large">
+                    <div class="slds-col slds-large-size_8-of-12 slds-size_12-of-12 animated slideInLeft middle-container">
+                        <lightning:tabset aura:id="cajbpTabs" selectedTabId="{!v.tabId}" onselect="{!c.onTabSelect}" class="slds-tabs_medium slds-p-top--medium tab-container">
+                            <lightning:tab label="Summary" id="Summary" aura:id="Summary" iconName="custom:custom63">
+                                <div class="animated fadeIn summary-container">
+                                    {!v.summary}
+                                </div>
+                            </lightning:tab>
+                            <c:CAJBP_LayoutRenderer expression="{!v.record.CAJBP_Account_Status__c == 'Prospect'}" onConfig="{!v.tabId == 'Prospect'}">
+                                <lightning:tab label="Prospect Overview" id="Prospect" aura:id="Prospect" iconName="standard:account">
+                                    <div class="{#'animated fadeIn scorecard-container ' + v.columnSpacing}">
+                                        <div>
+                                            {!v.prospect}
+                                        </div>
+                                    </div>
+                                </lightning:tab>
+                            </c:CAJBP_LayoutRenderer>
+                            <lightning:tab label="Insights (SWOT)" id="Insights" aura:id="Insights" iconName="custom:custom74">
+                                <div class="{#'animated fadeIn ' + v.columnSpacing}">
+                                    {!v.insights}
+                                </div>
+                            </lightning:tab>
+                            <lightning:tab label="Objectives &amp; Risks" id="Objectives" aura:id="Objectives" iconName="custom:custom18">
+                                <div class="{#'animated fadeIn ' + v.columnSpacing}">
+                                    {!v.objectives}
+                                </div>
+                            </lightning:tab>
+                            <lightning:tab label="Activities" id="Activities" aura:id="Activities" iconName="custom:custom82">
+                                <div class="{#'animated fadeIn ' + v.columnSpacing}">
+                                    <c:BPG_ExpandableSection collapsible="true" title="Calendar" open="true">
+                                        {!v.activityCalendar}
+                                    </c:BPG_ExpandableSection>
+                                    <c:BPG_ExpandableSection collapsible="true" title="Activities" open="true">
+                                        {!v.activities}
+                                    </c:BPG_ExpandableSection>
+                                </div>
+                            </lightning:tab>
+                            <c:CAJBP_LayoutRenderer expression="{!v.record.CAJBP_Account_Status__c != 'Prospect'}" onConfig="{!v.tabId == 'Scorecard'}">
+                                <lightning:tab label="Scorecard" id="Scorecard" aura:id="Scorecard" iconName="custom:custom17">
+                                    <div class="{#'animated fadeIn scorecard-container ' + v.columnSpacing}">
+                                        <div>
+                                            {!v.scorecardHeader}
+                                        </div>
+                                        <c:BPG_ExpandableSection collapsible="true" title="Rebates" open="true">
+                                            {!v.rebates}
+                                        </c:BPG_ExpandableSection>
+                                        <c:BPG_ExpandableSection  collapsible="true" title="Product Mix Targets" open="true">
+                                            {!v.productMix}
+                                        </c:BPG_ExpandableSection>
+                                        <c:BPG_ExpandableSection collapsible="true" title="Ways of Working Targets" open="true">
+                                            {!v.waysOfWorking}
+                                        </c:BPG_ExpandableSection>
+                                        <div>
+                                            {!v.scorecardFooter}
+                                        </div>
+                                    </div>
+                                </lightning:tab>
+                            </c:CAJBP_LayoutRenderer>
+                            <c:CAJBP_LayoutRenderer expression="{!and(v.record.RecordType.DeveloperName == 'CAJBP_Indirect_Joint_Business_Plan', v.record.CAJBP_Account_Status__c != 'Prospect')}" onConfig="{!v.tabId == 'JAF'}">
+                                <lightning:tab label="Joint Funding" id="JAF" aura:id="JAF" iconName="custom:custom16">
+                                    <div class="{#'animated fadeIn ' + v.columnSpacing}">
+                                        {!v.jaf}
+                                    </div>
+                                </lightning:tab>
+                            </c:CAJBP_LayoutRenderer>
+                            <lightning:tab label="JBP Dashboard" id="Dashboard" aura:id="Dashboard" iconName="custom:custom102">
+                                <div class="{#'animated fadeIn ' + v.columnSpacing}">
+                                    {!v.dashboard}
+                                </div>
+                            </lightning:tab>
+                        </lightning:tabset>
+
+                        <div class="animated fadeIn">
+                            {!v.main}
+                        </div>
+                    </div>
+                    <div class="animated slideInRight slds-col slds-large-size_4-of-12 slds-size_12-of-12 slds-m-top--small panel-slide panel-open">
+                        {!v.rightPanel}
+                        <c:BPG_ExpandableSection  collapsible="true" title="Customer Contact" open="true">
+                            {!v.customerContact}
+                        </c:BPG_ExpandableSection>
+                        {!v.other}
+                    </div>
+                </div>
+            </aura:if>
+        </div>
+        <aura:set attribute="else">
+            <c:CAJBP_Loader/>
+        </aura:set>
+    </aura:if>
+
+    <aura:html tag="style">
+        button[name='CAJBP_Joint_Business_Plan__c.CAJBP_Give_Feedback'] {
+            background-color: #1b5297 !important;
+            color: white !important;
+        }
+
+        button[name='CAJBP_Joint_Business_Plan__c.CAJBP_Give_Feedback']:hover {
+            background-color: #004487 !important;
+        }
+
+        a[title='Give Feedback'] {
+            background-color: #1b5297 !important;
+        }
+
+        a[title='Give Feedback']:hover {
+            background-color: #004487 !important;
+        }
+
+        div[title='Give Feedback'] {
+            color: white !important;
+        }
+    </aura:html>
+</aura:component>

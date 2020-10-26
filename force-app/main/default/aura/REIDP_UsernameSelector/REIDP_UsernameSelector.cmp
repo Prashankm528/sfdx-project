@@ -1,0 +1,54 @@
+<aura:component controller="REIDP_LightningLoginFormController" 
+                implements="forceCommunity:availableForAllPageTypes,force:hasRecordId" 
+                access="global">
+    
+    <aura:attribute name="Email" type="String"/>
+    <aura:attribute name="CountryCode" type="String"/>
+    <aura:attribute name="Phone" type="String"/>
+    <aura:attribute name="selTabId" type="String" default="email"/>
+    <aura:attribute name="emailBool" type="Boolean" default="false"/>
+    <aura:attribute name="phoneBool" type="Boolean" default="false"/>
+    <aura:attribute name="codeColSize" type="Integer" default="4" />
+    <aura:attribute name="phoneColSize" type="Integer" default="8" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    <!-- IF is used: when both fields are required; tabs are used -->
+    <aura:if isTrue="{! and(v.emailBool, v.phoneBool) }">
+        <lightning:tabset variant="default" selectedTabId="{! v.selTabId }">
+            <lightning:tab aura:id="email" tabindex="1" id="email" label="E-mail" class="padding-fix">
+                <lightning:input aura:id="userFieldEmail" 
+                                 type="email" 
+                                 name="email-address" 
+                                 placeholder="Email" 
+                                 value="{! v.Email }" 
+                                 onchange="{! c.handleEmailInput }"/>
+            </lightning:tab>
+            
+            <lightning:tab aura:id="phone" tabindex="2" id="phone" label="Phone Number">
+                <c:REIDP_PhoneNumberInput aura:id="phoneNumberId" phoneNumber="{! v.Phone }" countryCode="{! v.CountryCode }"/>
+            </lightning:tab>
+            <lightning:tab >
+                <!-- related with summer release 2019: there is no way to allign properly tabs 50/50, but only with additional hidden third tab -->
+                &nbsp;
+            </lightning:tab>
+        </lightning:tabset>
+        
+        <!-- IF is used: when only one field is required; tabs are not used -->
+        <!-- unable to style tabs yet in lightning -->
+        <aura:set attribute="else" >
+            <aura:if  isTrue="{! v.emailBool }">
+                <lightning:input aura:id="userFieldEmail" 
+                                 type="email" 
+                                 name="email-address" 
+                                 placeholder="Email" 
+                                 value="{! v.Email }" 
+                                 onchange="{! c.handleEmailInput }"/>
+                
+                <aura:set attribute="else">
+                    <c:REIDP_PhoneNumberInput aura:id="phoneNumberId" phoneNumber="{! v.Phone }" countryCode="{! v.CountryCode }" codeColSize="{! v.codeColSize }" phoneColSize="{! v.phoneColSize }"/>
+                </aura:set>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,5 @@
+<aura:event type="COMPONENT" description="Event template" >
+     <aura:attribute name="fieldsMetaDatamap" type="Map" default="{}"/>
+     <aura:attribute name="controlleringField" type="String"/>
+    <!-- <aura:attribute name="fieldsMetaDatamap" type="Map" default="{}"/> -->
+</aura:event>

@@ -1,0 +1,17 @@
+/**
+ * @author			Venkatesh Muniyasamy
+ * @date			20/12/2019
+ * @group			CAJBP
+ * @description		Renders SWOT's New Matrix.
+ *
+ * history
+ * 20/12/2019 	Venkatesh Muniyasamy	Created
+ */
+.THIS .container {
+    height: 300px;
+    overflow-y: auto;
+}
+
+.THIS .radioGroup .slds-form-element__control {
+    display: flex !important;
+}

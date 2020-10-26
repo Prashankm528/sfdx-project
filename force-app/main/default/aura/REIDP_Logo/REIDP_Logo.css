@@ -1,0 +1,13 @@
+@media all and (max-width: 499px) {
+    .THIS .bpLogo, .THIS .ampmLogo {
+        display:none;
+    }
+}
+
+.THIS {
+    text-align:center;
+}
+
+.THIS .bpLogo {
+    height:200px
+}

@@ -1,0 +1,6 @@
+<design:component >
+    <design:attribute name="userGuideline" label="User guideline"/>
+	<design:attribute name="termsAndConditions" label="Terms &#38; Conditions"/>
+    <design:attribute name="privacyStatement" label="Privacy Statement"/>
+    <design:attribute name="bpLimited" label="&#169; BP 2019"/>
+</design:component>

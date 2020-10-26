@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION">
+    <aura:attribute name="CPID" type="String"/>
+    <aura:attribute name="recId" type="String"/>
+</aura:event>

@@ -1,0 +1,9 @@
+<aura:component description="CAJBP_ButtonState" access="global">
+    <aura:attribute name="iconName" type="String" required="true"/>
+    <aura:attribute name="className" type="String"/>
+    <aura:attribute name="iconSize" type="String" default="small"/>
+    <aura:attribute name="selected" type="Boolean" default="false" />
+    <aura:attribute name="onclick" type="Aura.Action"/>
+
+    <lightning:buttonIconStateful class="{!v.className}" iconName="{!v.iconName}" size="{!v.iconSize}" selected="{!v.selected}" onclick="{!c.onAction}"/>
+</aura:component>

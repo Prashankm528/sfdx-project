@@ -1,0 +1,132 @@
+<!--
+ * @author			Venkatesh Muniyasamy
+ * @date			14/01/2020
+ * @group			CAJBP
+ * @description		Renders Custom Calendar.
+ *
+ * history
+ * 14/01/2020	Venkatesh Muniyasamy	    Custom Calendar
+ * 15/07/2020   Abhinit Kohar               Updated for Global Calendar
+ -->
+<aura:component implements="force:hasRecordId,flexipage:availableForAllPageTypes" controller="CAJBP_CalendarController">
+    <ltng:require scripts="{!join(',',
+        $Resource.CAJBP_Tippy + '/dist/popper.min.js',
+        $Resource.CAJBP_FullCalendar + '/packages/core/main.js',
+        $Resource.CAJBP_FullCalendar + '/packages/daygrid/main.js',
+        $Resource.CAJBP_FullCalendar + '/packages/timegrid/main.js',
+        $Resource.CAJBP_FullCalendar + '/packages/list/main.js',
+        $Resource.CAJBP_FullCalendar + '/packages/core/locales-all.js',
+        $Resource.CAJBP_FullCalendar + '/packages-premium/resource-common/main.min.js',
+        $Resource.CAJBP_FullCalendar + '/packages-premium/timeline/main.min.js',
+        $Resource.CAJBP_FullCalendar + '/packages-premium/resource-timeline/main.min.js',
+        $Resource.CAJBP_FullCalendar + '/packages/bootstrap/main.min.js',
+        $Resource.CAJBP_Bootstrap + '/dist/js/bootstrap.bundle.min.js',
+        $Resource.CAJBP_Tippy + '/dist/tippy.iife.js'
+    )}"
+    styles="{!join(',',
+        $Resource.CAJBP_FontAwesomeTheme + '/fontawesome-free-5.12.0-web/css/all.min.css',
+        $Resource.CAJBP_Bootstrap + '/dist/css/bootstrap.min.css',
+        $Resource.CAJBP_FullCalendar + '/packages/core/main.css',
+        $Resource.CAJBP_FullCalendar + '/packages/daygrid/main.css',
+        $Resource.CAJBP_FullCalendar + '/packages/timegrid/main.css',
+        $Resource.CAJBP_FullCalendar + '/packages/list/main.css',
+        $Resource.CAJBP_FullCalendar + '/packages-premium/timeline/main.min.css',
+        $Resource.CAJBP_FullCalendar + '/packages-premium/resource-timeline/main.min.css',
+        $Resource.CAJBP_FullCalendar + '/packages/bootstrap/main.min.css',
+        $Resource.CAJBP_Tippy + '/dist/tippy.css',
+        $Resource.CAJBP_Tippy + '/animations/perspective.css',
+        $Resource.AnimateCss
+    )}"
+    afterScriptsLoaded="{!c.doInit}"/>
+
+    <aura:attribute name="isLoaded" type="Boolean" default="false"/>
+    <aura:attribute name="event" type="Object" access="private"/>
+    <aura:attribute name="activityList" type="List" access="private"/>
+    <aura:attribute name="calendarInstance" type="Object" access="private"/>
+    <aura:attribute name="showFilter" type="Boolean" default="false"/>
+    <aura:attribute name="calendarView" type="string" default="timelineYear"/>
+
+    <aura:attribute name="AllJBPs" type="Boolean" required="true" default="false"/>
+
+    <aura:handler name="destroy" value="{!this}" action="{!c.destroy}"/>
+    <aura:handler event="c:CAJBP_LayoutToggleEvent" action="{!c.handleLayoutToggle}"/>
+
+    <c:BPG_ApexProvider aura:id="apexProvider"/>
+
+    <aura:html tag="style">
+        .bsx .btn {
+        	font-size: unset !important;
+        }
+
+        .tooltip-section {
+            background-color: #f3f2f2 !important;
+        }
+
+        .tippy-tooltip.event-theme {
+          	background-color: unset;
+        	color: black;
+        }
+
+        .tippy-tooltip.event-theme .tippy-arrow {
+            transform: scale(3.2);
+            bottom: 5px;
+            margin-left: 4em;
+            z-index: 999999;
+        }
+
+        .tippy-tooltip.event-theme[data-placement^='top'] .tippy-arrow {
+            border-top-color: #f3f2f2;
+        }
+
+        .tippy-tooltip.event-theme[data-placement^='bottom'] .tippy-arrow {
+            top: unset;
+            bottom: unset;
+            border-bottom-color: #d8d7d7 !important;
+        }
+
+        .tippy-tooltip.event-theme[data-placement^='left'] .tippy-arrow {
+            border-left-color: #f3f2f2;
+        }
+
+        .tippy-tooltip.event-theme[data-placement^='right'] .tippy-arrow {
+            border-right-color: #f3f2f2;
+        }
+
+        .fc-title {
+            text-overflow: ellipsis;
+            white-space: pre-line;
+        }
+
+    </aura:html>
+
+    <aura:if isTrue="{!not(v.isLoaded)}">
+        <div class="container">
+            <div class="slds-is-relative loader">
+                <lightning:spinner alternativeText="Loading" variant="inverse"></lightning:spinner>
+            </div>
+            <div class="slds-text-color_inverse slds-align_absolute-center slds-text-title_caps slds-p-around_large">
+                {!$Label.c.CAJBP_Calendar_Loading}
+            </div>
+        </div>
+    </aura:if>
+    <div class="{!(v.isLoaded ? ' animated fadeIn' : 'slds-hide')}">
+        <div class="slds-grid slds-wrap slds-box">
+            <div class='slds-col slds-size_12-of-12 slds-align-bottom slds-p-bottom_x-small' style="text-align-last: end;">
+                <c:CAJBP_ButtonState className="{!(v.isLoaded ? '':'slds-hide')}" iconName="utility:filterList" iconSize="medium" onclick="{!c.displayFilter}" selected="{!v.showFilter}"/>
+            </div>
+            <div class="{!'slds-col' + (v.showFilter ? 'slds-col slds-size_10-of-12' : ' slds-col slds-size_12-of-12')}">
+                <div aura:id="fullCalendar" class="bsx calendar-container" />
+            </div>
+            <div class="{!'slds-col' + (v.showFilter ? 'slds-col slds-size_2-of-12' : ' slds-hide')}" style="padding-bottom: 13px;">
+                <div class="slds-p-left_medium slds-p-top_xx-large slds-scrollable" style="height:34.7rem;width:100%">
+                    <c:cajbpCalendarFilter aura:id="calendarFilter" oncalendarOptions = "{!c.calendarDataOptions}" globalCalendar="{!v.AllJBPs}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+    	<div aura:id="template" style="display: none;">
+    	    <c:CAJBP_CalendarEventView event="{!v.event}"/>
+        </div>
+    </div>
+</aura:component>

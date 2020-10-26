@@ -1,0 +1,3 @@
+<design:component >
+    <design:attribute name="doYouLikeThisRecord" label="Do you like this record?" description="Do you like this record?" />
+</design:component>

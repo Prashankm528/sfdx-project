@@ -1,0 +1,6 @@
+<design:component>
+	<design:attribute name="colorTotal" label="Color Total" description="Color for the total bar (any valid css color value allowed)." default="#009A4E" />
+	<design:attribute name="colorActivity" label="Color Activity" description="Color for activities bar (any valid css color value allowed)." default="#6A8DB6" />
+	<design:attribute name="colorRisk" label="Color Risk" description="Color for risk bars (any valid css color value allowed)." default="#FE4110" />
+	<design:attribute name="colorTarget" label="Color Target" description="Color for the target label (any valid css color value allowed)." default="#AC9F83" />	
+</design:component>

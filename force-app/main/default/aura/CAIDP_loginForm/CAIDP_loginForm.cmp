@@ -1,0 +1,71 @@
+<!-- add implements="forceCommunity:availableForAllPageTypes" to surface the component in community builder -->
+<aura:component controller="REIDP_LightningLoginFormController" implements="forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="showError" type="Boolean" required="true" description="" default="false" access="private"/>
+    <aura:attribute name="errorMessage" type="String" required="false" description="" access="private"/>
+    <aura:attribute name="startUrl" type="String" required="false" description="The url you go to after a successful login" />
+    <aura:attribute name="usernameLabel" type="String" access="private" required="false" default="{!$Label.c.IDPEmail}"/>
+    <aura:attribute name="passwordLabel" type="String" access="private" required="false" default="{!$Label.c.IDPPassword}"/>
+    <aura:attribute name="loginButtonLabel" type="String" access="private" required="false" default="{!$Label.c.IDPLogin}"/>
+    
+    <aura:attribute name="forgotPasswordLabel" type="String" access="private" required="false" default="{!$Label.c.IDPForgotPassword}"/>
+    <aura:attribute name="selfRegisterLabel" type="String" access="private" required="false" default="{!format($Label.c.IDPNew, 'Castrol')}"/>
+    <aura:attribute name="forgotPasswordUrl" type="String" required="false" default="/ForgotPassword"/>
+    <aura:attribute name="selfRegisterUrl" type="String" required="false" default="/SelfRegister"/>
+    
+    <aura:attribute name="isUsernamePasswordEnabled" type="Boolean" access="private"/>
+    <aura:attribute name="isSelfRegistrationEnabled" type="Boolean" access="private"/>
+    <aura:attribute name="communityForgotPasswordUrl" type="String" access="private"/>
+    <aura:attribute name="communitySelfRegisterUrl" type="String" access="private"/>
+    
+    <aura:attribute name="emailInput" type="String"/>
+    <aura:attribute name="codeInput" type="String"/>
+    <aura:attribute name="phoneInput" type="String"/>
+    <aura:attribute name="tabId" type="String"/>
+    
+    <aura:registerevent name="sitePropagatedStartUrl" type="c:CAIDP_setStartUrl"/>
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
+    <aura:dependency resource="c:CAIDP_setStartUrl" type="EVENT"/>
+    
+    <aura:dependency resource="siteforce:registerQueryEventMap" type="EVENT"/>
+    
+    <aura:handler event="c:CAIDP_setStartUrl" action="{!c.setStartUrl}"/>
+    
+    <div>
+        <aura:if isTrue="{!v.isUsernamePasswordEnabled}">
+            <span>
+                <aura:if isTrue="{!v.showError}">
+                    <div id="error">
+                        <ui:outputRichText value="{!v.errorMessage}"/>
+                    </div>
+                </aura:if>
+            </span>            
+                <c:REIDP_UsernameSelector aura:id="logChoice" 
+                                          Email="{! v.emailInput }" 
+                                          CountryCode="{! v.codeInput }" 
+                                          Phone="{! v.phoneInput }" 
+                                          selTabId="{! v.tabId }"
+                                          codeColSize="3" 
+                                          phoneColSize="9"/>            
+            <div id="sfdc_password_container" class="sfdc">
+                <ui:inputSecret value="" aura:id="password" placeholder="{!v.passwordLabel}" keyup="{!c.onKeyUp}" updateOn="change" class="input sfdc_passwordinput sfdc" label="{!v.passwordLabel}" labelClass="assistiveText"/>
+            </div>
+            
+            <div class="sfdc">
+                <ui:button aura:id="submitButton" label="{!v.loginButtonLabel}" press="{!c.handleLogin}" class="sfdc_button"/>
+            </div>
+            
+            <div id="sfdc_forgot" class="sfdc">
+                <lightning:layout>
+                    <lightning:layoutItem size="8">
+                        <a href="{!if(v.communityForgotPasswordUrl == null, v.forgotPasswordUrl, v.communityForgotPasswordUrl)}" style="color:black">{!v.forgotPasswordLabel}</a>
+                    </lightning:layoutItem>
+                    <aura:if isTrue="{!v.isSelfRegistrationEnabled}">
+                        <lightning:layoutItem size="4">
+                            <span style="float:right" ><a href="{!if(v.communitySelfRegisterUrl == null, v.selfRegisterUrl, v.communitySelfRegisterUrl)}" style="color:black">{!v.selfRegisterLabel}</a></span>
+                        </lightning:layoutItem>
+                    </aura:if>                            
+                </lightning:layout>
+            </div> 
+        </aura:if>
+    </div>
+</aura:component>

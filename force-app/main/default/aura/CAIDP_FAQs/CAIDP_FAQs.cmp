@@ -1,0 +1,75 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+
+	<aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+
+	<aura:attribute name="personalDetailsFAQ" type="String" access="public" required="true" default="How can I change my personal details?" />
+	<aura:attribute name="personalDetailsAnswer" type="String" access="public" required="true" default="Go to the profile page (click Your username button in the header) and click Edit button to change Your personal details." />
+	<aura:attribute name="updatePasswordFAQ" type="String" access="public" required="true" default="How can I update my password?" />
+	<aura:attribute name="updatePasswordAnswer" type="String" access="public" required="true" default="Go to the profile page (click Your username button in the header) and click Change Password button to set new password." />
+	<aura:attribute name="deleteAccountFAQ" type="String" access="public" required="true" default="How can I delete my account?" />
+	<aura:attribute name="deleteAccountAnswer" type="String" access="public" required="true" default="Send email to our support team with the request to deactivate your account." />
+	<aura:attribute name="furtherSupportFAQ" type="String" access="public" required="true" default="How can I get further support?" />
+	<aura:attribute name="furtherSupportAnswer" type="String" access="public" required="true" default="Go to the help page or open 'Contact Us' email composer at the bottom of the page to send email to our support team." />
+
+	<div style="margin-top: 10rem; margin-left: 2rem;">
+	  <div class="slds-page-header" role="banner">
+        <h1 class="slds-page-header__title slds-m-right--small slds-align-middle slds-truncate">
+          {!$Label.c.CastrolFAQ}
+        </h1>
+      </div>	 
+	  <ul class="slds-accordion">
+	    <li class="slds-accordion__list-item">
+	      <section class="slds-accordion__section">
+	        <div class="slds-accordion__summary">
+	          <h3 class="slds-text-heading_small slds-accordion__summary-heading">
+	            <button class="slds-button slds-button_reset slds-accordion__summary-action" onclick="{!c.showSection}">
+	              <lightning:icon iconName="utility:switch" variant="switch" size="xx-small" class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left"/>
+	              <span class="slds-hyphenate slds-p-left_x-small" title="{!v.personalDetailsFAQ}">{!v.personalDetailsFAQ}</span>
+	            </button>
+	          </h3>
+	        </div>
+	        <ui:outputRichText class="slds-accordion__content slds-text-longform slds-hyphenate" value="{!v.personalDetailsAnswer}"/>
+	      </section>
+	    </li>
+	    <li class="slds-accordion__list-item">
+	      <section class="slds-accordion__section">
+	        <div class="slds-accordion__summary">
+	          <h3 class="slds-text-heading_small slds-accordion__summary-heading">
+	            <button class="slds-button slds-button_reset slds-accordion__summary-action" onclick="{!c.showSection}">
+	              <lightning:icon iconName="utility:switch" variant="switch" size="xx-small" class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left"/>
+	              <span class="slds-hyphenate slds-p-left_x-small" title="{!v.updatePasswordFAQ}">{!v.updatePasswordFAQ}</span>
+	            </button>
+	          </h3>
+	        </div>
+	        <ui:outputRichText class="slds-accordion__content slds-text-longform slds-hyphenate" value="{!v.updatePasswordAnswer}"/>
+	      </section>
+	    </li>
+	    <li class="slds-accordion__list-item">
+	      <section class="slds-accordion__section">
+	        <div class="slds-accordion__summary">
+	          <h3 class="slds-text-heading_small slds-accordion__summary-heading">
+	            <button class="slds-button slds-button_reset slds-accordion__summary-action" onclick="{!c.showSection}">
+	              <lightning:icon iconName="utility:switch" variant="switch" size="xx-small" class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left"/>
+	              <span class="slds-hyphenate slds-p-left_x-small" title="{!v.deleteAccountFAQ}">{!v.deleteAccountFAQ}</span>
+	            </button>
+	          </h3>
+	        </div>
+	        <ui:outputRichText class="slds-accordion__content slds-text-longform slds-hyphenate" value="{!v.deleteAccountAnswer}"/>
+	      </section>
+	    </li>
+	    <li class="slds-accordion__list-item">
+	      <section class="slds-accordion__section">
+	        <div class="slds-accordion__summary">
+	          <h3 class="slds-text-heading_small slds-accordion__summary-heading">
+	            <button class="slds-button slds-button_reset slds-accordion__summary-action" onclick="{!c.showSection}">
+	              <lightning:icon iconName="utility:switch" variant="switch" size="xx-small" class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left"/>
+	              <span class="slds-hyphenate slds-p-left_x-small" title="{!v.furtherSupportFAQ}">{!v.furtherSupportFAQ}</span>
+	            </button>
+	          </h3>
+	        </div>
+	        <ui:outputRichText class="slds-accordion__content slds-text-longform slds-hyphenate" value="{!v.furtherSupportAnswer}"/>
+	      </section>
+	    </li>
+	  </ul>
+	</div>
+</aura:component>

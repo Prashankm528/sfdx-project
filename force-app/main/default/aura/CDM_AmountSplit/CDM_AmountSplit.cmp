@@ -1,0 +1,199 @@
+<!-- CDM_AmontSplit Component, which is used for add or remove split amount line record -->
+<aura:component >
+    <aura:attribute name="childRecords" type="Object[]"
+                    description="store map value based on key" />
+    
+    <aura:attribute name="Optvalues" type="String"
+                    description="Record Id" />    
+    
+    <aura:attribute name="taxCodes" type="Map"/>
+    <aura:attribute name="recordId" type="String"
+                    description="Record Id" />
+    
+    <aura:attribute name="country" type="String"/>
+    <aura:attribute name="sumAmountsMap" type="Map"
+                    description="sum of amount map" default="{}"/>
+    <aura:attribute name="sumAmount" type="Decimal"
+                    description="Record Id" default="0"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    <aura:attribute name="fieldPicklistMap" type="Map" />
+    <aura:attribute name="hideRemove" type="Boolean"
+                    description="hide remove buttonw for first one record" default="false" />
+    <aura:attribute name="splitAmount" type="Boolean"
+                    description="it defines split true or false" />
+    <aura:attribute name="viewRecord" type="Boolean" default="false"/>
+    <aura:registerEvent name="CDM_AmountChangeEvt" type="c:CDM_AmountChangeEvt" />    
+    <br/>
+    <aura:if isTrue="{!and(!empty(v.childRecords), empty(v.recordId))}">
+        <div class="slds-card" style="width: 100rem">
+            
+            <div class="slds-p-around_medium">    
+                <aura:iteration items="{!v.childRecords}" var="field" indexVar="index">
+                    <div class="slds-grid slds-grid--vertical-stretch"> 
+                        <div>
+                            <lightning:input  type="number" 
+                                             label="Sub Gross Amt" 
+                                             required="true"
+                                             aura:id="SubGrossAmount"
+                                             name="{!index}" 
+                                             value="{!field.CDM_Sub_Gross_Amount__c}"
+                                             step="0.01"
+                                             disabled="true"
+                                             />
+                            
+                        </div> 
+                        <div>  <div class="slds-m-left_xx-small">
+                            <lightning:input type="number"
+                                             id="{!index}"
+                                             aura:id="SubNetAmount"
+                                             label="Sub Net Amount" 
+                                             name="{!index}" 
+                                             required="true"
+                                             value="{!field.CDM_Sub_Net_Amount__c}"
+                                             onblur="{!c.getData}"
+                                             step="0.01"/>
+                            </div> 
+                        </div>
+                        <aura:if isTrue="{!if(v.country == 'Switzerland',true,false)}">
+                            <div>  <div class="slds-m-left_xx-small">
+                                <lightning:input type="text" 
+                                                 label="D/C" 
+                                                 name="D/C" 
+                                                 required="true"
+                                                 value="{!field.CDM_D_C__c}"
+                                                 />
+                                </div> 
+                            </div>
+                        </aura:if>
+                        
+                        <div>  
+                            <div class="slds-m-left_xx-small">
+                            <lightning:input type="number" 
+                                             label="Sub Tax Amount" 
+                                             name="{!index}" 
+                                             required="true"
+                                             aura:id="SubTaxAmount"
+                                             id="{!index+'SubTaxAmount'}"
+                                             onblur="{!c.getData}"
+                                             value="{!field.CDM_Sub_Tax_Amount__c}"
+                                             step="0.01"/>
+                            </div> 
+                        </div>
+                        
+                        <div>  <div class="slds-m-left_xx-small">
+                            <lightning:input type="text" 
+                                             label="GL Account" 
+                                             name="GLAccount"
+                                             value="{!field.CDM_GL_Account__c}"/>
+                            </div>
+                        </div>
+                        
+                        <div>  <div class="slds-m-left_xx-small">
+                            <lightning:input type="text" 
+                                             label="Profit Center" 
+                                             aura:id="ProfitCenter"
+                                             id="{!index+'ProfitCenter'}"
+                                             onblur="{!c.getData}"
+                                             name="{!index}"
+                                             value="{!field.CDM_Profit_Center__c}"
+                                             disabled="false"/>
+                            </div>
+                        </div>
+                        <div>  <div class="slds-m-left_xx-small">
+                            <lightning:input type="text" 
+                                             label="Cost Center" 
+                                             aura:id="CostCenter"
+                                             name="{!index}"
+                                             onblur="{!c.getData}"
+                                             value="{!field.CDM_Cost_Center__c}"
+                                             disabled="false"/>
+                            </div>
+                        </div>
+                        
+                        
+                        
+                        
+                        
+                        <div>  <div class="slds-m-left_xx-small">
+                            
+                            
+                            
+                            <lightning:select  
+                                              name="SubTaxCode"
+                                              label="Sub Tax Code" 
+                                              required="true"
+                                              value="{!field.CDM_Sub_Tax_Code__c}"
+                                              >
+                                <option value="">-- None --</option>
+                                
+                                <aura:iteration items="{!v.Optvalues}" var="p">
+                                    <option value="{!p}" text="{!p}"></option>
+                                </aura:iteration>
+                            </lightning:select>
+                            
+                            </div> </div>
+                        
+                        <div>  <div class="slds-m-left_xx-small">
+                            <lightning:input type="number" 
+                                             label="Sub Tax Rate" 
+                                             aura:id="SubTaxRate"
+                                             name="{!index}"
+                                             required="{!(v.country == 'Netherlands' || v.country == 'Spain')? true:false}"
+                                             value="{!field.CDM_Sub_Tax_Rate__c}"
+                                             disabled="false"
+                                             formatter="percent-fixed" 
+                                             step="0.01"/>
+                            </div>
+                        </div>         
+                        
+                        
+                        <div>  <div class="slds-m-left_xx-small">
+                            
+                            <lightning:textarea label="Sub Item Text"
+                                                aura:id="SubItemText"
+                                                name="{!index}"
+                                                maxlength="300"
+                                                required="{!(v.country == 'Netherlands' || v.country == 'Spain')? true:false}"
+                                                value="{!field.CDM_Sub_Item_Text__c}"
+                                                disabled="false"/>
+                            
+                            </div>
+                        </div>
+                        
+                        
+                        
+                        
+                        
+                        <div>
+                            <div class="slds-m-top_large">
+                                <aura:if isTrue="{!index > 0}">
+                                    
+                                    
+                                    <button type="button" name="{!index}" class="slds-button"
+                                            onclick="{!c.removeSplit}"> 
+                                        <lightning:icon iconName="action:remove" size="xx-small"
+                                                        
+                                                        /> 
+                                        
+                                    </button>   
+                                    
+                                </aura:if>
+                            </div></div>
+                        
+                        
+                        
+                        
+                    </div>
+                    
+                    
+                    
+                    
+                </aura:iteration>
+            </div></div> 
+    </aura:if>
+    
+    
+    
+    
+</aura:component>

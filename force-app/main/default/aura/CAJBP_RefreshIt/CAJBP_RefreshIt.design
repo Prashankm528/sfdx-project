@@ -1,0 +1,5 @@
+<design:component label="CAJBP Refresh It">
+	<design:attribute name="needle" label="Search Value" description="String to search for in the toast message. If empty, the view will be refreshed on every toast (NOT RECOMMENDED)" default="" />
+	<design:attribute name="eventType" label="Event Type" description="The types of events to listen to i.e. SUCCESS,DELETE etc.." default="SUCCESS"/>
+    <design:attribute name="refreshEvent" label="Refresh Event" description="Name of the event. It will be called when the toast is displayed" default="e.force:refreshView" />
+</design:component>

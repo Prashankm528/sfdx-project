@@ -1,0 +1,124 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:appHostable" controller="CAPL_AdviceOfTheWeekClass">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+	<style>
+		#commentContainer {
+		    background: white;
+		    position: relative;
+		    overflow: hidden;
+		    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12);
+		    height: 400px;
+		    width: 100%;
+		}
+
+		.backgroundImage {
+		    padding: 0;
+		    position: relative;
+		}
+
+		.backgroundImage:after {
+		    content: "";
+		    position: absolute;
+		    left: 0;
+		    top: 0;
+		    right: 0;
+		    bottom: 0;
+		    background: rgba(62, 79, 178, .25);
+		    width: 100%;
+		}
+
+		.backgroundImage img {
+		    width: 100% !important;
+		    height: 400px !important;
+		    -o-object-fit: cover;
+		    object-fit: cover;
+		    margin: 0;
+		    display: block;
+		    position: absolute;
+		    opacity: 0.3;
+		}
+		
+		.createdBy {
+			opacity: 0.75;
+			font-family: Arial;
+			font-size: 14px;
+			text-align: center;
+			color: #626769;	
+    		margin-top: 50px;
+		}
+
+	    .commentHeader p {
+			font-family: Arial;
+			font-size: 32px;
+			letter-spacing: -1px;
+			text-align: center;
+			color: #626769;
+	    }
+
+	    .centerContent {
+		    padding-top: 12%;
+		    width: fit-content;
+		    min-width: 35%;
+		    max-width: 75%;
+		    margin-left: auto;
+		    margin-right: auto;
+		}
+
+		.upQuote {
+			width: 40px;
+			height: 40px;
+			float: left;
+			margin-top: -30px;
+    		margin-left: -30px;
+		}
+
+		.downQuote {
+			width: 40px;
+			height: 40px;
+			float: right;
+    		margin-right: -30px;
+		}
+
+		@media only screen and (max-width:40.063em) {
+			.centerContent {
+				padding-top: 40%;
+			}
+		}
+	</style>
+	
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+ 
+    <aura:attribute name="advice" type="object" access="public"/>
+    <aura:attribute name="background" type="String" access="public"/>
+
+    <div class="slds-grid_align-center slds-grid slds-wrap">
+    	<div class="slds-size--2-of-2">
+			<div class="slds-text-align_center">
+				<div id="commentContainer">
+					<div class="backgroundImage">
+						<img src="{!v.background}" alt="background image" />
+					</div>
+					<aura:if isTrue="{!v.advice.commentBody != null}">
+						<div class="centerContent">
+							<div class="upQuote">
+								<img src="{!$Resource.CAPL_Resources + '/CAPL_Resources/images/up_quotes.png'}"/>
+							</div>
+							<div class="commentHeader">
+		        				<aura:unescapedHtml value="{!v.advice.commentBody}"/>
+		        			</div>
+		        			<div class="downQuote">
+								<img src="{!$Resource.CAPL_Resources + '/CAPL_Resources/images/down_quotes.png'}"/>
+							</div>
+		        			<p class="createdBy" title="{!v.advice.commentCreatedBy}">
+								{!v.advice.commentCreatedBy} | Castrol
+							</p>
+		        		</div>
+		        	</aura:if>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</aura:component>

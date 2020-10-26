@@ -1,0 +1,101 @@
+<!--from here user can select Accounts to link with Opportunity from available Account Hirarchy-->
+<!-- this is parent component which added in Opportunity REcord page    -->
+<!--consist of child component named PCRMAccountHierarchy -->
+
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller ="PCRM_AccountHierarchyController" >
+    
+  <!--handler to perform required action after event got fired -->  
+  <aura:handler name = "SelectedAccountsEvent" event ="c:PCRM_SelectedAccounts" action ="{!c.getAccountsFromEvent}"/>  
+  <aura:attribute name="LeftGridAccountsFromEvent" type="OBJECT" />  
+  <aura:attribute name="RightGridAccountsFromEvent" type="OBJECT" />  
+  <aura:attribute name="Notselected_IdsOnLeftGrid" type="List" />  
+  
+  <!-- map of child and parent row keyfield-->
+  <aura:attribute name="MapOfChildParentKeyfield" type="Map" />  
+  <!-- map of each row's Keyfield and its detail-->
+  <aura:attribute name="MapOfRowKeyField_RowDetail" type="Map" />
+    
+   <!-- map of each row's Keyfield and its detail-->
+  <aura:attribute name="MapOfPicklistValuewithLable" type="Map" />  
+    
+  <aura:attribute name="topAccountId" type="string" />  
+    
+   <!--Accounts which are already added on right side --> 
+  <aura:attribute name="UnformatedExistingAccountsOnRight" type="OBJECT" />
+    
+  <aura:attribute name="UnformatedExistingAccountsOnLeft" type="OBJECT" />
+  
+  <aura:attribute name="formatedAccountsOnRight" type="OBJECT" /> 
+  <aura:attribute name="formatedAccountsOnLeft" type="OBJECT" />    
+    
+  <aura:attribute name="ParentAccIdFromEvent" type="string" />     
+    
+  <aura:attribute name="seletedIdsOnLeft" type="List" />    
+    
+  <!-- List of accounts receved via event which are notselected on left side-->  
+  <aura:attribute name="LeftGridNotSelectedAccountFromEvent" type="OBJECT" />   
+  <aura:attribute name="RightGridNotSelectedAccountFromEvent" type="OBJECT" />   
+  
+    
+  <!--List of rows to be expanded on right side treeGrid-->
+    <aura:attribute name="gridExpandedRowsOnRight" type="List" />   
+    
+   <aura:attribute name="gridExpandedRowsOnLeft" type="List" />     
+    
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+   <aura:attribute name="showSpinner" type="boolean" />   
+
+    <div style= "overflow: auto;">
+      <div class="SpinnerClass">
+            <aura:if isTrue="{! v.showSpinner }">
+            	<lightning:spinner alternativeText="Loading" />
+            </aura:if>
+      </div>
+     <lightning:layout multipleRows="true">
+         <lightning:layoutItem size= "5"  padding="around-small">
+              <!--<div class="custom-box"> <c:PCRMAccountHierarchy gridData="{!v.formatedAccountsOnLeft}" selectedIds ="{!v.seletedIdsOnLeft}" gridExpandedRows ="{!v.gridExpandedRowsOnLeft}" OpportunityId = "{!v.recordId}" renderArrows="True"/></div>-->
+             <div class="custom-box"> <c:PCRMAccountHierarchy  selectedIds="{!v.Notselected_IdsOnLeftGrid}" MapOfRowKeyField_RowDetail = "{!v.MapOfRowKeyField_RowDetail}"   MapOfChildParentKeyfield = "{!v.MapOfChildParentKeyfield}" isRightTreeGreed = "False" Unformated_ExistingAccountsOnLeft = "{!v.UnformatedExistingAccountsOnLeft}" gridData="{!v.formatedAccountsOnLeft}" gridExpandedRows ="{!v.gridExpandedRowsOnLeft}" OpportunityId = "{!v.recordId}" renderArrows="True"/></div>
+         </lightning:layoutItem>
+         <lightning:layoutItem  size= "2"  padding="around-small">
+             <div class="custom-box">
+                 <lightning:layoutItem size="2"   padding="around-large">
+                    <lightning:buttonIcon size="large"  variant="brand" iconName="utility:right" onclick="{! c.onRightArrowClick }" alternativeText="Settings" title="Settings" />
+                 </lightning:layoutItem>
+                 <lightning:layoutItem size="2"  padding="around-large">
+                     <lightning:buttonIcon size="large"  variant="brand" iconName="utility:left" onclick="{! c.onLeftArrowClick }" alternativeText="Settings" title="Settings" />
+                 </lightning:layoutItem>
+             </div>
+         </lightning:layoutItem>
+         <lightning:layoutItem size= "5"   padding="around-small">
+                <div class="custom-box"> <c:PCRMAccountHierarchy MapOfRowKeyField_RowDetail = "{!v.MapOfRowKeyField_RowDetail}"   MapOfChildParentKeyfield = "{!v.MapOfChildParentKeyfield}"  Unformated_ExistingAccountsOnRight = "{!v.UnformatedExistingAccountsOnRight}" OpportunityId = "{!v.recordId}" isRightTreeGreed = "True" gridData="{!v.formatedAccountsOnRight}" gridExpandedRows ="{!v.gridExpandedRowsOnRight}" /></div>
+            </lightning:layoutItem>
+         
+         
+          <!--<lightning:layoutItem   size= "4"  padding="around-small">
+              <div class="custom-box"></div>  
+          </lightning:layoutItem>        
+          <lightning:layoutItem  class = "footer" size= "6"   padding="around-small">
+              <div class="custom-box">
+               <lightning:button disabled="false"  onclick="{! c.OnclickSave }" label="Save" iconName="utility:like" variant="success" iconPosition="left"  />
+               <lightning:button disabled="false"  onclick="{! c.OnclickCancel}" label="Cancel" iconName="utility:refresh" variant="destructive" iconPosition="left"  />
+              </div> 
+          </lightning:layoutItem>  
+          <lightning:layoutItem    size= "4"   padding="around-small">
+             <div class="custom-box"></div>  
+          </lightning:layoutItem> -->
+        </lightning:layout>  
+        
+        <!--<hr style = "border: 1px solid #73AD21;" ></hr>-->
+        <hr ></hr>
+
+        
+        <!--iv Class = "buttonPosition">-->
+        	<!--<div style= "position: absolute; right: 0px;">-->
+            <div style= "text-align: right;">    
+        		<lightning:button disabled="false"  onclick="{! c.OnclickSave }" label="Save" iconName="utility:like" variant="success" iconPosition="left"  />
+        		<lightning:button disabled="false"  onclick="{! c.OnclickCancel}" label="Cancel" iconName="utility:refresh" variant="destructive" iconPosition="left"  />
+        	</div>
+  
+ </div>
+  
+</aura:component>

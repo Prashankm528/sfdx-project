@@ -1,0 +1,8 @@
+<!--
+    Custom JBP loader for records.
+-->
+<aura:component description="CAJBP_Loader">
+    <div class="loader">
+        <img src="{!$Resource.CAJBP_Assets + '/jbp/icons/loader_v3.png'}"/>
+    </div>
+</aura:component>

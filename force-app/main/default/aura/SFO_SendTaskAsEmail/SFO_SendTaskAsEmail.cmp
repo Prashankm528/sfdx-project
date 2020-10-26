@@ -1,0 +1,133 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" controller="CA_SendTaskAsEmailController">
+
+    <!-- To get rid of additional padding inherited from QuickAction -->
+    <aura:html tag="style">
+    	.cuf-content {
+        	padding: 0 0rem !important;
+        }
+        
+        .slds-p-around--medium {
+        	padding: 0rem !important;
+        }
+        
+        .slds-modal__content{
+        	height:unset !important;
+        	max-height:unset !important;
+        }
+    </aura:html>
+
+    <!-- The detail of the task record that needs to be sent externally --> 
+    <aura:attribute name="Task" type="Task" default="{ 'sobjectType' : 'Task' }"/>
+
+    <!-- The list of picklist options to display : selected from custom setting Send_Task_Settings__c  -->
+    <aura:attribute name="options" type="Send_Task_Settings__c[]"/>
+
+    <!-- Error messages provided by validation of input fields -->
+    <aura:attribute name="validationMessages" type="String[]" default=""/>
+    
+    <!-- Data related to parent object, Name, SalesOrg and BusinessUnit -->
+    <aura:attribute name="parentSpecificData" type="String[]" default=""/>   
+    
+    <!-- Id of parent object  -->
+    <aura:attribute name="parentId" type="String" default=""/>
+    
+    <!-- Type of the object to which task belongs to -->
+    <aura:attribute name="taskType" type="String" default=""/>
+    
+    
+    <!-- Boolean to show or hide messages --> 
+    <aura:attribute name="showMessages" type="Boolean" default="false"/>
+
+	<!-- Initialisation in a client-side controller -->
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <!-- workaround force:* fields not rendered within markup without being an immediate child of aura:component-->
+    <force:outputField aura:id="subjectHiddenOutput" value="{!v.Task.Subject}" class="slds-hide"></force:outputField>
+    <force:outputField aura:id="accountNameHiddenOutput" value="{!v.Task.Account.Name}" class="slds-hide"></force:outputField>
+    <!-- end of workaround -->
+
+     <!-- Markup -->
+
+        <div class="slds-modal__header">
+        <h2 id="header" class="slds-text-heading--medium">Send Task As Email</h2>
+        <aura:if isTrue="{!v.showMessages}">
+            <ui:message title="Unable to send this task as email" severity="error" closable="false">
+                <aura:iteration var="error" items="{!v.validationMessages}">
+                   <p><ui:outputText value="{!error.value}"/></p>
+                </aura:iteration>
+            </ui:message>
+        </aura:if> 
+    </div> 
+    <div class="slds" >
+        <div class="slds-grid slds-wrap slds-p-around--medium ">
+            <div class="slds-p-around--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                <div class="slds-form-element slds-is-required">
+                  <label class="slds-form-element__label" for="firstName">
+                    <abbr class="slds-required" title="required">*</abbr>Subject
+                  </label>
+                  <div class="slds-form-element__control">
+                    <force:inputField aura:id="tasksubject" value="{!v.Task.Subject}" />
+                  </div>
+                </div>
+            </div>
+           <div class="slds-p-around--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="relatedTo">
+                         <abbr class="slds-required" title="required">*</abbr>Related To
+                     </label>
+                    <div class="slds-form-element__control">
+                         <div>{!v.parentSpecificData[0]}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-p-around--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                <div class="slds-form-element">
+                  <label class="slds-form-element__label" for="dueDate">Due Date</label>
+                  <div class="slds-form-element__control">
+                    <force:inputField aura:id="dueDate" value="{!v.Task.ActivityDate}" />
+                  </div>
+                </div>
+            </div>
+            <div class="slds-p-around--small slds-size--1-of-1 slds-medium-size--1-of-2">
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="priority">
+                        <abbr class="slds-required" title="required">*</abbr>Priority
+                    </label>
+                    <div class="slds-form-element__control">
+                    <ui:inputSelect aura:id="prioritydynamic" value="{!v.Task.Priority}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-p-around--small slds-size--1-of-1 slds-medium-size--1-of-1">
+                
+                  
+                    
+                      <lightning:textarea aura:id="comments" label="Comments" 
+                                    value="{!v.Task.Description}"/>
+                
+             
+            </div>
+            <div class="slds-p-around--small  slds-size--1-of-1 slds-medium-size--1-of-1">
+                <div class="slds-form-element">
+                  <label class="slds-form-element__label" for="sendTo">
+                     <abbr class="slds-required" title="required">*</abbr>
+                     Send To</label>
+                  <div class="slds-form-element__control">
+                        <ui:inputSelect aura:id="sendTo" required="true">
+                            <ui:inputSelectOption text="--None--" label="--None--" />
+                            <aura:iteration items="{!v.options}" var="option">
+                                <ui:inputSelectOption text="{!option.Name}" label="{!option.Display_Name__c}" />
+                            </aura:iteration>
+                        </ui:inputSelect>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slds-modal__footer">
+        <div class="slds-x-small-buttons--horizontal">
+          <ui:button aura:id="cancelbutton" class="slds-button slds-button--neutral" press="{!c.handleCancel}">Cancel</ui:button>
+          <ui:button aura:id="savebutton" class="slds-button slds-button--brand" press="{!c.handleSave}">Send</ui:button>
+        </div>
+    </div>
+</aura:component>

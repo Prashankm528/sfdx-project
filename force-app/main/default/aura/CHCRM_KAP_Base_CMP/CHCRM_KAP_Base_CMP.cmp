@@ -1,0 +1,6 @@
+<aura:component implements="force:hasRecordId" access="global" controller="CHCRM_KAP_BaseController"  abstract="true">    
+    <aura:attribute name="isDraft" type="Boolean" default="false"/>    
+	<aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:handler event="force:refreshView" action="{!c.init}" />
+    {!v.body}
+</aura:component>

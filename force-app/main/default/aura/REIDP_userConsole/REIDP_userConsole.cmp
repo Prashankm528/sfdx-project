@@ -1,0 +1,20 @@
+<!--
+* @author Ragim Ragimov
+* @company Bluewolf, an IBM Company
+* @date 6/2017
+*
+* A Lightning Component for minimal Salesforce User Console for web user.
+-->
+<aura:component controller="REIDP_LightningUserConsoleController" implements="forceCommunity:availableForAllPageTypes" access="global" >
+
+    <aura:attribute type="String" name="recordId" description="User Record Id" default=""/>
+    <aura:attribute type="User" name="usr" default="{sobjectType:'User',Name:'',Email:'',Phone:''}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
+
+    <div style="font-size: 14px;text-align: left;padding: 0 15px;">
+        {!$Label.c.IDPName} : {!v.usr.Name}<br/>
+        {!$Label.c.IDPEmail} : {!v.usr.Email}<br/>
+        {!$Label.c.IDPPhone} : {!v.usr.Phone}<br/>
+    </div>
+
+</aura:component>

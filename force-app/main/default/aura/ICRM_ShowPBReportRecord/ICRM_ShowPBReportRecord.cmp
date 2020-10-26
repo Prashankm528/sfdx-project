@@ -1,0 +1,36 @@
+<aura:component controller="ICRM_getPowerBIRecords" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <!--defining attributes start-->
+    <aura:registerEvent name="PBEvent" type="c:ICRM_GetPBReportEvent"/>
+    <aura:attribute name="PBIReportList" type="List" />
+    <aura:attribute name="PBData" type="Object"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="mycolumns" type="List"/>
+    <aura:attribute name="startPage" type="Integer" />
+    <aura:attribute name="endPage" type="Integer"/>
+    <aura:attribute name="totalRecords" type="Integer"/>
+    <aura:attribute name="pageSize" type="Integer" default="10"/>
+    <aura:attribute name="sortBy" type="String"/>
+    <aura:attribute name="sortDirection" type="String"/>
+    <!--defining attributes end-->
+    <ltng:require styles="{!$Resource.ICRM_noheader}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <div style="width: 250px;">
+        <lightning:datatable data="{!v.PBIReportList}" 
+                             columns="{!v.mycolumns}" 
+                             keyField="id"
+                             hideCheckboxColumn="true"
+                             onrowaction="{! c.handleClick}"/>
+        <br/>
+        <div class="slds-align_absolute-center"> 
+            <lightning:buttonGroup >
+                <lightning:button label="Prev" disabled="{!v.startPage == 0}"  
+                                  onclick="{!c.previous}" variant="brand"
+                                  iconName="utility:back"/>
+                &nbsp; &nbsp; &nbsp;
+                <lightning:button label="Next" disabled="{!v.endPage+1 >= v.totalRecords}" 
+                                  onclick="{!c.next}" variant="brand"
+                                  iconName="utility:forward" iconPosition="right"/>
+            </lightning:buttonGroup>
+        </div>
+    </div>
+</aura:component>

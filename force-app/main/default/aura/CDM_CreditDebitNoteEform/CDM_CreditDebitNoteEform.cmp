@@ -1,0 +1,541 @@
+<!-- CDM CreditDebitNoteEform Component, which is used form show cdm eform new or edit record or vew record -->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,lightning:actionOverride,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" controller="CDM_CreditDebitNoteFormController" >
+    <aura:attribute name="recordId" type="String" description="get recordId from existing record"/>
+    <aura:attribute name="newRecord" type="Boolean" default="true" description="get find new or existing record"/>
+    <aura:attribute name="fieldsMetaData" type="Object[]" description="set fields meta data and user input data"/>
+    <aura:attribute name="fieldsMetaDatamap" type="Map" description="fields meta data map"/>
+    <aura:attribute name="eFormFieldRule" type="Map" description="get eform field rule"/>
+    <aura:attribute name="recordEditAccess" type="Boolean" default="false"/>
+    <aura:attribute name="recTypeOpts" type="List" description="get all cdm eform object record Types"/>
+    <aura:attribute name="recTypeMap" type="Map" description="cdm eform record types map"/> 
+    <aura:attribute name="sumAmount" type="Double" description="gross amount sum"/> 
+   
+     <aura:attribute name="userRole" type="String" description="get current user role"/> 
+    <aura:attribute name="recordTypeId" type="String" description="set selected record type id"/>
+    <aura:attribute name="requestType" type="String" description="set cdm eform request type"/>
+    <aura:attribute name="approvalStatus" type="String" description="set cdm eform approval status"/>
+    <aura:attribute name="depPicklistMap" type="String" description="set dependent picklist map"/>
+    <aura:attribute name="taxCodes" type="List" description="set tax codes map"/>
+    <aura:attribute name="salesDocType" type="List" description="set sales doc type for ANZ"/>
+    <aura:attribute name="channelCode" type="String" description="Channel code value get from Distribution Channel"/>
+    <aura:attribute name="taxEndUseflg" type="Boolean" default="true" description="this value indicate tax end use field display or not for ANZ"/>
+    <aura:attribute name="taxEndUse" type="Map" description="set tax end use for ANZ"/>
+    <aura:attribute name="salesDocTypeVal" type="String" description="get sales doc type selected value for ANZ"/>
+    <aura:attribute name="taxEndUseOpts" type="List" description="set tax end use for ANZ picklist options"/>
+    <aura:attribute name="taxCodesOpts" type="List" description="set tax end use for ANZ for selected values"/>
+    <aura:attribute name="paymentMethods" type="List" description="set paymethods values map"/>
+    <aura:attribute name="country" type="String" description="country values map"/>
+    <aura:attribute name="netAmountFlg" type="Boolean" description="display net amount field for ANZ countries"/>
+    <aura:attribute name="today" type="Date" description="today date"/>
+    <aura:attribute name="GLmaterialFlg" type="Boolean" default="true" description="this is refered for hide Default GL related fields for ANZ"/>
+    <aura:attribute name="netSumAmount" type="Double" description="cummulative net amount"/>
+    <aura:attribute name="grossSumAmount" type="Map" description="cummulative net amount"/>
+    <aura:attribute name="parentCDMFlg" type="String" description="this flag is indicate parent cdm form"/>
+    <aura:attribute name="companyCode" type="String" description="selected company code value"/>
+    <aura:handler name="change" value="{!v.country}" action="{!c.getDataOnContry}" description="event country values change event"/> 
+    <aura:handler name="change" value="{!v.viewRecord}" action="{!c.clickEditLoad}"/>
+    
+    <aura:attribute name="viewRecord" type="Boolean" default="false" description="view mode or edit defined flag"/>
+    <aura:attribute name="cdmStatus" type="String" description="cdm eform status"/>
+    <aura:attribute name="editRecord" type="Boolean" default="false" description="cdm eform edit record flag"/>
+    <aura:attribute name="fieldsMetaDataWrp" type="Object" description="meta map with data map"/>
+    <aura:attribute name="splitAmountRecs" type="Sobject[]" default="[]" description="cdm eform split line object records" />
+    <aura:attribute name="fieldPicklistMap" type="Map" description="fields picklist values map"/>
+    <aura:attribute name="splitAmount" type="Boolean" default="false" description="amount split flag"/>
+    <aura:attribute name="splitRequired" type="String" description="split amount required flag"/>
+    <aura:attribute name="selectedMaterial" type="Object" description="this is material object which is selected from material lookup"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" description="doinit system event"/>  
+    <aura:registerEvent name="CDM_HideSubmitBtnEvt" type="c:CDM_HideSubmitBtnEvt"/>
+   
+    <aura:handler name="CDM_setDependentPicklist" event="c:CDM_setDependentPicklist" action="{!c.setDepEventField}" description="get dependent picklist values"/>
+    <aura:handler name="CDM_AmountSplitEvt" event="c:CDM_AmountSplitEvt" action="{!c.splitAmount}" description="split amount event"/>
+     <aura:handler name="CDM_AmountChangeEvt" event="c:CDM_AmountChangeEvt" action="{!c.sumAmount}" description="amount change event"/>
+     <aura:handler name="CDM_MaterialTypeEvt" event="c:CDM_MaterialTypeEvt" action="{!c.materialType}" description="material section change from material look up"/>
+    <aura:handler name="CDM_TaxEndUseEvt" event="c:CDM_TaxEndUseEvt" action="{!c.setTaxEndUseOpts}" description="tax end use dependency logic"/>
+    
+    <aura:handler name="CDM_ShowHideEvent" event="c:CDM_ShowHideEvent" action="{!c.showHidePageLoad1}" description="show dependent field event"/>
+    <aura:attribute name="eFormRecord" type="Sobject" default="{'sobjectType': 'CDM_Credit_Debit_Note__c'
+                                                               }"/>
+    <aura:attribute name="approversList" type="Sobject[]" description="get approvers list"/>
+    <aura:attribute name="adminPermissionSet" type="Boolean" default="false" description="this is to check if Admin Permission Set is assigned to user"/>
+    <aura:attribute name="setNullDate" type="Date" default="" description="today date"/>
+    
+    <div aura:id="spinner" class="slds-hide">
+     <lightning:spinner alternativeText="Loading" size="large"/>
+        </div>
+    <div class="slds-container--large">
+       
+        <aura:if isTrue="{!empty(v.recordId)}">
+            <lightning:layout class="slds-page-header slds-page-header--object-home">
+                <lightning:layoutItem>
+                    <lightning:icon iconName="standard:scan_card" alternativeText="My Expenses"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="horizontal-small">
+                    <div class="page-section page-header">
+                        <h1 class="slds-text-heading--label">CDM Credit Debit Note</h1>
+                        
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </aura:if>
+               
+        
+        <aura:if isTrue="{!!empty(v.fieldsMetaData)}">
+        <div aria-labelledby="cdmeform">
+            
+            <fieldset class="slds-box slds-theme--default slds-container--large">
+               
+                <div class="slds-p-left_large slds-p-right_medium">	
+                   
+                   <div style="{!if(not(v.viewRecord),'display:inline','display:none')}">
+				                       
+                            <div class="slds-grid slds-wrap custom-container"> 
+                                
+                                <aura:iteration items="{!v.fieldsMetaData}" var="field"> 
+                               <!-- Text and Email type  -->     
+                                    <aura:if isTrue="{!if(or(field.CDM_DataType__c == 'STRING',
+                                                     field.CDM_DataType__c == 'EMAIL'                                                  
+                                                     ) &amp;&amp;
+                                                      if((field.Name == 'Profit Center' ||  field.Name == 'Cost Center' || field.Name == 'GL Account'  || field.Name == 'Item Text') 
+                                                     &amp;&amp; v.splitRequired == 'Yes',false,true)
+                                                      &amp;&amp; (v.parentCDMFlg == 'Yes'?field.CDM_Bulk_Upload__c == 'Yes'? true: false :field.CDM_Show__c) 
+                                                     &amp;&amp; (field.Name != 'FI Document number' &amp;&amp; field.Name != 'FI Document Date'
+                                                     &amp;&amp; field.Name !='GL Document Number' &amp;&amp; field.Name !='Order Date' &amp;&amp; field.Name !='Order Number'),true,
+                                                     if((field.Name == 'FI Document number' || field.Name == 'FI Document Date' || field.Name =='GL Document Number' ||
+                                                     field.Name =='Order Date'|| field.Name =='Order Number') &amp;&amp; v.recordId !=null &amp;&amp; 
+                                                     v.cdmStatus != 'Draft',true,false)) }"> 
+                                        
+                                        <div class="slds-size_1-of-2 slds-max-small-size_1-of-1"> 
+                                          <div class="slds-m-left_medium">
+                                                <lightning:input class="heighttext"  
+                                                                 required="{!field.CDM_Required__c}" 
+                                                                 value="{!field.CDM_DefaultValue__c}" 
+                                                                 aura:id="material"
+                                                                 id="{!field.CDM_Target_Field__c}" 
+                                                                 label="{!field.Name}"
+                                                                 type="{!field.CDM_DataType__c}"
+                                                                 onblur="{!c.getData}"
+                                                                 disabled="{!(field.CDM_Read_Only__c)}"
+                                                                 maxlength="{!field.CDM_Max_Length__c}"
+                                                                 placeholder="{!field.Place_Holder_Value__c}"
+                                                                 pattern="{!field.CDM_Pattern__c}"
+                                                                 messageWhenPatternMismatch="{!field.CDM_Pattern_Message__c}"
+                                                                 /> 
+                                            </div>
+                                        </div>  
+                                    </aura:if>  
+                                    
+                                                            
+                                    <!-- Look Up type  --> 
+                                    
+                                    <aura:if isTrue="{!if(((field.CDM_DataType__c == 'REFERENCE' &amp;&amp;  
+                                                     (v.parentCDMFlg == 'Yes'?field.CDM_Bulk_Upload__c == 'Yes'? true: false :field.CDM_Show__c)) 
+												     &amp;&amp; if((field.Name == 'Approver' &amp;&amp; (v.country=='Australia' || v.country=='New Zealand') &amp;&amp; 
+                                                     v.requestType == 'Debit Note'),	false, true)), true,false)}">
+                                        <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                                            <div class="slds-m-left_medium">
+                                                <aura:if isTrue="{!field.Name == 'Material'}">
+                                                    
+                                                <!-- General Look Up --> 
+                                               <c:CDM_MaterialLookUp
+                                                                    objectAPIName="{!field.CDM_Look_Up_Object_Name__c}"
+                                                                    IconName="standard:avatar"
+                                                                    label="{!field.Name}"
+                                                                    fieldsMetaDatamap="{!v.fieldsMetaDatamap}"
+                                                                    required="{!field.CDM_Required__c}"
+                                                                    fieldName = "{!field.CDM_Target_Field__c}"
+                                                                    value = "{!field}"
+                                                                    requestType = "{!v.requestType}"
+                                                                     selectedMaterial = "{!v.selectedMaterial}"
+                                                                     
+                                                                   
+                                                                    /> 
+                                                    <aura:set attribute="else">
+                                                         <!-- Material Look Up  -->
+                                                         <c:CDM_CustomLookUp
+                                                                    objectAPIName="{!field.CDM_Look_Up_Object_Name__c}"
+                                                                    IconName="standard:avatar"
+                                                                    label="{!field.Name}"
+                                                                    fieldsMetaDatamap="{!v.fieldsMetaDatamap}"
+                                                                    required="{!field.CDM_Required__c}"
+                                                                    fieldName = "{!field.CDM_Target_Field__c}"
+                                                                    value = "{!field}"
+                                                                    country = "{!v.country}"
+                                                                    companyCode = "{!v.companyCode}"
+                                                                    requestType = "{!v.requestType}"
+                                                                   
+                                                                    />   
+                                                    </aura:set>
+                                                </aura:if>
+                                                
+                                            </div></div>
+                                    </aura:if> 
+                                      <!-- Picklist type  -->
+                                    <aura:if isTrue="{!if( if(field.CDM_DataType__c == 'PICKLIST' &amp;&amp; (v.parentCDMFlg == 'Yes'?field.CDM_Bulk_Upload__c == 'Yes'? true: false :field.CDM_Show__c), true,false) 
+                                                   
+													 &amp;&amp; (if((field.Name == 'Tax Code' &amp;&amp; v.splitRequired == 'Yes') ,false,true)),true,false)  
+                                                     }"> 
+                                        <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                                            <div class="slds-m-left_medium">
+                                                <c:CDM_PicklistMapExtractor fieldsMetaDatamap = "{!v.fieldsMetaDatamap}"
+                                                                            key="{!field.CDM_Target_Field__c}"
+                                                                            datatype="{!field.CDM_Data_Type__c}"
+                                                                            recPicklistMap="{!v.fieldPicklistMap}"
+                                                                            depPicklistMap="{!v.depPicklistMap}"
+                                                                            value = "{!field}"
+                                                                            splitRequired = "{!v.splitRequired}"
+                                                                            country="{!v.country}"
+                                                                            companyCode="{!v.companyCode}"
+                                                                            taxEndUse = "{!v.taxEndUse}"
+                                                                            taxEndUseOpts = "{!v.taxEndUseOpts}"
+                                                                            parentCDMFlg = "{!v.parentCDMFlg}"
+                                                                            salesDocTypeVal="{!v.salesDocTypeVal}"
+                                                                            taxEndUseflg="{!v.taxEndUseflg}"
+                                                                           
+                                                                            disabled="{!if(and(v.userRole == 'CDM_Operations_User',field.Name == 'CDM Form Status') ,false,
+                                                                                      if(and(v.userRole != 'CDM_Operations_User',field.Name == 'CDM Form Status'),true,false))}"
+                                                                            /> 
+                                            </div></div>
+                                        
+                                    </aura:if>
+                                     <!-- Amount split line type  -->
+                                     <aura:if isTrue="{!and(field.CDM_DataType__c == 'Split',(v.parentCDMFlg == 'Yes'?field.CDM_Bulk_Upload__c == 'Yes'? true: false :field.CDM_Show__c))}">
+                                     <aura:if isTrue="{!v.splitAmount &amp;&amp; v.splitRequired == 'Yes'}">
+                                        <div class="slds-size_1-of-1 slds-max-small-size_1-of-1">
+                                            <div class="slds-m-left_medium"> 
+                                                <div class="slds-scrollable"  style="height: 10rem; width: 45rem">
+                                                <c:CDM_AmountSplit childRecords = "{!v.splitAmountRecs}"
+                                                                   splitAmount="{!v.splitAmount}"
+                                                                   sumAmount="{!v.sumAmount}"
+															       fieldPicklistMap ="{!v.fieldPicklistMap}" 
+                                                                   country = "{!v.country}"
+                                                                   taxCodes = "{!v.taxCodes}"
+                                                                           />
+                                                </div>
+                                            </div>
+                                         </div>
+                                        
+                                    </aura:if>
+                                    </aura:if>
+                                     <!-- Date type  -->
+                                   <aura:if isTrue="{!(field.CDM_DataType__c == 'DATE' &amp;&amp; (v.parentCDMFlg == 'Yes'?field.CDM_Bulk_Upload__c == 'Yes'? true: false :field.CDM_Show__c)
+                                                     )}">
+                                       <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                                            <div class="slds-m-left_medium">                                       
+                                         <aura:if isTrue="{!(field.CDM_Target_Field__c == 'CDM_Operation_Date__c' || field.CDM_Target_Field__c == 'CDM_Invoice_Date__c')}">
+                                             <label class="required">*</label>	
+                                             <label class="slds-form-element__label">{!field.Name}</label>                                          
+                                             <aura:if isTrue="{!(v.country == 'Spain')}">                                                 
+                                             	<lightning:helptext content="{!field.CDM_Help_Text__c}" class="customIcon"/>         
+                                             </aura:if>
+                                             <lightning:input class="heighttext"  
+                                                                 required="{!field.CDM_Required__c}" 
+                                                                 value="{!field.CDM_DefaultValue__c?field.CDM_DefaultValue__c:null}" 
+                                                                 id="{!field.CDM_Target_Field__c}" 
+                                                                 label="{!field.Name}" 
+                                                                 onblur="{!c.getData}"
+                                                                 type="{!field.CDM_DataType__c}"
+                                                                 disabled="{!field.CDM_Read_Only__c}"
+                                                              	 variant="label-hidden"
+                                                              	 aura:id="dateFields1"
+                                                                 />                                         
+                                            <aura:set attribute="else">
+                                               	<lightning:input class="heighttext"  
+                                                                 required="{!field.CDM_Required__c}" 
+                                                                 value="{!field.CDM_DefaultValue__c?field.CDM_DefaultValue__c:null}" 
+                                                                 id="{!field.CDM_Target_Field__c}" 
+                                                                 label="{!field.Name}" 
+                                                                 onblur="{!c.getData}"
+                                                                 type="{!field.CDM_DataType__c}"
+                                                                 disabled="{!field.CDM_Read_Only__c}"
+                                                                 
+                                                                 />
+                                          </aura:set>
+                                        </aura:if>     
+                                                
+                                        </div></div>
+                                       
+                                    </aura:if>
+                                     <!-- DateTime type  -->
+                                    <aura:if isTrue="{!and(field.CDM_DataType__c == 'DATETIME',(v.parentCDMFlg == 'Yes'?field.CDM_Bulk_Upload__c == 'Yes'? true: false :field.CDM_Show__c))}">
+                                        <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                                            <div class="slds-m-left_medium">
+                                                
+                                                <lightning:input class="heighttext"  
+                                                                 required="{!field.CDM_Required__c}" 
+                                                                 value="{!field.CDM_DefaultValue__c}" 
+                                                                 id="{!field.CDM_Target_Field__c}" 
+                                                                 label="{!field.Name}" 
+                                                                 onblur="{!c.getData}"
+                                                                 type="{!field.CDM_DataType__c}"
+                                                                 disabled="{!field.CDM_Read_Only__c}"                                                                 
+                                                                 
+                                                                 />
+                                            </div></div>
+                                    </aura:if> 
+                                    
+                                     <!-- Number,Currency type  -->
+                                    <aura:if isTrue="{!(field.CDM_DataType__c == 'DOUBLE' ||
+                                                     field.CDM_DataType__c == 'CURRENCY' || field.CDM_DataType__c == 'PERCENT') &amp;&amp;
+                                                     if(and(or(field.Name == 'Gross Amount',field.Name == 'Tax Amount' || field.Name == 'Tax Rate')
+                                                     ,v.splitRequired == 'Yes'),false, true)  &amp;&amp;
+                                                    (v.parentCDMFlg == 'Yes'?field.CDM_Bulk_Upload__c == 'Yes'? true: false :field.CDM_Show__c)}">
+                                        <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                                            <div class="slds-m-left_medium">
+                                           
+                                                <lightning:input   
+                                                                 required="{!field.CDM_Required__c}" 
+                                                                 value="{!field.CDM_DefaultValue__c}" 
+                                                                 id="{!field.CDM_Target_Field__c}"
+                                                                 aura:id="amount"
+                                                                 label="{!field.Name}" 
+                                                                 onblur="{!c.getData}"
+                                                                 type="number" 
+                                                                 step="0.01"
+                                                                 formatter="{!field.Name == 'Tax Rate' || field.Name == 'Customer Vat' ? 'percent-fixed' : ''}"
+                                                                disabled="{!if(field.CDM_Read_Only__c,field.CDM_Read_Only__c, if(and(v.splitRequired == 'Yes',field.Name == 'Net Amount'), true,field.CDM_Read_Only__c))}"/>
+                                            </div></div>
+                                       
+                                    </aura:if>
+                                    
+                                    
+                                      <!-- Empty Space  -->
+                                    <aura:if isTrue="{!(field.CDM_DataType__c == 'Label'
+                                                      &amp;&amp;
+                                                     (v.parentCDMFlg == 'Yes'?field.CDM_Bulk_Upload__c == 'Yes'? true: false :field.CDM_Show__c))}">
+                                        <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                                            <div class="slds-m-left_medium">
+                                           
+                                              
+                                            </div></div>
+                                       
+                                    </aura:if>
+                                    
+                                    
+                                    
+                                    
+                                     <!-- TextArea type  -->
+                                    
+                                  <aura:if isTrue="{!if(and(field.CDM_DataType__c == 'TEXTAREA' &amp;&amp; (v.parentCDMFlg == 'Yes'?field.CDM_Bulk_Upload__c == 'Yes'? true: false :field.CDM_Show__c))  &amp;&amp; 
+                                                    
+                                                     if(field.Name == 'Processing Error' &amp;&amp; 
+                                                     (v.recordId == null ||
+                                                     v.cdmStatus == 'Draft'),false,true) &amp;&amp;
+													 if(field.Name == 'Item Text' &amp;&amp; v.splitRequired == 'Yes',false,true), true,false
+													 
+													 )}">
+                                        <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                                            <div class="slds-m-left_medium"> 
+                                                <lightning:textarea class="heighttext"  
+                                                                    required="{!field.CDM_Required__c}" 
+                                                                    value="{!field.CDM_DefaultValue__c}" 
+                                                                    id="{!field.CDM_Target_Field__c}" 
+                                                                    label="{!field.Name}" 
+                                                                    onblur="{!c.getData}"
+                                                                    maxlength="{!field.CDM_Max_Length__c}"
+                                                                    disabled="{!field.CDM_Read_Only__c}"
+                                                                     
+                                                                    />
+                                            </div></div>
+                                    </aura:if>
+                                    
+                                     <!-- Dependent fields  -->
+                                    <aura:if isTrue="{!and(field.CDM_DataType__c == 'Dependent',(v.parentCDMFlg == 'Yes'?field.CDM_Bulk_Upload__c == 'Yes'? true: false :field.CDM_Show__c))}"> 
+                                        
+                                        <div id="{!field.CDM_Target_Field__c+'Div'}" class="slds-size_1-of-2 slds-max-small-size_1-of-1" style="display:none">
+                                           
+                                            <div  class="slds-m-left_medium">
+                                                <aura:if isTrue="{!and(field.CDM_Dependent_Field_DataType__c != 'BOOLEAN',
+                                                                 field.CDM_Dependent_Field_DataType__c != 'PICKLIST', field.CDM_Show__c)}">
+                                                    <div class="slds-form-element"> 
+                                                        <lightning:input  
+                                                                         required="{!field.CDM_Required__c}" 
+                                                                         value="{!field.CDM_DefaultValue__c}" 
+                                                                         id="{!field.CDM_Target_Field__c}" 
+                                                                         label="{!field.Name}" 
+                                                                         onblur="{!c.getData}"
+                                                                         step="0.01"
+                                                                         disabled="{!field.CDM_Read_Only__c}"
+                                                                         placeholder="{!field.Place_Holder_Value__c}"
+                                                                         type="{!(field.CDM_Dependent_Field_DataType__c == 'CURRENCY' || field.CDM_Dependent_Field_DataType__c == 'DOUBLE')? 'number' : (field.CDM_Dependent_Field_DataType__c == 'BOOLEAN'? 'checkbox' : field.CDM_Dependent_Field_DataType__c? field.CDM_Dependent_Field_DataType__c : 'text')}"
+                                                        				 aura:id="dependentFields"
+                                                                         />
+                                                    </div> 
+                                                </aura:if>
+                                                <aura:if isTrue="{!and(field.CDM_Dependent_Field_DataType__c == 'PICKLIST', field.CDM_Show__c)}">
+                                               
+                                                  <c:CDM_PicklistMapExtractor fieldsMetaDatamap = "{!v.fieldsMetaDatamap}"
+                                                                            key="{!field.CDM_Target_Field__c}"
+                                                                            datatype="{!field.CDM_Data_Type__c}"
+                                                                            recPicklistMap="{!v.fieldPicklistMap}"
+                                                                            depPicklistMap="{!v.depPicklistMap}"
+                                                                            value = "{!field}"
+                                                                            splitRequired = "{!v.splitRequired}"
+                                                                            country="{!v.country}"
+                                                                            companyCode="{!v.companyCode}"
+                                                                            taxEndUse = "{!v.taxEndUse}"
+                                                                            taxEndUseOpts = "{!v.taxEndUseOpts}"
+                                                                            parentCDMFlg = "{!v.parentCDMFlg}"
+                                                                            salesDocTypeVal="{!v.salesDocTypeVal}"
+                                                                            taxEndUseflg="{!v.taxEndUseflg}"
+                                                                           
+                                                                            disabled="{!if(and(v.userRole == 'CDM_Operations_User',field.Name == 'CDM Form Status') ,false,
+                                                                                      if(and(v.userRole != 'CDM_Operations_User',field.Name == 'CDM Form Status'),true,false))}"
+                                                                            /> 
+                                                </aura:if>
+                                                <aura:if isTrue="{!and(field.CDM_Dependent_Field_DataType__c == 'BOOLEAN',(v.parentCDMFlg == 'Yes'?field.CDM_Bulk_Upload__c == 'Yes'? true: false :field.CDM_Show__c))}">
+                                                
+                                                <label class="slds-form-element__label" for="checkbox-id-01"> {!field.Name} </label>
+                                                <lightning:input 
+                                                                 required="{!field.CDM_Required__c}" 
+                                                                 value="{!field.CDM_DefaultValue__c}" 
+                                                                 id="{!field.CDM_Target_Field__c}" 
+                                                                 label="{!field.Name}" 
+                                                                 class="slds-checkbox slds-checkbox_standalone"
+                                                                 onchange="{!c.getData}"
+                                                                 disabled="{!field.CDM_Read_Only__c}"
+                                                                 variant="label-hidden"
+                                                                 
+                                                                 checked="{!(field.CDM_DefaultValue__c &amp;&amp; (field.CDM_DefaultValue__c == true ||  field.CDM_DefaultValue__c == 'true'))? true : false}"
+                                                                 type="checkbox"/>
+                                                
+                                                   </aura:if>
+                                               
+                                                
+                                            </div>
+                                        </div>
+                                    </aura:if>   
+                                    
+                                </aura:iteration>  
+                                <br/><br/>
+                                
+                                <!--  <div class="slds-docked-form-footer"> -->
+                                <div class="slds-align_absolute-center">
+                                    
+                                    
+                                    <button type="button" name="Cancel" class="slds-button slds-button_neutral" onclick="{!c.onCancel}">Cancel</button>
+                                      <aura:if isTrue="{!((v.country=='Australia' || v.country=='New Zealand') &amp;&amp; 
+                                                     v.requestType == 'Debit Note'? false : true )}">
+                                    <button type="button" name="Save" class="slds-button slds-button_brand" onclick="{!c.onSave}">Save</button> 
+                                    </aura:if>
+                                    <aura:if isTrue="{!((v.country=='Australia' || v.country=='New Zealand') &amp;&amp; 
+                                                     v.requestType == 'Debit Note'? true : false )}"> 
+                                    <button type="button" name="Save/Submit" style="" class="slds-button slds-button_brand" onclick="{!c.onSave}">Save &amp; Submit</button> 
+                                    </aura:if>
+                                    
+                                    
+                                </div></div>
+                       </div>
+                  
+                </div>
+             <aura:if isTrue="{!(v.viewRecord  &amp;&amp; v.recordId !=null)}">
+                    <div class="slds-grid slds-wrap custom-container" > 
+                        <c:CDM_EformRecrodView fieldsMetaDatamap="{!v.fieldsMetaDatamap}"
+                                               viewRecord="{!v.viewRecord}"
+                                               approvalStatus="{!v.approvalStatus}"
+                                               splitAmountRecs="{!v.splitAmountRecs}"
+                                               splitAmount="{!v.splitAmount}"
+                                               country = "{!v.country}"
+                                               recordId = "{!v.recordId}"
+                                               childRecords = "{!v.splitAmountRecs}"
+                                                splitRequired = "{!v.splitRequired}"
+                                               cdmStatus="{!v.cdmStatus}"
+                                               recordEditAccess= "{!v.recordEditAccess}"
+                                               userRole="{!v.userRole}"
+                                               adminPermissionSet="{!v.adminPermissionSet}"/>  
+                    </div>
+                </aura:if>
+            </fieldset></div>
+        </aura:if>  
+    </div>
+    
+     <!-- approval modal box -->
+    <div class="slds-hide" style="height: 640px;" id="recMadal">
+        <section role="dialog" 
+                 tabindex="-1" 
+                 aria-labelledby="modal-heading-01" 
+                 aria-modal="true" 
+                 aria-describedby="modal-content-id-1" 
+                 class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                            title="Close" onclick="{!c.closeModal}">
+                        
+                        
+                        <lightning:Icon iconName="utility:close"   class="whiteColor" alternativeText="Close" /> 
+                    </button>
+                    <div class="slds-page-header__name">
+                        <div class="slds-page-header__name-title ">
+                            <h1>
+                                <span class="slds-page-header__title slds-hyphenate" title=" Approvers Confirmation"> Submit for Approval</span>
+                            </h1>
+                        </div>
+                    </div>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    
+                    <div class="slds-m-left_xx-large">
+                        
+                            <lightning:textarea name="input1" label="Comments" value="{!v.comments}" />
+                        
+                    </div>
+                    
+                </div>
+                  
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="brand"  label="Submit" title="Submit" onclick="{! c.submit }" />
+                    <lightning:button variant="neutral" onclick="{!c.closeModal}" >Close </lightning:button>         
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+    
+    <div class="slds-hide" style="height: 640px;" aura:id="recMadal">
+        <section role="dialog" 
+                 tabindex="-1" 
+                 aria-labelledby="modal-heading-01" 
+                 aria-modal="true" 
+                 aria-describedby="modal-content-id-1" 
+                 class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                            title="Close" onclick="{!c.closeRecordTypeModal}">
+                        
+                        
+                        <lightning:Icon iconName="utility:close" alternativeText="Close" /> </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New CDM_Credit Debit Note</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    
+                    
+                    
+                    <legend class="form-element__legend slds-form-element__label slds-m-left_xx-large" data-aura-rendered-by="63:2010;a">Select a Request Type</legend>
+                    <div class="slds-m-left_xx-large">
+                        <lightning:radioGroup name="recordType"
+                                              options="{! v.recTypeOpts }"
+                                              value="{! v.recordTypeId }"
+                                              onchange="{!c.selectRecordType}"
+                                              class="slds-m-left_xx-large"
+                                              type="radio"/>
+                    </div>
+                    
+                </div>
+                
+                
+                
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.closeRecordTypeModal}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.newRecord}" >Next</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+    
+</aura:component>

@@ -1,0 +1,11 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:appHostable,force:hasRecordId" controller="CAPL_TopicHeaderController">
+	
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+ 
+    <aura:attribute name="topicName" type="String" access="public"/>
+
+    <div class="headerContainer">
+		<p class="headlineTopicName">{!v.topicName}</p>
+		<p class="headlineBottomLine"></p>
+	</div>
+</aura:component>

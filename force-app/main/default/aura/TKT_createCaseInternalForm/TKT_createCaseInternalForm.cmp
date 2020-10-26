@@ -1,0 +1,124 @@
+<aura:component controller="TKT_createNewCaseController" 
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" 
+    access="global" >
+        <aura:attribute name="newCase" type="Case"
+                        default="{ 'sobjectType': 'Case',
+                                        'TKT_How_can_we_help_you_INTERNAL_FORM__c': '',
+                                        'SuppliedEmail': '',
+                                        'TKT_EIN__c': '',
+                                        'TKT_Primary_Commodity_Business_with_BP__c': '',
+                                        'TKT_Customer_Entity_Name_s__c': '',
+                                        'TKT_Customer_Full_Name_s__c': '',
+                                        'TKT_Customer_Email_Address__c':'',
+                                        'TKT_Describe_how_we_can_help__c': '',
+                                        'RecordType.DeveloperName':'TKT_Ticketing',
+                                        'Origin': 'Internal Form',
+                                 		'TKT_Required_Access__c':'',
+                                        'CaseNumber': ''
+                                  }" />
+
+        <aura:attribute name="helpOptions" type="String[]" />
+        <aura:attribute name="commodityOptions" type="String[]" />
+        <aura:attribute name="caseNumber" type="String" />
+        <aura:attribute name="caseId" type="Id"/>
+        <aura:attribute name="verified" type="boolean" default="false" />
+
+        <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+        <div class="container">
+            <form class="{!v.caseId ? 'slds-hide' : 'slds-form_stacked'}">
+                <lightning:select name="help" 
+                                    label="How can we help you?"
+                                    aura:id="helpId"
+                                    required="true"
+                                    value="{!v.newCase.TKT_How_can_we_help_you_INTERNAL_FORM__c}"
+                                    messageWhenValueMissing="Complete this field">
+                        <option value="">-- None --</option>
+                        <aura:iteration items="{!v.helpOptions}" var="option">
+                            <option text="{!option}" value="{!option}" />
+                        </aura:iteration>
+                </lightning:select>
+
+                <lightning:select name="commodityTeam"
+                                    label="Commodity/Team"
+                                    value="{!v.newCase.TKT_Primary_Commodity_Business_with_BP__c}"
+                                    required="true"
+                                    aura:id="commodityId">
+                        <option value="">--Select an option--</option>
+                        <aura:iteration items="{!v.commodityOptions}" var="commodityOption">
+                            <option text="{!commodityOption}" value="{!commodityOption}" />
+                        </aura:iteration>
+                </lightning:select>
+
+                <lightning:input type="text"
+                                    name="customerEntityName"
+                                    label="Customer Entity Name(s)"
+                                    value="{!v.newCase.TKT_Customer_Entity_Name_s__c}" />
+
+                <lightning:input type="text"
+                                    name="customerFullName"
+                                    label="Customer Full Name(s)"
+                                    value="{!v.newCase.TKT_Customer_Full_Name_s__c}" />
+
+                <lightning:input type="text"
+									aura:id="customerEmailId"
+                                    name="customerEmail"
+                                    label="Customer Email Address(es)"
+									required="true"
+                                    value="{!v.newCase.TKT_Customer_Email_Address__c}" />
+									
+                
+                <lightning:input type="text"
+                                    name="requiredAccess"
+                                    label="Required Access"
+                                    value="{!v.newCase.TKT_Required_Access__c}" />
+                
+                <lightning:input type="email"
+                                    aura:id="emailId"
+                                    name="Email"
+                                    label="Your Email"
+                                    required="true"
+                                    placeholder="abc@email.com"
+                                    value="{!v.newCase.SuppliedEmail}" />
+
+                <lightning:input type="text" 
+                                    aura:id="EINId"
+                                    name="EIN"
+                                    label="Your NTID"
+                                    value="{!v.newCase.TKT_EIN__c}" />
+
+                <lightning:textarea name="myTextArea" 
+                                    placeholder="&quot;Please include any important details here (contract number, account details, etc.).&quot;"
+                                    value="{!v.newCase.TKT_Describe_how_we_can_help__c}"
+                                    label="Comments" maxlength="300" />
+
+                <div class="slds-align_absolute-center">
+                    <!--
+                    <ui:button label="Submit" 
+                                class="slds-button slds-button_neutral"
+                                disabled="{!!v.verified}"
+                                labelClass="label"
+                                press="{!c.createCase}"/> -->
+                    <lightning:button aura:id="submitButton" label="Submit" onclick="{!c.createCase}" disabled="{!!v.verified}" />    
+                </div>
+                
+                <c:TKT_reCaptcha_Container isVerified="{!v.verified}" /> 
+            </form>
+            <section aura:id="successfulCreationMessage" class="{!v.caseId ? 'slds-text-body_regular' : 'slds-hide'}">
+                <br/>
+                <h1 class="slds-text-heading_small slds-align_absolute-center slds-text-color_success">
+                    <b>Your case {!v.caseNumber} was created.</b>
+                </h1>
+                <h2 class="slds-text-body_regular slds-align_absolute-center">
+                    We'll get back to you soon.
+                </h2>
+                <br/>
+
+            </section>
+            <section aura:id="successfulCreationMessage" class="{!v.caseId ? 'slds-border_top' : 'slds-hide'}">
+                    <h3 class="slds-text-heading_small slds-align_absolute-center">
+                        You will receive an email shortly with your case details.
+                    </h3>
+            </section>
+        </div>
+</aura:component>

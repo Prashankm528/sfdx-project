@@ -1,0 +1,11 @@
+<design:component label="RE IDP Login Form">
+	<design:attribute name="network" label="Network" description="contains Network name it is used on" />
+    <design:attribute name="startUrl" label="Start URL" description="The URL to display after a successful login."/>
+    <design:attribute name="usernameLabel" default="Email" label="Username Label" description="The label for the field where a user enters a username in the form of an email address."/>
+    <design:attribute name="passwordLabel" default="Password" label="Password Label" description="The label for the field where the users enter a password."/>
+    <design:attribute name="loginButtonLabel" default="Log In" label="Login Button Label"/>
+    <design:attribute name="forgotPasswordLabel" default="Forgot your password?" label="Forgot Password Label" description="The label for the link where a user triggers the forgot password email."/>
+    <design:attribute name="forgotPasswordUrl" label="Forgot Password URL" description="The URL to go to if the user forgot password."/>
+    <design:attribute name="selfRegisterLabel" default="New to BP?" label="Self Register Link Label" description="The label for the link where a user self registers."/>
+    <design:attribute name="selfRegisterUrl" label="Self Register URL" description="The URL to go to if the user wants to self register."/>
+</design:component>

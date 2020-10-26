@@ -1,0 +1,58 @@
+<!--
+ * @author			Jan Majling
+ * @date			09/08/2018
+ * @group			CAJBP
+ * @description		Displays rebate item with a link to edit form
+ *
+ * history
+ * 09/08/2018	Jan Majling			Created
+ * 04/02/2020   Abhinit Kohar       Updated the currency fields to take the currency from the records CurrencyISOCode
+ -->
+<aura:component>
+	<aura:attribute name="rebate" type="CAJBP_Rebate__c"/>
+	<aura:attribute name="describeInfo" type="Map"/>
+	<aura:attribute name="turnover" type="Boolean" default="false" access="private"/>
+	<aura:attribute name="recordUrl" type="String" access="private"/>
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	<lightning:navigation aura:id="navService"/>
+
+    <ul class="slds-has-dividers_bottom-space">
+        <li class="slds-item">
+            <lightning:tile label="{!v.rebate.CAJBP_Rebate_Type_Name__c}" href="{!v.recordUrl}">
+                <dl class="slds-list--horizontal slds-wrap">
+                    <aura:if isTrue="{!v.turnover}">
+                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Turnover Target">Turnover Target:</dt>
+                        <dd class="slds-item_detail slds-truncate" title="">
+                            <lightning:formattedNumber value="{!v.rebate.CAJBP_Turnover_Target__c}" style="currency" currencyCode="{!v.rebate.CurrencyIsoCode}"/>
+                        </dd>
+
+                        <aura:set attribute="else">
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Volume Target">Volume Target:</dt>
+                            <dd class="slds-item_detail slds-truncate" title="">
+                                <lightning:formattedNumber value="{!v.rebate.CAJBP_Volume_Target__c}" style="decimal"/>
+                            </dd>
+                        </aura:set>
+                    </aura:if>
+
+                    <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Target Rebate Amount">Target Rebate Amount:</dt>
+                    <dd class="slds-item_detail slds-truncate" title="">
+                        <lightning:formattedNumber value="{!v.rebate.CAJBP_Target_Rebate_Amount__c}" style="currency" currencyCode="{!v.rebate.CurrencyIsoCode}"/>
+                    </dd>
+                    <dt class="slds-item_label slds-text-color_weak slds-truncate" title="CreatedDate">Created Date:</dt>
+                    <dd class="slds-item_detail slds-truncate" title="">
+                        <lightning:formattedDateTime value="{!v.rebate.CreatedDate}" year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit" />
+                    </dd>
+                </dl>
+                <div>
+                    <aura:if isTrue="{!v.describeInfo.isUpdateable}">
+                        <lightning:button variant="base" label="Edit" onclick="{!c.editRecord}"/>
+                    </aura:if>
+                    <aura:if isTrue="{!v.describeInfo.isDeletable}">
+                        <lightning:button variant="base" label="Delete" onclick="{!c.deleteRecord}"/>
+                    </aura:if>
+                </div>
+            </lightning:tile>
+        </li>
+    </ul>
+</aura:component>

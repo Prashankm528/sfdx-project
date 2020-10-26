@@ -1,0 +1,8 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" controller="GCM_C2S_Controller">
+	        <aura:attribute name="recordId" type="Id"/>
+
+    <button disabled="" class="slds-button slds-button--neutral" onclick="{! c.handleClick }">
+        Stop Timer
+    </button>
+    
+</aura:component>

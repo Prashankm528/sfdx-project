@@ -1,0 +1,106 @@
+<!--****************************************************************************************
+*       Date:        19Set2019
+*       Author:      Alessandro Miele - IBM
+*       Description: Main component for the upload document in the community
+***************************************************************************************** !-->
+ <aura:component controller="DUP_CommunityMainViewController" implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global">
+    
+    <aura:attribute name="docStoreList" type="DUP_Document_Store__c[]" access="public"/> 
+     <aura:attribute name="docStore" type="List" access="public"/> 
+    <aura:attribute name="documentRequestName" type="String" access="public"/>
+    <aura:attribute name="countDocStoreUploaded" type="Integer" default="0" access="public"/>
+    <aura:attribute name="isCertifiedPresent" type="Boolean" default="false"/>
+    <aura:attribute name="closeVideo" type="Boolean" />
+    <aura:attribute name="uploadedPerFile" type="List" access="public"/>
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <!--added by ajay-->
+    <aura:attribute name="expand" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+            
+    <!--SPINNER -->
+ <aura:if isTrue="{!v.Spinner}">
+    <div aura:id="spinnerId" class="slds-spinner_container spins">
+        <div class="demo-only" >
+        <div class="slds-spinner_container ">
+            <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+                <div class="custom-loading-text">
+                    Still working. Please do not refresh...
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+ </aura:if>
+     
+    <div class="content slds-p-top--xx-large">               
+        <div class="slds-box slds-m-bottom--large">
+            <div class="slds-grid slds-wrap slds-gutters" >
+                <c:dUP_CommunityMainViewControllerLWC  aura:id="docRequests" onshowDocUploader="{!c.searchDocuments}" style="width:100%;"/>
+            </div>            
+        </div>        
+        <aura:if isTrue="{!v.closeVideo}">
+        <section role="dialog" tabindex="-1" class="slds-file--overlay slds-align_absolute-center slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div>
+                <p class="slds-align_absolute-center" ><strong style="color:#ffffff;">PORTAL GUIDE</strong></p>
+                <p class="slds-flip--horizontal">
+                    <button class="slds-button slds-button_neutral" title="Close" onclick="{!c.closeVideo}" style="background-color:transparent!important;border:none;">
+                        <lightning:icon iconName="utility:close" alternativeText="close" size="medium"/>
+                    </button>
+                </p>
+            <div>
+                <span><iframe id="my_iframe" style="min-width:600px;height:400px" src="{!$Resource.DUP_TrainingPart2}" 
+                              allowfullscreen="allowfullscreen"
+                              mozallowfullscreen="mozallowfullscreen" 
+                              msallowfullscreen="msallowfullscreen" 
+                              oallowfullscreen="oallowfullscreen" 
+                              webkitallowfullscreen="webkitallowfullscreen" frameborder="0" >
+                    </iframe>
+                </span>
+            </div>
+            </div>
+        </section>
+        </aura:if>
+        <aura:if isTrue="{!v.isCertifiedPresent}">
+            <div class="slds-box">
+                {!$Label.c.DUP_CertifiedTrueCopyInformation}
+            </div>
+        </aura:if>
+
+        <!--added by Ajay-->
+        <div class="slds-box slds-hide" aura:id="docList">
+        <div class="slds-hide slds-grid slds-wrap" aura:id="expandDocs">
+            <lightning:buttonIcon class="slds-size_1-of-9" iconName="utility:add" onclick="{! c.handleExpand }" alternativeText="Expand All" title="Expand All" />&nbsp;<span class="slds-p-around--x-small slds-size_2-of-9">LIST OF DOCUMENTS</span>
+        </div>
+        <div class="slds-hide" aura:id="collapseDocs">
+            <lightning:buttonIcon class="slds-size_1-of-9" iconName="utility:dash" onclick="{! c.handleExpand }" alternativeText="Collapse All" title="Collapse All" />&nbsp;<span class="slds-p-around--x-small slds-size_2-of-9">LIST OF DOCUMENTS</span>
+        </div>
+       
+
+        <aura:iteration items="{!v.docStoreList}" var="docStore">
+            <c:DUP_CommunitySingleDocumentView document="{!docStore}"
+                                               documentRequestName= "{!v.documentRequestName}"
+                                               documentName="{!docStore.DUP_Document_Name__c}"
+                                               documentsOption = "{!docStore.DUP_Options__c}"
+                                               documentId="{!docStore.Id}"
+                                               documentStatus="{!docStore.DUP_Document_Status__c}"
+                                               countDocStoreUploaded = "{!v.countDocStoreUploaded}"
+                                               uploadedPerFile = "{!v.uploadedPerFile}"
+                                               expand="{!v.expand}"/>
+        </aura:iteration>    
+        </div>
+
+
+        <!-- SUBMIT button-->
+        <div class="slds-box slds-hide" aura:id="submitDocs">
+            <div class="slds-col slds-size_12-of-12 slds-align_absolute-center">
+                <lightning:button variant="brand" label="Submit" title="Submit" onclick="{!c.submitDocuments}"/>
+            </div>            
+        </div>
+    </div>    
+</aura:component>

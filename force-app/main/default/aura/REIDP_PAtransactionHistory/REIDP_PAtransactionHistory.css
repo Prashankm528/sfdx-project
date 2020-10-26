@@ -1,0 +1,9 @@
+/* fixes the issue with modal window goin bellow Global Header*/
+.THIS .modal-fix {
+    /* top: -250px; not needed in clasic*/
+    position: absolute;
+    height: 750px;
+}
+.THIS .button-fix {
+    margin-top: 22px;
+}

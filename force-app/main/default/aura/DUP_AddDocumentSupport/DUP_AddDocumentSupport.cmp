@@ -1,0 +1,160 @@
+<!--****************************************************************************************
+*   Date:           2019-09-03
+*   Author:         Mayuri Basutkar - IBM
+*   Description:    single component for DUP_AddDocumentComponent
+*   Updated by:     Alessandro Miele - IBM
+****************************************************************************************-->
+
+<aura:component description="single document store view" controller="DUP_AddDocumentController">
+    <aura:attribute name="readOnly" type="Boolean" default="true" access="public"/>
+    <aura:attribute name="documentId" type="Id" access="public"/>
+    <aura:attribute name="documentStatus" type="String" access="public"/> 
+    <aura:attribute name="docStatusSelected" type="String"/> 
+    <aura:attribute name="documentName" type="String" access="public"/>
+    <aura:attribute name="documentsOption" type="String" access="public"/>
+    <aura:attribute name="document" type="DUP_Document_Store__c" access="public"/>
+    <aura:attribute name="recordId" type="String" access="public"/>
+    <aura:attribute name="context" type="String" default="Internal" access="public"/> 
+    <aura:attribute name="contentDocument" type="ContentDocumentLink[]" access="public"/>
+    <aura:attribute name="counterFiles" type="Integer" default="0" access="public"/>
+    <aura:attribute name="openModal" type="Boolean" default="false"/>  
+    <aura:attribute name="openModalComments" type="Boolean" default="false"/> 
+    <aura:attribute name="toshow" type="Boolean" default="false"/> 
+    <aura:html tag="style">
+        .forceContentPreviewPlayerTopToolbar .file-preview-buttons {
+        display: none !important;
+        } 
+    </aura:html>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class="slds-box">
+        <div class="slds-section forcePageBlockSection" aura:id="sectionDiv">
+            <h1 class="slds-section__title"> 
+                <div class="slds-button slds-section__title-action">
+                    <div class="slds-grid slds-gutters dup-grid slds-wrap">
+                        <div class="slds-col slds-size_2-of-12 slds-align_absolute-center" onclick="{!c.toggleSection}"> 
+                            <lightning:icon iconName="utility:switch" class="section-icon slds-section__title-action-icon slds-button__icon slds-button__icon_left " size="x-small" />
+                            <span class="{!'slds-text-align_center slds-badge slds-m-right_x-small slds-tex slds-p-top_xx-small slds-p-left_small slds-p-right_small dup-badge ' +
+                                        (equals($Label.c.DUP_Document_Requirement_Mandatory, v.documentsOption) ? 'dup-badge-text__red' :
+                                        equals($Label.c.DUP_Document_Requirement_Frozen, v.documentsOption) ? 'dup-badge-text__blue' : 'dup-badge-text__dimgray')}"
+                                title="{!concat('DUP Requirement: ', v.documentsOption)}">
+                                <strong>
+                                    <aura:if isTrue="{!v.documentsOption == 'Mandatory'}">
+                                        M
+                                        <aura:set attribute="else">
+                                            <div class="blueOne">
+                                                O
+                                            </div>
+                                        </aura:set>
+                                    </aura:if> 
+                                </strong>
+                            </span>
+                            <lightning:icon iconName="utility:record" alternativeText="{!v.documentName}"  title="" class="{slds-p-right_x-small slds-p-bottom_xxx-small greenOne}" size="x-small"/>                                         
+                        </div>                  
+                        <div class="slds-col slds-size_7-of-12" onclick="{!c.toggleSection}">
+                            {!v.documentName} 
+                        </div>
+                        <div class="slds-col slds-size_1-of-12 slds-align_absolute-center">
+                            <aura:renderIf isTrue="{!v.document.DUP_Certified_True_Copy__c}">
+                                Certified
+                            </aura:renderIf>
+                        </div>
+                        <div class="slds-card__footer slds-box--border slds-card__header-link slds-col slds-size_1-of-12">
+                            <aura:renderIf isTrue="{!and(or(v.document.DUP_Document_Status__c=='Uploaded',v.document.DUP_Document_Status__c=='Reviewed'),v.document.DUP_CPcomments__c!=null)}">
+                            <lightning:icon iconName="standard:note" alternativeText="note" size="x-small"/>
+                            </aura:renderIf>&nbsp;<a href="" onclick="{!c.openComments}">View Comments</a> 
+                        </div>
+                        <div class="slds-card__footer slds-box--border slds-card__header-link slds-col slds-size_1-of-12">
+                            <a href="" onclick="{!c.openDescription}">View Description</a> 
+                        </div>
+                    </div>    
+                </div>
+            </h1>
+            
+            <div class="slds-form slds-form_stacked slds-section__content toggle" aura:id="linksSection">
+                <div class="slds-grid slds-wrap slds-p-around_medium slds-gutters">
+                    <div class="slds-col slds-size_12-of-12 slds-box slds-m-bottom--medium">
+                        <div class="slds-grid slds-wrap slds-gutters">                           
+                            <div class="slds-col slds-size_3-of-12 slds-align_absolute-center">
+                                <div class=""> 
+                                    Document Status: {!v.document.DUP_Document_Status__c}
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_9-of-12">
+                                <aura:iteration items="{!v.contentDocument}" var="file">   
+                                    <aura:if isTrue="{!or(and(file.ContentDocument.LatestPublishedVersion.DUP_Status__c=='Uploaded',v.document.DUP_Document_Status__c!='Requested'),file.ContentDocument.LatestPublishedVersion.DUP_Status__c=='Approved')}">
+                                    <c:DUP_SingleFileView document="{!v.document}" 
+                                                        documentId="{!v.documentId}"
+                                                        contentDocument="{!v.contentDocument}"
+                                                        context="{!v.context}"
+                                                        fileId="{!file.ContentDocumentId}"
+                                                        fileTitle="{!file.ContentDocument.Title}"
+                                                        fileExtension="{!file.ContentDocument.FileExtension}"
+                                                        fileStatus="{!file.ContentDocument.LatestPublishedVersion.DUP_Status__c}"
+                                                        counterFiles="{!v.counterFiles}"/>
+
+                                </aura:if>
+				<aura:if isTrue="{!file.ContentDocument.LatestPublishedVersion.DUP_Status__c=='Template'}">
+                                    <c:DUP_SingleFileView document="{!v.document}" 
+                                                          documentId="{!v.documentId}"
+                                                          contentDocument="{!v.contentDocument}"
+                                                          context="{!v.context}"
+                                                          fileId="{!file.ContentDocumentId}"
+                                                          fileTitle="{!file.ContentDocument.Title}"
+                                                          fileExtension="{!file.ContentDocument.FileExtension}"
+                                                          fileStatus="{!file.ContentDocument.LatestPublishedVersion.DUP_Status__c}"
+                                                          counterFiles="{!v.counterFiles}"/>
+                                    </aura:if>
+				</aura:iteration> 
+                            </div> 
+                        </div>
+                    </div>                                               
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div>
+        <aura:renderIf isTrue="{!v.openModalComments}">
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon alternativeText="Close" iconName="utility:close" onclick="{!c.closeDescription}" variant="bare" size="large" class="slds-modal__close slds-button_icon-inverse" />
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Comments</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1"> 
+                       <aura:renderIf isTrue="{!v.toshow}">
+                       <ui:outputRichText value="{!v.document.DUP_CPcomments__c}"/>
+                           <aura:set attribute="else">
+								<ui:outputRichText value="No Comment added by Counterparty"/>
+                           </aura:set>
+                       </aura:renderIf>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="brand" label="Close" onclick="{!c.closeDescription}"/>
+                    </footer>
+                </div>
+            </section>
+        </aura:renderIf>    
+    </div>
+    <div>
+        <aura:renderIf isTrue="{!v.openModal}">
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon alternativeText="Close" iconName="utility:close" onclick="{!c.closeDescription}" variant="bare" size="large" class="slds-modal__close slds-button_icon-inverse" />
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Description</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">                        
+                        <ui:outputRichText value="{!v.document.DUP_Description__c}"/>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="brand" label="Close" onclick="{!c.closeDescription}"/>
+                    </footer>
+                </div>
+            </section>
+        </aura:renderIf>    
+    </div>
+    <div class="{!'slds-backdrop ' + ((v.openModal) ? 'slds-backdrop_open' : 'slds-backdrop_close')}"></div>
+    <div class="{!'slds-backdrop ' + ((v.openModalComments) ? 'slds-backdrop_open' : 'slds-backdrop_close')}"></div>
+
+</aura:component>

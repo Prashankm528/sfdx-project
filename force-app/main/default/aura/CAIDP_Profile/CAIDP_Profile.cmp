@@ -1,0 +1,248 @@
+<aura:component controller="CAIDP_LightningProfileController" implements="forceCommunity:availableForAllPageTypes" access="global" >
+
+<aura:attribute name="cancelLabel" type="String" access="public" required="true" default="Cancel" />
+<aura:attribute name="editLabel" type="String" access="public" required="true" default="Edit" />
+<aura:attribute name="detailsLabel" type="String" access="public" required="true" default="Profile Details" />
+<aura:attribute name="nameLabel" type="String" access="public" required="true" default="Name" />
+<aura:attribute name="emailLabel" type="String" access="public" required="true" default="Email/Username" />
+<aura:attribute name="businessLabel" type="String" access="public" required="true" default="Business Name" />
+<aura:attribute name="addressLabel" type="String" access="public" required="true" default="Address" />
+<aura:attribute name="phoneLabel" type="String" access="public" required="true" default="Phone" />
+<aura:attribute name="mobileLabel" type="String" access="public" required="true" default="Mobile" />
+<aura:attribute name="infoLabel" type="String" access="public" required="true" default="Additional Information" />
+<aura:attribute name="aboutLabel" type="String" access="public" required="true" default="About Me" />
+<aura:attribute name="fnameLabel" type="String" access="public" required="true" default="First Name" />
+<aura:attribute name="lnameLabel" type="String" access="public" required="true" default="Last Name" />
+<aura:attribute name="streetLabel" type="String" access="public" required="true" default="Street" />
+<aura:attribute name="cityLabel" type="String" access="public" required="true" default="City" />
+<aura:attribute name="stateLabel" type="String" access="public" required="true" default="State" />
+<aura:attribute name="zipLabel" type="String" access="public" required="true" default="Zip/Postal Code" />
+<aura:attribute name="countryLabel" type="String" access="public" required="true" default="Country" />
+<aura:attribute name="errorLabel" type="String" access="public" required="true" default="Country should be selected" />
+<aura:attribute name="saveLabel" type="String" access="public" required="true" default="Save" />
+
+
+<aura:attribute name="editMode" type="Boolean" access="private" default="false"/>
+<aura:attribute name="user" type="User" access="private" default="{sobjectType:'User',Name:'',Email:'',Phone:''}" />
+<aura:attribute name="countries" type="String[]" access="private" required="false" default="[]"/>
+<aura:attribute name="allCountries" type="String[]" access="private" required="false" default="[]"/>
+<aura:attribute name="selectedCountry" type="String" access="private" required="false" default=""/>
+
+<aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+<aura:handler name="change" action="{!c.showList}" value="{!v.countries}"/>
+  
+  <article class="slds-card">
+    <div class="slds-card__header slds-grid">
+      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+        <div class="slds-media__figure">
+          <span class="slds-icon_container">
+            <lightning:icon iconName="action:user" variant="user"/>
+          </span>
+        </div>
+        <div class="slds-media__body">
+          <h2 class="slds-truncate slds-text-heading_small">{!v.user.Name}</h2>
+        </div>
+      </header>
+    </div>
+    <div class="slds-card__body">
+      <div class="slds-grid" style="background: #fff;">
+        <div class="slds-panel slds-grid slds-grid_vertical slds-nowrap">
+          <div class="slds-form slds-form_stacked slds-grow slds-scrollable_y">
+            <div class="slds-panel__section slds-border_bottom">
+              <div class="slds-media">
+                <div class="slds-media__body">
+                  <div class="slds-button-group slds-m-top_small" role="group">
+                    <button class="slds-button slds-button_neutral slds-grow" onclick="{!c.editDetails}">{!if(v.editMode, v.cancelLabel, v.editLabel)}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <aura:renderIf isTrue="{!!v.editMode}">
+              <div class="slds-panel__section">
+                <h3 class="slds-text-heading_small slds-m-bottom_medium">{!v.detailsLabel}</h3>
+                <ul>
+                  <li class="slds-form-element slds-hint-parent slds-border_bottom">
+                    <span class="slds-form-element__label">{!v.nameLabel}</span>
+                    <div class="slds-form-element__control">
+                      <span class="slds-form-element__static">{!v.user.Name}</span>
+                    </div>
+                  </li>
+                  <li class="slds-form-element slds-hint-parent slds-border_bottom">
+                    <span class="slds-form-element__label">{!v.emailLabel}</span>
+                    <div class="slds-form-element__control">
+                      <span class="slds-form-element__static">{!v.user.Email}</span>
+                    </div>
+                  </li>
+                  <li class="slds-form-element slds-hint-parent slds-border_bottom">
+                    <span class="slds-form-element__label">{!v.businessLabel}</span>
+                    <div class="slds-form-element__control">
+                      <span class="slds-form-element__static">{!v.user.CAIDP_Business_Name__c}</span>
+                    </div>
+                  </li>
+                  <li class="slds-form-element slds-hint-parent slds-border_bottom">
+                    <span class="slds-form-element__label">{!v.addressLabel}</span>
+                    <div class="slds-form-element__control">
+                        <aura:renderIf isTrue="{!v.user.Street != null}">
+                            <span class="slds-form-element__static">{!v.user.Street + ','}</span><br/>
+                        </aura:renderIf>
+                        <aura:renderIf isTrue="{!v.user.City != null}">
+                            <span class="slds-form-element__static">{!v.user.City + ',&nbsp;'}</span>
+                        </aura:renderIf>
+                        <aura:renderIf isTrue="{!v.user.State != null}">
+                            <span class="slds-form-element__static">{!v.user.State + '&nbsp;'}</span>
+                        </aura:renderIf>
+                        <aura:renderIf isTrue="{!v.user.PostalCode != null}">
+                            <span class="slds-form-element__static">{!v.user.PostalCode + ',&nbsp;'}</span>
+                        </aura:renderIf>
+                        <aura:renderIf isTrue="{!v.user.Country != null}">
+                            <span class="slds-form-element__static">{!v.selectedCountry}</span>
+                        </aura:renderIf>                
+                    </div>
+                  </li>
+                  <li class="slds-form-element slds-hint-parent slds-border_bottom">
+                    <span class="slds-form-element__label">{!v.phoneLabel}</span>
+                    <div class="slds-form-element__control">
+                      <span class="slds-form-element__static">{!v.user.Phone}</span>
+                    </div>
+                  </li>
+                  <li class="slds-form-element slds-hint-parent ">
+                    <span class="slds-form-element__label">{!v.mobileLabel}</span>
+                    <div class="slds-form-element__control">
+                      <span class="slds-form-element__static">{!v.user.MobilePhone}</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="slds-panel__section">
+                <h3 class="slds-text-heading_small slds-m-bottom_medium">{!v.infoLabel}</h3>
+                <ul>
+                  <li class="slds-form-element slds-hint-parent">
+                    <span class="slds-form-element__label">{!v.aboutLabel}</span>
+                    <div class="slds-form-element__control">
+                      <span class="slds-form-element__static slds-text-longform">{!v.user.AboutMe}</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <aura:set attribute="else">
+                <div class="slds-panel__section">
+                  <h3 class="slds-text-heading_small slds-m-bottom_medium">{!v.detailsLabel}</h3>
+                  <ul>
+                    <div class="slds-form-element">
+                      <label class="slds-form-element__label">{!v.fnameLabel}</label>
+                      <div class="slds-form-element__control">
+                        <ui:inputText class="slds-input" value="{!v.user.FirstName}"/>
+                      </div>
+                    </div>
+                    <div class="slds-form-element">
+                      <label class="slds-form-element__label">{!v.lnameLabel}</label>
+                      <div class="slds-form-element__control">
+                        <ui:inputText class="slds-input" value="{!v.user.LastName}"/>
+                      </div>
+                    </div>
+                    <!-- <div class="slds-form-element">
+                      <label class="slds-form-element__label">{!v.emailLabel}</label>
+                      <div class="slds-form-element__control">
+                        <ui:inputText class="slds-input" value="{!v.user.Email}"/>
+                      </div>
+                    </div> -->
+                    <div class="slds-form-element">
+                      <label class="slds-form-element__label">{!v.businessLabel}</label>
+                      <div class="slds-form-element__control">
+                        <ui:inputText class="slds-input" value="{!v.user.CAIDP_Business_Name__c}"/>
+                      </div>
+                    </div>
+                    <div class="slds-form-element">
+                      <label class="slds-form-element__label">{!v.streetLabel}</label>
+                      <div class="slds-form-element__control">
+                        <ui:inputText class="slds-input" value="{!v.user.Street}"/>
+                      </div>
+                    </div>
+                    <div class="slds-form-element">
+                      <label class="slds-form-element__label">{!v.cityLabel}</label>
+                      <div class="slds-form-element__control">
+                        <ui:inputText class="slds-input" value="{!v.user.City}"/>
+                      </div>
+                    </div>
+                    <div class="slds-form-element">
+                      <label class="slds-form-element__label">{!v.stateLabel}</label>
+                      <div class="slds-form-element__control">
+                        <ui:inputText class="slds-input" value="{!v.user.State}"/>
+                      </div>
+                    </div>
+                    <div class="slds-form-element">
+                      <label class="slds-form-element__label">{!v.zipLabel}</label>
+                      <div class="slds-form-element__control">
+                        <ui:inputText class="slds-input" value="{!v.user.PostalCode}"/>
+                      </div>
+                    </div>
+                    <div class="slds-form-element" id="countryForm">
+                      <label class="slds-form-element__label">{!v.countryLabel}</label>
+                      <div class="slds-form-element__control">
+                        <div class="slds-combobox_container">
+                          <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-haspopup="listbox" role="combobox" id="countryCombobox">
+                            <div id="country-error-message" class="slds-form-element__help slds-hide">{!v.errorLabel}</div>
+                            <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                              <input type="text" class="slds-input" id="countryId" aria-autocomplete="list" aria-controls="countriesListbox" aria-describedby="country-error-message" autocomplete="off" role="textbox" onkeyup="{!c.onKeyUp}" value="{!v.selectedCountry}" disabled="true"/>
+                              <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+                                <lightning:icon iconName="utility:search" variant="search" size="x-small"/>
+                              </span>
+                            </div>                            
+                            <div id="countriesListbox" role="listbox">
+                              <ul class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid" role="presentation">
+                                <aura:iteration items="{!v.countries}" var="country" >
+                                    <li id="{!country}" role="presentation" class="slds-listbox__item" onclick="{!c.selectItem}">
+                                      <span class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                        <span class="slds-media__body">
+                                          <span class="slds-listbox__option-text slds-listbox__option-text_entity">{!country}</span>
+                                        </span>
+                                      </span>
+                                    </li>
+                                </aura:iteration>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="slds-form-element">
+                      <label class="slds-form-element__label">{!v.phoneLabel}</label>
+                      <div class="slds-form-element__control">
+                        <ui:inputText class="slds-input" aura:id="phoneInput" value="{!v.user.Phone}" keyup="{!c.checkPhone}" updateOn="keyup"/>
+                      </div>
+                    </div>
+                    <div class="slds-form-element">
+                      <label class="slds-form-element__label">{!v.mobileLabel}</label>
+                      <div class="slds-form-element__control">
+                        <ui:inputText class="slds-input" aura:id="mobileInput" value="{!v.user.MobilePhone}" keyup="{!c.checkPhone}" updateOn="keyup"/>
+                      </div>
+                    </div>
+                  </ul>
+                </div>
+                <div class="slds-panel__section">
+                  <h3 class="slds-text-heading_small slds-m-bottom_medium">{!v.infoLabel}</h3>
+                  <ul>                
+                    <div class="slds-form-element">
+                      <label class="slds-form-element__label">{!v.aboutLabel}</label>
+                      <div class="slds-form-element__control">
+                        <ui:inputTextArea class="slds-textarea" rows="5" value="{!v.user.AboutMe}"/>
+                      </div>
+                    </div>
+                  </ul>
+                </div>
+                <div class="slds-panel__actions">
+                  <div class="slds-grid slds-grid_align-center">
+                    <button type="button" class="slds-button slds-button_neutral" onclick="{!c.cancel}">{!v.cancelLabel}</button>
+                    <button type="button" class="slds-button slds-button_brand" onclick="{!c.save}">{!v.saveLabel}</button>
+                  </div>
+                </div>
+              </aura:set>
+            </aura:renderIf>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+  
+</aura:component>

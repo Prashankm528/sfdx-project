@@ -1,0 +1,18 @@
+<aura:component controller="CDM_EformsCsvUpload" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute name="recordId" type="String" description="Record to which the files should be attached" />
+    <lightning:card variant="Narrow" title="Files(0)" iconName="standard:file">
+        <aura:set attribute="actions">
+            <lightning:buttonIcon iconName="utility:down" variant="border-filled" alternativeText="Show More"/>
+        </aura:set>
+        <p class="slds-p-horizontal_small slds-align_absolute-center">
+            <lightning:fileUpload 
+                                  name="fileUploader"
+                                  multiple="false"
+                                  accept=".csv"
+                                  recordId="{!v.recordId}"
+                                  onuploadfinished="{!c.handleUploadFinished}" />
+        </p>
+    </lightning:card>
+       
+    
+</aura:component>

@@ -1,0 +1,43 @@
+
+<template>
+    <div class="slds-box slds-box_x-small slds-theme_shade ">
+        <p><strong>Customer/Pricing</strong></p>
+      </div><br/>
+
+      <lightning-layout vertical-align="end" >
+        <lightning-layout-item   size ="2">
+            <lightning-combobox
+            name="progress"
+            label="AVAILABLE ACTIONS"
+            value={value}
+            placeholder="Select Progress"
+            options={options}
+            onchange={handleChange} ></lightning-combobox>
+        </lightning-layout-item>
+        <lightning-layout-item size ="8">
+            <lightning-button class="slds-m-left_x-small" label="Delete" variant="Brand" onclick={deleteRecord}></lightning-button>
+            <lightning-icon icon-name="utility:threedots_vertical" ></lightning-icon>
+            <lightning-button class="slds-m-left_x-small" label="Clone Customer" variant="Brand"></lightning-button>
+            <lightning-button class="slds-m-left_x-small" label="Add Customer" variant="Brand"></lightning-button> 
+        </lightning-layout-item>
+        
+        <lightning-layout-item size ="2">
+            <lightning-input name="enter-search" placeholder="Search Locations" type="search" ></lightning-input>
+        </lightning-layout-item>
+      </lightning-layout>  
+    <br/>
+    
+    <div class="scrollable">
+      <c-a-i-t-m_-package-customer-tile location-line-items ={locationLineItem} ></c-a-i-t-m_-package-customer-tile>
+      
+    </div>
+      <div class="slds-clearfix slds-m-around_medium">
+        <div class="slds-float_left">  
+            <lightning-button label="Previous" variant="Brand" onclick={showLocationScreenWithChecked}></lightning-button>   
+        </div>
+        <div class="slds-float_right">
+            <lightning-button label="Save" variant="Brand" ></lightning-button>
+        </div>
+    </div>
+   
+</template>

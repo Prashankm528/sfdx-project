@@ -1,0 +1,29 @@
+<aura:component implements="force:lightningQuickAction,force:hasRecordId" access="global" controller ="PCRM_InitiateCloningController">
+
+    <aura:attribute name="showSpinner" type="boolean" />   
+    <div class="SpinnerClass">
+        <aura:if isTrue="{! v.showSpinner }">
+            <lightning:spinner alternativeText="Loading" size="small" />
+        </aura:if>
+     </div>
+    
+    <div class="slds-box">
+        
+    <div style="padding:0.5rem;background:#16325c">
+       <!--<lightning:icon iconName="standard:work_contract" alternativeText="Contract" variant="inverse"  title="contract" /> -->
+       <div class="slds-text-color_inverse">Are you sure you want to renew Contract ? </div>
+    </div>  
+        
+     <!--<div class="row dark-background slds-box slds-text-heading_small">
+        <h4>Are you sure you want to renew Contract ?</h4>
+        <lightning:icon iconName="utility:contract" alternativeText="contract" variant="inverse"/>    
+     </div>  --> 
+        
+        
+    <div style= "padding-top: 25px;"></div>    
+    <div class="slds-align_absolute-center">  
+    	<lightning:button iconName="utility:like" variant="success" label="Yes" title="Success" onclick="{! c.handleClick }" iconPosition="left"/>
+    </div>  
+    </div>
+    
+</aura:component>

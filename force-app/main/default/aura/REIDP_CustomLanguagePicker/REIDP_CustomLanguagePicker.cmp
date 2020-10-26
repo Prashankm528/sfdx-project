@@ -1,0 +1,21 @@
+<aura:component controller="REIDP_CustomLanguagePickerController"
+                implements="forceCommunity:availableForAllPageTypes" 
+                access="global">
+    <aura:attribute name="options" type="List" default="[]"/>
+    <aura:attribute name="communityTypeLangUrl" type="String" access="private" description="Is used to check the type of page the end-user is on"/>
+    <aura:attribute name="isViewable" type="String" />
+    
+    <!-- grabs startUrl attribute -->    
+    <aura:attribute name="startUrl" type="String" required="false" description="The url you go to after a successful login" />
+    <aura:registerEvent name="sitePropagatedStartUrl" type="c:REIDP_setStartUrl"/>
+    <aura:dependency resource="siteforce:registerQueryEventMap" type="EVENT"/>
+
+    <aura:handler name="init" value="{! this }" action="{! c.loadOptions }"/>
+    <aura:handler event="c:REIDP_setStartUrl" action="{!c.setStartUrl}"/>
+    
+    <lightning:combobox name="language" aura:id="selectLang"
+                        dropdownAlignment="right"
+                        onchange="{! c.handleLangOptionChange }"
+                        options="{! v.options }"/>
+    
+</aura:component>

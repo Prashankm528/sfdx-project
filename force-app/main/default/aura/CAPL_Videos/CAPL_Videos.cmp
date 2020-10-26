@@ -1,0 +1,115 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:appHostable" controller="CAPL_VideosClass">
+
+	<style>
+
+		.fa {
+		    font-size: 14px;
+		}
+
+		.fa-clock-o {
+			margin-right: 7px;
+    		vertical-align: middle;
+		}
+
+		.fa-clock-o::before {
+			content: '&#128339;';
+			font-size: 1rem;
+			font-style: initial;
+		}
+
+		#container {
+		    background: white;
+		    position: relative;
+		    overflow: hidden;
+		    box-shadow: 0 5px 15px 0 rgba(0,0,0,0.25);
+		}
+
+		h2 {
+		    padding: 20px;
+		    font-weight: 300;
+		    text-align: left;
+		    font-size: 18px;
+		}
+
+		.img-wrapper {
+		    padding: 0;
+		    position: relative;
+		}
+
+		.img-wrapper:after {
+		    content: "";
+		    position: absolute;
+		    left: 0;
+		    top: 0;
+		    right: 0;
+		    bottom: 0;
+		    background: rgba(62, 79, 178, .25);
+		    width: 100%;
+		}
+
+		.img-wrapper img {
+		    width: 100% !important;
+		    height: 200px !important;
+		    -o-object-fit: cover;
+		    object-fit: cover;
+		    margin: 0;
+		    display: block;
+		    position: relative;
+		}
+
+		.img-wrapper:hover {
+			opacity: .8;
+			cursor:pointer
+		}
+
+		.createdDate {
+			border-top: 1px solid #f2f2f2;
+		    padding-left: 20px;
+		    padding-right: 20px;
+		    padding-top: 10px;
+		    padding-bottom: 10px;
+		    font-weight: 300;
+		    text-align: left;
+		    font-size: 14px;
+		}
+	</style>
+	
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+ 
+    <aura:attribute name="videoList" type="CAPL_Video__c[]" access="public"/>
+
+    <aura:attribute name="secondsAgo" type="String" access="public"/>
+    <aura:attribute name="minuteAgo" type="String" access="public"/>
+    <aura:attribute name="minutesAgo" type="String" access="public"/>
+    <aura:attribute name="hourAgo" type="String" access="public"/>
+    <aura:attribute name="hoursAgo" type="String" access="public"/>
+    <aura:attribute name="dayAgo" type="String" access="public"/>
+    <aura:attribute name="daysAgo" type="String" access="public"/>
+    <aura:attribute name="monthAgo" type="String" access="public"/>
+    <aura:attribute name="monthsAgo" type="String" access="public"/>
+    <aura:attribute name="yearAgo" type="String" access="public"/>
+    <aura:attribute name="yearsAgo" type="String" access="public"/>
+
+    <div class="slds-grid_align-center slds-grid slds-wrap" style="margin-top: 1rem;">
+	    <aura:iteration var="video" items="{!v.videoList}">
+			<div class="slds-size--2-of-2 slds-medium-size--3-of-6 slds-large-size--4-of-12">
+				<div class="slds-text-align_center slds-m-around_x-small">
+					<div id="container">
+						<div id="{!video.Id}" class="img-wrapper" onclick="{!c.goToDetailPage}">
+						  <aura:unescapedHtml value="{!video.CAPL_Image__c}"/>
+						</div>
+
+						<h2 id="{!video.Id}" onclick="{!c.goToDetailPage}" style="cursor: pointer;">{!video.CAPL_Title__c}</h2>
+
+						<p class="createdDate">
+							<i class="fa fa-clock-o"></i>
+							{!video.RelativeTime}
+						</p>
+					</div>
+				</div>
+			</div>
+		</aura:iteration>
+	</div>
+
+
+</aura:component>

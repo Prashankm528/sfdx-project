@@ -1,0 +1,178 @@
+<template>
+    <div if:true={table}>
+        <lightning-card  title={title}>
+            <lightning-layout horizontal-align="space" vertical-align="center" class="slds-p-horizontal_small slds-p-bottom_small">
+                
+                <template if:true={showEndurIdFilter}>
+                    <lightning-layout-item flexibility="auto" size="4">
+                        <lightning-combobox label="Select company" value={selectedNum} options={bpNumbers} onchange={handleBPNumberChange} variant="label-inline"></lightning-combobox>
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={showBPNumbersFilter}>
+                    <lightning-layout-item>
+                        <lightning-dual-listbox id="select-bpNumbers"
+                            name="selectBPNumbers"
+                            label="Select companies"
+                            source-label="Available"
+                            selected-label="Selected"
+                            size="4"
+                            options={bpNumbers}
+                            onchange={handleBPNumberChange}
+                            required>
+                        </lightning-dual-listbox>
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={showReportTypeFilter}>
+                    <lightning-layout-item>
+                        <lightning-layout-item>
+                            <lightning-dual-listbox id="select-reportType"
+                                name="selectReportTypes"
+                                label="Select report type"
+                                source-label="Available"
+                                selected-label="Selected"
+                                size="4"
+                                options={reportTypes}
+                                onchange={handleReportTypeChange}
+                                required>
+                            </lightning-dual-listbox>
+                        </lightning-layout-item>
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={showPeriodFilter}>
+                    <lightning-layout-item>
+                        <lightning-dual-listbox id="select-period"
+                            name="selectPeriods"
+                            label="Select periods"
+                            source-label="Available"
+                            selected-label="Selected"
+                            size="4"
+                            options={periods}
+                            onchange={handlePeriodChange}>
+                        </lightning-dual-listbox>
+                    </lightning-layout-item>
+                </template>
+
+                <template if:true={showDatesFilter}>
+                    <lightning-layout-item>
+                        <template if:true={showYearFilter}>
+                            <lightning-input name="year" label="Year(s)" onchange={handleYearsChange} field-level-help="YYYY values separated by commas"></lightning-input>
+                        </template>
+                        <lightning-input type="date" date-style="short" name="startDate" label="Start date" onchange={handleStartDate}></lightning-input>
+                        <lightning-input type="date" date-style="short" name="endDate" label="End date" onchange={handleEndDate}></lightning-input>
+                    </lightning-layout-item>
+                </template>
+                
+                <lightning-layout-item class="slds-p-left_small slds-p-top_large">
+                    <lightning-button label="Search" variant="brand" onclick={doSearch}></lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </template>
+            
+            <template if:false={isLoading}>
+                <lightning-datatable
+                    key-field={keyfield}
+                    hide-checkbox-column={hideCheckboxColumn}
+                    suppress-bottom-bar
+                    show-row-number-column={showRowNumberColumn}
+                    column-widths-mode="auto"
+                    row-number-offset=0
+                    data={data}
+                    columns={columns}
+                    onrowselection={getSelectedRows}
+                    onrowaction={handleRowAction}>
+                </lightning-datatable>
+            </template>
+
+            <!-- Pagination controls -->
+            <lightning-layout horizontal-align="spread" vertical-align="center" multiple-rows>
+                <lightning-layout-item size="12">
+                    <lightning-layout horizontal-align="spread" vertical-align="center" >
+                        <lightning-layout-item class="slds-p-left_small slds-p-top_small"></lightning-layout-item>
+                        <lightning-layout-item class="slds-p-right_small slds-p-top_small">
+                            <lightning-button label="View all" value="View all" variant="base" icon-name="utility:threedots" icon-position="right" onclick={handleViewAll}></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+                
+                <lightning-layout-item size="12">
+                    <lightning-layout horizontal-align="end" vertical-align="center" >
+                        <lightning-layout-item class="slds-p-top_small">
+                            <div>Page {pageNum}</div>
+                        </lightning-layout-item>
+                        <lightning-layout-item class="slds-p-left_small slds-p-top_small">
+                            <lightning-button label="Previous" value="Previous" onclick={handlePrevious} disabled={previousDisabled}></lightning-button>
+                        </lightning-layout-item>
+                        <lightning-layout-item class="slds-p-left_small slds-p-right_small slds-p-top_small">
+                            <lightning-button label="Next" value="Next" onclick={handleNext} disabled={nextDisabled}></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>            
+        </lightning-card>
+    </div>
+
+    <!-- Generic modal -->
+    <template if:true={isModalOpen}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-02" aria-modal="true" aria-describedby="modal-content-id-2" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">{modalTitle}</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                    <c-istcp_trade trade-configuration={selectedActionableRow} trade-mode={modalTitle} oncancel={closeModal}></c-istcp_trade>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <div if:true={searchBox}>
+        <lightning-card  title={title}>
+            <lightning-layout horizontal-align="space">
+                <lightning-layout-item class="slds-p-top_xx-small">
+                    <lightning-input placeholder='Invoice number' value={searchVal}>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item class="slds-p-top_large">
+                    <lightning-button label="Search" variant="brand" onclick={handleSearch}>
+                    </lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+            <div if:true={searchResult} class="slds-p-top_small">
+                <lightning-datatable
+                    key-field={keyfield}
+                    hide-checkbox-column
+                    suppress-bottom-bar
+                    show-row-number-column
+                    row-number-offset=0
+                    data={data}
+                    columns={columns}>
+                </lightning-datatable>
+            </div>
+        </lightning-card>
+    </div>
+    <div if:true={accordion}>
+        <p>Accordion</p>
+        <lightning-accordion>
+            <lightning-accordion-section name="A" label="Accordion Title A"></lightning-accordion-section>
+            <lightning-accordion-section name="B" label="Accordion Title B"></lightning-accordion-section>
+            <lightning-accordion-section name="C" label="Accordion Title C"></lightning-accordion-section>
+        </lightning-accordion>
+    </div>
+</template>

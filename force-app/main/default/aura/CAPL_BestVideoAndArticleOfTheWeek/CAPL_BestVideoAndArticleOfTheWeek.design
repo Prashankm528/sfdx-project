@@ -1,0 +1,6 @@
+<design:component >
+	<design:attribute name="articleHeader" label="Article Header" description="header of the article" />
+	<design:attribute name="videoHeader" label="Video Header" description="header of the video" />
+	<design:attribute name="readArticle" label="Read Article" description="read article" />
+	<design:attribute name="watchVideo" label="Watch Video" description="watch video" />
+</design:component>

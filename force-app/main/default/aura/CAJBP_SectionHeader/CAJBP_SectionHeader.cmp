@@ -1,0 +1,23 @@
+<!--
+ * @author			Jan Majling
+ * @date			11/09/2018
+ * @group			CAJBP
+ * @description		Displays section header with no user interaction
+ *
+ * history
+ * 11/09/2018	Jan Majling			Created
+ -->
+<aura:component implements="flexipage:availableForAllPageTypes" access="global">
+	<aura:attribute name="title" type="String" />
+	<aura:attribute name="icon" type="String" />
+
+	<div class="slds-section">
+		<h3 class="slds-section__title slds-theme_shade">
+			<lightning:button
+				label="{!v.title}"
+				iconName="{!v.icon}"
+				class="slds-section__title-action"
+			/>
+		</h3>
+	</div>
+</aura:component>

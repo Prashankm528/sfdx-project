@@ -1,0 +1,36 @@
+<aura:component controller="REIDP_AppLauncherController" implements="forceCommunity:availableForAllPageTypes" access="global">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    <aura:attribute name="appsList" type="List"/>
+    
+    <div class="slds-container--center slds-container--large slds-p-top_xx-large">
+        <div class="slds-text-heading_large slds-m-bottom-large">{!$Label.c.IDPAppLauncher}</div>
+        
+        <aura:if isTrue="{!not(empty(v.appsList))}">
+            <div class="slds-text-heading_small slds-text-color_weak">{!$Label.c.IDPAppAccess}:</div>
+            <lightning:layout multipleRows="true">
+                <aura:iteration items="{! v.appsList }" var="appSetting">
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="3" padding="horizontal-small">
+                        <div class="slds-app-launcher__tile">
+                            <div class="slds-app-launcher__tile-figure">
+                                <span class="slds-avatar slds-avatar_large">
+                                    <img src="{! appSetting.App_Icon__c }"/>
+                                </span>
+                            </div>
+                            <div class="slds-app-launcher__tile-body slds-align-middle">
+                                <p><lightning:formattedUrl value="{! appSetting.URL__c }" tooltip="{! appSetting.URL__c }" label="{! appSetting.Name }" target="_blank" /></p>
+                            </div>
+                        </div>
+                    </lightning:layoutItem>        
+                </aura:iteration>
+            </lightning:layout>
+            <aura:set attribute="else">
+                <div class="slds-align_absolute-center slds-text-color_weak" style="height: 5rem;">
+                    <p class="launcher-desc">{!$Label.c.IDPAppNoAccess}</p>
+                </div>
+            </aura:set>
+        </aura:if> 
+        
+    </div>
+</aura:component>

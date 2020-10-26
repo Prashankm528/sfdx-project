@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="Event template" >
+     <aura:attribute name="salesOrg" type="String"/>
+    <aura:attribute name="channelCode" type="String"/>
+</aura:event>

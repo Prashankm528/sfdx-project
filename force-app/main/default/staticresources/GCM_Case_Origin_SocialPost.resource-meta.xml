@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StaticResource xmlns="http://soap.sforce.com/2006/04/metadata">
+    <cacheControl>Public</cacheControl>
+    <contentType>image/png</contentType>
+    <description>GCM: 15-01-2019 CB: Created to display case origin if the case was created for social post like facebook or twitter</description>
+</StaticResource>

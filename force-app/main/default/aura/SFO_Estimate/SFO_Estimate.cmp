@@ -1,0 +1,130 @@
+<aura:component controller="CASFO_EstimateController" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+    <aura:html tag="style">
+        .cuf-content {
+            padding: 0 0rem !important;
+        }
+        
+        .slds-p-around--medium {
+            padding: 0rem !important;
+        }
+        
+        .slds-modal__content{
+            height:unset !important;
+            max-height:unset !important;
+        }
+    </aura:html>
+    
+    <aura:attribute name="opportunity" type="Opportunity" />
+    <aura:attribute name="hasRevenues" type="Boolean"
+        description="Indicate if there are products added or (if false) there is only estimate." />
+    <aura:attribute name="oppoStage" type="Boolean" default="true"
+        description="Indicate if there opportunity is in stage when estimate can be added." />
+    <aura:attribute name="isCommit" type="Boolean" default="false"
+      description="Indicate if commit to plan is set on opportunity." />
+    <aura:attribute name="hasErrors" type="Boolean" default="false"
+        description="Indicate that there is some error and errorMessage should be shown." />
+    <aura:attribute name="errorMessage" type="String"/>
+
+    <aura:attribute name="type" type="String" required="true" default="New"/>
+    <aura:attribute name="revenue" type="Decimal" required="true" default="0"/>
+    <aura:attribute name="margin" type="Decimal" required="true" default="0"/>
+    <aura:attribute name="volume" type="Integer" required="true" default="0"/>
+    <aura:attribute name="oem" type="String" required="true" default="-- Select Specific OEM or None --"/>
+    <!-- The list of picklist options to display : selected from custom setting Send_Task_Settings__c  -->
+    <aura:attribute name="oemOptions" type="String[]"/>
+
+    <aura:attribute name="showSellOut" type="Boolean" default="false"/>
+    
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <!-- Display a header with details about the account -->
+    <div class="slds-modal__header">
+        <h2 class="title slds-text-heading--medium">Estimate</h2>
+    </div>
+    <aura:if isTrue="{!v.hasRevenues}">
+        <div class="slds-notify slds-notify--alert slds-theme--warning slds-theme--alert-texture" role="alert">
+            <h2>{!$Label.c.Estimate_Del_Revenue_War}</h2>
+        </div>
+      </aura:if>
+      <aura:if isTrue="{!v.hasErrors}">
+        <div class="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+            <h2>{!v.errorMessage}</h2>
+        </div>
+      </aura:if>
+      <aura:if isTrue="{!v.oppoStage == false}">
+        <div class="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+            <h2>{!$Label.c.Wrong_Stage}</h2>
+        </div>
+      </aura:if>
+    <aura:if isTrue="{!v.isCommit}">
+      <div class="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+      <h2>{!$Label.c.Is_in_commit_warning}</h2>
+    </div>
+    </aura:if>
+
+      <!-- Actual form -->
+      <div class="scrolable">
+        <div class="slds-m-around--medium">
+            <div class="slds-form--stacked">
+            <div class="slds-form-element slds-m-vertical--medium">
+                <div class="slds-form-element__control">
+                  <p class="slds-line-height--reset">Opportunity</p>
+                  <h5 class="slds-m-top--x-small" style="font-weight: bold" title="{!v.opportunity.Name}">{!v.opportunity.Name}</h5>
+                </div>
+            </div>
+                
+                <div class="slds-form-element slds-m-vertical--medium">
+                    <div class="slds-form-element__control">
+                        <ui:inputSelect label="Type" class="slds-input estimate-type" value="{!v.type}" required="true">
+                            <ui:inputSelectOption class="slds-dropdown__item" text="New" label="New"/>
+                            <ui:inputSelectOption class="slds-dropdown__item" text="Renewal" label="Renewal"/>
+                            <ui:inputSelectOption class="slds-dropdown__item" text="Acquisition" label="Acquisition"/>
+                            <ui:inputSelectOption class="slds-dropdown__item" text="Promotion" label="Promotion"/>
+                  <aura:if isTrue="{!v.showSellOut}">
+                    <ui:inputSelectOption class="slds-dropdown__item" text="Sell-out" label="Sell-out"/>
+                  </aura:if>
+                        </ui:inputSelect>
+                    </div>
+                </div>
+                <div class="slds-form-element slds-m-vertical--medium">
+                    <div class="slds-form-element__control">
+                      <ui:inputNumber class="estimate-revenue" label="Total Revenue" aura:id="total_revenue" value="{!v.revenue}" required="true"/>
+                  <lightning:icon class="slds-input__icon" iconName="utility:info" size="x-small" alternativeText="Info icon"/>
+                  <span class="annual-value-warning">&nbsp;Please enter annual value.</span>
+                    </div>
+                </div>
+
+                <div class="slds-form-element slds-m-vertical--medium">
+                    <div class="slds-form-element__control">
+                      <ui:inputNumber class="estimate-margin" label="Total Margin" aura:id="total_margin" value="{!v.margin}" required="true"/>
+                  <lightning:icon class="slds-input__icon" iconName="utility:info" size="x-small" alternativeText="Info icon"/>
+                  <span class="annual-value-warning">&nbsp;Please enter annual value.</span>
+                    </div>
+                </div>
+                <div class="slds-form-element slds-m-vertical--medium">
+                    <div class="slds-form-element__control">
+                      <ui:inputNumber class="estimate-volume" label="Total Volume" aura:id="total_volume" value="{!v.volume}" required="true"/>
+                  <lightning:icon class="slds-input__icon" iconName="utility:info" size="x-small" alternativeText="Info icon"/>
+                  <span class="annual-value-warning">&nbsp;Please enter annual value.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cancel and Save buttons -->
+
+    <div class="slds-modal__footer">
+        <div class="slds-col">
+            <ui:button label="Cancel" press="{!c.handleCancel}"
+                class="slds-button slds-button--neutral" /> 
+                <aura:if isTrue="{!v.oppoStage}">
+                 <aura:if isTrue="{!v.isCommit == false}">
+                    <ui:button label="Save Estimate" press="{!c.handleSave}"
+                class="slds-button slds-button--brand" />
+                 </aura:if>
+              </aura:if>
+        </div>
+    </div>
+</aura:component>

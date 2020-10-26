@@ -1,0 +1,27 @@
+<aura:component controller="SFO_CustomLinksController" implements="flexipage:availableForAllPageTypes">
+    <aura:attribute name="currentUser" type="Map" access="private"/>
+    <aura:attribute name="links" type="List" access="private"/>
+    <aura:attribute name="title" type="String" default=""/>
+    <aura:attribute name="config" type="String" default="default"/>
+    <aura:attribute name="names" type="String"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+
+    <lightning:card >
+        <aura:set attribute="title">
+            <span class="slds-card__header-link slds-truncate">{!v.title}</span>
+        </aura:set>
+        <div class="slds-p-horizontal--large">
+            <aura:if isTrue="{!not(empty(v.links))}">
+                <aura:iteration items="{!v.links}" var="link">
+                    <div>
+                        <!--<lightning:formattedUrl value="{!link.SFO_URL__c}" label="{!link.SFO_Title__c}" target="{!link.SFO_Target__c}" />-->
+                        <a href="{!link.SFO_URL__c}" target="{!link.SFO_Target__c}">{!link.SFO_Title__c}</a>
+                    </div>
+                </aura:iteration>
+            </aura:if>
+        </div>
+    </lightning:card>
+
+</aura:component>

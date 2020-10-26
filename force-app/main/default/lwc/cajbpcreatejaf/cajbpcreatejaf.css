@@ -1,0 +1,13 @@
+/**
+ * @author			Venkatesh Muniyasamy
+ * @date			11/12/2019
+ * @group			CAJBP
+ * @description		Renders JAF fields based on the recordtype choosen.
+ *
+ * history
+ * 11/12/2019	Amir Hafeez	    New JAF
+ */
+
+.hide {
+    display: none;
+}

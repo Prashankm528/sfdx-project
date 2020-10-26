@@ -1,0 +1,62 @@
+<!--
+ * @author Amal Ali-Muradbeyli
+ * @company Bluewolf, an IBM Company
+ * @date 10/2017
+ *
+ * This is a child component for REIDP_PAconsumerDetails that holds Secret question and answer details
+ * related to user
+ *
+ -->
+
+<aura:component access="global" controller="REIDP_PAConsumerDetailsController">
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="availableQuestions" type="REIDP_PAApi.Question"/>
+    <aura:attribute name="newQuestions" type="REIDP_PAApi.Question"/>
+    <aura:attribute name="editing" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    
+    <lightning:spinner aura:id="consumerDetailsSpinner" variant="brand" size="large"/>
+    
+    <lightning:layout horizontalAlign="spread" multipleRows="true">
+        <aura:iteration var="q" items="{!v.newQuestions}" indexVar="i">
+            <aura:if isTrue="{! !q.newQuestion}">
+                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                    <aura:if isTrue="{!v.editing}">                       	
+                        <lightning:select label="Select a new security question" value="{!q.question}">
+                            <aura:iteration items="{!v.availableQuestions}" var="aq">
+                                <option value="{!aq.question}" text="{!aq.question}"></option>
+                            </aura:iteration>
+                        </lightning:select>
+                        <aura:set attribute="else">
+                            <ui:outputText class="slds-form-element__label" value="Security question" /><br/>
+                            <ui:outputText class="slds-form-element__static" value="{!q.question}" />   
+                        </aura:set>
+                    </aura:if> 
+                </lightning:layoutItem>      
+                
+                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">  
+                    <lightning:input type="text" label="{!if(v.editing, 'New answer to security question', 'Answer to security question')}" required="true" name="answer" value="{!q.answer}"/>
+                </lightning:layoutItem>
+            </aura:if>
+        </aura:iteration>
+        <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+            <aura:if isTrue="{!v.newQuestions.length > 0 }">
+                <aura:if isTrue="{!v.editing}">                       	
+                    <lightning:button label="Submit new question" variant="success" onclick="{!c.submitQuestions}" />
+                    <lightning:button label="Cancel" variant="destructive" onclick="{!c.cancelSubmit}" />
+                    
+                    <aura:set attribute="else">
+                        <lightning:button label="Edit question"  onclick="{!c.editQuestions}" />
+                        <lightning:button label="Authenticate security question"  onclick="{!c.authenticateQuestions}" />
+                        
+                    </aura:set>
+                </aura:if> 
+                <aura:set attribute="else">
+                    Security Question is not configured.
+                </aura:set>
+            </aura:if>
+        </lightning:layoutItem> 
+    </lightning:layout>
+    {!v.body}   
+</aura:component>

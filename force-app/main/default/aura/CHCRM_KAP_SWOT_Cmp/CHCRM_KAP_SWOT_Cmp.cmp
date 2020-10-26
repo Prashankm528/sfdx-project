@@ -1,0 +1,32 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" extends="c:CHCRM_KAP_Base_CMP">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="fields_a" type="String[]" default="['CHCRM_Strengths__c',
+                                                              'CHCRM_Weakness__c',
+                                                              'CHCRM_Opportunity__c',
+                                                              'CHCRM_Threats__c']" />
+    
+   <aura:attribute name="fields_b" type="String[]" default="['CHCRM_Requirements__c',
+                                                             'CHCRM_Solution__c',
+                                                             'CHCRM_Detailed_Solution__c',
+                                                             'CHCRM_Solution_Advantages__c', 
+                                                             'CHCRM_Benefits_Brought_By_Solution__c']" />
+    
+    <div aura:id="container" class="slds-card">
+        <h3 class="slds-theme_shade label slds-p-around_x-small slds-m-bottom_medium">SWOT Analysis</h3>
+        <lightning:recordForm recordId="{!v.recordId}"
+                              objectApiName="CHCRM_Key_Account_Plan__c"
+                              mode="{!if(v.isDraft,'view','readonly')}"                  
+                              fields="{!v.fields_a}"
+                              columns="2"
+                              aura:id="recordForm1"/>
+	</div>
+    <div aura:id="container" class="slds-card">
+        <h3 class="slds-theme_shade label slds-p-around_x-small slds-m-bottom_medium">赢单策略</h3>
+        <lightning:recordForm recordId="{!v.recordId}"
+                              objectApiName="CHCRM_Key_Account_Plan__c"
+                              mode="{!if(v.isDraft,'view','readonly')}"                  
+                              fields="{!v.fields_b}"
+                              columns="2"
+                              aura:id="recordForm2"/>
+	</div>
+</aura:component>

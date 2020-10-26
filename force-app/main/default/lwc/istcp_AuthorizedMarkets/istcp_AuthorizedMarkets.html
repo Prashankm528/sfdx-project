@@ -1,0 +1,13 @@
+<template>
+    <lightning-layout class="slds-p-top_small" vertical-align="end">
+        <lightning-layout-item>
+            <lightning-combobox label="Select a watchlist to add items to" options={myWatchlistsOptions} onchange={handleMyWatchlistsChange}></lightning-combobox>
+        </lightning-layout-item>
+        <lightning-layout-item class="slds-p-left_small">
+            <lightning-button label="Add selected items to watchlist" onclick={addWatchlistItems}></lightning-button>
+        </lightning-layout-item>
+    </lightning-layout>
+    <div class="slds-p-top_small">
+        <c-istcp_generic-l-w-c-component runtime-invocations={runtimeInvocations} onrowsselected={handleSelectedItems}></c-istcp_generic-l-w-c-component>
+    </div>
+</template>

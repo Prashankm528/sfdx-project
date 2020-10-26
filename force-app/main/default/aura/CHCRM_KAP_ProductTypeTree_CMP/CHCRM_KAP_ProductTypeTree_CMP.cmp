@@ -1,0 +1,37 @@
+<aura:component implements="flexipage:availableForRecordHome" access="global" controller="CHCRM_KAP_ProductTypeTree_Ctl">
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="items" type="Object"/>
+    <aura:attribute name="mapping" type="Object"/>
+    <aura:attribute name="selectedId" type="String" default=""/>
+    <aura:attribute name="selectedName" type="String" default=""/>
+    <!-- attributes -->
+    <aura:attribute name="skuList" type="Object"/>
+    
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col">
+            <lightning:tree items="{! v.items }" header="Product Type" onselect="{! c.handleSelect }"/>
+        </div>
+        <!--<div class="slds-col slds-box">
+            <b>SKU Code</b>
+            <aura:iteration items="{!v.skuList}" var="item" indexVar="key">
+                <ui:inputRadio name="{!item.value}" label="{!item.label}" change="{!c.onGroup}"/>
+            </aura:iteration>
+        </div>-->
+        <div class="slds-col slds-box">
+            <fieldset class="slds-form-element">
+                <legend class="slds-form-element__legend slds-form-element__label">SKU Code</legend>
+                <div class="slds-form-element__control">
+                    <aura:iteration items="{!v.skuList}" var="item" indexVar="key">
+                        <span class="slds-radio">
+                            <input type="radio" id="{!item.label}" value="{!item.value}" name="radio" onchange="{!c.onGroup}"/>
+                            <label class="slds-radio__label" for="{!item.label}">
+                                <span class="slds-radio_faux"></span>
+                                <span class="slds-form-element__label">{!item.label}</span>
+                            </label>
+                        </span>
+                    </aura:iteration>
+                </div>
+            </fieldset>
+        </div>
+    </div>    
+</aura:component>

@@ -1,0 +1,38 @@
+.THIS.dupFooter {
+    height: 62px;
+    background-color: #eaeaea;
+    padding-top: 23px;
+}
+
+.THIS .footerCenterContent {
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto; 
+    padding: 0px 20px;
+}
+
+@media only screen and (max-width:40.063em) {
+    .THIS.hideDetails {
+        display: none;
+    }
+
+    .THIS.blockLink {
+        display: block;
+    }
+
+    .THIS.dupFooter {
+        height: inherit;
+    }
+}
+
+.THIS .dup-left-text{
+    text-align: left;
+}
+
+.THIS .dup-right-text{
+    text-align: right;
+}
+
+.THIS .blockLink{
+    color: #525759;
+}

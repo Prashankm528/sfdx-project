@@ -1,0 +1,22 @@
+.UserName{
+    font-size:20px; 
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: green;
+    }
+  
+  li, p {
+    float: right;
+    font-size: large;
+    padding: 10px;
+    color: white;
+  }
+  a {
+    float: right;
+    font-size: large;
+    padding: 10px;
+}

@@ -1,0 +1,37 @@
+.THIS input {
+    line-height: normal;
+}
+
+.THIS input:focus {
+    outline: none;
+    box-shadow:none;
+}
+
+.THIS .country-select input::placeholder {
+    font-size: 10px;
+}
+
+.THIS .slds-tabs_default__item {
+    width: 50%;
+    text-align: center;
+}
+
+.THIS .slds-tabs_default__overflow-button {
+    display: none;
+}
+
+.THIS .slds-tabs_default__content {
+    padding: 0;
+}
+
+.THIS a:link {
+    text-decoration: none !important;
+}
+
+.THIS .slds-tabs_default__item.slds-has-focus::after, .THIS .slds-tabs_default__item.slds-active::after {
+    background-color: #cccccc;
+}
+
+.THIS .slds-tabs_default__item:hover::after {
+    background-color: #cccccc;
+}

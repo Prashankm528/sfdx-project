@@ -1,0 +1,239 @@
+<aura:component controller="CHCRM_KAPSovController">
+    
+    <aura:registerEvent name="DeleteSovEvent" type="c:CHCRM_KAP_SOV_Delete_EVENT"/>
+    
+    <aura:attribute name="allSOVdata" type="Object"/>
+    <aura:attribute name="editMainRowIndex" type="Integer" />
+    
+    <aura:attribute name="yearHeader" type="Object"/>
+    
+    <aura:attribute name="parentCmp" type="Aura.Component" required="true"/>
+    
+    <aura:attribute name="sovTitleId" type="Object"/>
+    <aura:attribute name="sovTitleFields" type="String[]" default="['CHCRM_SOV_Name__c',
+                                                                   'CHCRM_Priority__c',
+                                                                   'CHCRM_SOV_Principal__c',
+                                                                   'CHCRM_Product_Type__c',
+                                                                   'CHCRM_Join_Mode__c',
+                                                                   'CHCRM_SOV_Title__c'
+                                                                   ]"/>
+    <aura:attribute name="deleteSovFields" type="String[]" default="['CHCRM_SOV_Title__c',
+                                                                    'CHCRM_SOV_Name__c'
+                                                                    ]"/>
+    
+    <aura:attribute name="isPercent" type="Boolean" default="false"/>
+    <aura:attribute name="finacnceAllColumns" type="List"/>
+    <aura:attribute name="financeList" type="Object"/>    
+    <aura:attribute name="financeEditRow" type="Object"/>
+    
+    <aura:attribute name="projectAllColumns" type="List"/>
+    <aura:attribute name="projectList" type="Object"/>
+    
+    
+    <aura:attribute name="isEditFinanceForm" type="Boolean" default="false"/>
+    
+    <aura:attribute name="isEditProjectForm" type="Boolean" default="false"/>
+    <aura:attribute name="isDeleteProjectForm" type="Boolean" default="false"/>
+    <aura:attribute name="projectFields" type="String[]" default="['CHCRM_Sov_Assigned_Project__c',
+                                                                  'CHCRM_Assigned_Target__c',
+                                                                  'CHCRM_Complete_Date__c',
+                                                                  'CHCRM_End_Date__c',
+                                                                  'CHCRM_Sales_Principal__c'
+                                                                  ]"/>
+                                                                  <!--'CHCRM_Status__c'-->
+    
+    <aura:attribute name="editRecordId" type="String"/>
+    
+    <aura:attribute name="isDeleteSOV" type="Boolean" default="false"/>
+    
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    
+    <aura:attribute name="isloading" type="boolean" default = "false"/>
+    
+    <aura:attribute name="isDraft" type="Boolean" default="false"/> 
+    <aura:handler event="force:refreshView" action="{!c.init}" />
+    
+    <div class="slds-grid slds-grid_vertical slds-m-vertical_small">
+        <div class="slds-col slds-m-horizontal_small">
+            <lightning:card title="{!'SOV '+(v.editMainRowIndex+1)}" iconName="standard:lightning_usage" 
+                            class="slds-card slds-card_boundary headerBottomBorder forceRelatedListCardDesktop">
+                <aura:set attribute="actions">
+                    <lightning:button label="{!'Delete SOV '+(v.editMainRowIndex+1)}" title="Delete SOV"
+                                      iconName="utility:delete" iconPosition="left"
+                                      onclick="{!c.deleteSOVClr}" variant="Neutral" disabled="{!if(v.isDraft,'false','true')}"/>
+                </aura:set>
+                <div class="slds-grid slds-grid_vertical slds-m-horizontal_small">
+                    <div aura:id="container" class="slds-col slds-m-vertical_small">
+                        <lightning:recordForm aura:id="sovTitleForm"
+                                              recordId="{!v.sovTitleId}"
+                                              objectApiName="CHCRM_KAP_Sov_AUTO_Title__c"
+                                              mode="{!if(v.isDraft,'view','readonly')}"                 
+                                              fields="{!v.sovTitleFields}"
+                                              columns="2"
+                                              onsuccess="{!c.refresh}"/>
+                    </div>                   
+                    <div class="slds-col slds-card_boundary"> 
+                        <lightning:datatable
+                                             columns="{! v.finacnceAllColumns }"
+                                             data="{! v.financeList }"
+                                             keyField="id"
+                                             hideCheckboxColumn = "true"
+                                             showRowNumberColumn = "false"
+                                             onrowaction="{!c.handleFinanceRowAction}"/> 
+                    </div>
+                    <div class="slds-col slds-m-bottom_small">
+                        <lightning:card title="赋能项目设定" iconName="standard:sales_cadence_target"
+                                        class="slds-card slds-card_boundary headerBottomBorder forceRelatedListCardDesktop">
+                            <aura:set attribute="actions">
+                                <lightning:button label="Add Row" title="Add Row"
+                                                  iconName="utility:add" iconPosition="left"
+                                                  onclick="{! c.addProjectNewRow }" variant="Neutral" />
+                            </aura:set>
+                            <lightning:datatable
+                                                 columns="{! v.projectAllColumns }"
+                                                 data="{! v.projectList }"
+                                                 keyField="id"
+                                                 hideCheckboxColumn = "true"
+                                                 showRowNumberColumn = "true"
+                                                 onrowaction="{!c.handleProjectRowAction}"
+                                                 /> 
+                        </lightning:card>
+                    </div>
+                </div>
+            </lightning:card>
+        </div>
+    </div>
+    
+    <aura:if isTrue="{!v.isEditFinanceForm}"> 
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <aura:if isTrue="{!v.isloading}"> 
+                <div class="exampleHolder">
+                    <lightning:spinner alternativeText="Loading" size="large" />
+                </div>
+            </aura:if>
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">编辑财务指标-{! v.financeEditRow.financeTarget}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" >
+                    <aura:if isTrue="{!v.isPercent}">
+                        <div class="slds-form-element__control">
+                            <lightning:input   label = "{!v.yearHeader[0]+' (%)'}" step="1" max="100" type="number" disabled = "true" value="{! v.financeEditRow.lastYear3}"/>
+                        </div>
+                        <div class="slds-form-element__control">
+                            <lightning:input  label = "{!v.yearHeader[1]+' (%)'}" step="1" max="100" type="number" disabled = "true" value="{! v.financeEditRow.lastYear2}"/>
+                        </div>
+                        <div class="slds-form-element__control">
+                            <lightning:input   label = "{!v.yearHeader[2]+' (%)'}" step="1" max="100" type="number" disabled = "true" value="{! v.financeEditRow.lastYear}"/>
+                        </div>
+                        <div class="slds-form-element__control">
+                            <lightning:input  label = "{!v.yearHeader[3]+' (%)'}" step="1" max="100" type="number" value="{! v.financeEditRow.curYear}"/>
+                        </div>
+                        <div class="slds-form-element__control">
+                            <lightning:input  label = "{!v.yearHeader[4]+' (%)'}" step="1" max="100" type="number" value="{! v.financeEditRow.nextYear}"/>
+                        </div>
+                        <div class="slds-form-element__control">
+                            <lightning:input  label = "{!v.yearHeader[5]+' (%)'}" step="1" max="100" type="number" value="{! v.financeEditRow.nextYear2}"/>
+                        </div>
+                        <aura:set attribute="else">
+                            <div class="slds-form-element__control">
+                                <lightning:input   label = "{!v.yearHeader[0]}" type="number" disabled = "true" value="{! v.financeEditRow.lastYear3}"/>
+                            </div>
+                            <div class="slds-form-element__control">
+                                <lightning:input  label = "{!v.yearHeader[1]}" type="number" disabled = "true" value="{! v.financeEditRow.lastYear2}"/>
+                            </div>
+                            <div class="slds-form-element__control">
+                                <lightning:input   label = "{!v.yearHeader[2]}" type="number" disabled = "true" value="{! v.financeEditRow.lastYear}"/>
+                            </div>
+                            <div class="slds-form-element__control">
+                                <lightning:input  label = "{!v.yearHeader[3]}" type="number" value="{! v.financeEditRow.curYear}"/>
+                            </div>
+                            <div class="slds-form-element__control">
+                                <lightning:input  label = "{!v.yearHeader[4]}" type="number" value="{! v.financeEditRow.nextYear}"/>
+                            </div>
+                            <div class="slds-form-element__control">
+                                <lightning:input  label = "{!v.yearHeader[5]}" type="number" value="{! v.financeEditRow.nextYear2}"/>
+                            </div>
+                        </aura:set>
+                    </aura:if>                    
+                </div>               
+                <footer class="slds-modal__footer">
+                    <button type="button" id="back" class="slds-button slds-button_neutral" onclick="{!c.closeFinanceEdit}">Cancel</button> 
+                    <button class="slds-button slds-button_brand" onclick="{!c.financeSave}">Save</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>         
+    </aura:if> 
+    
+    <aura:if isTrue="{!v.isEditProjectForm}">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <aura:if isTrue="{!v.isloading}"> 
+                <div class="exampleHolder">
+                    <lightning:spinner alternativeText="Loading" size="large" />
+                </div>
+            </aura:if>
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{! c.closeProjectEdit}">
+                        X
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">赋能项目</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" >
+                    <div aura:id="container" class="slds-card">
+                        <lightning:recordForm 
+                                              aura:id="projectForm"
+                                              recordId="{!v.editRecordId}"
+                                              objectApiName="CHCRM_KAP_Sov_AUTO_Project_Information__c"
+                                              mode="{!if(v.isDeleteProjectForm,'readonly','edit')}"                  
+                                              fields="{!v.projectFields}"
+                                              columns="1"
+                                              onsubmit = "{!c.onSubmit}"
+                                              onsuccess = "{!c.closeProjectEdit}"
+                                              class="none-cancel"
+                                              />
+                    </div>
+                </div>
+                <aura:if isTrue="{!v.isDeleteProjectForm}"> 
+                    <footer class="slds-modal__footer" style="text-align:center">                        
+                        <button class="slds-button slds-button_brand" onclick="{! c.deleteProjectCrtl}">Delete</button>                       
+                    </footer>
+                </aura:if>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div> 
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isDeleteSOV}">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <aura:if isTrue="{!v.isloading}"> 
+                <div class="exampleHolder">
+                    <lightning:spinner alternativeText="Loading" size="large" />
+                </div>
+            </aura:if>
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">确定删除 SOV {!(v.editMainRowIndex+1)} ？</h2>
+                </header>
+                <!--<div aura:id="container" class="slds-card">
+                    <lightning:recordForm 
+                                          recordId="{!v.sovTitleId}"
+                                          objectApiName="CHCRM_KAP_Sov_AUTO_Title__c"
+                                          mode="readonly"                  
+                                          fields="{!v.deleteSovFields}"
+                                          columns="1"/>
+                </div>-->
+                <footer class="slds-modal__footer">
+                    <button type="button" id="back" class="slds-button slds-button_neutral" onclick="{!c.closeDeleteSOV}">Cancel</button> 
+                    <button class="slds-button slds-button_brand" onclick="{!c.deleteSOVItem}">Delete</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+   
+    
+</aura:component>

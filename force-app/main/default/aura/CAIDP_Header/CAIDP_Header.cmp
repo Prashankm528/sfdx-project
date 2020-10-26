@@ -1,0 +1,10 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <div class="header">
+    	<div class="overflow-right" style="{! 'background: url(' + $Resource.CAIDP_GreenOverflow + '); background-size: 100% 60px;' }"></div>
+		<div class="roundel" style="{! 'background-image: url(' + $Resource.CAIDP_Header + ');'}">
+			<div class="logo-container">
+				<div class="logo" style="{! 'background-image: url(' + $Resource.CAIDP_Logo_MID + ');' }"></div>
+			</div>
+		</div>
+	</div>
+</aura:component>

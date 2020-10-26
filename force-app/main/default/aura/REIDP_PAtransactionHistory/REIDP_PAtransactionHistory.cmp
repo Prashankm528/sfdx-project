@@ -1,0 +1,197 @@
+<aura:component access="global" controller="REIDP_PAConsumerDetailsController">
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="pageNum" type="String" default="1"/>
+    <aura:attribute name="totalPageCount" type="List" default="['1']"/>
+    <aura:attribute name="transactions" type="REIDP_PAApi.CustomerTransaction" description="Attribute that holds data returned from API call"/>
+    <aura:attribute name="modalTransaction" type="REIDP_PAApi.CustomerTransaction" description="The transaction displayed in the modal"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    <lightning:spinner aura:id="transactionHistorySpinner" variant="brand" size="large"/>
+    <lightning:layout horizontalAlign="center" multipleRows="true">
+        <lightning:layoutItem flexibility="auto"  mediumDeviceSize="2" size="2" padding="around-small">
+            <lightning:select aura:id="selectStatus" name="selectStatus" label="Select transaction status" onchange="">
+                <option value="">--NO STATUS--</option>
+                <option value="BLOCKED">BLOCKED</option>
+                <option value="CANCELED">CANCELED</option>
+                <option value="COMPLETE">COMPLETE</option>
+                <option value="FULL_REVERSAL">FULL_REVERSAL</option>
+                <option value="INPROGRESS">INPROGRESS</option>
+                <option value="VOID">VOID</option>
+            </lightning:select>           
+        </lightning:layoutItem>
+        <lightning:layoutItem flexibility="auto"  mediumDeviceSize="2" size="2" padding="around-small">
+            <lightning:input aura:id="startDate" type="date" label="Start date"/>                
+        </lightning:layoutItem>
+        <lightning:layoutItem flexibility="auto"  mediumDeviceSize="2" size="2" padding="around-small">
+            <lightning:input aura:id="endDate" type="date" label="End date"/>                
+        </lightning:layoutItem>
+        <lightning:layoutItem flexibility="auto"  mediumDeviceSize="2" size="2" padding="around-small">
+            <lightning:button class="slds-align_absolute-center button-fix" variant="brand" iconPosition="right" label="Find transaction" iconName="utility:search" onclick="{! c.findTransactions }" />                
+        </lightning:layoutItem>
+    </lightning:layout>
+    <aura:if isTrue="{!empty(v.transactions)}">
+        <ui:outputText class="slds-form-element__static" value="No transactions found." />
+        <aura:set attribute="else">
+            <lightning:layout horizontalAlign="spread" multipleRows="true">
+                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="12" size="12" padding="around-small">
+                    <lightning:card title="Transaction history" iconName="custom:custom17">
+                        <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal slds-table_striped">
+                            <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col">
+                                        <ui:outputText class="slds-truncate" value="Status" />
+                                    </th>
+                                    <th scope="col">
+                                        <ui:outputText class="slds-truncate" value="Date" />
+                                    </th>
+                                    <th scope="col">
+                                        <ui:outputText class="slds-truncate" value="Station id" />
+                                    </th>
+                                    <th scope="col">
+                                        <ui:outputText class="slds-truncate" value="Station name" />
+                                    </th>
+                                    <th scope="col">
+                                        <ui:outputText class="slds-truncate" value="Payment method" />
+                                    </th>
+                                    <th scope="col">
+                                        <ui:outputText class="slds-truncate" value="Item" />
+                                    </th>
+                                    <th scope="col">
+                                        <ui:outputText class="slds-truncate" value="Total" />
+                                    </th>
+                                    <th scope="col">
+                                        <ui:outputText class="slds-truncate" value="" />
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <aura:iteration var="transaction" items="{!v.transactions}" indexVar="i">
+                                    <tr>
+                                        <td data-label="Transaction status" >
+                                            <ui:outputText class="slds-truncate" value="{!transaction.transactionStatus}" /> 
+                                        </td>
+                                        <td data-label="Transaction date">
+                                            <ui:outputDateTime class="slds-truncate" value="{!transaction.transactionDateDT}" />  
+                                        </td>
+                                        <td data-label="Station id">
+                                            <ui:outputText class="slds-truncate" value="{!transaction.location.code}" />
+                                        </td>
+                                        <td data-label="Station name">
+                                            <ui:outputText class="slds-truncate" value="{!transaction.location.name}" />
+                                        </td>
+                                        <td data-label="Payment method">
+                                            <ui:outputText class="slds-truncate" value="{!transaction.payments[0].paymentAccountNetworkName}" />
+                                        </td>
+                                        <td data-label="Item">
+                                            <ui:outputText class="slds-truncate" value="{!if(equals(transaction.receipt.items.length, 0),
+                                                                                        'N/A', transaction.receipt.items[0].description)}" />
+                                        </td>
+                                        <td data-label="Total">
+                                            <ui:outputText class="slds-truncate" value="{!transaction.receipt.totalAmount + ' ' + transaction.payments[0].currencyCode}" />
+                                        </td>
+                                        <th scope="row" class="slds-align_absolute-center">
+                                            <lightning:button variant="base" class="veiewMoreButton" label="View details" onclick="{!c.toggleModal}" value="{!i}" />
+                                        </th>
+                                    </tr>       
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                        <aura:set attribute="footer">
+                            <lightning:button variant="brand" disabled="{!equals(v.pageNum, '1')}" label="Previous" iconName="utility:chevronleft" onclick="{!c.prevPage}" />
+                            <lightning:buttonGroup >
+                                <aura:iteration items="{!v.totalPageCount}" var="page">
+                                    <aura:if isTrue="{!equals(v.pageNum, page) || equals(v.pageNum, 1)}">
+                                        <lightning:button variant="brand" value="{!page}" label="{!page}" onclick="{!c.goToPage}"/>
+                                        <aura:set attribute="else">
+                                            <lightning:button label="{!page}" value="{!page}" onclick="{!c.goToPage}"/>
+                                        </aura:set>
+                                    </aura:if> 
+                                </aura:iteration>
+                            </lightning:buttonGroup>
+                            <lightning:button variant="brand" label="Next" disabled="{!lessthan(v.transactions.length, 10)}" iconName="utility:chevronright" iconPosition="right" onclick="{!c.nextPage}" />
+                        </aura:set>
+                        
+                    </lightning:card>
+                    
+                </lightning:layoutItem>
+            </lightning:layout> 
+            <div aura:id="transactionDetailsModal" class="slds-hide">
+                <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open modal-fix">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <lightning:button class="slds-float_right" iconName="utility:close" variant="base" onclick="{!c.toggleModal}"/>
+                            <ui:outputText class="slds-text-heading_medium slds-hyphenate" value="{!'Merchant transaction id: ' + v.modalTransaction.merchantTransactionReferenceId}" />
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium">
+                            <lightning:layout horizontalAlign="spread" multipleRows="true">
+                                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                                    <ui:outputText class="slds-form-element__label" value="Merchant transaction id:" /><br/>
+                                    <ui:outputText class="slds-form-element__static" value="{!v.modalTransaction.merchantTransactionReferenceId}" />
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small"> 
+                                    <ui:outputText class="slds-form-element__label" value="Terminal ID (TID):" /><br/>
+                                    <ui:outputText class="slds-form-element__static" value="{!v.modalTransaction.terminalId}" />
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                                    <ui:outputText class="slds-form-element__label" value="Receipt no:" /><br/>
+                                    <ui:outputText class="slds-form-element__static" value="{!v.modalTransaction.receiptId}" />
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small"> 
+                                    <ui:outputText class="slds-form-element__label" value="Paydiant Transaction RefId:" /><br/>
+                                    <ui:outputText class="slds-form-element__static" value="{!v.modalTransaction.paydiantTransactionRefId}" />
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                                    <ui:outputText class="slds-form-element__label" value="BP service station ID:" /><br/>
+                                    <ui:outputText class="slds-form-element__static" value="{!v.modalTransaction.location.code}" /> 
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                                    <ui:outputText class="slds-form-element__label" value="BP service station name:" /><br/>
+                                    <ui:outputText class="slds-form-element__static" value="{!v.modalTransaction.location.name}" />
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                                    <ui:outputText class="slds-form-element__label" value="Transaction status:" /><br/>
+                                    <ui:outputText class="slds-form-element__static" value="{!v.modalTransaction.transactionStatus}" />
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                                    <ui:outputText class="slds-form-element__label" value="Transaction date:" /><br/>
+                                    <ui:outputDateTime class="slds-form-element__static" value="{!v.modalTransaction.transactionDateDT}" />
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                                    <ui:outputText class="slds-form-element__label" value="Total transaction amount:" /><br/>
+                                    <ui:outputText class="slds-truncate" value="{!v.modalTransaction.receipt.totalAmount + ' ' + v.modalTransaction.payments[0].currencyCode}" />
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                                    <ui:outputText class="slds-form-element__label" value="Item sold:" /><br/>
+                                    <ui:outputText class="slds-form-element__static" value="{!if(equals(!v.modalTransaction.receipt.items.length, 0),
+                                                                                            'N/A', !v.modalTransaction.receipt.items[0].description)}" />
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                                    <ui:outputText class="slds-form-element__label" value="Item amount/volume:" /><br/>
+                                    <ui:outputText class="slds-form-element__static" value="{!if(equals(!v.modalTransaction.receipt.items[0].itemCount.length, 0),
+                                                                                            'N/A', !v.modalTransaction.receipt.items[0].itemCount)}" /> 
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                                    <ui:outputText class="slds-form-element__label" value="Item unit price:" /><br/>
+                                    <ui:outputCurrency class="slds-form-element__static" value="{!if(equals(!v.modalTransaction.receipt.items[0].unitPrice.length, 0),
+                                                                                                'N/A', !v.modalTransaction.receipt.items[0].unitPrices)}" />
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                                    <ui:outputText class="slds-form-element__label" value="Masked card PAN:" /><br/>
+                                    <ui:outputText class="slds-form-element__static" value="{!v.modalTransaction.payments[0].maskedCardNumber}" /> 
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                                    <ui:outputText class="slds-form-element__label" value="Payment method:" /><br/>
+                                    <ui:outputText class="slds-form-element__static" value="{!v.modalTransaction.payments[0].paymentAccountNetworkName}" />
+                                </lightning:layoutItem>
+                            </lightning:layout>                    
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <lightning:button label="Close" onclick="{!c.toggleModal}" />
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+        </aura:set>
+    </aura:if>
+    {!v.body}
+</aura:component>

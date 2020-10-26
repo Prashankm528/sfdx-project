@@ -1,0 +1,27 @@
+<aura:component implements="lightning:availableForFlowScreens" controller="SFO_RecordChoiceController" access="global">
+    <aura:attribute name="sObjectName" type="String" access="global" required="true"/>
+    <aura:attribute name="configFields" type="String" access="global" required="true"/>
+    <aura:attribute name="configFilters" type="String" access="global"/>
+    <aura:attribute name="sortBy" type="String" access="global" default=""/>
+    <aura:attribute name="limit" type="Integer" access="global" default="50"/>
+    <aura:attribute name="valueField" type="String" access="global" default="Id" required="true"/>
+    <aura:attribute name="layoutType" type="String" access="global" default="inline"/>
+    <aura:attribute name="choiceType" type="String" access="global" default="single"/>
+    <aura:attribute name="recordIcon" type="String" access="global"/>
+    <aura:attribute name="selectedValues" type="String[]" access="global"/>
+
+    <aura:attribute name="records" type="List" access="private"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <c:BPG_ApexProvider aura:id="apexProvider"/>
+
+    <aura:if isTrue="{!not(empty(v.records))}">
+        <ul class="slds-has-dividers_bottom-space container">
+            <aura:iteration items="{!v.records}" var="record">
+                <c:SFO_RecordChoiceTile aura:id="options" record="{!record}" layoutType="{!v.layoutType}"
+                        choiceType="{!v.choiceType}" valueField="{!v.valueField}" recordIcon="{!v.recordIcon}"
+                        onChange="{!c.onChange}"/>
+            </aura:iteration>
+        </ul>
+    </aura:if>
+</aura:component>

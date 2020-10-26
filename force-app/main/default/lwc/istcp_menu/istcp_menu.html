@@ -1,0 +1,138 @@
+<template>
+    <lightning-card>
+        <nav class="slds-nav-vertical slds-p-bottom_medium" aria-label="Menu">
+            <div class="slds-nav-vertical__section">
+                <ul>
+                    <li class="slds-nav-vertical__item slds-text-align_left">
+                        <a href="javascript:void(0);" class="slds-nav-vertical__action">
+                            <lightning-icon icon-name="utility:home" alternative-text="Dashboard home"
+                                title="Dashboard home" size="xx-small" class="slds-m-right_x-small"></lightning-icon>
+                            Dashboard home
+                        </a>
+                    </li>
+
+                    <li class="slds-nav-vertical__item slds-text-align_left slds-is-active">
+                        <a href="javascript:void(0);" class="slds-nav-vertical__action" aria-current="true">
+                            <lightning-icon icon-name="utility:notification" alternative-text="Message center" title="Message center"
+                                size="xx-small" class="slds-m-right_x-small"></lightning-icon>
+                            Message center
+
+                            <span class="slds-badge slds-col_bump-left">
+                                <span class="slds-assistive-text">:</span>3
+                                <span class="slds-assistive-text">New Items</span>
+                            </span>
+                        </a>
+                    </li>
+
+                    <div class="slds-nav-vertical__overflow slds-text-align_left">
+                        <button
+                            class="slds-nav-vertical__action slds-nav-vertical__action_overflow slds-text-align_left"
+                            aria-controls="myAccountsMenu" aria-expanded="false" onclick={changeMyAccountsState}>
+                            <lightning-icon icon-name="utility:company" alternative-text="My accounts"
+                                title="My accounts" size="xx-small" class="slds-m-right_x-small"></lightning-icon>
+                            My accounts
+                            <template if:true={myAccountsOpen}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="Close"
+                                    title="Approved" size="xx-small" class="slds-m-left_x-small"></lightning-icon>
+                            </template>
+
+                            <template if:false={myAccountsOpen}>
+                                <lightning-icon icon-name="utility:chevronright" alternative-text="Open"
+                                    title="Approved" size="xx-small" class="slds-m-left_x-small"></lightning-icon>
+                            </template>
+                        </button>
+                        <div id="myAccountsMenu" class={myAccountsState}>
+                            <ul aria-describedby="folder-header" class="slds-m-left_large">
+                                <li class="slds-nav-vertical__item">
+                                    <a href="javascript:void(0);" class="slds-nav-vertical__action">Invoices</a>
+                                </li>
+                                <li class="slds-nav-vertical__item">
+                                    <a href="javascript:void(0);" class="slds-nav-vertical__action">Daily marks</a>
+                                </li>
+                                <li class="slds-nav-vertical__item">
+                                    <a href="javascript:void(0);" class="slds-nav-vertical__action">REP Account Management</a>
+                                </li>
+                                <li class="slds-nav-vertical__item">
+                                    <a href="javascript:void(0);" class="slds-nav-vertical__action">BOLs</a>
+                                </li>
+                                <li class="slds-nav-vertical__item">
+                                    <a href="javascript:void(0);" class="slds-nav-vertical__action">Contracts</a>
+                                </li>
+                                <li class="slds-nav-vertical__item">
+                                    <a href="javascript:void(0);" class="slds-nav-vertical__action">Deal details</a>
+                                </li>
+                                <li class="slds-nav-vertical__item">
+                                    <a href="javascript:void(0);" class="slds-nav-vertical__action">Custom reports</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="slds-nav-vertical__overflow slds-text-align_left">
+                        <button
+                            class="slds-nav-vertical__action slds-nav-vertical__action_overflow slds-text-align_left"
+                            aria-controls="marketInsightsMenu" aria-expanded="false" onclick={changeMarketInsightsState}>
+                            <lightning-icon icon-name="utility:agent_session" alternative-text="Market insights"
+                                title="Market insights" size="xx-small" class="slds-m-right_x-small"></lightning-icon>
+                                Market insights
+                            <template if:true={marketsInsightsOpen}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="Close"
+                                    title="Close" size="xx-small" class="slds-m-left_x-small"></lightning-icon>
+                            </template>
+
+                            <template if:false={marketsInsightsOpen}>
+                                <lightning-icon icon-name="utility:chevronright" alternative-text="Open"
+                                    title="Open" size="xx-small" class="slds-m-left_x-small"></lightning-icon>
+                            </template>
+                        </button>
+                        <div id="marketInsightsMenu" class={marketsInsightsState}>
+                            <ul aria-describedby="folder-header" class="slds-m-left_large">
+                                <li class="slds-nav-vertical__item">
+                                    <a href="javascript:void(0);" class="slds-nav-vertical__action">Pricing</a>
+                                </li>
+                                <li class="slds-nav-vertical__item">
+                                    <a href="javascript:void(0);" class="slds-nav-vertical__action">bp publications</a>
+                                </li>
+                                <li class="slds-nav-vertical__item">
+                                    <a href="javascript:void(0);" class="slds-nav-vertical__action">Glossary</a>
+                                </li>
+                                <li class="slds-nav-vertical__item">
+                                    <a href="javascript:void(0);" class="slds-nav-vertical__action">News and events</a>
+                                </li>
+                                <li class="slds-nav-vertical__item">
+                                    <a href="javascript:void(0);" class="slds-nav-vertical__action">Weather</a>
+                                </li>
+                                <li class="slds-nav-vertical__item">
+                                    <a href="javascript:void(0);" class="slds-nav-vertical__action">Webinars</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <li class="slds-nav-vertical__item slds-text-align_left">
+                        <a href="javascript:void(0);" class="slds-nav-vertical__action">
+                            <lightning-icon icon-name="utility:apps" alternative-text="Products and services"
+                                title="Products and services" size="xx-small" class="slds-m-right_x-small"></lightning-icon>
+                            Products and services
+                        </a>
+                    </li>   
+
+                    <li class="slds-nav-vertical__item slds-text-align_left">
+                        <a href="javascript:void(0);" class="slds-nav-vertical__action">
+                            <lightning-icon icon-name="utility:cart" alternative-text="Transact with bp"
+                                title="Transact with bp" size="xx-small" class="slds-m-right_x-small"></lightning-icon>
+                            Transact with bp
+                        </a>
+                    </li>   
+                </ul>
+            </div>
+        </nav>
+
+        <a href="javascript:void(0);">
+            <p class="slds-m-top_small slds-text-align_center">Customer care</p>
+        </a>
+        <a href="https://istcpdev-bpcustomer.cs126.force.com/myBPenergy2/s/preferences">
+            <p class="slds-m-top_small slds-text-align_center">Preferences</p>
+        </a>
+    </lightning-card>
+</template>

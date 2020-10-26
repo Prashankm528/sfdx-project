@@ -1,0 +1,98 @@
+<!--
+ * @author			Venkatesh Muniyasamy
+ * @date			20/12/2019
+ * @group			CAJBP
+ * @description		Renders SWOT's New Matrix.
+ *
+ * history
+ * 20/12/2019 	Venkatesh Muniyasamy	Created
+ -->
+<aura:component controller="CAJBP_SwotController" implements="force:hasRecordId,flexipage:availableForRecordHome,force:lightningQuickActionWithoutHeader" description="CAJBP SWOT Component">
+    <aura:attribute name="listOfSwotOpportunity" type="List"/>
+    <aura:attribute name="listOfSwotStrength" type="List"/>
+    <aura:attribute name="listOfSwotThreat" type="List"/>
+    <aura:attribute name="listOfSwotWeakness" type="List"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true" />
+    <aura:attribute name="showFilter" type="Boolean" default="false"/>
+    <aura:attribute name="data" type="Map"/>
+    <aura:attribute name="value" type="String" default="all"/>
+    <aura:attribute name="filter" type="Integer" default="" />
+    <aura:attribute name="options" type="List" default="[
+        {'label': 'All', 'value': 'all'},
+        {'label': 'Active', 'value': 'true'},
+        {'label': 'In Active', 'value': 'false'}
+    ]"/>
+
+    <ltng:require scripts="{!$Resource.CAJBP_SortableJs}" afterScriptsLoaded="{!c.doInit}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:handler name="swotRelatedEvent" event="c:CAJBP_SwotRelatedEvent" action="{!c.updateRelatedSwots}"/>
+
+    <c:BPG_ApexProvider aura:id="apexProvider"/>
+    <c:CAJBP_RefreshIt needle="SWOT,DELETE"/>
+
+    <div class="slds-card slds-p-left_xx-small slds-p-right_xx-small">
+        <aura:if isTrue="{!v.isLoading}">
+            <lightning:spinner size="medium" alternativeText="Loading"/>
+        </aura:if>
+
+        <div class="slds-box">
+            <div style="position: absolute;right: 30px;top: 8px;z-index: 2;">
+                <lightning:buttonIconStateful iconName="utility:filterList" size="medium" onclick="{!c.displayFilter}" selected="{!v.showFilter}"/>
+            </div>
+            <div class="{!'slds-grid' + (v.showFilter ? '' : ' slds-hide')}" style="padding-bottom: 13px;">
+                <div class="slds-col slds-large-size_1-of-2 slds-small-size_1-of-1 slds-p-right_x-small slds-p-left_x-small" style="margin-top: -8px;">
+                    <lightning:radioGroup aura:id="active-options" name="Active SWOT"
+                        label="SWOT Status"
+                        options="{!v.options}"
+                        value="{!v.value}"
+                        onchange="{!c.statusFilterChange}"
+                        class="radioGroup"/>
+                </div>
+            </div>
+            
+            <div class="slds-grid slds-wrap" style="margin-top: -13px;">
+                <div class="slds-col slds-large-size_1-of-2 slds-small-size_1-of-1 slds-p-right_x-small slds-p-left_x-small slds-p-top_x-small">
+                    <h4 class="title slds-text-heading--medium slds-p-bottom_x-small">
+                        <lightning:icon iconName="custom:custom5" size="small"/><a class="slds-p-left_x-small slds-text-link_reset" style="font-weight: bold;color:green; cursor:default;" >Strengths</a>
+                    </h4>
+                    <div class="slds-box container">
+                        <span>
+                           <c:CAJBP_SwotRelatedItem swots="{!v.listOfSwotStrength}"></c:CAJBP_SwotRelatedItem>
+                        </span>
+                    </div>
+                </div>
+                <div class="slds-col slds-large-size_1-of-2 slds-small-size_1-of-1 slds-p-right_x-small slds-p-left_x-small slds-p-top_x-small">
+                    <h4 class="title slds-text-heading--medium slds-p-bottom_x-small">
+                        <lightning:icon iconName="custom:custom91" size="small"/><a class="slds-p-left_x-small slds-text-link_reset" style="font-weight: bold;color:saddlebrown; cursor:default;" >Weaknesses</a>
+                    </h4>
+                    <div class="slds-box container">
+                        <span>
+                            <c:CAJBP_SwotRelatedItem swots="{!v.listOfSwotWeakness}"></c:CAJBP_SwotRelatedItem>
+                        </span>
+                    </div>
+                </div>
+                <div class="slds-col slds-large-size_1-of-2 slds-small-size_1-of-1 slds-p-right_x-small slds-p-left_x-small slds-p-top_x-small">
+                    <h4 class="title slds-text-heading--medium slds-p-bottom_x-small">
+                        <lightning:icon iconName="custom:custom57" size="small"/><a class="slds-p-left_x-small slds-text-link_reset" style="font-weight: bold;color:steelblue; cursor:default;" >Opportunities</a>
+                    </h4>
+                    <div class="slds-box container">
+                        <span>
+                            <c:CAJBP_SwotRelatedItem swots="{!v.listOfSwotOpportunity}"></c:CAJBP_SwotRelatedItem>
+                        </span>
+                    </div>
+                </div>
+                <div class="slds-col slds-large-size_1-of-2 slds-small-size_1-of-1 slds-p-right_x-small slds-p-left_x-small slds-p-top_x-small">
+                    <h4 class="title slds-text-heading--medium slds-p-bottom_x-small">
+                        <lightning:icon iconName="custom:custom53" size="small"/><a class="slds-p-left_x-small slds-text-link_reset" style="font-weight: bold;color:indianred; cursor:default;" >Threats</a>
+                    </h4>
+                    <div class="slds-box container">
+                        <span>
+                            <c:CAJBP_SwotRelatedItem swots="{!v.listOfSwotThreat}"></c:CAJBP_SwotRelatedItem>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

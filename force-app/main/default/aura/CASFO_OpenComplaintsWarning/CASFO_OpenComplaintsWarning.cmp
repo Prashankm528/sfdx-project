@@ -1,0 +1,15 @@
+<aura:component controller="CASFO_OpenComplaintsWarningController" implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="public">
+
+	<aura:attribute name="showWarning" type="Boolean" default="false"
+		description="Indicates whether we want to show warning"/>
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+	<aura:if isTrue="{!v.showWarning}">
+		<div class="slds-box slds-theme--shade slds-theme--alert-texture">
+			<span><lightning:icon iconName="utility:warning" size="medium" alternativeText="Warning Inactive Product"/></span>
+			&nbsp;
+			<strong>{!$Label.c.CASFO_Open_Complaints_warning}</strong>
+		</div>
+	</aura:if>
+</aura:component>

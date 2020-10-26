@@ -1,0 +1,11 @@
+<aura:component implements="lightning:isUrlAddressable" description="CAJBP_BusinessStrategicGoals">
+    <aura:attribute name="recordId" type="ID"/>
+    <aura:attribute name="year" type="String"/>
+    <aura:attribute name="clt" type="String"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.onPageReferenceChange}"/>
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.onPageReferenceChange}"/>
+
+    <c:cajbpRelatedBusinessStrategicGoals recordId="{!v.recordId}" year="{!v.year}" clt="{!v.clt}">
+    </c:cajbpRelatedBusinessStrategicGoals>
+</aura:component>

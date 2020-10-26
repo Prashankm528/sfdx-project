@@ -1,0 +1,72 @@
+<template>
+    <!-- Top menu -->
+    <lightning-layout horizontal-align="spread" vertical-align="center">
+        <lightning-layout-item class="slds-text-heading_small">
+            Market pricing
+        </lightning-layout-item>
+
+        <lightning-layout-item>
+            <lightning-layout horizontal-align="end">
+                <lightning-layout-item>
+                    <lightning-button icon-name="utility:refresh" icon-position="left" label="Refresh 30 min delay" variant="base"></lightning-button>
+                </lightning-layout-item> 
+
+                <lightning-layout-item class="slds-p-left_x-large">
+                    <lightning-button icon-name="utility:filter" icon-position="left" label="Filter" variant="base"></lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-layout-item>
+
+    </lightning-layout>
+
+    <lightning-card>
+        <!-- Picker, Electronic/Pit -->
+        <lightning-layout horizontal-align="spread" vertical-align="center" class="slds-p-horizontal_small">
+            <lightning-layout-item>
+                <lightning-combobox
+                    name="market"
+                    label=""
+                    value={marketValue}
+                    placeholder="Select a market"
+                    options={marketOptions}
+                    onchange={handleChange} >
+                </lightning-combobox>
+            </lightning-layout-item>
+
+            <lightning-layout-item>
+                <lightning-radio-group name="electronicPit"
+                          label=""
+                          options={options}
+                          value={electronicPitValue}
+                          type="button"></lightning-radio-group>
+            </lightning-layout-item>
+        </lightning-layout>
+
+        <!-- Last days pricing -->
+        <lightning-layout horizontal-align="center">
+            <lightning-layout-item class="slds-p-horizontal_large">
+                <div class="slds-text-heading_small">$ 839.23</div>
+                <div class="slds-text-body_small">Last 7 days</div>
+            </lightning-layout-item>
+
+            <lightning-layout-item class="slds-p-horizontal_large">
+                <div class="slds-text-heading_small">$ 2,014.92</div>
+                <div class="slds-text-body_small">Last 14 days</div>
+            </lightning-layout-item>
+
+            <lightning-layout-item class="slds-p-horizontal_large">
+                <div class="slds-text-heading_small">$ 4,921.67</div>
+                <div class="slds-text-body_small">Last month</div>
+            </lightning-layout-item>
+        </lightning-layout>
+        
+        <!--Graph-->
+        <lightning-layout horizontal-align="center">
+            <lightning-layout-item>
+                <img alt="Pricing graph"
+                    src="https://www.lightningdesignsystem.com/assets/images/carousel/carousel-02.jpg"
+                    title="Pricing graph" />  
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+</template>

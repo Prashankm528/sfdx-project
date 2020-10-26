@@ -1,0 +1,12 @@
+<aura:component controller="REIDP_AppAccessRequestController" access="global">
+    <aura:attribute name="applicationId" type="String"/>
+    <aura:attribute name="YesLabel" type="String" access="private" required="false" default="{!$Label.c.REIDP_YesLabel}"/>
+    <aura:attribute name="NoLabel" type="String" access="private" required="false" default="{!$Label.c.REIDP_NoLabel}"/>
+    
+    <aura:registerEvent name="loadReInit" type="c:REIDP_ReInitEvent"/>
+    <lightning:overlayLibrary aura:id="overlayLib" />
+    <lightning:spinner aura:id="spinner" variant="brand" class="slds-hide" size="large" alternativeText="Loading..."/>
+    
+    <lightning:button variant="destructive" label="{!v.NoLabel}" onclick="{! c.handleCancel }" class="btn_neutral"/>
+    <lightning:button variant="success" label="{!v.YesLabel}" onclick="{! c.handleSubmit }" class="btn_brand"/>
+</aura:component>

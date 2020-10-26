@@ -1,0 +1,195 @@
+<aura:component >
+    <div class="slds-text-heading--large slds-m-top--xx-large">
+        <b>Conditions d'utilisation et Engagement de confidentialité pour les employés et les sous-traitants de BP utilisant Salesforce</b>
+    </div>
+    <div class="slds-m-top--large">
+        Les présentes conditions régissent l'utilisation de Salesforce par les employés et les sous-traitants de BP.
+    </div>
+    <h3 class="slds-section-title--divider slds-m-top--large">
+        <b>1. Introduction - Qu'est-ce que Salesforce ?</b>
+    </h3>
+    <p class="slds-m-top--large">
+        <b>1.1</b> Salesforce (« l'Application ») est un système de gestion des comptes Clients basé sur le cloud, fourni par Salesforce. Il est utilisé par les employés et les sous-traitants de BP afin de centraliser les informations relatives aux clients. Il permet aux utilisateurs de saisir des données, de générer des rapports et de gérer les opportunités de développement commercial. En accédant à l'Application et en l'utilisant, vous acceptez les présentes conditions d'utilisation (« Conditions d'utilisation ») et vous vous engagez à les respecter. Les Conditions d'utilisation peuvent, ponctuellement et à tout moment, faire l'objet de modifications par BP, sans qu'une notification spécifique ne vous soit envoyée. Toute mise à jour des mentions légales sera publiée sur l'Application. Il vous faudra prendre connaissance de ces mentions légales avant d'utiliser l'Application.
+    </p>
+    <p class="slds-m-top--large">
+        <b>1.2</b> Toutes les activités  relatives à l'Application doivent être conformes <a href="http://codeofconduct.bpweb.bp.com/">au Code de conduite et aux valeurs et comportements de BP</a>, ainsi qu'<a href="http://securityatbp.bpweb.bp.com/en/ds/psg_protecting_information.aspx">à notre Politique de protection des informations.</a>.
+    </p>
+    <p class="slds-m-top--large">
+        <b>1.3</b> Toute personne ne respectant pas les Conditions d'utilisation alors qu'elle utilise l'Application pourra s'en voir refuser l'accès de manière temporaire ou définitive et faire l'objet de mesures disciplinaires, pouvant aller jusqu'à la résiliation de son contrat de travail.
+    </p>
+    <p class="slds-m-top--large">
+        <b>1.4</b> Si vous n'acceptez pas les présentes conditions, vous devez supprimer votre compte Salesforce.
+    </p>
+    <p class="slds-m-top--large">
+        <b>1.5</b> L'Application est fournie par Salesforce et gérée par <b><i>BP International Limited</i></b>.
+    </p>
+    <p class="slds-m-top--large">
+        <b>1.6</b> Sauf indication contraire, les références à « BP », « Groupe BP », « nous », « notre » ou « nos » dans le présent avis juridique désignent BP International Limited, ses filiales et ses sociétés affiliées.
+    </p>
+    <h3 class="slds-section-title--divider slds-m-top--large">
+        <b>2. Conditions d'utilisation</b>
+    </h3>
+    <p class="slds-m-top--large">
+        <b>2.1</b> Les Conditions d'utilisation s'appliquent à tous les employés et sous-traitants de BP travaillant pour, avec ou au nom de BP (l'« <b>Utilisateur</b> » individuellement, les « <b>Utilisateurs</b> » collectivement).
+    </p>
+    <p class="slds-m-top--large">
+        <b>2.2</b> En utilisant l'Application, les Utilisateurs acceptent les présentes Conditions d'utilisation et confirment qu'ils s'engagent à les respecter. Par ailleurs, les Utilisateurs reconnaissent que BP peut modifier les présentes Conditions d'utilisation. Le fait qu'un Utilisateur continue d'utiliser l'Application après une telle modification signifie qu'il est toujours d'accord avec les Conditions d'utilisation.
+    </p>
+    <h3 class="slds-section-title--divider slds-m-top--large">
+        <b>3. Responsabilité</b>
+    </h3>
+    <p class="slds-m-top--large">
+        <b>3.1</b>  Les Utilisateurs doivent faire preuve d'une extrême vigilance lorsqu'ils utilisent l'Application et comprendre que leurs commentaires ou conversations en lien avec BP, ses activités et ses employés, ses clients, ses fournisseurs, ses sous-traitants ou tout autre-   tiers peuvent affecter la réputation et les activités de BP.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.2</b> En s'inscrivant et en utilisant l'Application, l'Utilisateur s'engage à lire, à accepter et à respecter les politiques BP suivantes :
+        <ul class="slds-m-top--large">
+            <li><a href="http://codeofconduct.bpweb.bp.com/">Code de conduite et valeurs et comportements de BP</a></li>
+            <li><a href="http://securityatbp.bpweb.bp.com/en/ds/psg_protecting_information.aspx">Politique de protection des informations de BP</a></li>
+            <li><a href="http://legal.bpweb.bp.com/Data_Privacy/DataPrivacy_BPStandardsPolicies_BCRRules.aspx">Politique de confidentialité des données de BP</a></li>
+            <li><a href="http://securityatbp.bpweb.bp.com/en/local_assets/documents/ds/qg_ref/Information_classification.pdf">Classification des informations de BP</a></li>
+        </ul>
+    </p>
+    <p class="slds-m-top--large">
+        (collectivement, les « <b>Politiques associées</b> »). Si ces liens ne fonctionnent pas, il est possible de demander les dernières versions de ces politiques à votre supérieur hiérarchique BP ou à votre point de contact BP. En cas de conflit entre ces Politiques associées, c'est la norme la plus élevée/restrictive qui s'applique.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3</b> De plus, en utilisant l'Application, l'Utilisateur accepte spécifiquement de se conformer aux obligations suivantes :
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.1</b> Veiller à respecter les conditions d'utilisation de Salesforce (disponibles <a href="http://www.sfdcstatic.com/assets/pdf/misc/SALESFORCEIQ-EULA-OFS-iOS-Mobile-App.pdf">ici</a>) en plus des présentes Conditions d'utilisation.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.2</b> Veiller à ce que toute utilisation de l'Application soit conforme aux politiques BP applicables, y compris aux Politiques associées susmentionnées.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.3</b> Faire preuve de vigilance et ne pas publier, divulguer ou partager des informations secrètes de BP. Pour plus de détails sur les différents niveaux de classification des informations de BP, veuillez consulter la Politique de protection des informations de BP.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.4</b> Sur l'Application, ne se livrer à aucune conduite susceptible d'être considérée comme de la discrimination, de l'intimidation ou du harcèlement sur la base de l'âge, de la race, de l'appartenance ethnique, du pays d'origine, de la religion, du sexe, du handicap, du statut militaire, de l'orientation sexuelle, de l'identité sexuelle ou de toute autre catégorie, tout autre statut ou toute autre caractéristique faisant l'objet d'une protection légale.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.5</b> Signaler les utilisations ou contenus inappropriés.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.6</b> S’Assurer que le contenu  saisi dans l'Application est compatible avec sa publication et son affichage. Le contenu ne saurait être indécent ou obscène. Il ne doit pas inclure de symboles, déclarations ou mots offensants pour le public en général ou pour les membres d'un groupe socio-économique en particulier, ou visant les individus avec une orientation sexuelle, une appartenance ethnique, une race ou une religion spécifique. Le contenu ne doit enfreindre aucune loi, ni aucune norme du réseau, et ne doit pas contenir de menaces à l'encontre de tierces parties. Il ne doit pas enfreindre le droit à la confidentialité, ni aucun autre droit d'une personne ou entité.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.7</b> Veiller à ce que le contenu  saisi dans l'Application ne présente pas d'éléments protégés par des droits d'auteur de tierces parties et à ce qu'il n'enfreigne aucun droit de confidentialité, de publicité, d'auteur ou tout autre droit de parties tierces.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.8</b> Ne pas accéder pas aux comptes Salesforce d'autres Utilisateurs, ne pas les copier pas, ne pas les utiliser pas et ne fournir à personne vos informations de compte, y compris votre nom d'utilisateur et votre mot de passe.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.9</b> Protéger vos informations de compte et les traiter comme des données confidentielles. Vous ne devez les divulguer à  aucun tiers.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.4</b> BP se réserve en outre le droit de surveiller, d'intercepter, d'examiner et de supprimer le contenu des Utilisateurs si cela lui paraît nécessaire.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.5</b> Les informations et documents partagés dans le cadre de l'utilisation de l'Application peuvent être divulgués à des fins d'enquête ou de règlement de contentieux. 
+    </p>
+    <h3 class="slds-section-title--divider slds-m-top--large">
+        <b>4. Non-respect de la Politique</b>
+    </h3>
+    <p class="slds-m-top--large">
+        <b>4.1</b> Un Utilisateur qui enfreint les présentes Conditions d'utilisation ou d'autres Politiques associées peut être bloqué ou se voir autrement refuser l'accès à l'Application de manière temporaire ou définitive, sans préavis, et/ou faire l'objet de mesures disciplinaires, pouvant aller jusqu'à la résiliation de son contrat de travail.
+    </p>
+    <p class="slds-m-top--large">
+        <b>4.2</b> Si un Utilisateur pense avoir été témoin d'une violation de l'une des politiques répertoriées dans les présentes Conditions d'utilisation ou dans les Politiques associées, ou souhaite faire part d'une réclamation ou d'une question concernant le contenu de l'Application (y compris des préoccupations liées à la confidentialité) ou encore signaler des erreurs ou incohérences particulières, il peut envoyer un message à l'adresse <a href="mailto:myit@bp.com">myit@bp.com</a>.
+    </p>
+    <h3 class="slds-section-title--divider slds-m-top--large">
+        <b>5. Données personnelles et confidentialité des données</b>
+    </h3>
+    <p class="slds-m-top--large">
+        <b>5.1</b> Lors de la configuration d'un compte pour un individu, ce dernier devra fournir des données personnelles de base. Ces données incluront le nom, l'adresse e-mail et l'identifiant réseau BP (NTID). 
+    </p>
+    <p class="slds-m-top--large">
+        <b>5.2</b> Les données personnelles des Utilisateurs seront utilisées par BP dans le strict cadre de la Déclaration de confidentialité exposée à la clause 7, que tout Utilisateur doit lire attentivement, en se concentrant notamment sur les règles relatives au respect de la vie privée des autres utilisateurs de l'Application.
+    </p>
+    <h3 class="slds-section-title--divider slds-m-top--large">
+        <b>6. Droit applicable</b>
+    </h3>
+    <p class="slds-m-top--large">
+        <b>6.1</b>
+        <p>Utilisateurs salariés de BP France</p>
+        <p>Votre utilisation de l'Application, les présentes Conditions d'utilisation et toutes les obligations non contractuelles seront régies par et interprétées selon les lois françaises. Les litiges en lien avec les présentes Conditions d'utilisation seront soumis à la compétence exclusive des tribunaux de Paris.</p>
+        <p>Autres Utilisateurs</p>
+        <p>Votre utilisation de l'Application, les présentes Conditions d'utilisation et toutes les obligations non contractuelles seront régies par et interprétées selon les lois d'Angleterre et du Pays de Galles. Les litiges en lien avec les présentes Conditions d'utilisation seront soumis à la compétence exclusive des tribunaux d'Angleterre et du Pays de Galles.</p>
+    </p>
+    <p class="slds-m-top--large">
+        <b>6.2</b> Si une disposition ou une partie des dispositions contenues dans les présentes Conditions d'utilisation est jugée nulle, illégale ou inapplicable, dans quelque mesure que ce soit, par une autorité compétente, ladite disposition ou partie sera éliminée et les conditions restantes demeureront valides et applicables dans toute la mesure permise par la loi.
+    </p>
+    <h3 class="slds-section-title--divider slds-m-top--large">
+        <b>7. Déclaration de confidentialité</b>
+    </h3>
+    <p class="slds-m-top--large">
+        La présente Déclaration de confidentialité régit l'utilisation de l'Application et explique comment BP utilise vos données personnelles en lien avec l'Application, comment vos données sont protégées et comment vous pouvez faire valoir vos droits à la confidentialité des données.
+        Les données sur l'Application sont détenues et contrôlées par BP International Limited (« BP »). Salesforce (l'entreprise qui fournit l'Application) ne joue qu'un rôle de prestataire de services au nom de BP en rendant possible la publication des données de BP sur l'Application.
+		Salesforce Inc est une société basée aux Etats Unis d’Amérique. Les transferts de données vers les Etats Unis sont encadrés par la certification ‘Safe Harbor’ de Salesforce Inc.
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.1</b> Quelles données personnelles recueillons-nous ?
+    </p>
+    <p class="slds-m-top--large">
+        Pour accéder à l'Application, l'Utilisateur doit s'inscrire et fournir son nom, son NTID et son adresse e-mail BP.
+        Les Utilisateurs peuvent publier et échanger des messages en lien avec les activités de BP sur l'outil de communication de l'Application, appelé « Chatter ». Ces messages peuvent accessoirement comporter vos données personnelles, comme votre nom, vos compétences et des informations sur les projets et travaux BP auxquels vous participez. Les utilisateurs décident du type de contenu qu'ils souhaitent partager sur Chatter (pourvu que ce contenu soit conforme aux Conditions d'utilisation et aux Politiques de BP). Par conséquent, il est possible que d'autres types de données personnelles soient présents dans les messages instantanés.
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.2</b> Dans quel cadre utilisons-nous vos données personnelles ?
+    </p>
+    <p class="slds-m-top--large">
+        BP utilise les données personnelles que vous fournissez lors de votre inscription pour fournir le service Salesforce.
+        Vos données personnelles peuvent également être utilisées à des fins d'assistance technique et de dépannage (si vous avez un problème pour vous connecter à l'Application, par exemple).
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.3</b> Règles de confidentialité et principes régissant votre utilisation de Salesforce
+    </p>
+    <p class="slds-m-top--large">
+        Votre activité dans l'Application est régie par les principes de confidentialité suivants, auxquels vous êtes tenu de vous conformer :
+        · L'Application ne doit pas être utilisée pour publier ou échanger des informations ou documents personnels, y compris des informations sur la vie privée d'un individu.
+        · Il convient de respecter la vie privée et l'intégrité des personnes. Les individus ont des droits de confidentialité pour les informations ayant trait à leur vie professionnelle, ainsi qu'à leur vie personnelle. Faites preuve de discernement et de bon sens lorsque vous publiez des éléments sur Salesforce.
+        · Les utilisateurs de l'Application sont tenus de respecter toutes les Politiques BP associées (comme cela est prévu dans la section 3 des Conditions d'utilisation), y compris la Politique de confidentialité des données de BP et tous les documents contenant des directives pour les utilisateurs émis par BP en lien avec l'Application.
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.4</b> Qui peut accéder à vos données personnelles sur Salesforce et les consulter ?
+    </p>
+    <p class="slds-m-top--large">
+        Seuls les autres utilisateurs inscrits sur Salesforce au sein de BP peuvent voir vos données personnelles. Les messages publiés sur l'Application sont accessibles à tous les utilisateurs chez BP. Il est toutefois possible de limiter leur visibilité à un public spécifique en les publiant dans un groupe privé.
+        BP se réserve le droit d'accéder au contenu publié sur l'Application, de l'examiner et de le supprimer pour garantir la conformité avec les Conditions d'utilisation, la Déclaration de confidentialité et les Politiques BP associées, ainsi que dans le cadre d'enquêtes internes, de règlements de contentieux et si cela est nécessaire pour répondre à des demandes des autorités judiciaires, tribunaux, organismes de régulation et administrations publiques.
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.5</b> Partage de vos données personnelles avec des parties tierces
+    </p>
+    <p class="slds-m-top--large">
+        Vos données personnelles seront traitées comme des informations confidentielles par BP et ne seront transmises à aucune partie tierce, sauf si cela est exigé par la loi ou si les fournisseurs de services de BP en ont besoin pour procéder à des interventions de maintenance et d'assistance liées à des problèmes informatiques.
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.6</b> Cookies
+    </p>
+    <p class="slds-m-top--large">
+        Salesforce utilise des cookies pour authentifier les utilisateurs, pour mémoriser les préférences et les paramètres des utilisateurs, et pour effectuer des analyses générales sur le site (les individus ne sont pas identifiés par l'intermédiaire de ces cookies). En utilisant la plateforme Salesforce, vous acceptez l'utilisation des cookies dans ce cadre.
+        Pour plus d'informations sur les cookies (et pour savoir comment désactiver les cookies sur votre navigateur notamment), rendez-vous sur <a href="http://www.allaboutcookies.org/">www.allaboutcookies.org</a>.
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.7</b> Comment la sécurité de vos données personnelles est-elle garantie ?
+    </p>
+    <p class="slds-m-top--large">
+        Salesforce fournit à BP un réseau fermé, qui est défini par le domaine de messagerie électronique de BP. Les données de BP sont hébergées par Salesforce en Allemagne et sauvegardées dans un serveur au Royaume-Uni, mais Salesforce ne possède et ne contrôle pas les données de BP (y compris vos données personnelles) et ne peut utiliser ces données à ses propres fins.
+        Le fournisseur de services de BP, Infosys (basé en Inde), a accès aux données sur l'Application dans le seul but de fournir des services d'assistance informatique pour l'Application. Le contrat entre BP et Infosys impose des obligations strictes à Infosys en matière de confidentialité et de sécurité des données afin de garantir la sécurité de vos données personnelles. Infosys ne peut utiliser ces données à ses propres fins.
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.8</b> Comment pouvez-vous accéder à vos données personnelles, vérifier leur exactitude et les modifier, le cas échéant ?
+    </p>
+    <p class="slds-m-top--large">
+        Vous pouvez accéder à vos données personnelles liées à votre utilisation de l'Application à tout moment. Vous avez également le droit de faire supprimer vos données personnelles dans certaines circonstances.
+        Pour accéder à vos données personnelles ou solliciter leur correction ou leur suppression, vous devez adresser une demande à l'administrateur en envoyant un message à l'adresse <a href="mailto:myit@bp.com">myit@bp.com</a>.
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.9</b> Questions ou réclamations relatives à la confidentialité
+    </p>
+    <p class="slds-m-top--large slds-m-bottom--large">
+        Veuillez contacter l'administrateur en envoyant un message à l'adresse <a href="mailto:myit@bp.com">myit@bp.com</a> si vous avez des questions ou des réclamations relatives à la confidentialité.
+        La présente Déclaration de confidentialité et tous les litiges et réclamations découlant de ou en lien avec l'utilisation de données personnelles sur l'Application seront régis par la loi en vigueur en Angleterre et au Pays de Galles.
+    </p>
+</aura:component>

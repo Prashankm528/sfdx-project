@@ -1,0 +1,1 @@
+<aura:event type="APPLICATION" description="Event for reInit function in REIDP_Application Access Request"/>

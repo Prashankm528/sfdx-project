@@ -1,0 +1,66 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" description="CAJBP_EditObjectiveSwots">
+    <ltng:require styles="{!$Resource.AnimateCss}"/>
+
+    <aura:attribute name="record" type="Object" access="private"/>
+    <aura:attribute name="targetFields" type="String[]" default="Id, CAJBP_Joint_Business_Plan__c" access="private"/>
+    <aura:attribute name="error" type="String" access="private"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true" access="private"/>
+
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+
+    <force:recordData aura:id="recordLoader"
+            recordId="{!v.recordId}"
+            fields="{!v.targetFields}"
+            targetFields="{!v.record}"
+            targetError="{!v.error}"
+            recordUpdated="{!c.handleRecordUpdated}"/>
+
+    <!--Modal Header-->
+    <div class="modal-header slds-modal__header">
+        <h2 class="slds-text-heading--medium">Edit Objective SWOTs</h2>
+    </div>
+    <!--End Modal Header-->
+
+    <!--Modal Body-->
+    <div class="slds-modal__content slds-p-around_medium slds-scrollable">
+        <div class="slds-is-relative">
+            <div class="swots-container">
+                <aura:if isTrue="{!v.isLoading}">
+                    <lightning:spinner size="medium" alternativeText="Loading SWOTs ...."></lightning:spinner>
+                </aura:if>
+                <aura:if isTrue="{!not(empty(v.record))}">
+                    <div class="animated fadeIn">
+                        <c:cajbpObjectiveSwots aura:id="objective-swots"
+                            objectiveId="{!v.record.Id}"
+                            jbpId="{!v.record.CAJBP_Joint_Business_Plan__c}"
+                            onerror="{!c.error}"
+                            onsuccess="{!c.success}"
+                            onloaded="{!c.loaded}">
+                        </c:cajbpObjectiveSwots>
+                    </div>
+                </aura:if>
+            </div>
+        </div>
+    </div>
+    <!--End of Modal Body-->
+
+    <!--Modal Footer-->
+    <div class="modal-footer slds-modal__footer">
+        <lightning:button label="Cancel" variant="brand" onclick="{!c.cancel}" disabled="{!v.isLoading}"></lightning:button>
+        <lightning:button label="Save" variant="brand" onclick="{!c.save}" disabled="{!v.isLoading}"></lightning:button>
+    </div>
+    <!--End of Modal Footer-->
+
+    <aura:html tag="style">
+        .slds-p-around--medium {
+            padding: 0rem !important;
+        }
+        .slds-modal__content{
+            height:unset !important;
+            max-height: unset !important;
+        }
+        .cuf-content {
+            padding: 0 0rem !important;
+        }
+    </aura:html>
+</aura:component>

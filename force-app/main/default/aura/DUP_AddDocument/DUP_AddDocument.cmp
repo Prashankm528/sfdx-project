@@ -1,0 +1,302 @@
+<aura:component controller="DUP_AddDocumentListController" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" >
+    
+    <aura:attribute name="recordId" type="String" access="public"/>
+    <aura:attribute name="itemList" type="list"/>
+    <aura:attribute name="openModal" type="Boolean" default="false"/>
+    <aura:attribute name="modalNewDocStore" type="Boolean" access="public"/>
+    <aura:attribute name="groupExpanded" type="Boolean" default="false"/>
+    <aura:attribute name="counterCertified" type="Integer" default="0"/>
+    <aura:attribute name="body" type="Aura.Component[]" />
+    <aura:attribute name="contentDocument" type="ContentDocumentLink[]" access="public"/>
+    <aura:attribute name="fileList" type="object" />
+    <aura:attribute name="templateLookup" type="object" />
+    <aura:attribute name="contactLookup" type="object" />
+    <aura:attribute name="searchedObj" type="string" default=""/>
+    <aura:attribute name="selected" type="Boolean" default="false"/>
+    <aura:attribute name="conList" type="list"/>
+    <aura:attribute name="blurTimeout" type="Integer"/>
+    <aura:attribute name="titleMap" type="object"/>
+    <aura:attribute name="uiMap" type="list"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="newDocumentEvent" event="c:DUP_NewDocumentRequestAdded" action="{!c.handleNewDocumentEvent}"/>
+    <aura:handler name="LookupEventToParent" event="c:DUP_LookupEventToParent" action="{!c.handleEvent}"/>
+    
+    
+    <div class="{!'slds-backdrop ' + ((v.openModal) ? 'slds-backdrop_open' : 'slds-backdrop_close')}"></div>
+    
+    <aura:if isTrue="{!v.counterCertified > 0}">
+        <div class="slds-box slds-m-around_medium">
+            {!$Label.c.DUP_CertifiedTrueCopyInformation}
+        </div>
+    </aura:if>
+    
+    <table class="slds-table slds-scrollable slds-table_cell-buffer slds-no-row-hover dup-add-document-table" >
+        <colgroup>
+            <col class="dup-select-col"/>            
+            <col class="dup-document-name-col"/>
+            <col class="dup-certified"/>
+            <col class="dup-downloadable-template-col"/>
+            <col class="dup-counterparty-contact-col"/>
+            <col class="dup-view-description"/>
+        </colgroup>
+        <thead>
+            <tr class="slds-text-title_caps">
+                <th scope="col">
+                    <div class="slds-truncate" title="Select">Select</div>
+                </th>                
+                <th scope="col">
+                    <div class="slds-truncate" title="Name">Document Name</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Certified">Certified</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Template">Downloadable Document</div>
+                </th>
+                <th scope="col">
+                    <div title="Contact">Counterparty Contact</div>
+                </th>
+                <th scope="col">
+                    <div title="Description">View Description</div>
+                </th>
+            </tr>
+        </thead>
+    </table>
+    <aura:iteration items="{!v.titleMap}" var="mapKey" >
+        <div aura:id="{!mapKey.key}" class="slds-section" id="{!mapKey.key+'divHeader'}">
+            
+          <h3 class="slds-section__title">
+            <button id="{!mapKey.key}" class="slds-button slds-section__title-action" onclick="{!c.handleOnClick}">
+              <lightning:icon iconName="utility:switch" class="section-icon slds-section__title-action-icon slds-button__icon slds-button__icon_left " size="x-small" />
+              <span class="slds-truncate" title="Section Title" ><strong><p>{!mapKey.key}</p></strong></span>
+            </button>
+          </h3>
+            <div class="slds-section__content" id="{!mapKey.key}" >
+        <aura:iteration items="{!mapKey.value}" var="item" aura:id="storeRec" indexVar="key" >
+            <table class="slds-table slds-table_cell-buffer dup-add-document-table">
+                <colgroup>
+                    <col class="dup-select-col"/>            
+                    <col class="dup-document-name-col"/>
+                    <col class="dup-certified"/>
+                    <col class="dup-downloadable-template-col"/>
+                    <col class="dup-counterparty-contact-col"/>
+                    <col class="dup-view-description"/>
+                </colgroup>
+                <tbody>
+                    <aura:if isTrue="{!or(item.DUP_Document_Status__c == 'Created',item.DUP_Document_Status__c == 'Requested')}">                    
+                        <tr class="dup-document-row slds-hint-parent">
+                            <td>
+                                <div class="slds-truncate" id="{!item.Id}">
+                                    <lightning:input onchange="{!c.setChanged}" type="checkbox" aura:id="checkboxRequested" value="{!item.DUP_Requested__c}" checked ="{!(item.DUP_Requested__c)}" disabled="{!item.DUP_Options__c == 'Mandatory'}" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate" id="{!item.Id}">
+                                    <lightning:input onchange="{!c.setChanged}" type="text" fieldName="DUP_Document_Name__c" variant="label-hidden"  value="{!item.DUP_Document_Name__c}"  />
+                                </div>
+                            </td>
+                            <td>
+                                <div id="{!item.Id}">
+                                    <lightning:input type="checkbox" aura:id="checkboxCertified" onchange="{!c.displayCertified}" value="{!item.DUP_Certified_True_Copy__c}" checked ="{!(item.DUP_Certified_True_Copy__c)}" />
+                                </div>
+                            </td>
+                            <!--Added by Sunaiyana for PBI-->
+                            <td>
+                                <aura:if isTrue="{!!item.DUP_ManualUpload__c}">
+                                    
+                                    <div class="slds-form-element">
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-combobox_container slds-has-selection">
+                                                <div aura:id="toOpen" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                                                    <div class=" slds-input-has-icon slds-input-has-icon_right" role="none">
+                                                        <div>
+                                                            <aura:if isTrue="{!and(item.DUP_Document_Template__c !=null,item.DUP_Document_Template__c != '')}">
+                                                                <div aura:id="lookup-pill" class="slds-pill-container" >
+                                                                    <lightning:pill name="{!item}" aura:id="DUP_Document_Template__c" class="pillSize" label="{!item.DUP_Document_Template__r.Name}" href="{!'/'+(item.DUP_Document_Template__c)}" onremove="{! c.handleRemoveOnly }"/>
+                                                                </div>
+                                                                <aura:set  attribute="else">
+                                                                    <div aura:id="input" class="slds-p-top_none" >
+                                                                        <lightning:input aura:id="DUP_Document_Template__c" class="slds-p-top_none" variant="label-hidden" name="{!item}" value="{!item.searchTextTemplate}" onchange="{!c.onchange}" id="{!item}" onblur="{!c.onFocusOut}"/>
+                                                                        
+                                                                        <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right ">
+                                                                            <span class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default" aria-hidden="true">
+                                                                                <lightning:icon class="" iconName="utility:search" size="x-small" alternativeText="Search" />
+                                                                            </span>
+                                                                        </span>
+                                                                    </div>
+                                                                </aura:set>
+                                                            </aura:if>
+                                                        </div>
+                                                    </div>
+                                                    <div id="listbox-id-1" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click dup-listTopContainer" role="listbox">
+                                                        <aura:if isTrue="{!and(item.searchTextTemplate !=null,item.searchTextTemplate != '')}">
+                                                            <ul class="slds-listbox slds-listbox_vertical dup-listContainer" role="presentation">
+                                                                <aura:iteration items="{!v.conList}" var="listItem">
+                                                                    <c:DUP_ChildLookUp icon="custom:custom18" myData="{!listItem}" itemId="{!item.Id}" objectName="DUP_Document_Template__c" toHide="true"/>
+                                                                </aura:iteration>
+                                                            </ul>
+                                                        </aura:if>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <aura:set attribute="else">
+                                        <div class="slds-truncate">
+                                            <aura:iteration items="{!v.fileList}"  var="fileKey">
+                                                <aura:if isTrue="{!fileKey.docStoreId==item.Id}">
+                                                    <aura:iteration items="{!fileKey.files}" var="files">
+                                                        <a href="" id="{!files.fileId}" onclick="{!c.previewFile}"><div class="slds-truncate fileNames"><li>{!files.title}</li></div></a>
+                                                    </aura:iteration>
+                                                </aura:if>
+                                            </aura:iteration>
+                                        </div>
+                                        
+                                    </aura:set>
+                                </aura:if>
+                            </td>
+                            <!--End of code added by Sunaiyana for PBI-->
+                            <td>
+                                <!--<lightning:input type="lookup" fieldName="DUP_Counterparty_Contact_Name__c" variant="label-hidden" aura:id="contact"  value="{!item.DUP_Counterparty_Contact_Name__c}" />-->
+                                <div class="slds-form-element">
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-combobox_container slds-has-selection">
+                                            <div aura:id="toOpen" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                                                <div class=" slds-input-has-icon slds-input-has-icon_right" role="none">
+                                                    
+                                                    <div>
+                                                        
+                                                        <aura:if isTrue="{!and(item.DUP_Counterparty_Contact_Name__c !=null,item.DUP_Counterparty_Contact_Name__c != '')}">
+                                                            <div aura:id="lookup-pill" class="slds-pill-container" >
+                                                                <lightning:pill aura:id="DUP_Counterparty_Contact__c" class="pillSize" name="{!item}" label="{!item.DUP_Counterparty_Contact_Name__r.Name}" href="{!'/'+(item.DUP_Counterparty_Contact_Name__c)}" onremove="{! c.handleRemoveOnly }"/>
+                                                            </div>
+                                                            <aura:set  attribute="else">
+                                                                <div aura:id="input" class="slds-p-top_none" >
+                                                                    <lightning:input aura:id="DUP_Counterparty_Contact__c" class="slds-p-top_none" variant="label-hidden" name="{!item}" value="{!item.searchText}" onchange="{!c.onchange}" id="{!item}" onblur="{!c.onFocusOut}"/>
+                                                                    
+                                                                    <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right ">
+                                                                        <span class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default" aria-hidden="true">
+                                                                            <lightning:icon class="" iconName="utility:search" size="x-small" alternativeText="Search" />
+                                                                        </span>
+                                                                    </span>
+                                                                </div>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </div>
+                                                </div>
+                                                <div id="listbox-id-1" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click dup-listTopContainer" role="listbox">
+                                                    <aura:if isTrue="{!and(item.searchText !=null,item.searchText != '')}">
+                                                        <ul class="slds-listbox slds-listbox_vertical dup-listContainer" role="presentation">
+                                                            <aura:iteration items="{!v.conList}" var="listItem">
+                                                                <c:DUP_ChildLookUp cmpName="Review" icon="custom:custom56" myData="{!listItem}" itemId="{!item.Id}" objectName="DUP_Counterparty_Contact__c" toHide="false"/>
+                                                            </aura:iteration>
+                                                        </ul>
+                                                    </aura:if>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <a href="" onclick="{!c.openDescription}" id="{!key}">View Description</a>
+                                </div>
+                            </td>
+                            <div class="slds-hide" id="{!item.Id}">
+                                <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                                    <div class="slds-modal__container">
+                                        <header class="slds-modal__header">
+                                            <lightning:buttonIcon alternativeText="Close" iconName="utility:close" onclick="{!c.closeDescription}" variant="bare" size="large" class="slds-modal__close slds-button_icon-inverse" />
+                                            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Description</h2>
+                                        </header>
+                                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                            <lightning:inputRichText value="{!item.DUP_Description__c}" placeholder="Enter Description"/>
+                                        </div>
+                                        <footer class="slds-modal__footer">
+                                            <lightning:button variant="brand" label="Close" onclick="{!c.closeDescription}"/>
+                                        </footer>
+                                    </div>
+                                </section>
+                            </div>
+                        </tr>
+                        <aura:set attribute="else">
+                            <tr class="dup-document-row slds-hint-parent">
+                                <td>
+                                    <div class="slds-truncate">
+                                        <lightning:input type="checkbox" value="{!item.DUP_Requested__c}" checked ="{!(item.DUP_Requested__c)}" disabled="true" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">
+                                        <lightning:inputField fieldName="DUP_Document_Name__c" variant="label-hidden"  value="{!item.DUP_Document_Name__c}" disabled="true" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <lightning:input type="checkbox" value="{!item.DUP_Certified_True_Copy__c}" checked ="{!(item.DUP_Certified_True_Copy__c)}" disabled="true" />
+                                    </div>
+                                </td>                            
+                                <td>
+                                    <div >
+                                        <lightning:inputField fieldName="DUP_Document_Template__c" variant="label-hidden" value="{!item.DUP_Document_Template__c}" disabled="true" /> 
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <lightning:inputField fieldName="DUP_Counterparty_Contact_Name__c" variant="label-hidden" aura:id="contact"  value="{!item.DUP_Counterparty_Contact_Name__c}" disabled="true"/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <a href="" onclick="{!c.openDescription}" id="{!key}">View Description</a>
+                                    </div>
+                                </td>
+                                <div class="slds-hide">
+                                    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                                        <div class="slds-modal__container">
+                                            <header class="slds-modal__header">
+                                                <lightning:buttonIcon alternativeText="Close" iconName="utility:close" onclick="{!c.closeDescription}" variant="bare" size="large" class="slds-modal__close slds-button_icon-inverse" />
+                                                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Description</h2>
+                                            </header>
+                                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                                <lightning:inputRichText value="{!item.DUP_Description__c}" placeholder="Enter Description"/>
+                                            </div>
+                                            <footer class="slds-modal__footer">
+                                                <lightning:button variant="brand" label="Close" onclick="{!c.closeDescription}"/>
+                                            </footer>
+                                        </div>
+                                    </section>
+                                </div>
+                            </tr>
+                        </aura:set> 
+                    </aura:if>                   
+                </tbody>
+            </table>
+            <!--</lightning:recordEditForm>--> 
+            </aura:iteration>
+      </div>
+      </div>
+      
+    </aura:iteration>
+    
+    
+    <div class="slds-text-align--center">
+        <lightning:button aura:id="submit" type="submit" label="Save" variant="brand" class="slds-m-around--small" onclick="{!c.doUpdate}"/>
+        <lightning:button label="Add Request" onclick="{!c.addRequest}"/>
+    </div>
+    
+    <aura:renderIf isTrue="{!v.modalNewDocStore}">
+        <div>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                {!v.body}
+                <!--<c:DUP_NewDocumentRequest parent="{! this }" modalNewDocStore="{!v.modalNewDocStore}" openModal="{!v.openModal}" recordId="{!v.recordId}" /> 
+            -->
+            </section>
+        </div>
+    </aura:renderIf>
+    
+    
+</aura:component>

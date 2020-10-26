@@ -1,0 +1,109 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller ="PCRM_AccountHierarchyController" >
+	
+    <!--registeering Event in child Component-->
+    <aura:registerEvent name = "SelectedAccountsEvent"  type = "c:PCRM_SelectedAccounts" /> 
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="OpportunityId" type="string" />
+    <aura:attribute name="gridColumns" type="List" access="PRIVATE" />
+    <aura:attribute name="gridData" type="Object" />
+    <aura:attribute name="gridExpandedRows" type="List" />
+    <aura:attribute name="isLoading" type="Boolean" default="false" />
+
+    <aura:attribute name="hasGrandParent" type="Boolean" default="true" />
+    
+    <!-- map of child and parent row keyfield-->
+    <aura:attribute name="MapOfChildParentKeyfield" type="Map" />
+    
+    <!-- Available existing Accounts-->
+    <aura:attribute name="Unformated_ExistingAccountsOnLeft" type="OBJECT" />
+    
+    <!-- Available existing Accounts-->
+    <aura:attribute name="Unformated_ExistingAccountsOnRight" type="OBJECT" />
+    
+    <aura:attribute name="isRightTreeGreed" type="Boolean" />
+    
+    <!-- map of each row's Keyfield and its detail-->
+    <aura:attribute name="MapOfRowKeyField_RowDetail" type="Map" />
+
+    <!-- Account on which opportunity is created-->
+    <aura:attribute name="parentAccountId" type="string" />
+    
+    <aura:attribute name="selectedIds" type="List" />
+
+    <aura:attribute name="renderArrows" type="Boolean"   />
+
+    <!--List of Accounts to passed from Left to right without hierarchy format-->
+    <aura:attribute name="unformattedGridData" type="List" />
+    
+    
+    <!--<aura:attribute name="recordId" type="String" />-->
+
+     <div class="SpinnerClass">
+            <aura:if isTrue="{! v.isLoading }">
+            	<lightning:spinner alternativeText="Loading" />
+            </aura:if>
+      </div>
+    
+    <!--<lightning:card >-->
+        <!--<div  class="slds-box">-->
+        <!--<div class="abc">  --> 
+        <!--<aura:set attribute="title">
+            <lightning:icon iconName="standard:hierarchy" size="small"/>
+            {! v.title }
+        </aura:set>
+        <aura:set attribute="actions">
+            <lightning:button label="Search"/>
+        </aura:set>-->
+          
+            <div class="treeGridBox" >
+                           
+                <lightning:treeGrid 
+                                    aura:id="treegrid_async"
+                                    columns="{! v.gridColumns }"
+                                    data="{! v.gridData }"
+                                    expandedRows="{! v.gridExpandedRows }"
+                                    keyField="varKeyField"
+                                    selectedRows ="{!v.selectedIds}"
+                                    onrowselection = "{!c.handleRowSelection}"
+                                    ontoggle="{! c.handleRowToggle }"
+                                    
+                                    />
+                
+                          <!--     <lightning:treeGrid 
+                                                    aura:id="treegrid_async"
+                                                    columns="{! v.gridColumns }"
+                                                    data="{! v.gridData }"
+                                                    expandedRows="{! v.gridExpandedRows }"
+                                                    keyField="varKeyField"
+                                                    selectedRows ="{!v.selectedIds}"
+                                                    
+                                                    ontoggle="{! c.handleRowToggle }"
+                                                    onrowaction ="{!c.handleRowAction}"
+                                                    />-->
+                           </div> 
+                           
+            <!--<aura:renderIf isTrue="{!v.renderArrows}">
+                <lightning:buttonIcon size="large"  variant="brand" iconName="utility:right" onclick="{! c.onRightArrowClick }" alternativeText="Settings" title="Settings" />
+                <lightning:buttonIcon size="large"  variant="brand" iconName="utility:left" onclick="{! c.onLeftArrowClick }" alternativeText="Settings" title="Settings" />
+                <aura:set attribute="else">
+                    <div></div>
+                </aura:set>
+            </aura:renderIf> -->
+    
+                    
+               <!--<div class="paddingLeft">
+                    <aura:renderIf isTrue="{!v.renderSaveButton}">
+                       <lightning:button disabled="false"  onclick="{! c.OnclickSave }" label="Save" iconName="utility:like" variant="success" iconPosition="left"  />
+                           <aura:set attribute="else">
+                           <div></div>
+                           </aura:set>
+                   </aura:renderIf>
+              </div>  -->
+              
+       <!--</div>  -->     
+       <!--</div>-->
+    <!--</lightning:card>-->
+    
+  
+</aura:component>

@@ -1,0 +1,84 @@
+<!--
+ * @author Nazim Aliyev
+ * @company Bluewolf, an IBM Company
+ * @date 2/2018
+ *
+ * This is a component is used to search for Paydiant merchant locations and update mobile enabled status 
+ * 
+ -->
+<aura:component controller="REIDP_PAStoreSearchController">
+    <aura:attribute name="acceptanceLocation" type="Object" />
+    <aura:attribute name="mobileEnabled" type="Boolean" />
+    <aura:attribute name="goLiveDate" type="String" />
+    <aura:attribute name="newGoLiveDate" type="Date" />
+    <aura:attribute name="editMode" type="Boolean"  access="private" default="false"/>
+
+    <lightning:spinner aura:id="spinner" variant="brand" class="slds-hide" size="large"/>
+	<lightning:card title="{!v.acceptanceLocation.name}" iconName="standard:account">
+            <aura:set attribute="actions">
+                <aura:if isTrue="{!not(v.editMode)}">
+                    <lightning:button label="Edit" onclick="{! c.handleEdit }" />
+                    <aura:set attribute="else">
+                        <lightning:button variant="destructive" label="Cancel" onclick="{! c.handleCancel }" />
+                        <lightning:button variant="success" label="Save" onclick="{! c.handleSave }" />
+                    </aura:set>
+                </aura:if>
+            </aura:set>
+            <p class="slds-p-horizontal_small">
+                <lightning:layout horizontalAlign="spread" multipleRows="true">
+                    <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                        <ui:outputText class="slds-form-element__label" value="Store Code" /><br/>
+                        <ui:outputText class="slds-form-element__static" value="{!v.acceptanceLocation.storeCode}" />  
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small"> 
+                        <ui:outputText class="slds-form-element__label" value="Secondary Identifier" /><br/>
+                        <ui:outputText class="slds-form-element__static" value="{!v.acceptanceLocation.secondaryIdentifier}" />                   	         
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small"> 
+                        <ui:outputText class="slds-form-element__label" value="Mobile Enabled" /><br/>
+                        <aura:if isTrue="{!v.editMode}">
+                            <lightning:input type="toggle" variant="label-hidden" label="Mobile Enabled" name="togglevalue" checked="{!v.mobileEnabled}" />
+                            <aura:set attribute="else">
+                                <lightning:badge label="{!if(v.mobileEnabled, 'Active', 'Inactive')}" 
+                                                 class="{! 'slds-badge_inverse ' + if(v.mobileEnabled, 'status-badge-active') }" />
+                            </aura:set>
+                        </aura:if>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                        <ui:outputText class="slds-form-element__label" value="Go Live Date" /><br/>
+                        <aura:if isTrue="{!v.editMode}">
+                            <lightning:input type="date" value="{!v.newGoLiveDate}" variant="label-hidden" label="Go Live Date" />
+                            <aura:set attribute="else">
+                                <ui:outputText class="slds-form-element__static" value="{!v.goLiveDate}"/>
+                            </aura:set>
+                        </aura:if>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                        <ui:outputText class="slds-form-element__label" value="Email" /><br/>
+                        <lightning:formattedEmail value="{!v.acceptanceLocation.email}" label="{!v.acceptanceLocation.email}" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                        <ui:outputText class="slds-form-element__label" value="Phone" /><br/>
+                        <lightning:formattedPhone value="{!v.acceptanceLocation.phone}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                        <ui:outputText class="slds-form-element__label" value="Location" /><br/>
+                        <aura:if isTrue="{!v.editMode}">
+                            <lightning:inputLocation label="Location" variant="label-hidden" latitude="{!v.acceptanceLocation.latitude}" longitude="{!v.acceptanceLocation.longitude}"/>
+                            <aura:set attribute="else">
+                                <lightning:formattedLocation latitude="{!v.acceptanceLocation.latitude}" longitude="{!v.acceptanceLocation.longitude}"/>
+                            </aura:set>
+                        </aura:if>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                        <ui:outputText class="slds-form-element__label" value="Address" /><br/>
+                        <lightning:formattedAddress street="{!v.acceptanceLocation.address1}"
+                                                    city="{!v.acceptanceLocation.city}"
+                                                    country="{!v.acceptanceLocation.countryCode}"
+                                                    province="{!v.acceptanceLocation.state}"
+                                                    postalCode="{!v.acceptanceLocation.zipCode}"/>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </p>
+        </lightning:card>
+</aura:component>

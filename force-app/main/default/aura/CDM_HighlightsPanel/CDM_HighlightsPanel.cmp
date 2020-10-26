@@ -1,0 +1,128 @@
+<aura:component controller="CDM_CreditDebitNoteFormController" 
+                implements="flexipage:availableForRecordHome,force:hasRecordId" 
+                access="global" >
+    
+    <aura:attribute name="comments" type="String"/>
+    <aura:attribute name="approvalStatus" type="String"/>
+    <aura:attribute name="approverId" type="String"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="cdmRecord" type="Object"/>
+    <aura:attribute name="validApprover" type="Boolean" default="false"/>
+    <aura:attribute name="approversList" type="Sobject[]"/>
+    <lightning:spinner aura:id="mySpinner" alternativeText="Processing.." title="Processing.." variant="brand" size="large" class="slds-hide"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="c:CDM_HideSubmitBtnEvt" action="{!c.hideSubmitBtn}"/>
+    <aura:attribute name="recordEditAccess" type="Boolean" default="false"/>
+     <ltng:require styles="{!$Resource.CDM_MultilineToastCSS}" />
+    <!-- record hightlight panel  -->
+        
+        <div class="slds-page-header slds-page-header_record-home">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container slds-icon-standard-opportunity">
+                                <lightning:icon iconName="custom:custom63" alternativeText="CDM Eform"/>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span>CDM Credit Debit Note</span>
+                                        <span style="font-weight: bold;" class="slds-text-heading_large slds-text-title_bold" >
+                                            <br></br>{!v.cdmRecord.Name}
+                                            <!--<lightning:outputField style="font-weight: bold;" class="slds-text-heading_large slds-text-title_bold" fieldName="Name" variant="label-hidden"/> -->
+                                        </span>
+                                    </h1>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-page-header__col-actions">
+                    <div class="slds-page-header__controls">
+                        
+                        <div class="slds-page-header__control"> 
+                            <aura:if isTrue="{!and(v.recordEditAccess, (v.cdmRecord.CDM_Form_Status__c == 'Draft' || v.cdmRecord.CDM_Form_Status__c == 'Rejected' || v.cdmRecord.CDM_Form_Status__c == 'Failed'))}">
+                                <lightning:button aura:id="sbutton" label="Submit for Approval" title="Neutral action" onclick="{! c.submitForApproval }" class="test"/>
+                               
+                                <!--<button class="slds-button slds-button_neutral" onclick="{!c.submitForApproval}">Submit for Approvals</button>  -->
+                            </aura:if>
+                            
+                            <aura:if isTrue="{!v.recordEditAccess}">
+                                <lightning:button aura:id="clone" label="Clone" title="Neutral action" onclick="{! c.onCloneAction }" class="test"/>
+                                
+                            </aura:if>  
+                          </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__row slds-page-header__row_gutters">
+                <div class="slds-page-header__col-details">
+                    
+                    <ul class="slds-page-header__detail-row">
+                        
+                        <li class="slds-page-header__detail-block">
+                            <div class="slds-m-left_medium">
+                                <div class="slds-text-title slds-truncate" title="Field 1">CDM Form Status</div>
+                                <div class="slds-truncate" title="">
+                                  {!v.cdmRecord.CDM_Form_Status__c}
+                                </div>
+                            </div> </li>
+                        
+                    </ul>
+                    
+                </div>
+            </div>
+        </div>
+     
+    
+    <!-- approval modal box -->
+    <div class="slds-hide" style="height: 640px;" id="recMadal">
+        <section role="dialog" 
+                 tabindex="-1" 
+                 aria-labelledby="modal-heading-01" 
+                 aria-modal="true" 
+                 aria-describedby="modal-content-id-1" 
+                 class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                            title="Close" onclick="{!c.closeModal}">
+                        
+                        
+                        <lightning:Icon iconName="utility:close"   class="whiteColor" alternativeText="Close" /> 
+                    </button>
+                    <div class="slds-page-header__name">
+                        <div class="slds-page-header__name-title ">
+                            <h1>
+                                <span class="slds-page-header__title slds-hyphenate" title=" Approvers Confirmation"> Submit for Approval</span>
+                            </h1>
+                        </div>
+                    </div>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    
+                    <div class="slds-m-left_xx-large">
+                        <aura:if isTrue="{!v.validApprover}">
+                            <lightning:textarea name="input1" label="Comments" value="{!v.comments}" />
+                            
+                            
+                        </aura:if> 
+                    </div>
+                    
+                </div>
+                  
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="brand"  label="Submit" title="Submit" onclick="{! c.submit }" />
+                    <lightning:button variant="neutral" onclick="{!c.closeModal}" >Close </lightning:button>         
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+
+</aura:component>

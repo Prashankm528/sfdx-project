@@ -1,0 +1,5 @@
+<aura:event type="APPLICATION" description="hide submit for approval button when edit record in record page layout" >
+    <aura:attribute name="recordId" type="String"/>
+   <aura:attribute name="btnFlag" type="Boolean" default="false"/>
+   
+</aura:event>

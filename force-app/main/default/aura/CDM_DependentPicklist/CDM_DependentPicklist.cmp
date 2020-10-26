@@ -1,0 +1,43 @@
+<!-- CDM_DependentPicklist Component, which is used for show dependent picklist with values  -->
+
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global"
+                controller="CDM_DepedentPicklist">
+    <!-- call doInit function on component load -->  
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+    
+    <!-- aura attributes-->  
+    <aura:attribute name="listControllingValues" type="list" default="[]" description="to store controller field values"/>
+    <aura:attribute name="listDependingValues" type="list" default="['--- None ---']" description="to store dependent field values"/>
+    <aura:attribute name="depnedentFieldMap" type="map" description="map to store dependent values with controlling value"/>
+    <aura:attribute name="bDisabledDependentFld" type="boolean" default="true"/> 
+    
+    <aura:attribute name="objDetail" type="CDM_Credit_Debit_Note__c" default="{'sobjectType' : 'CDM_Credit_Debit_Note__c'}"/>
+    <aura:attribute name="controllingFieldAPI" type="string" default="Country__c" description="store field API name of Controller field"/>
+    <aura:attribute name="dependingFieldAPI" type="string" default="Company_Code__c" description="store field API name of dependent field"/>
+    
+    <!--Controller Field-->
+    <lightning:layoutItem size="12" padding="around-small">    
+        <lightning:select name="controllerFld"
+                          value="{!v.objDetail.CDM_Country__c}"
+                          label="Country"
+                          onchange="{!c.onControllerFieldChange}">
+            <aura:iteration items="{!v.listControllingValues}" var="val">
+                <option value="{!val}">{!val}</option>
+            </aura:iteration>
+        </lightning:select>
+    </lightning:layoutItem>
+    
+    <!--Dependent Field-->
+    <lightning:layoutItem size="12" padding="around-small">
+        <lightning:select name="dependentFld"
+                          value="{!v.objDetail.CDM_Company_Code__c}"
+                          label="City"
+                          disabled="{!v.bDisabledDependentFld}">
+            <aura:iteration items="{!v.listDependingValues}" var="val">
+                <option value="{!val}">{!val}</option>
+            </aura:iteration>
+        </lightning:select>
+    </lightning:layoutItem>
+    
+</aura:component>

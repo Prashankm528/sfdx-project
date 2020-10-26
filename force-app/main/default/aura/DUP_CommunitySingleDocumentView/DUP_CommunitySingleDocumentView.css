@@ -1,0 +1,60 @@
+/*****************************************************************************************
+*       Date:        19Set2019
+*       Author:      Alessandro Miele - IBM
+*       Description: Css for DUP_CommunitySingleDocumentView
+*****************************************************************************************/
+
+ .THIS .red svg {
+    fill: red;
+}
+
+.THIS .green svg {
+    fill: green;
+}
+
+.THIS .orange svg {
+    fill: orange;
+}
+
+.THIS .dup-badge {
+    width: 35px;
+    border: 1px solid LightGray;
+}
+
+.THIS .dup-badge-text__red {
+    color: red;
+}
+
+.THIS .dup-badge-text__blue {
+    color: blue;
+}
+
+.THIS .dup-badge-text__dimgray {
+    color: dimgray;
+}
+
+.THIS .greenOne{
+     background: green;
+    fill: green
+}
+
+.THIS .blueone svg{
+    background:blue;
+}
+
+.THIS .dup-grid {
+    width : 100%;
+}
+
+.THIS .commentArea {
+    background : #ffffff;
+    height : 90px;
+}
+
+.THIS .commentArea label{
+    display : none;
+}
+
+.THIS .commentArea textarea{
+    height : 90px;
+}

@@ -1,0 +1,129 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction,forceCommunity:availableForAllPageTypes" controller="LCP_RpProposalApprovalsController" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" /> 
+    <aura:attribute name="rpProposalId" type="String" default="{!v.recordId}"/>
+    <aura:attribute name="rpRec" type="LCP_Reporting_Period__c"/>
+    <aura:attribute name="rpRecId" type="String"/>
+    <aura:attribute name="tobeRevProposalRec" type="LCP_Reporting_Period_Proposal__c"/>
+    <aura:attribute name="rpfieldNames" type="String[]"/>
+    <aura:attribute name="rpPropfieldNames" type="String[]"/>
+    <aura:attribute name="labelList" type="String[]"/>
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="approvedRpProposals" type="LCP_Reporting_Period_Proposal__c[]"/>
+    <aura:attribute name="noToBeReviewedRecordsFound" type="String"/>
+    <aura:attribute name="noApprovedProposalRecordsFound" type="String"/>
+    <aura:attribute name="isBpManager" type="Boolean" default="false"/>
+    <aura:handler event="force:showToast" action="{!c.doInit}"/>
+    <aura:attribute name="today" type="Date" />
+    <aura:attribute name="activeSections" type="List" default="['Current Value','Proposed Value','Proposal History']" />
+    
+    <!-- Accordians Section Start -->
+    <lightning:accordion allowMultipleSectionsOpen="true" activeSectionName="{!v.activeSections }">
+        <!-- Current Value Section -->
+        <div class="slds-scrollable" style="height:23rem;width:80rem">
+            
+            <lightning:accordionSection name="Current Value" label="Current Value">
+                <!--Displaying the Current RP record Values in the View mode -->
+                <aura:if isTrue="{! not( empty( v.rpRec.Id ) ) }">
+                    <lightning:recordViewForm recordId="{!v.rpRec.Id}" objectApiName="LCP_Reporting_Period__c" >
+                        
+                        <lightning:layout multipleRows="false">
+                            <aura:iteration items="{!v.rpfieldNames}" var="fieldapiNames">
+                                <lightning:layoutItem padding="around-small" size="12"  class="alignfields">
+                                    <lightning:outputField fieldName="{!fieldapiNames}"/><br></br>
+                                </lightning:layoutItem>
+                            </aura:iteration>
+                        </lightning:layout>
+                        
+                    </lightning:recordViewForm>
+                </aura:if>
+                
+                <!--Edit form of RP Records (This section is used for developement purpose and not showing in the UI level)-->
+                <aura:if isTrue="{! not( empty( v.rpRec.Id ) ) }">
+                    <lightning:recordEditForm  aura:id="rpform" recordId="{!v.rpRec.Id}" objectApiName="LCP_Reporting_Period__c" >
+                        <div class="hide">
+                            <aura:iteration items="{!v.rpfieldNames}" var="fieldapiNames">
+                                <lightning:InputField fieldName="{!fieldapiNames}"/><br></br>
+                            </aura:iteration>
+                            <lightning:InputField fieldName="LCP_Channel__c" />
+                        </div>
+                    </lightning:recordEditForm>
+                </aura:if>
+            </lightning:accordionSection>
+            
+            <!-- Proposal Values Section -->
+            <lightning:accordionSection name="Proposed Value" label="Proposed Value" >
+                
+                <!--Displaying the Proposal Records Section -->
+                <aura:if isTrue="{! not( empty( v.tobeRevProposalRec.Id ) ) }">
+                    <lightning:recordViewForm recordId="{!v.tobeRevProposalRec.Id}" objectApiName="LCP_Reporting_Period_Proposal__c"> 
+                        <lightning:messages />
+                        
+                        <lightning:layout multipleRows="false">
+                            <aura:iteration items="{!v.rpPropfieldNames}" var="rpProposalApiNames">
+                                <lightning:layoutItem padding="around-small" size="12"  class="alignfields">
+                                    <lightning:OutPutField fieldName="{!rpProposalApiNames}" />
+                                </lightning:layoutItem>
+                            </aura:iteration>
+                        </lightning:layout>
+                        
+                    </lightning:recordViewForm>
+                </aura:if>
+                
+                <!--Submitting the Reviewed RP Proposal Records -->
+                <aura:if isTrue="{! not( empty( v.tobeRevProposalRec.Id ) ) }">
+                    <lightning:recordEditForm aura:id="rpproposalform" recordId="{!v.tobeRevProposalRec.Id}" objectApiName="LCP_Reporting_Period_Proposal__c" onsubmit="{!c.onReviewedRecordSubmit}" onsuccess="{!c.onReviewedRecordSuccess}">
+                        <lightning:messages />
+                        <div class="hide">
+                            <lightning:InputField fieldName="LCP_Status__c" />
+                            <lightning:InputField fieldName="Approved_Reviewed_Date__c" />
+                        </div>
+                        <aura:if isTrue="{!v.isBpManager}">
+                            <lightning:button class="slds-m-top_small" variant="brand" type="submit" name="Review and Add to History" label="Review and Add to History"/>
+                        </aura:if>
+                    </lightning:recordEditForm>
+                </aura:if>
+                
+                <!--Submit the Approved RP Proposal Records -->
+                <aura:if isTrue="{! not( empty( v.tobeRevProposalRec.Id ) ) }">
+                    <lightning:recordEditForm aura:id="rpproposalApprovedform" recordId="{!v.tobeRevProposalRec.Id}" objectApiName="LCP_Reporting_Period_Proposal__c" onsubmit="{!c.onApprovedRecordSubmit}" onsuccess="{!c.onApprovedRecordSuccess}">
+                        <lightning:messages />
+                        <div class="hide">
+                            <aura:iteration items="{!v.rpPropfieldNames}" var="rpProposalApiNames">
+                                <lightning:InputField fieldName="{!rpProposalApiNames}" />
+                            </aura:iteration>
+                            <lightning:InputField fieldName="LCP_Channel__c" />
+                            <lightning:InputField fieldName="Approved_Reviewed_Date__c" />
+                        </div>
+                        <aura:if isTrue="{!v.isBpManager}">
+                            <lightning:button class="slds-m-top_small modify" variant="brand" type="submit" name="Approve and Add to History" label="Approve and Add to History" />
+                        </aura:if>
+                    </lightning:recordEditForm>
+                </aura:if>
+                
+                <!--Populated the below error message when there are no "To be reviewed" records in RP Proposal-->
+                <aura:if isTrue="{!  empty( v.tobeRevProposalRec.Id  ) }">
+                    <center>{!v.noToBeReviewedRecordsFound}</center>
+                    <aura:if isTrue="{!v.isBpManager}">
+                        <lightning:button class="slds-m-top_small" variant="brand" name="Edit Reporting Period" label="Edit Reporting Period" onclick="{!c.editRpRec}"/>
+                    </aura:if>
+                </aura:if>
+            </lightning:accordionSection>
+            
+        </div>
+        <!-- Proposal History Accordian Section -->
+        <lightning:accordionSection name="Proposal History" label="Proposal History">
+            <!-- Displaying the Approved and Reviewed RP Proposal Records in the Datatable-->
+            <aura:if isTrue="{! not( empty( v.approvedRpProposals ) ) }">
+                <lightning:datatable data="{! v.approvedRpProposals }"
+                                     columns="{! v.columns }"
+                                     keyField="Id"
+                                     hideCheckboxColumn="true"/>
+            </aura:if>
+            <aura:if isTrue="{! empty( v.approvedRpProposals )  }">
+                <center>{!v.noApprovedProposalRecordsFound}</center>
+            </aura:if>
+        </lightning:accordionSection>
+        
+    </lightning:accordion> 
+    <!-- Accordians Section End -->
+</aura:component>

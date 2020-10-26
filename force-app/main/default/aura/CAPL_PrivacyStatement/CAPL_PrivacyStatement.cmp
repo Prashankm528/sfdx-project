@@ -1,0 +1,201 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:appHostable">
+
+	<style>
+		.termsAndConditions {
+			background: white;
+		    position: relative;
+		    overflow: hidden;
+		    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12);
+		}
+	</style>
+
+    <div class="slds-grid_align-center slds-grid slds-wrap">
+		<div class="slds-size--2-of-2 slds-medium-size--5-of-6 slds-large-size--10-of-12">
+			<div class="termsAndConditions slds-box_x-small slds-m-around_x-small">
+				<div style="padding: 3rem;">
+					<p style="text-align: center; font-weight: bold;"> 
+						GİZLİLİK BEYANI
+						<br/>
+						CASTROL SAVUNMA AĞI
+					</p>
+					<br/>
+					<br/>
+					<p style="font-weight: bold;"> 
+						Şirketimiz ve İnternet Sitemiz Hakkında Veriler
+					</p>
+					<br/>
+					<p>
+						Bu <span style="background-color: yellow; font-weight: bold;">[LÜTFEN ALAN ADI YAZINIZ]</span> internet sitesi (“<b>İnternet Sitesi</b>”) BP P.L.C.’e ait olup, kayıtlı ticari
+						merkezi Değirmen yolu cad. No:28, Asia OfisPark K:3 İçerenköy-Ataşehir, İstanbul, 34752, Türkiye
+						adresinde bulunan BP Petrolleri Anonim Şirketi’ (işbu Gizlilik Beyanı kapsamında “Castrol” olarak
+						anılacaktır.) tarafından yönetilmektedir.
+						<br/>
+						Castrol gizlilik hakkınıza saygı gösterir ve bunu korumaya çalışır. Bu doğrultuda, sizi gizlilik
+						uygulamalarımız ile kişisel verilerinizin Castrol tarafından nasıl korunduğu ve kullanıldığı hakkında
+						bilgilendirmek amacıyla bu Gizlilik Beyanı’nı sunuyoruz. Bu İnternet sitesi Türk kanunlarına tabidir. Bu
+						İnternet Sitesi’ni kullanmanıza ilişkin olarak doğabilecek her türlü anlaşmazlık münhasıran Türk
+						mahkemelerinin yargı yetkisi kapsamındadır.
+					</p>
+					<br/>
+					<p style="font-weight: bold;">
+						Kişisel Verilerin Toplanması ve Kullanılması
+					</p>
+					<br/>
+					<p>
+						Bu Gizlilik Beyanı Castrol’ün kişisel verilerinizi hangi temele dayanarak topladığını ve kullandığını
+						düzenler. Kişisel veriler, kimliği belirli veya belirlenebilir gerçek kişiye ilişkin hertürlü bilgidir. .
+						Castrol’ün bu internet sitesi vasıtasıyla toplayacağı kişisel veriler şunlardır:
+						<br/>
+						<ul style="list-style-type: lower-latin; margin-left: 3rem; background-color: yellow; font-weight: bold;">
+							<li>
+								[<span style="color: red;">İsim, E-posta Adresi, Fotoğraf, Meslek</span>,Cep Telefonu, Adres, Doğum tarihi],İçerik
+								ve/veya Gönderi’de yer alan Kişisel Verileri Koruma Kanunu’nu kapsamında her türlü
+								Kişisel Veri.
+							</li>
+						</ul>
+						<br/>
+						Eğer İnternet Sitesi’ni ziyaret ettiğiniz esnada herhangi bir ürün veya hizmet sipariş eder, herhangi bir yarışma veya tanıtıma katılır ya da diğer bir şekilde bize veriler sunarsanız (örneğin, formlar doldurarak veya anketleri yanıtlayarak) kişisel verilerinizi tarafımıza vermeyi tercih etmiş olursunuz. Biz de bu kişisel verileri sizin talep ettiğiniz veriler, ürünler ve hizmetleri korumak için kullanacağız. Bunun yanı sıra, kişisel verilerinizi Castrol’ün makul olarak ilgilenebileceğinizi düşündüğü ek ürünler ve/veya hizmetlere ilişkin verileri size ulaştırmak için de kullanabiliriz. Daha fazla bilgi için lütfen aşağıdaki “Doğrudan Pazarlama” bölümünü inceleyin. 
+						<br/>
+						<br/>
+						İnternet Sitesi’nde bir profil oluşturduğunuzda, <span style="background-color: yellow; font-weight: bold;">[profil sayfanıza fotoğrafınız, iş adresiniz ve uzmanlık alanınızı içeren ek kişisel veriler girmeyi de tercih edebilirsiniz]</span>. Bu profil bilgileri İnternet Sitesi’nin diğer kayıtlı kullanıcılarına açıktır. Bu profil bilgilerini istediğiniz zaman güncelleyebilir veya kaldırabilirsiniz.
+						<br/>
+						<br/>
+						Kullanıcılar İnternet Sitesi’nde rastlantı sonucu sizin kişisel verilerinizi de içeren mesajlar paylaşabilir veya mesaj alışverişinde bulunabilirler. İnternet Sitesi’nde ne türden içerik paylaşacaklarına kullanıcılar karar vermektedir (bu içerik İnternet Sitesi’nin Kullanım Şartları ve Koşulları’na uyduğu sürece), bu nedenle bu mesajlarda diğer türden kişisel verilerin bulunması da mümkündür.
+						<br/>
+						<br/>
+						Castrol İnternet Sitesi’ne kayıt olurken sizin sunmuş olduğunuz kişisel verilerinizi şu amaçlarla kullanır:
+						<br/>
+						<ul>
+							<li>
+								Diğer kullanıcılar İnternet Sitesi’nde sizin paylaşmış olduğunuz bir mesaja cevap verdiğinde size güncellemeler sunmak ve
+							</li>
+							<li>
+								Teknik destek ve arızaların giderilmesi amacıyla (örneğin, İnternet Sitesi’ne girmekte sorun yaşıyorsanız).
+							</li>
+						</ul>
+					</p>
+					<br/>
+					<p style="font-weight: bold;">
+						Doğrudan Pazarlama
+					</p>
+					<br/>
+					<p>
+						Castrol daha önceden açıklamış olduğunuz pazarlama tercihleriniz doğrultusunda size bazı pazarlama mesajları (e-posta, SMS de dâhil olmak üzere) gönderebilir. Artık bu mesajları almak istemezseniz, lütfen <span style="color: blue;">iletisim@castrol.com</span>  adresinden bizimle irtibata geçerek tercihlerinizi değiştirin veya her bir pazarlama mesajında yer alan ‘vazgeç’ talimatlarını takip edin.
+					</p>
+					<br/>
+					<p style="font-weight: bold;">
+						Kişisel Verilerin Açıklanması ve Gönderilmesi 
+					</p>
+					<br/>
+					<p>
+						Castrol kişisel verilerinizi satmaz ya da üçüncü kişilerin ürünleri ve hizmetlerini size doğrudan pazarlayabilecekleri şekilde bu verileri onlara açıklamaz. Ancak, ürünlerimiz ve hizmetlerimizi size sunmak amacıyla kişisel verilerinizi BP Grup bünyesindeki diğer şirketlerle ve/veya verileri bizim adımıza işleyen hizmet sunucusu üçüncü kişilerle paylaşmamız gerekebilir. 
+						<br/>
+						Castrol küresel ölçekte faaliyet gösterdiği için, kişisel verilerinizi Avrupa Ekonomik Alanı (EEA) dışındaki diğer ülkelere göndermeyi isteyebilir. Ancak, kişisel verileriniz kontrolümüz altındayken kişisel verilerinizin daima Avrupa Ekonomik Alanı içerisindeymiş gibi ve bu seviyeye eşit bir korumaya sahip olmasını sağlarız; ki bu durum kişisel verilerinizin güvenli tutulduğunu ve sadece bizim talimatlarımız ile üzerinde anlaşılan amaca/amaçlara uygun olarak kullanıldığını sağlamayı da kapsar. 
+						<br/>
+						Kişisel verilerinizi kanunun gerektirdiği veya haklarımızı korumak ve/veya bir adli kovuşturma, mahkeme kararı, idari talep veya Castrol aleyhine yürütülen diğer bir hukuki sürece uygun hareket etmek amacıyla bunları paylaşmamızın gerekli olduğuna inandığımız durumlarda açıklama hakkımızı saklı tutarız. Ayrıca, Castrol’ün bir devralma, tasfiye veya birleşmeye konu olması hâlinde kişisel verilerinizi işin yeni malikine açıklayabiliriz.
+					</p>
+					<br/>
+					<p style="font-weight: bold;">
+						Sitenin Trafik Verileri ve Çerezler
+					</p>
+					<br/>
+					<p>
+						Castrol bünyesinde bulunan ve üçüncü taraf tedarikçiler tarafından Avrupa Ekonomik Bölgesi (EEA) dışında barındırılan sunucular, IP adresinizi esas alarak sitemizi ziyaretinizle ilgili verileri otomatik olarak kaydeder. Bu bilgiler sizi bir kişi olarak tanıtmaz ancak web sitesine erişim için kullandığınız bilgisayarı veya başka cihazı tanımlar. Topladığımız bu bilgiler kapsamdan emin olmak üzere sitenin dünyada nerelerde kullanıldığını görmek ve site kullanımını daha iyi anlamak için tıklama akış analizi için kullanılmaktadır.
+						<br/>
+						Web sitemizi ziyaretinizin ilerleyişi sırasında, bilgisayarınıza “Cookie” olarak adlandırılan kısa metin dosyaları yükleyebiliriz. Cookie’ler, sitenin daha önce ziyaret ettiğinizi bilmesini sağlayarak size daha iyi bir çevrimiçi deneyim sunmamızı ve bazı durumlarda ziyaretinizi kişiselleştirmek için tercihleri kaydetmemizi sağlamaktadır. Ayrıca Cookie’ler ziyaretçilerimizin profilini analiz etmemize de yardımcı olmaktadır. Cookie’ler kişi olarak kullanıcıyı değil yalnızca sitenin görüntülendiği bilgisayarı tanıtır.  Bunlar, tarayıcınızı kapattığınızda silinen oturum Cookie’leri ve/veya bilgisayarınızda daha uzun bir süre boyunca kalan kalıcı Cookie’ler olabilir.
+						<br/>
+						Cookie’leri silmek veya Cookie’lerin bilgisayarınıza yerleştirilmesini engellemek için tarayıcınızın yardım menüsüne bakın. Bazı durumlarda Cookie’leri engellemek bazı sitelerin işlevselliğini azaltabilir veya tercih ettiğiniz tarayıcı seçeneklerine bağlı olarak bu sitelere erişimi engelleyebilir. 
+						<br/>
+						Daha fazla bilgi için, www.aboutcookies.org adresini ziyaret edin. Bu bağlantı sizi yeni bir pencerede açılan başka bir web sitesine götürecektir. Castrol, www.aboutcookies.org  web sitesinin içeriğinden sorumlu değildir.
+
+					</p>
+					<br/>
+					<p style="font-weight: bold;">
+						Güvenlik
+					</p>
+					<br/>
+					<p>
+						İnternet vasıtasıyla veri iletimi her zaman güvenli değildir. Verilerinizin sitemize aktarıldığı esnada bunların güvenliğini garanti edemeyiz, dolayısıyla tüm veri iletimlerine ilişkin riskler size aittir. Ancak, biz verilerinizi aldıktan ve bunlar bizim kontrolümüze geçtikten sonra bu kişisel verilere izinsiz erişimi, bunların uygun olmayan şekillerde kullanılması veya açıklanması ya da bunların yetki alınmadan değiştirilmesi veya hukuka aykırı şekilde imha edilmesi veya bunların kazara kaybını engellemek için uygun güvenlik tedbirlerinizi almaktayız.
+					</p>
+					<br/>
+					<p style="font-weight: bold;">
+						Kişisel Verilerin Doğru Bir şekilde Saklanması ve Erişim
+					</p>
+					<br/>
+					<p>
+						Kişisel verilerinizin doğru ve güncel bir şekilde saklanmasını sağlamaya çalışmaktayız. Fakat kişisel verilerinizde ancak bize bildirimde bulunduğunuz takdirde değişiklik yapabiliriz. Bu doğrultuda, kişisel verilerinizde hatalar veya değişiklikler olması hâlinde bunu bize bildirmek sizin sorumluluğunuzdadır. Böyle bir durumda gerekli değişiklikleri yapabilmemiz için lütfen, kimlik tespitinizi gerçekleştirebileceğimiz yeterli bilgileri de sunarak bize <span style="color: blue;">iletisim@castrol.com</span>  adresi kanalıyla bildirimde bulunun.
+						<br/>
+						Hakkınızda işlediğimiz tüm kişisel verilere iç politikalarımız ve BK kanunlarına uygun bir şekilde bizden erişim talebinde bulunabilirsiniz. Kişisel verilerinize erişim sağlamak isterseniz lütfen <span style="color: blue;">iletisim@castrol.com</span>  adresini ziyaret edin. Ancak bu tür bir erişim sağlamak için sizden ücret talep etmemiz söz konusu olabilir. 
+					</p>
+					<br/>
+					<p style="font-weight: bold;">
+						Köprü (hiperlink) ve Gömülü Fonksiyonlar
+					</p>
+					<br/>
+					<p>
+						İnternet Sitemiz’de gömülü arama kutusu da dâhil olmak üzere, üçüncü kişiler tarafından sunulan, kontrolümüz dışındaki ve gizlilik beyanımız kapsamına girmeyen içerik veya diğer fonksiyonlar için bazı linkler yer alabilir. Bu İnternet Sitesi’nde yer alan arama kutusu (“Arama Kutusu”) Google Inc (“Google”) tarafından yönetilmektedir. Bu doğrultuda Arama Kutusu’na ilişkin kullanımınızın Google’ın gizlilik politikasına (<span style="color: blue;">http://www.google.com/privacy.html</span> adresinde yer alan) tabi olacağını kabul ve beyan etmiş olursunuz; ayrıca Arama Kutusu’nu kullanarak Google’ın kişisel verilerinizi kendi gizlilik politikasına uygun olarak kullanmasına izin vermiş sayılırsınız. Benzer bir şekilde, üçüncü taraflarca sunulan linkler veya diğer gömülü fonksiyonları kullanarak diğer İnternet Siteleri’ne erişim sağladığınızda bu İnternet Siteleri’nin operatörleri sizin hakkınızda veya sizden, kendi gizlilik bildirimlerine (bizim gizlilik beyanımızdan farklı olabilir) uygun olarak kullanacakları birtakım veriler toplayabilir. Bu nedenle ilgili sunucuların kendi İnternet Siteleri’nde yer alan gizlilik beyanlarını okumanızı öneririz. Ayrıca, bu politikalar konusunda herhangi sorumluluk veya mesuliyet kabul etmemekteyiz.
+					</p>
+					<br/>
+					<p style="font-weight: bold;">
+						Çocuklar
+					</p>
+					<br/>
+					<p>
+						Castrol çocuklardan kasten veri toplamamaktadır.
+					</p>
+					<br/>
+					<p style="font-weight: bold;">
+						Kişisel Verilerinize İlişkin Haklarınız
+					</p>
+					<br/>
+					<p>
+						Castrol’den aşağıdaki taleplerde bulunma hakkınız vardır:
+						<ul>
+							<li>
+								Kişisel verinizin işlenip işlenmediğini öğrenme ;
+							</li>
+							<li>
+								Eğer kişisel verileriniz işlenmiş ise, bunların nasıl kullanılacağına dair ek bilgi sunulması;
+							</li>
+							<li>
+								Herhangi bir sistem, veri veya bilgiye müdahale etmemeli, bunlara engel olmamalı ya da el koymamalısınız;
+							</li>
+							<li>
+								(i) kişisel verilerinizin işlenme amacı hakkında bilgi verilmesi ve (ii) kişisel verilerinizin bu amaca uygun olarak işlenip işlenmediğinin teyit edilmesi; 
+							</li>
+							<li>
+								Kişisel verilerinizin Türkiye içinde ve/veya dışında açıklandığı/açıklanacağı üçüncü taraf alıcılar hakkında bilgi verilmesi;
+							</li>
+							<li>
+								Kişisel verilerinizin tam veya doğru olmayan herhangi bir kısmının değiştirilmesi; 
+							</li>
+							<li>
+								Kişisel verilerinizin<span style="background-color: yellow; font-weight: bold;">Kanunu’nun 7. maddesi</span>] kapsamına  hükümlere uygun olarak silinmesi veya imha edilmesi; 
+							</li>
+							<li>
+								Kişisel verilerin açıklandığı üçüncü tarafların yukarıdaki e) ve f) alt başlıkları kapsamında gerçekleştirilen eylemler hakkında bilgilendirilmesi; 
+							</li>
+							<li>
+								<span style="background-color: yellow; font-weight: bold;">İşlenen kişisel verilerinizin münhasıran otomatik araçlarla analizi sonucunda aleyhinize bir sonucun ortaya çıkmasına itiraz etme,ı;</span>
+							</li>
+							<li>
+								Kişisel verileriniz hukuka aykırı şekilde işlenmiş ise bunun sonucunda uğramış olduğunuz <span style="background-color: yellow; font-weight: bold;">[zararların / kayıpların]</span> tazmin edilmesi.
+							</li>
+						</ul>
+						<br/>
+						Bu gizlilik beyanına veya hakkında tutmuş olduğumuz kişisel verilere ilişkin herhangi bir sorunuz olması hâlinde lütfen [<span style="color: blue; font-weight: bold;">iletisim@castrol.com</span> adresinden e-posta yoluyla veya şu adresten posta yoluyla bize ulaşın: <span style="background-color: yellow; font-weight: bold;">[ BP Petrolleri A.Ş. Değirmenyolu cad. No:28, Asia OfisPark K:3 İçerenköy- Ataşehir, İstanbul , 34752, Türkiye]</span>.
+					</p>
+					<br/>
+					<p style="font-weight: bold;">
+						Bu Gizlilik Beyanında Yapılacak Değişiklikler
+					</p>
+					<br/>
+					<p>
+						Bu gizlilik beyanı tarafımızca düzenli aralıklarla kontrol edilmektedir ve zaman zaman değiştirilebilir. Yapılan tüm değişiklikler bu internet sayfasında yayınlanacaktır. İlgili değişikliklerin yapılmasının ardından bu İnternet Sitesi’ni kullanmaya devam etmekle bu değişiklikleri okuduğunuzu, anladığınızı ve kabul ettiğinizi kabul ve beyan etmiş olursunuz.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</aura:component>

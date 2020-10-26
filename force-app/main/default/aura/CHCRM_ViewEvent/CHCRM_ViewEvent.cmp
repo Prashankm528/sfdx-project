@@ -1,0 +1,441 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global"
+                extends="c:CHCRM_EventBase" controller="CHCRM_ViewEventController">
+    
+    <aura:attribute name="evt" type="Event" access="public" />
+    <aura:attribute name="detail" type="CHCRM_Event__c" access="public" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="force:refreshView" action="{!c.doRefresh}" />
+    
+    <lightning:card>
+        <div style="padding-top: 5px; padding-bottom:5px">
+            <h3 class="slds-section__title slds-theme--shade primaryPaletteBorder test-id__section-header-container">
+                <span class="test-id__section-header-title section-header-title slds-p-horizontal--small slds-truncate">
+                    事件信息
+                </span>
+            </h3>
+        </div>
+        <div class="slds-grid slds-wrap slds-gutters ">
+            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                <div class="slds-form__item" >
+                    <div
+                         class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                        <span class="slds-form-element__label">主题</span>
+                        <div class="slds-form-element__control row-height">
+                            <div class="slds-form-element__static">
+                                <lightning:formattedText value="{!v.evt.Subject}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="slds-form__item" >
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">位置</span>
+            <div class="slds-form-element__control row-height">
+              <lightning:formattedText value="{!v.evt.Location}" />
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" >
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">开始</span>
+            <div class="slds-form-element__control row-height">
+           <lightning:formattedDateTime value="{!v.evt.StartDateTime}" year="numeric" month="numeric" day="numeric" hour="2-digit"
+                                 minute="2-digit"  hour12="false"/>                
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" >
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">结束</span>
+            <div class="slds-form-element__control row-height">
+           <lightning:formattedDateTime value="{!v.evt.EndDateTime}" year="numeric" month="numeric" day="numeric" hour="2-digit"
+                                 minute="2-digit"  hour12="false"/>
+            </div>
+          </div>
+        </div> -->
+                <div class="slds-form__item" >
+                    <div
+                         class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                        <span class="slds-form-element__label">类型</span>
+                        <div class="slds-form-element__control row-height">
+                            <div class="slds-form-element__static">
+                                <lightning:formattedText value="{!v.evt.Type}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-form__item">
+                    <div
+                         class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                        <span class="slds-form-element__label">内容</span>
+                        <div class="slds-form-element__control row-height">
+                            <div class="slds-form-element__static">
+                                <lightning:formattedText value="{!v.evt.Description}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                <div class="slds-form__item" >
+                    <div
+                         class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                        <span class="slds-form-element__label">被分配人</span>
+                        <div class="slds-form-element__control row-height">
+                            <div class="slds-form-element__static">
+                                <a href = "" data-record="{!v.evt.OwnerId}" onclick = "{!c.navigateToDetailPage}">{!v.evt.Owner.Name}</a>
+                            </div>
+                            <!--<lightning:formattedText value="{!v.evt.Owner.Name}" />-->
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-form__item" >
+                    <div
+                         class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                        <span class="slds-form-element__label">状态</span>
+                        <div class="slds-form-element__control row-height">
+                            <div class="slds-form-element__static">
+                                <lightning:formattedText value="{!v.evt.SOM_Status__c}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-form__item" >
+                    <div
+                         class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                        <span class="slds-form-element__label">门店拜访</span>
+                        <div class="slds-form-element__control row-height">
+                            <div class="slds-form-element__static">
+                                <a href = "" data-record="{!v.evt.CHCRM_HQ_Mnthly_Assgmnt__c}" onclick = "{!c.navigateToDetailPage}">{!v.evt.CHCRM_HQ_Mnthly_Assgmnt__r.Name}</a>
+                            </div>
+                            <!-- <lightning:formattedText value="{!v.evt.CHCRM_HQ_Mnthly_Assgmnt__r.Name}" /> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-form__item" >
+                    <div
+                         class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                        <span class="slds-form-element__label">相关项</span>
+                        <div class="slds-form-element__control row-height">
+                            <div class="slds-form-element__static">
+                                <a href = "" data-record="{!v.evt.WhatId}" onclick = "{!c.navigateToDetailPage}">{!v.evt.What.Name}</a>
+                            </div>
+                            <!-- <lightning:formattedText value="{!v.evt.What.Name}" /> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="padding-top: 5px; padding-bottom:5px">
+            <h3 class="slds-section__title slds-theme--shade primaryPaletteBorder test-id__section-header-container">
+                <span class="test-id__section-header-title section-header-title slds-p-horizontal--small slds-truncate">
+                    拜访详细信息
+                </span>
+            </h3>
+        </div>
+        <aura:if isTrue="{!v.evt.RecordType.DeveloperName == 'CHCRM_Event'}">
+            <div class="slds-grid slds-wrap slds-gutters slds-grid--vertical-stretch">
+                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                    <div class="slds-form__item" >
+                        <div
+                             class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">处理投诉</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:input type="checkbox" variant="label-hidden" name="input3" checked="{!v.detail.CHCRM_Complaint_Resolved__c}" disabled="true" />
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="slds-form__item" >
+                        <div
+                             class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">处理投诉备注</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:formattedText value="{!v.detail.CHCRM_Complaint_Remarks__c}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-form__item" >
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">客户体验日执行</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:input type="checkbox" variant="label-hidden" checked="{!v.detail.CHCRM_Cust_Exp_Day_Executed__c}" disabled="true" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-form__item" >
+                        <div
+                             class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">客户体验日备注</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:formattedText value="{!v.detail.CHCRM_Cust_Exp_Day_Remarks__c}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-form__item" >
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">潜客信息收集</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:input type="checkbox" variant="label-hidden" checked="{!v.detail.CHCRM_Lead_Collected__c}" disabled="true" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-form__item" >
+                        <div
+                             class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">潜客信息收集备注</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:formattedText value="{!v.detail.CHCRM_Lead_Collected_Remarks__c}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-form__item" >
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">总部政策或市场活动沟通/执行/回顾</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:input type="checkbox" variant="label-hidden" checked="{!v.detail.CHCRM_HQ_Policy_or_Mkt_Act__c}" disabled="true" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-form__item" >
+                        <div
+                             class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">总部政策或市场活动备注</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:formattedText value="{!v.detail.CHCRM_HQ_Policy_or_Mkt_Act_Remarks__c}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Column Two Start-->
+                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                    <div class="slds-form__item" >
+                        <div
+                             class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">签到实际地址</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:formattedText value="{!v.detail.CHCRM_Check_In_Address__c}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-form__item">
+                        <div
+                             class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">签到时间</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:formattedDateTime value="{!v.detail.CHCRM_Check_In_Time__c}" year="numeric" month="numeric" day="numeric" hour="2-digit"
+                                                                 minute="2-digit"  hour12="false"/>
+                                </div>
+                                <!--<lightning:formattedText value="{!v.detail.CHCRM_Check_In_Time__c}" />-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-form__item" >
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">培训执行</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:input type="checkbox" variant="label-hidden" checked="{!v.detail.CHCRM_Training__c}" disabled="true" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-form__item" >
+                        <div
+                             class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">培训备注</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:formattedText value="{!v.detail.CHCRM_Training_Remarks__c}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-form__item" >
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">沟通执行LTT</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:input type="checkbox" variant="label-hidden" checked="{!v.detail.CHCRM_LTT_Exec__c}" disabled="true" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-form__item" >
+                        <div
+                             class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">LTT备注</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:formattedText value="{!v.detail.CHCRM_LTT_Remarks__c}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.evt.RecordType.DeveloperName == 'CHCRM_Visit'}">
+            <div class="slds-grid slds-wrap slds-gutters slds-grid--vertical-stretch">
+                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                    <div class="slds-form__item" >
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">下一步计划</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:formattedText value="{!v.detail.CHCRM_Next_Step__c}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-form__item" >
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">拜访总结</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:formattedText value="{!v.detail.Visit_Summary__c}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                    <div class="slds-form__item">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">实际拜访日期</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:formattedDateTime value="{!v.detail.CHCRM_Actual_Visit_Time__c}" year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"  hour12="false"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                <div class="slds-form__item" >
+                    <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                        <span class="slds-form-element__label">KAP备注</span>
+                        <div class="slds-form-element__control row-height">
+                            <div class="slds-form-element__static">
+                                <lightning:formattedText value="{!v.detail.CHCRM_KAP_Remark__c}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>   
+            <div class="slds-grid slds-wrap slds-gutters slds-grid--vertical-stretch">
+                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                    <div class="slds-form__item" >
+                        <div
+                             class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">Actual Start Date</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:formattedDateTime value="{!v.detail.CHCRM_KAP_Actual_Start_Date__c}" year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"  hour12="false"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                    <div class="slds-form__item" >
+                        <div
+                             class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                            <span class="slds-form-element__label">Actual Completion Date</span>
+                            <div class="slds-form-element__control row-height">
+                                <div class="slds-form-element__static">
+                                    <lightning:formattedDateTime value="{!v.detail.CHCRM_KAP_Actual_Completion_Date__c}" year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"  hour12="false"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>   
+        </aura:if>
+        <div style="padding-top: 5px; padding-bottom:5px">
+            <h3 class="slds-section__title slds-theme--shade primaryPaletteBorder test-id__section-header-container">
+                <span class="test-id__section-header-title section-header-title slds-p-horizontal--small slds-truncate">
+                    系统信息
+                </span>
+            </h3>
+        </div>
+        <div class="slds-grid slds-wrap slds-gutters slds-grid--vertical-stretch">
+            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                <div class="slds-form__item" >
+                    <div
+                         class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                        <span class="slds-form-element__label">创建人</span>
+                        <div class="slds-form-element__control row-height">
+                            <div class="slds-form-element__static">
+                                <a href = "" data-record="{!v.evt.CreatedById}" onclick = "{!c.navigateToDetailPage}">{!v.evt.CreatedBy.Name}</a>
+                            </div>
+                            <!-- <lightning:formattedText value="{!v.evt.CreatedBy.Name}" /> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-form__item" >
+                    <div
+                         class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                        <span class="slds-form-element__label">创建时间</span>
+                        <div class="slds-form-element__control row-height">
+                            <div class="slds-form-element__static">
+                                <lightning:formattedDateTime value="{!v.evt.CreatedDate}" year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"  hour12="false"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                <div class="slds-form__item" >
+                    <div
+                         class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                        <span class="slds-form-element__label">上次修改人</span>
+                        <div class="slds-form-element__control row-height">
+                            <div class="slds-form-element__static">
+                                <a href = "" data-record="{!v.evt.LastModifiedById}" onclick = "{!c.navigateToDetailPage}">{!v.evt.LastModifiedBy.Name}</a>
+                            </div>
+                            <!-- <lightning:formattedText value="{!v.evt.CreatedBy.Name}" /> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-form__item" >
+                    <div
+                         class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                        <span class="slds-form-element__label">上次修改时间</span>
+                        <div class="slds-form-element__control row-height">
+                            <div class="slds-form-element__static">
+                                <lightning:formattedDateTime value="{!v.evt.LastModifiedDate}" year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"  hour12="false"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning:card>
+</aura:component>

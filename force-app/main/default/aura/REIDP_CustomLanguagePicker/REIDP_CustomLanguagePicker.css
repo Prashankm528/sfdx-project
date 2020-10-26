@@ -1,0 +1,53 @@
+.THIS [role=combobox] input[readonly] {
+    padding-left: .75rem;
+    border-color: transparent;
+    background-color: transparent;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: right;
+    color: #018b46;
+}
+
+.THIS input[readonly]:focus { 
+    outline: none !important;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.THIS .slds-icon-text-default {
+    fill: #018b46;
+}
+
+.THIS .contentRegion .ui-widget .slds-form-element .slds-form-element__control {
+    position: absolute !important;
+    top: 0px;
+    right: 0px;
+}
+
+.THIS .slds-dropdown_fluid, .THIS .slds-dropdown--fluid {
+    min-width: auto;
+    max-width: 100%;
+    width: 100%;
+}
+.THIS .slds-combobox_container{
+     margin-top: 5px !important;
+}
+.THIS .slds-combobox {
+    color: #018b46;
+}
+.THIS .slds-combobox__input {
+    cursor: pointer;
+}
+
+.THIS .slds-dropdown_fluid, .cREIDP_CustomLanguagePicker .slds-dropdown--fluid { 
+	width: 20%;
+    max-width: 20%;
+    font-size: 16px;    
+}
+
+@media (max-width : 600px) {
+    .THIS .slds-dropdown_fluid, .cREIDP_CustomLanguagePicker .slds-dropdown--fluid { 
+        width: 50%;
+        max-width: 50%;
+    }
+}

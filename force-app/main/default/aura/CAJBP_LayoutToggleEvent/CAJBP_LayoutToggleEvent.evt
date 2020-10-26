@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="CAJBP_LayoutToggleEvent">
+    <aura:attribute name="expanded" type="String"/>
+</aura:event>

@@ -1,0 +1,50 @@
+<aura:component controller="REIDP_ProfileController" 
+                implements="forceCommunity:availableForAllPageTypes" 
+                access="global">
+    
+    <aura:attribute name="myUser" type="List" default="[Name, Email, Birthdate__c, Title, Address, Phone, TimeZoneSidKey, AboutMe]"/>
+    <aura:attribute name="userId" type="String" />
+    <aura:attribute name="modalStyle" type="String"/>
+    <aura:attribute name="userName" type="String" />
+    
+    <aura:attribute name="saved" type="Boolean" default="false" />
+    <aura:attribute name="showSpinner" type="Boolean" default="true" />
+    <aura:attribute name="errorMessage-username" type="String"/>
+    
+    <aura:registerEvent name="newUsernameEvent" type="c:REIDP_UpdateUsername"/>
+    
+    <aura:html tag="style">
+        {! v.modalStyle }
+    </aura:html>
+    
+    <aura:if isTrue="{! v.showSpinner }">
+        <lightning:spinner />
+    </aura:if>
+    
+    <aura:if isTrue="{!!v.saved}">
+        
+        <lightning:recordEditForm aura:id="editProfile"
+                                  recordId="{! v.userId }"
+                                  onload="{! c.handleLoad }"
+                                  objectApiName="User">
+            <lightning:messages />
+            
+            <lightning:inputField aura:id="fname" fieldName="FirstName" />
+            <lightning:inputField aura:id="lname" fieldName="LastName" />
+            <lightning:inputField fieldName="Email" disabled="true"/>
+            <lightning:inputField fieldName="Birthdate__c" />
+            <lightning:inputField fieldName="Title" />
+            <lightning:inputField fieldName="Address" />
+            <lightning:inputField fieldName="Phone" />
+            <lightning:inputField fieldName="TimeZoneSidKey" />
+            
+        </lightning:recordEditForm>
+        
+        <div class="slds-align_absolute-center slds-m-top_x-large">
+            <lightning:button name="cancel" label="{!$Label.c.IDPCancel}" onclick="{! c.handleCancel }" class="bp-brand-cancel"/>
+            <lightning:button name="save" label="{!$Label.c.IDPSave}" variant="success" onclick="{! c.handleSave }" class="bp-brand-yes"/>
+        </div>
+        
+    </aura:if>
+    
+</aura:component>

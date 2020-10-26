@@ -1,0 +1,16 @@
+<design:component >
+	<design:attribute name="header" label="Header" description="header of the component" />
+	<design:attribute name="by" label="By" description="a word between date and user" />
+	<design:attribute name="comments" label="comments" description="comments word under number of comments" />
+    <design:attribute name="secondsAgo" label="Seconds Ago"/>
+    <design:attribute name="minuteAgo" label="Minute Ago"/>
+    <design:attribute name="minutesAgo" label="Minutes Ago"/>
+    <design:attribute name="hourAgo" label="Hour Ago" />
+    <design:attribute name="hoursAgo" label="Hours Ago"/>
+    <design:attribute name="dayAgo" label="Day Ago"/>
+    <design:attribute name="daysAgo" label="Days Ago"/>
+    <design:attribute name="monthAgo" label="Month Ago"/>
+    <design:attribute name="monthsAgo" label="Months Ago"/>
+    <design:attribute name="yearAgo" label="Year Ago"/>
+    <design:attribute name="yearsAgo" label="Years Ago"/>
+</design:component>

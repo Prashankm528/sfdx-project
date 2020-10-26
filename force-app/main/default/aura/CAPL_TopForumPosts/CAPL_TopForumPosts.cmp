@@ -1,0 +1,122 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:appHostable" controller="CAPL_TopForumPostsController">
+
+    <style>
+        .slds-page-header {
+        	background: white;
+        	padding: .5rem 1rem;
+        }
+        .slds-page-header__title, .slds-page-header__title:hover {
+        	color: black;
+        }
+        .slds-media__figure {
+        	text-align: center;
+        }
+
+        .slds-grid {
+        	border-radius: .25rem;
+        }
+
+        .title {
+        	text-align:left; 
+        	text-transform: uppercase; 
+        	padding: .5rem 0rem; 
+        	font-size: 16px;
+        }
+        .comments {
+        	color: #525759; 
+        	font-size: .75rem; 
+        	margin-top: -0.3rem;
+        }
+        .commentsCount {
+        	font-size: 1.25rem
+        }
+        .slds-page-header__title {
+        	font-size: 1rem;
+        }
+        .slds-text-body_small {
+        	margin-top: 0.3rem;
+        	color: #525759; 
+        	font-size: 11px;
+        }
+        img {
+            height: inherit !important;
+        }
+
+        .topForumPosts {
+            background: #fff;
+            object-fit: contain;
+            border-radius: 2px;
+            background-color: #ffffff;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12);
+        }
+    </style>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+ 
+    <aura:attribute name="forumPosts" type="Object[]" access="public"/>
+
+    <aura:attribute name="header" type="String" access="public"/>
+    <aura:attribute name="by" type="String" access="public"/>
+    <aura:attribute name="comments" type="String" access="public"/>
+
+    <aura:attribute name="secondsAgo" type="String" access="public"/>
+    <aura:attribute name="minuteAgo" type="String" access="public"/>
+    <aura:attribute name="minutesAgo" type="String" access="public"/>
+    <aura:attribute name="hourAgo" type="String" access="public"/>
+    <aura:attribute name="hoursAgo" type="String" access="public"/>
+    <aura:attribute name="dayAgo" type="String" access="public"/>
+    <aura:attribute name="daysAgo" type="String" access="public"/>
+    <aura:attribute name="monthAgo" type="String" access="public"/>
+    <aura:attribute name="monthsAgo" type="String" access="public"/>
+    <aura:attribute name="yearAgo" type="String" access="public"/>
+    <aura:attribute name="yearsAgo" type="String" access="public"/>
+
+    <div class="topForumPosts slds-grid_align-center slds-grid slds-wrap">
+        <div class="slds-size_12-of-12">
+        	<div class="slds-page-header">
+        		<div class="slds-media__figure title">
+        			{!v.header}
+        		</div>
+        	</div>
+        	<aura:iteration var="post" items="{!v.forumPosts}">
+	            <div>
+	            	<div class="slds-page-header" id="{!post.post.Id}" onclick="{!c.goToDetailPage}">
+					    <div class="slds-media slds-media_center">
+					        <div class="slds-media__figure">
+					            <span class="slds-avatar slds-avatar_circle slds-avatar_medium">
+						            <img src="{!post.userPhotoURL}"/>
+						        </span>
+					        </div>
+					        <div class="slds-media__body">
+                                <aura:if isTrue="{!post.post.Title != null}">
+    					            <a href="" class="slds-page-header__title slds-truncate slds-align-middle">	
+                                        {!post.post.Title}
+    					            </a>
+                                    <br/>
+                                </aura:if>
+                                <a href="" class="slds-page-header__title slds-truncate slds-align-middle">
+                                    <aura:unescapedHtml value="{!post.post.Body}"/>
+                                </a>
+					            <p class="slds-text-body_small slds-line-height_reset">
+                                    {!post.post.RelativeTime} 
+					            	&nbsp;{!v.by}&nbsp;{!post.post.CreatedBy.Name} 
+					            </p>
+					        </div>
+					        <div class="slds-media__figure slds-media__figure_reverse">
+						        <span class="commentsCount">
+						        	{!post.post.CommentCount}
+						        </span>
+						        <br/>
+						        <div class="comments">
+						        	{!v.comments}
+						        </div>	 
+						    </div>
+					    </div>
+					</div>
+	            </div>
+            </aura:iteration>
+        </div>
+        
+    </div>
+
+</aura:component>

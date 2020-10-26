@@ -1,0 +1,6 @@
+<aura:event type="COMPONENT" >
+	<aura:attribute name ="SelectedAccountList" type="OBJECT" />
+    <aura:attribute name ="ParentAccountId" type="OBJECT" />
+    <aura:attribute name ="NotSelectedAccountList" type="OBJECT" />
+    <aura:attribute name ="treeGrid_Side" type="STRING" />
+</aura:event>

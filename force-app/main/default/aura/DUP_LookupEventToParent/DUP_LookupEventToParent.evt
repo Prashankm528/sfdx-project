@@ -1,0 +1,7 @@
+<!-- DUP_LookupEventToParent -->
+<aura:event type="COMPONENT" description="Event template">
+    <aura:attribute name="selectedItem" type="Map"/>
+    <aura:attribute name="itemId" type="String"/>
+    <aura:attribute name="objectName" type="String"/>
+    <aura:attribute name="groupTitle" type="String"/>
+</aura:event>

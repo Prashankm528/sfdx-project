@@ -1,0 +1,21 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="objApiName" type="String" default="CHCRM_Key_Account_Plan__c"/>  
+    <aura:attribute name="fieldsKeyInfo" type="String[]" default="['CHCRM_RTM_model__c','CHCRM_KA_Type__c','CHCRM_Account_Status__c']" />
+    <aura:attribute name="fieldsStore" type="String[]" default="['CHCRM_Total_Number_of_WS__c','CHCRM_Corprated_Number_of_WS__c','CHCRM_Undeveloped_Number_of_WS__c','CHCRM_Number_of_Sales_Force_of_WS__c']" />
+    
+    <div aura:id="container" class="slds-card">
+        <h3 class="slds-theme_shade label slds-p-around_x-small slds-m-bottom_medium">Account关键信息</h3>
+        <lightning:recordForm recordId="{!v.recordId}"
+                              objectApiName="{!v.objApiName}"
+                              columns="2"
+                              fields="{!v.fieldsKeyInfo}"/>
+	</div>
+    <div aura:id="container" class="slds-card">
+        <h3 class="slds-theme_shade label slds-p-around_x-small slds-m-bottom_medium">门店信息</h3>
+        <lightning:recordForm recordId="{!v.recordId}"
+                              objectApiName="{!v.objApiName}"
+                              columns="2"
+                              fields="{!v.fieldsStore}"/>
+	</div>
+</aura:component>

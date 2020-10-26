@@ -1,0 +1,24 @@
+<!--
+ - @Author: Vit Bares
+ - @Email: vit.bares@bluewolfgroup.com
+ - @Company: Bluewolf
+ - @Created: 03/12/2017
+ - @Description: Helper component, which currently implements functionality of enqueueing apex actions.
+ -               This component can be included in any existing components to reuse the code.
+ - This code is the intellectual property of IBM GBS and is not to be used by non-GBS practitioners nor distributed outside of GBS engagements.
+ - For full usage guidelines refer to http://ibm.biz/innersourcing-consume-guidelines
+ -->
+<aura:component description="LEX_Utils_Apex">
+
+    <aura:registerEvent name="apexCallError" type="c:LEX_Utils_ComponentNotificationEvent"/>
+
+    <c:LEX_Utils_View aura:id="LEX_Utils_View" />
+
+    <aura:method name="callApex" action="{!c.callApex}" description="Method enqueues Apex actions and returns the response result">
+        <aura:attribute name="component" type="Aura.Component" description="Injected caller component"/>
+        <aura:attribute name="controllerMethod" type="String" description="Apex Controller Method which should be called. 'c.methodName' "/>
+        <aura:attribute name="actionParameters" type="Object" description="Parameters for controller method in JSON format '{ param: paramValue } "/>
+        <aura:attribute name="successCallback" type="Object" description="Function which is called on successful response from Apex" />
+        <aura:attribute name="callbackParams" type="Object" description="Parameters which are injected along with response result to callback function. (Useful for injecting helper f.e." />
+    </aura:method>
+</aura:component>

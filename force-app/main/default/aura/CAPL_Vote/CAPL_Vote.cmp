@@ -1,0 +1,27 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:appHostable,force:hasRecordId" controller="CAPL_VoteClass">
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:attribute name="numOfLikes" type="Integer" access="public" />
+    <aura:attribute name="isLiked" type="Boolean" access="public" />
+    <aura:attribute name="doYouLikeThisRecord" type="String" access="public" default="Do you like this record?"/>
+	
+	<article class="slds-card">
+	    <div class="vote slds-grid">
+	        <header class="slds-media slds-media_center slds-has-flexi-truncate">
+	            <div class="slds-media__body">
+	                {!v.doYouLikeThisRecord}
+	            </div>
+	        </header>
+	        <div class="slds-no-flex">
+	        	<button class="{!v.isLiked == true ? 'slds-button_brand slds-button slds-button--icon-border' : 'slds-button slds-button--icon-border'}" onclick="{!c.voteForRecord}">
+	            	<lightning:icon iconName="utility:like" size="x-small" />
+	            </button>
+	            <div class="numOfLikes slds-float--right slds-m-left--small slds-m-right--small slds-p-top--x-small">
+	            	{!v.numOfLikes}
+	            </div>
+	        </div>
+	    </div>
+	</article>
+
+</aura:component>

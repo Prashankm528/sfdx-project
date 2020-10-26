@@ -1,0 +1,26 @@
+<aura:component description="CAJBP_PDF_Viewer" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+    <iframe src="{!'/apex/CAJBP_PDF_SummaryExecutor?id=' + v.recordId}" width="100%" height="650px" frameborder="0"/>
+
+    <aura:html tag="style">
+        .slds-p-around--medium {
+            padding: 0rem !important;
+        }
+        .slds-modal__content{
+            height:unset !important;
+            max-height:unset !important;
+        }
+        .cuf-content {
+            padding: 0 0rem !important;
+        }
+        .uiModal--medium .modal-container {
+            width: 70% !important;
+            max-width: 840px !important;
+            min-width: 480px !important;
+        }
+        .slds-modal__container {
+            width: 70% !important;
+            max-width: 840px !important;
+            min-width: 480px !important;
+        }
+    </aura:html>
+</aura:component>

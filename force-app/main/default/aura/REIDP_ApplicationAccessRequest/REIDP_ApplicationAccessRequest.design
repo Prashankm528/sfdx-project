@@ -1,0 +1,8 @@
+<design:component label="RE IDP Application Access Request">
+
+    <design:attribute name="headerTextColor" label="Header Text Color" default="#F00023" description="Table header text color"/>
+    <design:attribute name="textColor" label="Text Color" default="#FFFFFF" description="General text color"/>
+    <design:attribute name="actionBtnColor" label="Action Button Color" default="#009343" description="Color of an Action Button"/>
+    <design:attribute name="disabledBtnColor" label="Disabled Button Color" default="#999999" description="Color of a Disabled Button"/>
+    
+</design:component>

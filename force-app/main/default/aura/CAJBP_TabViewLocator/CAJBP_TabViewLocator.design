@@ -1,0 +1,3 @@
+<design:component label="CAJBP Tab View Locator">
+    <design:attribute name="selectedTab" label="Tab" datasource="Summary,Prospect,Insights,Objectives,Activities,Scorecard,JAF,Dashboard" default="Summary"/>
+</design:component>

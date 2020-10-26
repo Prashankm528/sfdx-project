@@ -1,0 +1,92 @@
+<aura:component controller="GEFUE_CreateCommOppProdController" implements="lightning:actionOverride,flexipage:availableForAllPageTypes,lightning:isUrlAddressable,force:hasRecordId">
+    <aura:attribute name="recordId" type="Id" access="global"/>
+    <aura:attribute name="parentId" type="Id" access="global"/>
+    <aura:attribute name="commOppProdId" type="Id" access="global"/>
+    <aura:attribute name="terminalId" type="Id" access="global"/>
+    <aura:attribute name="lgtMode" type="String" default="New"/>
+    <aura:attribute name="isNew" type="Boolean" default="true"/>
+    <aura:attribute name="showTerminalError" type="Boolean"/>
+    <aura:attribute name="selectedProductRecord" type="sObject" default="{}"/>
+    <aura:attribute name="prodTerminalMap" type="Map"/>
+    <aura:attribute name="spinner" type="boolean" default="true"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+   <!-- <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/> -->
+    <aura:handler name="eventProductValidate" event="c:GEFUE_ProductValidationEvent" action="{!c.setErrorMessage}"/>
+    <aura:handler name="eventOnProductClose" event="c:GEFUE_onProductClose" action="{!c.handleProductClose}"/>
+    
+    <aura:if isTrue="{!v.spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand slds-spinner slds-spinner--medium slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <lightning:buttonIcon class="slds-modal__close" iconName="utility:close" variant="bare-inverse" onclick="{!c.onCancel}" alternativeText="Close" title="Close" />
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate"><aura:if isTrue="{!v.isNew}">New <aura:set attribute="else">Edit</aura:set></aura:if> Commercial Opportunity Product</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <div class="slds-p-vertical_small slds-text-body_medium">
+                    <lightning:recordEditForm aura:id="recordViewForm"
+                                              recordId="{!v.recordId}"
+                                              objectApiName="GEFUE_Commercial_Opportunity_Product__c"     
+                                              class="slds-card__body_inner"
+                                              onsuccess="{!c.handleSuccess}"
+                                              onsubmit="{!c.handleSubmitClick}"
+                                              onload="{!c.handleOnLoad}">
+                        
+                        <h2 class="slds-section-title--divider">Information</h2>
+                        <div class="slds-grid slds-gutters">
+                            <lightning:messages/>
+                            <div class="slds-col ">
+                                <lightning:inputField fieldName="GEFUE_Terminal__c" aura:id="terminalLookupId" onchange="{!c.terminalChange}"/>
+                                <aura:if isTrue="{!v.showTerminalError}">
+                                    <div class="slds-text-color_error slds-p-left_x-small">
+                                        Please select a Terminal before selecting a Product
+                                    </div>
+                                </aura:if>
+                                <!--value="{!v.terminalVal}"/>-->
+                                <c:GEFUE_CustomLookup aura:id="prodLookUpId" objectAPIName="Product2" IconName="standard:product" label="Product" selectedRecord="{!v.selectedProductRecord}"
+                                                      prodTerminals="{!v.prodTerminalMap}" terminalVal="{!v.terminalId}"/>
+                            </div>
+                            <div class="slds-col">
+                                <lightning:inputField fieldName="GEFUE_Opportunity__c" aura:id="oppLookupId"
+                                                      value="{!v.parentId}"/>
+                            </div>
+                        </div>
+                        <h2 class="slds-section-title--divider">Demand</h2>
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col ">
+                                <lightning:inputField fieldName="GEFUE_BP_Existing_Business__c" />
+                                <lightning:inputField fieldName="GEFUE_Existing_Probability__c"/>
+								<lightning:inputField fieldName="GEFUE_Total_Customer_Demand__c"/>  
+                                <lightning:inputField fieldName="GEFUE_Finished_Product_Existing__c"/> 
+                                <lightning:inputField fieldName="GEFUE_Finished_Product_Fina__c"/> 
+                                <lightning:inputField fieldName="GEFUE_IN_CBM__c"/>
+                            </div>
+                            <div class="slds-col ">
+                                <lightning:inputField fieldName="GEFUE_Accessible_Demand__c"  />
+                                <lightning:inputField fieldName="GEFUE_Accessible_Probability__c"/>
+                                <lightning:inputField fieldName="GEFUE_Finished_Product_Actual_Lifted__c"/>
+                                <lightning:inputField fieldName="GEFUE_Finished_Product_New__c"/>
+                                <lightning:inputField fieldName="GEFUE_Won_or_Lost__c"/>
+                            </div>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <lightning:button label="Cancel" title="Cancel" onclick="{!c.onCancel}"/>
+                            <lightning:button aura:id="save" variant="brand" type="submit" label="Save" disabled="false"/>
+                        </footer>
+                    </lightning:recordEditForm>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</aura:component>

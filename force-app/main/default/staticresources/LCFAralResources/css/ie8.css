@@ -1,0 +1,55 @@
+  input[type="radio"] {
+        clip: auto;
+        width: 20px;
+        height: 20px;
+        overflow: initial;
+        margin-top:5px;
+        margin-left:0px;
+        margin-right:0px;
+    }
+    .button {
+        display:inline-block;
+        line-height:2.7;
+    }
+    .dummy-spacer {
+        display: none;
+    }
+    .survey-header-holder {
+        position: static;
+        padding-bottom:16px;
+    }
+
+    .survey-container {
+      border: 1px solid #e2e2e2;
+      border-bottom: 2px solid #e2e2e2;
+      border-left: 1px solid #e2e2e2;
+      border-right: 1px solid #e2e2e2;
+    }
+
+    @media screen and (max-width: 630px) {
+        .radio-row-table-0-to-10 input[type="radio"] {
+            margin-left:0px;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .radio-row-table-1-to-5 input[type="radio"] {
+            margin-left:8px;
+        }
+    }
+    @media screen and (min-width: 992px) {
+        .header .roundel {
+            background: url('../images/roundal-ie8.png') no-repeat;
+        }
+        .header .header-middle, .header .overflow-right {
+            background: url('../images/blueOverflow-ie8.png') repeat-x;
+        }
+        .header .overflow-left {
+            background: url('../images/blueOverflow-ie8.png') repeat-x;
+        }
+
+    }
+    @media screen and (max-width: 991px) {
+      .header .header-middle .logo-container .logo {
+        background-image: url('../images/aralLogo-ie8.png');
+    }

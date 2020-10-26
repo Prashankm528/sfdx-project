@@ -1,0 +1,92 @@
+<!-- CDM_MaterialLookUp Component which is used for show look up search component  -->
+<aura:component  access="global" controller="CDM_CreditDebitNoteFormController" extends="c:CDM_GenericComponent">
+    <!--declare attributes--> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="selectedRecord" type="sObject" default="{}" description="Use,for store SELECTED sObject Record"/>
+    <aura:attribute name="listOfSearchRecords" type="List" description="Use,for store the list of search records which returns from apex class"/>
+    <aura:attribute name="PreviousListOfSearchRecords" type="List" description="Use,for store the list of search records which prevoius result"/>
+    <aura:attribute name="SearchKeyWord" type="string"/>
+    <aura:attribute name="PreviousSearchKeyWord" type="string"/>
+    <aura:attribute name="objectAPIName" type="string" default=""/>
+    <aura:attribute name="IconName" type="string" default=""/>
+    <aura:attribute name="label" type="string" default=""/>
+     <aura:attribute name="requestType" type="String"/>
+    <aura:attribute name="fieldName" type="string" default=""/>
+    <aura:attribute name="value" type="string" default=""/>
+    <aura:attribute name="Message" type="String" default=""/>
+     <aura:attribute name="fieldsMetaDatamap" type="Map" /> 
+    <aura:attribute name="required" type="Boolean" /> 
+     <aura:attribute name="selectedMaterial" type="Object" description="selected from material lookup"/>
+   
+     <aura:registerEvent name="CDM_MaterialTypeEvt" type="c:CDM_MaterialTypeEvt" />
+    <aura:attribute name="readOnly" type="Boolean" /> 
+    <!--declare events hendlers  required-->  
+   <aura:handler name="CDM_SelectLookUpRecord" 
+                 event="c:CDM_SelectLookUpRecord" 
+                 action="{!c.handleComponentEvent}"/> 
+   
+    <aura:if isTrue="{!v.value.CDM_Read_Only__c}">
+        <lightning:input     disabled="{!v.value.CDM_Read_Only__c}"
+                         required="{!v.value.CDM_Required__c}"
+                         value="{!v.selectedRecord.CDM_Material__c}"
+                         label="{!v.value.CDM_Material__c}"/>
+        <aura:set attribute="else">
+            <div onmouseleave="{!c.onblur}" aura:id="searchRes" 
+                 class="slds-form-element slds-lookup slds-is-close" 
+                 data-select="single">
+                <label class="slds-form-element__label" for="lookup-348">{!v.label} 
+                </label>
+                <!--This part is for display search bar for lookup-->  
+                <div class="slds-form-element__control">
+                    
+                    <div class="slds-input-has-icon slds-input-has-icon--right">
+                        <!-- This markup is for when an record is selected -->
+                        <div aura:id="lookup-pill" class="slds-pill-container slds-hide">
+                            <lightning:pill class="pillSize" 
+                                            label="{!v.selectedRecord.CDM_Material__c}" 
+                                            name="{!v.selectedRecord.CDM_Material__c}" 
+                                            onremove="{! c.clear }">
+                                <aura:set attribute="media">
+                                    <lightning:icon iconName="{!v.IconName}" 
+                                                    size="x-small" 
+                                                    alternativeText="{!v.IconName}"/>
+                                </aura:set>
+                            </lightning:pill>
+                        </div>
+                        <div aura:id="lookupField" class="slds-show">
+                            <lightning:icon class="slds-input__icon slds-show" 
+                                            iconName="utility:search" 
+                                            size="x-small" 
+                                            alternativeText="search"/>
+                            
+                            
+                            <ui:inputText click="{!c.onfocus}" 
+                                          updateOn="keyup" 
+                                          aura:id="{!v.fieldName}"
+                                          keyup="{!c.keyPressController}" 
+                                          class="slds-lookup__search-input slds-input leftPaddingClass"
+                                          value="{!v.SearchKeyWord}" 
+                                          placeholder="search material.."
+                                          disabled="{!v.readOnly}"
+                                          required="{!v.required}"/>
+                        </div>   
+                    </div> 
+                    
+                    
+                </div>
+                <!--This part is for Display typehead lookup result List-->  
+                <ul style="min-height:40px;margin-top:0px !important" 
+                    class="slds-listbox slds-dropdown_length-5 slds-listbox_vertical slds-dropdown_fluid slds-lookup__menu slds" 
+                    role="listbox">
+                    <lightning:spinner class="slds-hide" variant="brand" size="small" aura:id="mySpinner"/>
+                    <center> {!v.Message}</center>
+                    <aura:iteration items="{!v.listOfSearchRecords}" var="singleRec">
+                        <c:CDM_LookUpResult oRecord="{!singleRec}" IconName="{!v.IconName}"/>  
+                    </aura:iteration>
+                </ul>
+            </div> 
+        </aura:set>
+    </aura:if>
+    
+  
+</aura:component>

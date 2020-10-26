@@ -1,0 +1,141 @@
+<aura:component controller="REIDP_ProfileController" 
+                implements="forceCommunity:availableForAllPageTypes" 
+                access="global">
+    
+    <!-- LABELS -->
+    <aura:attribute name="detailsLabel" type="String" access="public" default="{!$Label.c.IDPProfileDetails}" />
+    
+    <!-- ATTRIBUTES -->
+    <aura:attribute name="userId" type="String"/>
+    <aura:attribute name="userName" type="String"/>
+    
+    <!-- HANDLERS AND LIBRARIES AND EVENTS -->
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:handler event="c:REIDP_UpdateUsername" action="{! c.checkUsername }"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <aura:if isTrue="{! not( empty( v.userId ) ) }">
+        <lightning:recordViewForm recordId="{! v.userId }" objectApiName="User" class="profile">
+            
+            <aura:if  isTrue="{!$Browser.isTablet}">
+                <lightning:layout verticalAlign="stretch" multipleRows="true">
+                    
+                    <lightning:layoutItem  size="12" padding="horizontal-medium" class="slds-m-top_medium">
+                        <span class="user-name">{!v.userName}</span>
+                        <lightning:outputField fieldName="Name" class="user-name"/>
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="12" padding="around-small">
+                        
+                        <lightning:layout horizontalAlign="spread" multipleRows="true" class="slds-m-around_medium">
+                            
+                            <lightning:layoutItem  size="1" mediumDeviceSize="1" padding="around-small">
+                                <lightning:icon iconName="utility:user" alternativeText="{!$Label.c.IDPUserProfile}" class="icon-color slds-icon_small"/>
+                            </lightning:layoutItem>
+                            
+                            <lightning:layoutItem  size="8" mediumDeviceSize="8" padding="around-small">
+                                <lightning:formattedText value="{! v.detailsLabel }" class="section-name slds-m-right_small"/>
+                                <lightning:button variant="base" label="{!$Label.c.IDPEdit}" title="{!$Label.c.IDPEdit}" onclick="{! c.handleEditRecord }"/>
+                                <br></br>
+                                <lightning:outputField fieldName="Name" />
+                                <lightning:outputField fieldName="Email" />
+                                <lightning:outputField fieldName="Birthdate__c" />
+                                <lightning:outputField fieldName="Title" />
+                                <lightning:outputField fieldName="Address" />
+                                <lightning:outputField fieldName="Phone" />
+                                <lightning:outputField fieldName="TimeZoneSidKey" />
+                            </lightning:layoutItem>
+                            
+                            <lightning:layoutItem  size="3" mediumDeviceSize="3" padding="around-small">
+                                <lightning:button variant="base" label="{!$Label.c.IDPChangePassword}" title="{!$Label.c.IDPChangePassword}" onclick="{! c.handleChangePassword }"/>
+                            </lightning:layoutItem>
+                            
+                        </lightning:layout>
+                    </lightning:layoutItem>
+                </lightning:layout>
+                
+                <aura:set attribute="else">
+                    <aura:if isTrue="{!$Browser.isPhone}">
+                        <lightning:layout verticalAlign="stretch" multipleRows="true">
+                            
+                            <lightning:layoutItem  size="12" padding="horizontal-medium" class="slds-m-top_medium">
+                                <span class="user-name">{!v.userName}</span>
+                            </lightning:layoutItem>
+                            
+                            <lightning:layoutItem size="12" padding="around-small">
+                                <lightning:layout horizontalAlign="spread" multipleRows="true" class="slds-m-around_none">
+                                    
+                                    <lightning:layoutItem  size="1" smallDeviceSize="1" padding="around-small">
+                                        <lightning:icon iconName="utility:user" alternativeText="{!$Label.c.IDPUserProfile}" class="icon-color slds-icon_small"/>
+                                    </lightning:layoutItem>
+                                    
+                                    <lightning:layoutItem  size="6" smallDeviceSize="6">
+                                        <lightning:button variant="base" label="{!$Label.c.IDPChangePassword}" title="{!$Label.c.IDPChangePassword}" onclick="{! c.handleChangePassword }"/>
+                                    </lightning:layoutItem>
+                                    
+                                    <lightning:layout horizontalAlign="spread" multipleRows="true" class="slds-m-around_none">
+                                        <lightning:layoutItem  size="12" smallDeviceSize="12" padding="around-small">
+                                            <lightning:formattedText value="{! v.detailsLabel }" class="section-name slds-m-right_small"/>
+                                            <lightning:button variant="base" label="{!$Label.c.IDPEdit}" title="{!$Label.c.IDPEdit}" onclick="{! c.handleEditRecord }"/>
+                                            <br></br>
+                                            <lightning:outputField fieldName="Name" />
+                                            <lightning:outputField fieldName="Email" />
+                                            <lightning:outputField fieldName="Birthdate__c" />
+                                            <lightning:outputField fieldName="Title" />
+                                            <lightning:outputField fieldName="Address" />
+                                            <lightning:outputField fieldName="Phone" />
+                                            <lightning:outputField fieldName="TimeZoneSidKey" />
+                                        </lightning:layoutItem>
+                                    </lightning:layout>
+                                </lightning:layout>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                        
+                        
+                        <aura:set attribute="else">
+                            
+                            <lightning:layout verticalAlign="stretch" multipleRows="true" class="slds-m-around_xx-large">
+                                
+                                <lightning:layoutItem  size="12" padding="horizontal-medium" class="slds-m-top_medium">
+                                    <span class="user-name">{!v.userName}</span>
+                                </lightning:layoutItem>
+                                
+                                <lightning:layoutItem size="12" padding="around-small">
+                                    <lightning:layout horizontalAlign="spread" multipleRows="true" >
+                                        
+                                        <lightning:layoutItem  size="1" padding="around-small">
+                                            <lightning:icon iconName="utility:user" alternativeText="{!$Label.c.IDPUserProfile}" class="icon-color slds-icon_small"/>
+                                        </lightning:layoutItem>
+                                        
+                                        <lightning:layoutItem  size="4" padding="around-small">
+                                            <lightning:formattedText value="{! v.detailsLabel }" class="section-name slds-m-right_small"/>
+                                            <lightning:button variant="base" label="{!$Label.c.IDPEdit}" title="{!$Label.c.IDPEdit}" onclick="{! c.handleEditRecord }"/>
+                                            <br></br>
+                                            <lightning:outputField fieldName="Name" />
+                                            <lightning:outputField fieldName="Email" />
+                                            <lightning:outputField fieldName="Birthdate__c" />
+                                            <lightning:outputField fieldName="Title" />
+                                        </lightning:layoutItem>
+                                        
+                                        <lightning:layoutItem  size="4" padding="around-small">
+                                            <br></br>
+                                            <lightning:outputField fieldName="Address" />
+                                            <lightning:outputField fieldName="Phone" />
+                                            <lightning:outputField fieldName="TimeZoneSidKey" />
+                                        </lightning:layoutItem>
+                                        
+                                        <lightning:layoutItem  size="3" padding="around-small">
+                                            <lightning:button variant="base" label="{!$Label.c.IDPChangePassword}" title="{!$Label.c.IDPChangePassword}" onclick="{! c.handleChangePassword }"/>
+                                        </lightning:layoutItem>
+                                        
+                                    </lightning:layout>
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </aura:set>
+                    </aura:if> 
+                </aura:set>
+            </aura:if>
+        </lightning:recordViewForm>
+    </aura:if>
+    
+</aura:component>

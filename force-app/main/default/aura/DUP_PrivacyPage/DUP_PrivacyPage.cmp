@@ -1,0 +1,70 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+	
+    <head>
+    </head>
+    <body class="par">
+        <table class="par">
+            <tr>
+                <td width="20%">
+                </td>
+                <td width="60%">
+                    <p align="right"> 
+                        <img src="{!$Resource.DUP_PrivacyPageLogo}" width="60" height="78.5" alt="BPLogo"/>  
+                    </p>            
+                  <div> 
+                      <h1><u>BP Data Privacy – Counterparty Due Diligence</u></h1>
+                      <p class ="par"> BP plc and its affiliates listed <a href="https://www.bp.com/en/global/corporate/what-we-do/bp-worldwide.html">here</a> (“<b>BP</b>”) 
+                      conduct reasonable and proportionate due diligence checks against 
+                      their counterparties to comply with BP’s Code of Conduct 
+                      (publicly available <a href="https://www.bp.com/en/global/corporate/who-we-are/our-values-and-code-of-conduct.html">here</a>) and to comply with our legal
+                       obligations and regulatory requirements, including anti-money laundering, anti-bribery and corruption and international 
+                       trade regulations  screening requirements (the “<b>Purposes</b>”). </p>
+                       
+                      <p>In order to carry out these checks we may collect personal data about you, either obtained by you directly, 
+                      from publically available sources or from third party information providers (such as company and risk intelligence databases)
+                       (the "<b>Sources</b>"). Our legal basis for this processing is compliance with our regulatory obligations. </p>
+                       
+                      <p>Data obtained by BP as part of this process will exclusively be used for the Purposes. BP will delete this data once the
+                       Purposes are achieved or it is no longer required. Given the global nature of BP’s operations, personal information may be 
+                       transferred within its group internationally, subject always to BP’s Binding Corporate Rules (“<b>BCRs</b>”), available <a href="https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/pdfs/legal-and-privacy/appendix2-part-a-bp-data-privacy-rules-public-document-13-jan-17.pdf">here</a>). 
+                       We will not normally share the outcome of these checks with any third party outside the BP group, unless required to so do 
+                       under our regulatory obligations (for example for audit or insurance purposes) or otherwise with your permission. 
+                       Any international transfers to third parties will be governed by appropriate contractual wording of which you can request a copy of. </p>
+                       
+                       <p>You, and any individual whose personal data is processed for the Purposes, have various rights under data protection laws, 
+                       including the right to request access to, rectification or, or erasure of your personal data. You also have a right to request 
+                       the restriction of or object to our processing of your personal data. Please note that as the Purposes are necessary to allow 
+                       us to comply with our legal obligations if you fail to provide the requested information, or if you object to this processing, 
+                       then we may be unable to work with you as a counterparty.</p>
+                       
+                       <p> Please ensure that all directors, officers, key employees and/or owners of your company whose personal details are provided 
+                       to BP for the Purposes, or whose personal data may be obtained through the Sources, are made aware that BP will be processing 
+                       their information for the Purposes and you and/or they may contact your regional Counterpart Due Diligence team, with questions, 
+                       including how to exercise their rights. If in the EU you and/or they have the right to complain to a data privacy supervisory 
+                       authority with jurisdiction over BP (in the UK this is the ICO – <a href="https://ico.org.uk/">www.ico.org.uk</a>); before taking this step we encourage you to 
+                       first use BP’s complaints resolution mechanism under our BCRs. </p>
+                  </div>
+                  <div class ="par">
+                      <p><br/></p>
+                      <h1><u>Counterpart Due Diligence teams contacts</u></h1>
+                      <p><b>GOE, BPIM, Treasury and International Gas</b>
+                         <br/>G1STAccountOpening@uk.bp.com </p>
+                     <p> <b>NAGP</b>
+                         <br/>AccountOpeningNAGP@uk.bp.com </p>
+                     <p> <b>GOEH</b>
+                         <br/>GISTEHCDDTeam@bp.com </p>
+                     <p> <b>GOA</b>
+                         <br/>OAAccountOpening1@bp.com </p>
+                     <p> <b>GBS</b>
+                         <br/>G1stAOTReviews@uk.bp.com </p>
+                  </div>
+                  
+              </td>
+              <td width="20%">
+              </td>
+           </tr>
+       </table>
+   </body>
+   <footer class="par">
+   </footer>
+</aura:component>

@@ -1,0 +1,31 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" access="global" controller="REIDP_AppAccessRequestController">
+    <!-- attributes -->
+    <aura:attribute name="ApplicationLabel" type="String" access="private" required="false" default="{!$Label.c.REIDP_ApplicationLabel}"/>
+    <aura:attribute name="data" type="List"/>
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="headerTextColor" type="String" default="#F00023" access="global"/>
+    <aura:attribute name="textColor" type="String" default="#FFFFFF" access="global"/>
+    <aura:attribute name="actionBtnColor" type="String" default="#009343" access="global"/>
+    <aura:attribute name="disabledBtnColor" type="String" default="#999999" access="global"/>
+    
+    <!-- handlers -->
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:handler event="c:REIDP_ReInitEvent" action="{! c.init }"/>
+    <!-- libraries -->
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <!-- the container element determine the height of the datatable -->
+    <p style="color: #666666; font-weight: bold; font-size: 20px; font-size: 20px; margin-bottom: 15px;">{!v.ApplicationLabel}</p>
+    <aura:if isTrue="{! if(v.data.length == 0, true, false)}">
+        <p>
+            No applications available.
+        </p>
+        <aura:set attribute="else">            
+            <lightning:datatable keyField="id"
+                                 data="{! v.data }"
+                                 columns="{! v.columns }"
+                                 hideCheckboxColumn="true"
+                                 onrowaction="{! c.handleRowAction }"/>
+        </aura:set>
+    </aura:if>
+</aura:component>

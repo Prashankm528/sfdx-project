@@ -1,0 +1,16 @@
+<aura:component description="SFO_OpportunityProbabilityMessage" implements="flexipage:availableForRecordHome,force:hasRecordId">
+    <aura:attribute name="opportunity" type="Map" access="private"/>
+
+    <force:recordData aura:id="recordLoader"
+            recordId="{!v.recordId}"
+            fields="CASFO_Probability_Override__c"
+            targetFields="{!v.opportunity}"/>
+
+    <aura:if isTrue="{!and(not(empty(v.opportunity)), not(empty(v.opportunity.CASFO_Probability_Override__c)))}">
+        <div class="slds-box slds-theme--shade slds-theme--alert-texture">
+            <span><lightning:icon iconName="utility:warning" size="medium" alternativeText="Warning Probability Override"/></span>
+            <span class="slds-p-horizontal--x-small"><strong>{!$Label.c.SFO_Probability_Override_Message}</strong></span>
+        </div>
+    </aura:if>
+
+</aura:component>

@@ -1,0 +1,279 @@
+<template>
+    <lightning-card>
+        
+        <template if:true={featureDisabled}>
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" role="alert">
+                <span class="slds-assistive-text">warning</span>
+                <h2>Access to this feature is restricted.</h2>
+            </div>
+        </template>
+
+        
+        <template if:true={isQuickTrade}>
+            <div class="slds-form" role="list">
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Location</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.MeterName}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <lightning-input variant="label-inline" type="number" name="quantityField" label={volumeUnitOfMeasure}
+                                value={trade.Quantity} max={trade.Volume} onchange={handleQuantityChange} required
+                                disabled={featureDisabled}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <lightning-combobox variant="label-inline" name="directionField" label="Direction"
+                                value={trade.Direction} options={directions} onchange={handleDirectionChange} disabled={featureDisabled}></lightning-combobox>
+                        </div>
+                    </div>
+
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Price</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.Price}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Product Type</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.ProductType}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Pipeline</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.PipelineName}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Delivery Period</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.DeliveryPeriod}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Zone</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.ZoneName}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template if:true={isMoreInfo}>
+            <div class="slds-form" role="list">
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Location</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.MeterName}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Pipeline</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.PipelineName}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Direction</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.Direction}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Zone</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.ZoneName}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Daily volume</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.Volume}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Delivery period</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.DeliveryPeriod}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Live price</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.Price}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Market status</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.MarketStatus}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Product type</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.ProductType}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Last traded on</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.LastTradedOn}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">Start date</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.StartDate}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-form__row">
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            <span class="slds-form-element__label">End date</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <div class="slds-form-element__static">{trade.EndDate}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal slds-hint-parent">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <div class="slds-grid slds-grid_align-end slds-p-top_small">
+            <div class="slds-col">
+                <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+            </div>
+            <div class="slds-col slds-p-left_small">
+                <template if:true={isQuickTrade}>
+                    <lightning-button label="Complete trade" onclick={completeTrade} disabled={featureDisabled}></lightning-button>
+                </template>
+            </div>
+        </div>
+
+    </lightning-card>
+</template>

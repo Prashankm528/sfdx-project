@@ -1,0 +1,16 @@
+.THIS ul {
+    list-style: disc !important;
+    padding-left: 2rem;
+}
+
+.THIS .decimalListType {
+    list-style: decimal !important;
+}
+
+.THIS .circleListType {
+    list-style: circle !important;
+}
+
+.THIS .squareListType {
+    list-style: square !important;
+}

@@ -1,0 +1,40 @@
+<template>
+
+    <div>
+    <template if:true={available}>
+    <table  class="slds-action-overflow--touch__footer slds-border_left slds-border_right slds-table slds-table_bordered slds-table_col-bordered">
+        <thead>
+            <tr class="slds-line-height_reset">
+            <th class="" scope="col">
+                <div class="slds-truncate" title="Name">Name</div>
+            </th>
+            <th class="" scope="col">
+                <div class="slds-truncate" title="Pending Documents">Pending Documents</div>
+            </th>
+            </tr>
+        </thead>
+        <tbody>
+            <template for:each={docReqList} for:item="row">
+                <tr key={row.reqId} class={row.styleClass}>
+            <td key={row.reqId}>
+                <a class="slds-truncate"
+                    data-id={row.reqId}
+                    onclick={clickHandler}
+                    id={row.reqName}>{row.reqName}
+            </a>
+                </td>
+                <td key={row.reqId}>
+                <span class="slds-truncate">{row.pendingDocs}
+                </span>
+                </td>
+            </tr>
+            </template>
+        </tbody>
+        </table>
+    </template>
+    <template if:false={available}>
+        <div class="slds-align_absolute-center highlight"><p>You have no pending requests!</p></div>
+    </template>
+    </div>
+
+</template>

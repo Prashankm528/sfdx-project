@@ -1,0 +1,146 @@
+<aura:component >
+    <aura:attribute name="event" type="Object"/>
+
+    <section aria-labelledby="panel-heading-id" class="slds-popover tooltip-section slds-popover_large" role="dialog">
+        <lightning:buttonIcon iconName="utility:close" variant="bare" alternativeText="Close dialog" class="slds-float_right slds-popover__close event-close" size="medium"/>
+
+        <header class="slds-popover__header slds-popover_panel" style="background-color: #d8d7d7; height: 25px;">
+            <h2 class="slds-text-heading_small" id="dialog-heading-id">
+            </h2>
+        </header>
+        <div class="slds-popover__header slds-popover_panel">
+            <header class="slds-media slds-media_center slds-m-bottom_small">
+                <aura:if isTrue="{!v.event.extendedProps.objectType =='Activity'}">
+                    <lightning:icon iconName="custom:custom82" alternativeText="Activity" class="slds-media__figure"/>
+                </aura:if>
+                <aura:if isTrue="{!v.event.extendedProps.objectType =='Task'}">
+                    <lightning:icon iconName="standard:task" alternativeText="Task" class="slds-media__figure"/>
+                </aura:if>
+                <aura:if isTrue="{!v.event.extendedProps.objectType =='Event'}">
+                    <lightning:icon iconName="standard:events" alternativeText="Event" class="slds-media__figure"/>
+                </aura:if>
+                <div class="slds-media__body">
+                    <h2 class="slds-text-heading_medium slds-hyphenate" id="panel-heading-id">
+                        <a href="javascript:void(0);" class="event-title">{!v.event.title}</a>
+                    </h2>
+                </div>
+            </header>
+            <footer class="slds-grid slds-wrap slds-grid_pull-padded">
+                <aura:if isTrue="{!v.event.extendedProps.objectType =='Activity'}">
+                    <div class="slds-p-horizontal_small slds-size_1-of-1 slds-p-bottom_x-small">
+                        <dl>
+                            <dt>
+                                <p class="slds-popover_panel__label slds-truncate" title="Objective">
+                                    Objective
+                                </p>
+                            </dt>
+                            <dd>
+                                <a href="javascript:void(0);"><lightning:formattedText class="event-objective" value="{!v.event.extendedProps.objectiveName}"/></a>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-p-bottom_x-small">
+                        <dl>
+                            <dt>
+                                <p class="slds-popover_panel__label slds-truncate" title="Ownership">
+                                    Ownership
+                                </p>
+                            </dt>
+                            <dd>
+                                <lightning:formattedText value="{!v.event.extendedProps.ownership}"/>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-p-bottom_x-small">
+                        <dl>
+                            <dt>
+                                <p class="slds-popover_panel__label slds-truncate" title="Paid for By">
+                                    Paid for By
+                                </p>
+                            </dt>
+                            <dd>
+                                <lightning:formattedText value="{!v.event.extendedProps.paidBy}"/>
+                            </dd>
+                        </dl>
+                    </div>
+                </aura:if>
+                <div class="slds-p-horizontal_small slds-size_1-of-1 slds-p-bottom_x-small">
+                    <dl>
+                        <dt>
+                            <p class="slds-popover_panel__label slds-truncate" title="Description">
+                                Description
+                            </p>
+                        </dt>
+                        <dd>
+                            <lightning:formattedText value="{!v.event.extendedProps.description}"/>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="slds-p-horizontal_small slds-size_1-of-2 slds-p-bottom_x-small">
+                    <dl>
+                        <dt>
+                            <p class="slds-popover_panel__label slds-truncate" title="Status">Status</p>
+                        </dt>
+                        <dd>
+                            <lightning:formattedText value="{!v.event.extendedProps.status}"/>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="slds-p-horizontal_small slds-size_1-of-2 slds-p-bottom_x-small">
+                    <dl>
+                        <dt>
+                            <p class="slds-popover_panel__label slds-truncate" title="Status">Type</p>
+                        </dt>
+                        <dd>
+                            <lightning:formattedText value="{!v.event.extendedProps.type}"/>
+                        </dd>
+                    </dl>
+                </div>
+                <aura:if isTrue="{!v.event.extendedProps.objectType =='Event'}">
+                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-p-bottom_x-small">
+                        <dl>
+                            <dt>
+                                <p class="slds-popover_panel__label slds-truncate" title="Start Date">Start Date</p>
+                            </dt>
+                            <dd>
+                                <lightning:formattedDateTime value="{!v.event.start}" year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"/>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-p-bottom_x-small">
+                        <dl>
+                            <dt>
+                                <p class="slds-popover_panel__label slds-truncate" title="End Date">End Date</p>
+                            </dt>
+                            <dd>
+                                <lightning:formattedDateTime value="{!v.event.end==null?v.event.end:v.event.end-1}" year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"/>
+                            </dd>
+                        </dl>
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{!v.event.extendedProps.objectType !='Event'}">
+                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-p-bottom_x-small">
+                        <dl>
+                            <dt>
+                                <p class="slds-popover_panel__label slds-truncate" title="Start Date">Start Date</p>
+                            </dt>
+                            <dd>
+                                <lightning:formattedDateTime value="{!v.event.start}" year="numeric" month="numeric" day="numeric"/>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-p-bottom_x-small">
+                        <dl>
+                            <dt>
+                                <p class="slds-popover_panel__label slds-truncate" title="End Date">End Date</p>
+                            </dt>
+                            <dd>
+                                <lightning:formattedDateTime value="{!v.event.end==null?v.event.end:v.event.end-1}" year="numeric" month="numeric" day="numeric"/>
+                            </dd>
+                        </dl>
+                    </div>
+                </aura:if>
+            </footer>
+        </div>
+    </section>
+</aura:component>

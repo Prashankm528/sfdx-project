@@ -1,0 +1,13 @@
+.THIS .vote { 
+	padding: .5rem;
+	text-align: left;
+	background: #fff;
+    object-fit: contain;
+    border-radius: 2px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12);
+}
+
+.THIS .slds-button_brand { 
+	padding-left: 0.5rem !important;
+}

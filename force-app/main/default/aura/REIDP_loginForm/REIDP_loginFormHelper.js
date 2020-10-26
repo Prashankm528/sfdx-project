@@ -1,0 +1,78 @@
+({
+    qsToEventMap: {
+        'startURL'  : 'e.c:REIDP_setStartUrl'
+    },
+
+    handleLogin: function (component, event, helpler) {
+        var username = component.find("username").get("v.value");
+        var password = component.find("password").get("v.value");
+        var action = component.get("c.login");
+        var startUrl = component.get("v.startUrl");
+        
+        startUrl = decodeURIComponent(startUrl);
+        
+        action.setParams({username:username, password:password, startUrl:startUrl});
+        action.setCallback(this, function(a){
+            var rtnValue = a.getReturnValue();
+            if (rtnValue !== null) {
+                component.set("v.errorMessage",rtnValue);
+                component.set("v.showError",true);
+            }
+        });
+        $A.enqueueAction(action);
+    },
+    
+    getIsUsernamePasswordEnabled : function (component, event, helpler) {
+        var action = component.get("c.getIsUsernamePasswordEnabled");
+        action.setCallback(this, function(a){
+        var rtnValue = a.getReturnValue();
+            if (rtnValue !== null) {
+                component.set('v.isUsernamePasswordEnabled',rtnValue);
+            }
+        });
+        $A.enqueueAction(action);
+    },
+    
+    getIsSelfRegistrationEnabled : function (component, event, helpler) {
+        var action = component.get("c.getIsSelfRegistrationEnabled");
+        action.setCallback(this, function(a){
+        var rtnValue = a.getReturnValue();
+            if (rtnValue !== null) {
+                component.set('v.isSelfRegistrationEnabled',rtnValue);
+            }
+        });
+        $A.enqueueAction(action);
+    },
+    
+    getCommunityForgotPasswordUrl : function (component, event, helpler) {
+        var action = component.get("c.getForgotPasswordUrl");
+        action.setCallback(this, function(a){
+        var rtnValue = a.getReturnValue();
+            if (rtnValue !== null) {
+                component.set('v.communityForgotPasswordUrl',rtnValue);
+            }
+        });
+        $A.enqueueAction(action);
+    },
+    
+    getCommunitySelfRegisterUrl : function (component, event, helpler) {
+        var action = component.get("c.getSelfRegistrationUrl");
+        action.setCallback(this, function(a){
+        var rtnValue = a.getReturnValue();
+            if (rtnValue !== null) {
+                component.set('v.communitySelfRegisterUrl',rtnValue);
+            }
+            
+            //Fire loaded event for iOS
+            try {
+                webkit.messageHandlers.callbackHandler.postMessage("loaded");
+            } catch(err) {}
+            
+            //Fire loaded event for Android
+            try {
+                LoginPage.loaded();
+            } catch(err) {}
+        });
+        $A.enqueueAction(action);
+    }
+})

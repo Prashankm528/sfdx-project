@@ -1,0 +1,24 @@
+<!--
+  @Component Name     : ICRM_CDH_one.cmp    
+  @Description        : Component to show iframe with Credit Limit Hierarchy report in SF
+  @Author             : Santosh Verma
+  @Group              : IST
+  @Last Modified By   :  
+  @Last Modified On   :  
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author      		      Modification
+  ==============================================================================
+  1.0    27.08.2019                 Santosh verma             Initial Version
+-->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+   <aura:attribute name="CDH_One" type="Object"/>
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      layoutType="FULL"
+                      targetFields="{!v.CDH_One}"
+                      targetError="{!v.recError}"
+                      /> 
+    <c:ICRM_CreditCPID  HoldRecordId="{!v.CDH_One}"/>
+    <c:ICRM_CreditLimit simpleRecord="{!v.CDH_One}"/>
+</aura:component>

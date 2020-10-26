@@ -1,0 +1,12 @@
+<design:component label="CA IDP Self Register">
+    <design:attribute name="startUrl" label="Start URL" description="The URL the user is brought to after a successful registration."/>
+    <design:attribute name="regConfirmUrl" default="./CheckPasswordResetEmail" label="Registration Confirmation URL" description="The URL to display after a successful registration where the user did not provide a password."/>
+    <design:attribute name="firstnameLabel" default="First Name" label="First Name Label" description="The label for the field where a user enters a first name."/>
+    <design:attribute name="lastnameLabel" default="Last Name" label="Last Name Label" description="The label for the field where a user enters a last name."/>
+    <design:attribute name="emailLabel" default="Email" label="Email Label" description="The label for the field where a user enters a valid email address."/>
+    <design:attribute name="passwordLabel" default="Create Password" label="Password Label" description="The label for the field where the user enters a new password request."/>
+    <design:attribute name="confirmPasswordLabel" default="Confirm Password" label="Confirm Password Label" description="The label for the field where the user enters the new password, a second time, for verification."/>
+    <design:attribute name="submitButtonLabel" default="Sign Up" label="Submit Button Label" description="The label for the button the user clicks to submit the request for a new account."/>
+    <design:attribute name="includePasswordField" default="false" label="Include Password Field?" description="Sets self registration to require specifying password at time of registration."/>
+    <design:attribute name="extraFieldsFieldSet" default="CAIDP_Registration_Fields" label="Extra Fields Field Set Name" description="A user field set api name for extra fields the user needs to populate to submit a self registration."/>
+</design:component>

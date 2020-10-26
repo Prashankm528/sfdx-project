@@ -1,0 +1,10 @@
+<design:component >
+	<design:attribute name="personalDetailsFAQ" default="How can I change my personal details?" label="FAQ 1" description="Question #1."/>
+    <design:attribute name="personalDetailsAnswer" default="Go to the profile page (click Your username button in the header) and click Edit button to change Your personal details." label="Answer 1" description="Answer #1."/>
+    <design:attribute name="updatePasswordFAQ" default="How can I update my password?" label="FAQ 2" description="Question #2."/>
+    <design:attribute name="updatePasswordAnswer" default="Go to the profile page (click Your username button in the header) and click Change Password button to set new password." label="Answer 2" description="Answer #2."/>
+    <design:attribute name="deleteAccountFAQ" default="How can I delete my account?" label="FAQ 3" description="Question #3."/>
+    <design:attribute name="deleteAccountAnswer" default="Send email to our support team with the request to deactivate your account." label="Answer 3" description="Answer #3."/>
+    <design:attribute name="furtherSupportFAQ" default="How can I get further support?" label="FAQ 4" description="Question #4."/>
+    <design:attribute name="furtherSupportAnswer" default="Go to the help page or open 'Contact Us' email composer at the bottom of the page to send email to our support team." label="Answer 4" description="Answer #4."/>
+</design:component>

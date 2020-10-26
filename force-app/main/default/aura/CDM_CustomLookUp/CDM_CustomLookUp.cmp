@@ -1,0 +1,122 @@
+<!-- CDM_CustomLookUp Component which is used for show look up search component  -->
+<aura:component  access="global" controller="CDM_CreditDebitNoteFormController" extends="c:CDM_GenericComponent">
+    <!--declare attributes--> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="selectedRecord" type="sObject" default="{}" description="Use,for store SELECTED sObject Record"/>
+    <aura:attribute name="listOfSearchRecords" type="List" description="Use,for store the list of search records which returns from apex class"/>
+    <aura:attribute name="PreviousListOfSearchRecords" type="List" description="Use,for store the list of search records which prevoius result"/>
+    <aura:attribute name="SearchKeyWord" type="string"/>
+    <aura:attribute name="SNoteFlg" type="Boolean" default="false"/>
+    <aura:attribute name="PreviousSearchKeyWord" type="string"/>
+    <aura:attribute name="objectAPIName" type="string" default=""/>
+    <aura:attribute name="IconName" type="string" default=""/>
+    <aura:attribute name="label" type="string" default=""/>
+     <aura:attribute name="requestType" type="String"/>
+    <aura:attribute name="fieldName" type="string" default=""/>
+    <aura:attribute name="value" type="string" default=""/>
+    <aura:attribute name="Message" type="String" default=""/>
+     <aura:attribute name="fieldsMetaDatamap" type="Map" /> 
+    <aura:attribute name="required" type="Boolean" /> 
+     <aura:attribute name="sumAmount" type="Double"/>
+    <aura:attribute name="country" type="String"/>
+    <aura:attribute name="companyCode" type="String"/>
+    <aura:attribute name="supportingNotes" type="String"/>
+  
+    <aura:attribute name="readOnly" type="Boolean" /> 
+    <!--declare events hendlers  required-->  
+   <aura:handler name="CDM_SelectLookUpRecord" 
+                 event="c:CDM_SelectLookUpRecord" 
+                 action="{!c.handleComponentEvent}"/> 
+ 
+      <aura:if isTrue="{!v.value.CDM_Read_Only__c}">
+               <lightning:input     disabled="{!v.value.CDM_Read_Only__c}"
+                                    required="{!v.value.CDM_Required__c}"
+                                    value="{!v.selectedRecord.Name}"
+                                	 label="{!v.value.Name}"/>
+           <aura:set attribute="else">
+    <div onmouseleave="{!c.onblur}" aura:id="searchRes" 
+         class="slds-form-element slds-lookup slds-is-close" 
+         data-select="single">
+        <label class="slds-form-element__label" for="lookup-348">{!v.label} 
+           </label> <lightning:helptext
+       content="{!add('Supporting Note(Credit):'+v.selectedRecord.CDM_Supporting_Notes_Credit__c,'Supporting Note(Debit): '+v.selectedRecord.CDM_Supporting_Notes_Debit__c)}"
+    />
+        <!--This part is for display search bar for lookup-->  
+        <div class="slds-form-element__control">
+               
+                       <div class="slds-input-has-icon slds-input-has-icon--right">
+                <!-- This markup is for when an record is selected -->
+                <div aura:id="lookup-pill" class="slds-pill-container slds-hide">
+                     <lightning:pill class="pillSize" 
+                                     label="{!v.selectedRecord.Name}" 
+                                     name="{!v.selectedRecord.Name}" 
+                                     onremove="{! c.clear }">
+                          <aura:set attribute="media">
+                             <lightning:icon iconName="{!v.IconName}" 
+                                             size="x-small" 
+                                             alternativeText="{!v.IconName}"/>
+                          </aura:set>
+                      </lightning:pill>
+                </div>
+                <div aura:id="lookupField" class="slds-show">
+                    <lightning:icon class="slds-input__icon slds-show" 
+                                    iconName="utility:search" 
+                                    size="x-small" 
+                                    alternativeText="search"/>
+                     <ui:inputText click="{!c.onfocus}" 
+                                   updateOn="keyup" 
+                                   aura:id="{!v.fieldName}"
+                                   keyup="{!c.keyPressController}" 
+                                   class="slds-lookup__search-input slds-input leftPaddingClass"
+                                   value="{!v.SearchKeyWord}" 
+                                   placeholder="search approver.."
+                                   disabled="{!v.readOnly}"
+                                   required="{!v.required}"/>
+                </div>   
+            </div> 
+                
+                
+        </div>
+        <!--This part is for Display typehead lookup result List-->  
+        <ul style="min-height:40px;margin-top:0px !important" 
+            class="slds-listbox slds-dropdown_length-5 slds-listbox_vertical slds-dropdown_fluid slds-lookup__menu slds" 
+            role="listbox">
+            <lightning:spinner class="slds-hide" variant="brand" size="small" aura:id="mySpinner"/>
+            <center> {!v.Message}</center>
+            <aura:iteration items="{!v.listOfSearchRecords}" var="singleRec">
+              <c:CDM_LookUpResult oRecord="{!singleRec}" IconName="{!v.IconName}"/>  
+            </aura:iteration>
+        </ul>
+    </div> 
+                </aura:set>
+            </aura:if>
+    
+   <!-- 
+   <aura:if isTrue="{!v.SNoteFlg == true}">
+       <div style="height:640px">
+  <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+    <div class="slds-modal__container">
+     
+                <header class="slds-modal__header slds-modal__header_empty">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                            title="Close" onclick="{!c.close}" name="close">
+                        <lightning:Icon iconName="utility:close" alternativeText="Close" />
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Supporting Note</h2>
+                </header>
+      <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <p> Supporting Note(Credit): {!v.selectedRecord.CDM_Supporting_Notes_Credit__c}</p>
+          <div class="slds-border_top"> <p>Supporting Note(Debit): {!v.selectedRecord.CDM_Supporting_Notes_Debit__c}</p> </div>
+                </div>
+      <footer class="slds-modal__footer">
+        <button class="slds-button slds-button_neutral"  onclick="{!c.close}">OK</button>
+      
+      </footer>
+    </div>
+  </section>
+  <div class="slds-backdrop slds-backdrop_open"></div>
+</div>
+     
+        </aura:if> 
+-->    
+</aura:component>

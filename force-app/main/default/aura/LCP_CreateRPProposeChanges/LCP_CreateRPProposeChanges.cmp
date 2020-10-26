@@ -1,0 +1,4 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:lightningQuickAction,force:hasRecordId,forceCommunity:availableForAllPageTypes" controller="LCP_ProposeChangesController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="rprecordId" type="String" default="{!v.recordId}"/>
+</aura:component>

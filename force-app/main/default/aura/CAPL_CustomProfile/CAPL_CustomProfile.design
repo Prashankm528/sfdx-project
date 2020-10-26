@@ -1,0 +1,27 @@
+<design:component >
+	<design:attribute name="castrolProfessionalPoints"  label="Castrol Professional Points" />
+	<design:attribute name="following"  label="Following" />
+	<design:attribute name="followers"  label="Followers" />
+	<design:attribute name="posts"  label="Posts" />
+	<design:attribute name="comments"  label="Comments" />
+	<design:attribute name="likes"  label="Likes" />
+	<design:attribute name="name"  label="Name" />
+	<design:attribute name="aboutme"  label="About me" />
+	<design:attribute name="jobrole"  label="Job Role" />
+	<design:attribute name="cell"  label="Cell" />
+	<design:attribute name="email"  label="Email" />
+	<design:attribute name="birthdate"  label="Birthdate" />
+	<design:attribute name="location"  label="Location" />
+	<design:attribute name="phone"  label="Phone" />
+	<design:attribute name="oembrand"  label="OEM Brand" />
+	<design:attribute name="close"  label="Close" />
+	<design:attribute name="editpersonalinfo"  label="Edit Personal Info" />
+	<design:attribute name="cancel"  label="Cancel" />
+    <design:attribute name="edit"  label="Edit" />
+	<design:attribute name="save"  label="Save" />
+	<design:attribute name="updatephoto"  label="Update Photo" />
+	<design:attribute name="updatephotodetails"  label="You can upload a JPG, GIF or PNG file. Maximum file size is 16 MB." />
+	<design:attribute name="currentphoto"  label="Current Photo" />
+	<design:attribute name="changeimage"  label="Change image" />
+	<design:attribute name="selectfiles"  label="Select files" />
+</design:component>

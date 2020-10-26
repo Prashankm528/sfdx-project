@@ -1,0 +1,52 @@
+<aura:component controller="REIDP_ProfileChangePasswordController" 
+                implements="forceCommunity:availableForAllPageTypes" 
+                access="global">
+    
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <aura:attribute name="newPassword" type="String" />
+    <aura:attribute name="newPasswordRepeat" type="String" />
+    <aura:attribute name="oldPassword" type="String" />
+    <aura:attribute name="policyRule" type="String" />
+	
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    
+    {! v.policyRule }
+    
+    <lightning:input aura:id="oldPassword" 
+                     type="password"
+                     label="{!$Label.c.IDPOldPassword}" 
+                     name="oldpass" 
+                     value="{!v.oldPassword}" 
+                     placeholder="{!$Label.c.IDPOldPassword}" 
+                     minlength="8" 
+                     required="true" 
+                     messageWhenBadInput="{!$Label.c.CastrolPasswordLength}"
+                     onchange ="{! c.checkFields }"/>
+    
+    <lightning:input aura:id="newPassword" 
+                     type="password" 
+                     label="{!$Label.c.IDPNewPassword}" 
+                     name="newpass" 
+                     value="{!v.newPassword}" 
+                     placeholder="{!$Label.c.IDPNewPassword}" 
+                     minlength="8" 
+                     required="true" 
+                     messageWhenBadInput="{!$Label.c.CastrolPasswordLength}" 
+                     onchange ="{! c.checkFields }"/>
+    
+    <lightning:input aura:id="newPasswordRepeat"
+                     type="password"
+                     label="{!$Label.c.IDPRepeatPassword}" 
+                     name="repeatpass" 
+                     value="{!v.newPasswordRepeat}" 
+                     placeholder="{!$Label.c.IDPRepeatPassword}" 
+                     minlength="8" 
+                     required="true" 
+                     messageWhenBadInput="{!$Label.c.CastrolPasswordLength}" 
+                     onchange ="{! c.checkFields }"/>
+    
+    <div class="slds-align_absolute-center slds-m-top_x-large">
+        <lightning:button aura:id="submitId" name="submit" label="{!$Label.c.IDPSubmit}" variant="success" onclick="{! c.handleSubmit }" class="bp-brand-yes" disabled="true"/>
+    </div>
+</aura:component>

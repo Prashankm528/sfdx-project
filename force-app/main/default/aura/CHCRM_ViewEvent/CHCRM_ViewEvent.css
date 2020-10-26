@@ -1,0 +1,7 @@
+.THIS .card-padding {
+    margin-bottom: 0;
+    padding: var(--lwc-varSpacingVerticalMedium,1rem) var(--lwc-varSpacingHorizontalMedium,1rem);
+}
+/*.THIS .row-height {
+    height: 2rem;
+}*/

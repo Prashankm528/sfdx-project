@@ -1,0 +1,8 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:appHostable">
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+	
+	<aura:attribute name="redirectToURL" type="String" />
+
+	<lightning:spinner variant="brand" size="large"/>
+</aura:component>

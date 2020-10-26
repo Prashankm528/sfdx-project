@@ -1,0 +1,177 @@
+<aura:component controller="GCP_TFD_Claim_Parcels_Controller" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction">
+    <!--Attributes here-->
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <!--currentStep attribute will control the steps of progress indicator-->
+    <aura:attribute name="currentStep" type="string" default="1"/>
+    <aura:attribute name="ListOfParcels" type="GCP_TFD_LC_Parcel__c[]" />
+    <aura:attribute name="recordId" type="string"/>
+    <aura:attribute name="caseValue" type="case" default="{sobjectType : 'Case'}"/>
+    <aura:attribute name="picvalue1" type="List"/>
+    <aura:attribute name="picvalue2" type="List"/>
+    <lightning:spinner aura:id="mySpinner" class="slds-hide"/>
+    
+    <!--Init handler to fetch Parcel records here-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <ui:button class="slds-button slds-button--brand" press="{!c.openModel}" label="Claim"/>
+    <!--Code to have 2 screens having next and back button here-->
+    <!--Pop-up related Code-->
+    <div class="slds-m-around_xx-large">     
+        <!--Use aura:if tag to display Model Box, on the bese of conditions. [isOpen boolean attribute] -->    
+        <aura:if isTrue="{!v.isOpen}">
+            <!--###### MODAL BOX Start From Here ######--> 
+            <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <!--Close button on top left-->
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{!c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="header99" class="slds-text-heading--medium">Claim Parcels</h2>
+                        <br/>
+                        <aura:if isTrue="{!not(empty(v.ListOfParcels))}">
+                        <!--lightning progressIndicator start-->
+                            <lightning:progressIndicator currentStep="{!v.currentStep}" type="Path">
+                                <lightning:progressStep label="Select Parcels" value="1" onclick="{!c.selectFromHeaderStep1}"/>
+                                <lightning:progressStep label="Select Letter Type" value="2" onclick="{!c.selectFromHeaderStep2}"/>
+                            </lightning:progressIndicator>  
+                        </aura:if>
+                    </div>
+					
+					<!-- Code added by Subin Starts -->
+					
+                    <aura:if isTrue="{!not(empty(v.ListOfParcels))}">
+                        <div class="slds-modal__content slds-p-around_medium">
+                            <div class="{!v.currentStep == '1' ? 'slds-show' : 'slds-hide'}">
+                               <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+                                  <thead>
+                                      <!--Header-->
+                                     <tr class="slds-text-title--caps">
+                                        <th width="40">
+                                           <span class="slds-truncate" title="Discounted Payment Date">Discounted Payment Date :</span> 
+                                        </th>
+										<th>
+                                           <ui:inputDate aura:id="discdate" value="" displayDatePicker="true" format="MM/dd/yyyy"/>
+                                        </th>
+                                     </tr>
+                                  </thead>                                
+                               </table>
+                            </div>
+						</div>
+					</aura:if>
+					
+					<!-- Code added by Subin Ends -->
+					
+                    <aura:if isTrue="{!not(empty(v.ListOfParcels))}">
+                        <!--MODAL BODY Part Start From Here -->
+                        <div class="slds-modal__content slds-p-around_medium">
+                            <!--showing 2 screens based on progress indicator steps-->
+                            <div class="{!v.currentStep == '1' ? 'slds-show' : 'slds-hide'}">
+                                <!--Parcel Selection screen here-->
+                                <!--Parcels table part--> 
+                               <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+                                  <thead>
+                                      <!--Header-->
+                                     <tr class="slds-text-title--caps">
+                                        <th style="width:3.25rem;" class="slds-text-align--right">
+                                           <div class="slds-form-element">
+                                              <div class="slds-form-element__control">
+                                                 <label class="slds-checkbox">
+                                                    <!--header checkbox for select all-->
+                                                    <ui:inputCheckbox aura:id="box3" change="{!c.selectAll}"/>
+                                                    <span class="slds-checkbox--faux"></span>
+                                                    <span class="slds-form-element__label text"></span>
+                                                 </label>
+                                              </div>
+                                           </div>
+                                        </th>
+                                        <th>
+                                           <span class="slds-truncate" title="Name">Parcel Name</span>      
+                                        </th>
+                                        <th>
+                                           <span class="slds-truncate" title="Parcel Value">Parcel Value</span>
+                                        </th>
+										<th>
+                                           <span class="slds-truncate" title="BP Reference Number">BP Reference Number</span>
+                                        </th>
+                                     </tr>
+                                  </thead>
+                                  <!--table body start,Iterate Parcel list as a <tr> -->
+                                  <tbody>
+                                     <aura:iteration items="{!v.ListOfParcels}" var="parcel">
+                                        <tr>
+                                           <td scope="row" class="slds-text-align--right" style="width:3.25rem;">
+                                              <div class="slds-form-element">
+                                                 <div class="slds-form-element__control">
+                                                    <label class="slds-checkbox">
+                                                       <ui:inputCheckbox text="{!parcel.Id}" aura:id="boxPack" value=""/>
+                                                       <span class="slds-checkbox--faux"></span>
+                                                       <span class="slds-form-element__label text"></span>
+                                                    </label>
+                                                 </div>
+                                              </div>
+                                           </td>
+                                           <td scope="row">
+                                              <div class="slds-truncate" title="{!parcel.Name}"><a>{!parcel.Name}</a></div>
+                                           </td>
+                                           <td scope="row">
+                                              <div class="slds-truncate" title="{!parcel.GCP_TFD_Amount__c}">{!parcel.GCP_TFD_Amount__c}</div>
+                                           </td>
+										   <td scope="row">
+                                              <div class="slds-truncate" title="{!parcel.GCP_TFD_Reference_Number__c}">{!parcel.GCP_TFD_Reference_Number__c}</div>
+                                           </td>
+                                        </tr>
+                                     </aura:iteration>
+                                  </tbody>
+                               </table>
+                            </div>
+                            <!--Second Screen Code-->
+                            <div class="{!v.currentStep == '2' ? 'slds-show' : 'slds-hide'}" >
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="select-01">Cover Letter</label>
+                                        <div class="slds-select_container">
+                                            <ui:inputSelect  aura:id="cLetter" class="slds-select" required="True"/>
+                                        </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="select-01">Supporting Letter</label>
+                                        <div class="slds-select_container">
+                                            <ui:inputSelect  aura:id="sLetter" class="slds-select" required="True"/>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                     	<aura:set attribute="else">   							
+                            <h3 id="staticText" class="slds-text-heading--medium">There are no parcels to claim for this LC record.</h3>
+  						</aura:set>
+ 					</aura:if>    
+                    
+                    <aura:if isTrue="{!not(empty(v.ListOfParcels))}">
+                    <!-- MODAL BOX FOOTER Part Start From Here-->
+                        <div class="slds-modal__footer slds-modal__footer_directional">
+                            <lightning:button disabled="{!v.currentStep != '1' ? '' : 'disabled'}"
+                                              variant="neutral" 
+                                              label="Back"
+                                              title="Back"
+                                              onclick="{! c.moveBack }"/>
+                            <aura:if isTrue="{!v.currentStep != '2'}">
+                                <lightning:button variant="brand" 
+                                                  label="Next"
+                                                  title="Next"
+                                                  onclick="{! c.moveNext }"/>
+                            </aura:if>
+                            <aura:if isTrue="{!v.currentStep == '2'}"> 
+                                <lightning:button variant="brand" 
+                                                  label="Finish"
+                                                  title="Finish"
+                                                  onclick="{!c.finish}"/>  
+                            </aura:if>
+                        </div>
+                    </aura:if>    
+                </div>
+            </div>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>
+</aura:component>

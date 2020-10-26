@@ -1,0 +1,9 @@
+.disabledbutton {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+.scrollable {
+    height: 200px; 
+    overflow-y:auto;
+}

@@ -1,0 +1,255 @@
+<aura:component implements="force:appHostable" controller="CASFO_QBRMeetingRequestController"> 
+    <aura:attribute name="accounts" type="Account[]"/>
+    <aura:attribute name="selectedAccountId" type="Id" description="Selected Customer Id"/>
+    <aura:attribute name="searchTerm" type="String" description="String used to search for accounts"/>
+    <aura:attribute name="searchLocked" type="Boolean" description="Indicates if search is locked"/>
+    <aura:attribute name="searchedAccounts" type="Account[]"
+                    description="Accounts available for user defined by a searchTerm"/>
+    <aura:attribute name="selectAll" type="Boolean" description="Flag to select all listed Accounts"/>
+    <aura:attribute name="countOfRequested" type="Integer" description="Count of all requested Accoutns"/>
+    <aura:attribute name="showFavouritesOnly" type="Boolean" description="" default="false"/>
+    <aura:attribute name="showBusinessUnitOnly" type="Boolean" description="" default="false"/>
+    <aura:attribute name="showSpinner" type="Boolean" description="" default="true"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="slds-modal__header">
+        <h2 class="slds-text-heading--medium">{!$Label.c.CALCF_QBR_RequesterTitle}</h2>
+    </div>
+    
+    <div class="slds-modal__content">
+        <div class="slds-grid slds-p-around_medium">
+            <p>
+                <div class="slds-m-vertical_small">
+                	{!$Label.c.CALCF_QBR_RequesterRuleIntro}
+                </div>
+                <ul class="slds-list_dotted">
+                    <li>{!$Label.c.CALCF_QBR_RequesterRule1}</li>
+                    <li>{!$Label.c.CALCF_QBR_RequesterRule2}</li>
+                    <li>{!$Label.c.CALCF_QBR_RequesterRule3}</li>
+                    <li>{!$Label.c.CALCF_QBR_RequesterRule4}</li>
+                </ul>
+                <div class="slds-m-vertical_small">
+                	{!$Label.c.CALCF_QBR_RequesterRuleOutro}
+                </div>
+                
+                <lightning:input class="slds-m-vertical_small" 
+                                 label="{!$Label.c.CALCF_QBR_RequesterFavToggle}" 
+                                 type="checkbox" 
+                                 checked="{!v.showFavouritesOnly}" 
+                                 onchange="{!c.toggleFav}"/>
+                <lightning:input class="slds-m-vertical_small" 
+                                 label="Show only my Business Unit" 
+                                 type="checkbox" 
+                                 checked="{!v.showBusinessUnitOnly}" 
+                                 onchange="{!c.toggleBU}"/>
+            </p>
+        </div>
+    </div>
+    
+    <!-- Loading -->
+    
+    <aura:if isTrue="{! v.showSpinner}">
+        <!-- <lightning:spinner alternativeText="Loading" size="small" /> -->
+        <table class="slds-table slds-table_bordered slds-table_striped slds-table_cell-buffer slds-p-bottom_large">
+        <div class="slds-align_absolute-center slds-m-top_large" style="height: 4rem;">
+          <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_inline slds-spinner_medium slds-spinner_brand">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+          </div>
+            
+            
+        </div>
+            <h2 class="slds-align_absolute-center slds-text-heading--medium ">Loading...</h2>
+        </table>
+    </aura:if>
+    
+    <!-- Loading -->
+    <!-- Account table -->
+    
+    <aura:if isTrue="{! !v.showSpinner}">
+    <table class="slds-table slds-table_bordered slds-table_striped slds-table_cell-buffer">
+        <thead>
+            <tr class="slds-text-title_caps">
+                
+                <th scope="col"><div class="slds-truncate" 
+                                     title="Name">Name</div></th>
+                <th scope="col"><div class="slds-truncate" 
+                                     title="Owner">Owner</div></th>
+                <th scope="col"><div class="slds-truncate" 
+                                     title="Business Unit">Business Unit</div></th>
+                <th scope="col"><div class="slds-truncate" 
+                                     title="Classification">Classification</div></th>
+                <th scope="col"><div class="slds-truncate" 
+                                     title="Type">Type</div></th>
+                <th scope="col"><div class="slds-truncate slds-align_absolute-center" 
+                                     title="Favourite">Favourite</div></th>
+                <th scope="col"><div class="slds-truncate slds-align_absolute-center" 
+                                     title="QBR Requested">QBR Requested</div></th>
+                <th scope="col"><div class="slds-truncate slds-align_absolute-center" 
+                                     title="QBR Planned">QBR Planned</div></th>
+                <th scope="col"><div class="slds-truncate slds-align_absolute-center" 
+                                     title="QBR Completed">QBR Completed</div></th>
+                <th scope="col">
+                    <div class="slds-truncate slds-align_absolute-center" title="SELECT ALL">
+                		<lightning:input label="SELECT ALL" 
+                                         type="checkbox" 
+                                         checked="{!v.selectAll}" 
+                                         onchange="{!c.toggleSelect}"/>
+					</div>
+                </th>
+            </tr>
+        </thead>
+        
+        <tbody> 
+            <aura:iteration items="{!v.accounts}" var="account">
+                <tr>
+                    <td>
+                        <div class="slds-truncate" title="{#account.Name}">
+                            <a href="{!'/lightning/r/Account/'+ account.Id + '/view'}" 
+                               target="_blank">{!account.Name}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="slds-truncate" title="{#account.Owner.Name}">
+                            <a href="{!'/lightning/r/User/'+ account.OwnerID + '/view'}" 
+                               target="_blank">{!account.Owner.Name}</a>
+                        </div>
+                    </td>
+                    <td>
+						{!account.Business_Unit__c}
+                    </td>
+                    <td>
+                        <lightning:recordViewForm recordId="{#account.Id}" objectApiName="Account">
+                            <div class="slds-truncate">
+                                <lightning:outputField fieldName="Classification__c" variant="label-hidden"/>
+                            </div>
+                        </lightning:recordViewForm>
+                        
+                    </td>
+                    <td>
+                        <lightning:recordViewForm recordId="{#account.Id}" objectApiName="Account">
+                            <div class="slds-truncate">
+                                <lightning:outputField fieldName="Type" variant="label-hidden"/>
+                            </div>
+                        </lightning:recordViewForm>
+                    </td>
+                    <td>
+                        <div class="slds-align_absolute-center">
+                            <aura:if isTrue="{#account.CASFO_QBR_Favorite__c}">
+                                Y
+                                <aura:set attribute="else">
+                                    N
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="slds-align_absolute-center">
+                            <aura:if isTrue="{#account.CASFO_QBR_Requested__c}">
+                                <div class="slds-text-color_error">Y</div>
+                                <aura:set attribute="else">
+                                    N
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="slds-align_absolute-center">
+                            <aura:if isTrue="{#account.CASFO_QBR_Planned__c}">
+                                <div class="slds-text-color_error">Y</div>
+                                <aura:set attribute="else">
+                                    N
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="slds-align_absolute-center">
+                            <lightning:formattedDateTime value="{#account.CASFO_QBR_Completed_Date__c}" 
+                                                         year="numeric" 
+                                                         month="short" 
+                                                         day="2-digit"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="slds-align_absolute-center">
+                            <lightning:input type="checkbox" 
+                                             checked="{!account.newRequest}" 
+                                             onchange="{!c.updateCount}"/>
+                        </div>
+                    </td>
+                        
+                </tr>
+                    
+            </aura:iteration>
+            
+        </tbody>
+    </table>
+    </aura:if>
+    
+    <div class="slds-modal__footer">
+        <div class="slds-grid">
+            
+            <!-- Account Search Start-->
+            
+            <div class="slds-col slds-size_4-of-12">
+                <div class="slds-form-element">
+                    <lightning:input aura:id="locationsInput" 
+                                     updateOn="keyup" 
+                                     onchange="{!c.search}" 
+                                     placeholder="{!$Label.c.CALCF_QBR_RequesterSearchPlaceholder}" 
+                                     value="{!v.searchTerm}"/>
+                    
+                    <aura:if isTrue="{! !empty(v.searchedAccounts)}">
+                        <div class="slds-lookup__menu" id="lookup-66">
+                            <ul class="slds-lookup__list" role="listbox">
+                                
+                                <aura:iteration items="{!v.searchedAccounts}" var="account">
+                                    <li role="presentation">
+                                        <span class="slds-lookup__item-action slds-media" 
+                                              id="{!account.Id}" 
+                                              onclick="{!c.selectAccount}" 
+                                              data-label="{!account.Name}" 
+                                              role="option">
+                                            <lightning:icon iconName="standard:account" 
+                                                            size="small" 
+                                                            class="slds-media__figure"/>
+                                            <div class="slds-media__body">
+                                                <div class="slds-lookup__result-text">{!account.Name}</div>
+                                                <span class="slds-lookup__result-meta slds-text-body--small">
+                                                    ERP: {!account.Account_ERP_ID__c}
+                                                </span>
+                                                <span class="slds-lookup__result-meta slds-text-body--small">
+                                                    Business Unit: {!account.Business_Unit__c}
+                                                </span>
+                                            </div>
+                                        </span>
+                                    </li>
+                                </aura:iteration>
+                                
+                            </ul>
+                        </div>
+                        
+                    </aura:if>
+                    
+                </div>
+            </div>
+            
+            <!-- Account Search End-->
+            
+            <div  class="slds-col slds-size_5-of-12"></div>      
+            <div  class="slds-col slds-size_3-of-12">
+                <div class="slds-p-top_medium">
+                    <lightning:button variant="neutral" 
+                                      label="Cancel"  
+                                      onclick="{!c.close}"/>
+                    <lightning:button variant="brand"
+                                      label="{!'Confirm Request (' + v.countOfRequested + ')'}"
+                                      onclick="{!c.request}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

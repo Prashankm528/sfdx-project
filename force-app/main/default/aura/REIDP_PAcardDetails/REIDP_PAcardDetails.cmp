@@ -1,0 +1,60 @@
+<!--
+ * @author Amal Ali-Muradbeyli
+ * @company Bluewolf, an IBM Company
+ * @date 9/2017
+ *
+ * This is a component that holds all card related details
+ * 
+ -->
+
+<aura:component access="global" controller="REIDP_PAConsumerDetailsController">
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="cardsInfo" type="REIDP_PAApi.Card" description="Attribute that holds data returned from API call"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:spinner aura:id="cardDetailsSpinner" variant="brand" size="large"/>
+    <ui:outputText class="slds-form-element__static" value="{!v.lookupInfo.pan}" />   
+    <lightning:layout horizontalAlign="spread" multipleRows="true">
+        <aura:if isTrue="{!empty(v.cardsInfo)}">
+            <ui:outputText class="slds-form-element__static" value="User has no associated cards." />
+            <aura:set attribute="else">
+                <aura:iteration var="card" items="{!v.cardsInfo}">
+                    <lightning:layoutItem flexibility="auto"  mediumDeviceSize="6" size="6" padding="around-small">
+                        <lightning:tile class="slds-hint-parent slds-grid slds-grid_align-spread slds-has-flexi-truncate" label="">
+                            <h3 class="slds-show_inline-block slds-tile__title slds-truncate" title="{!card.nickName + ' (' + card.cardType + ')'}">{!card.nickName + ' (' + card.cardType + ')'}</h3>
+                            <div class="slds-shrink-none slds-show_inline-block slds-float_right cardSettings">
+                                <lightning:buttonMenu iconName="utility:settings" class="" alternativeText="Settings" onselect="{!c.deleteCard}">
+                                    <lightning:menuItem label="Delete card" value="{!card.cardUri}"/>
+                                </lightning:buttonMenu>
+                            </div>
+                            
+                            <aura:set attribute="media">
+                                <lightning:icon iconName="custom:custom62"/>
+                            </aura:set>
+                            <dl class="slds-dl--horizontal">
+                                <dt class="slds-dl--horizontal__label">
+                                    <ui:outputText class="slds-form-element__label" value="Card PAN:" />
+                                </dt>
+                                <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                                    <ui:outputText class="inline-data slds-form-element__static" value="{!card.pan}" />
+                                </dd>
+                                <dt class="slds-dl--horizontal__label">
+                                    <ui:outputText class="slds-form-element__label" value="Added date:" />
+                                </dt>
+                                <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                                    <ui:outputDateTime format="DD-MMM-YYYY" class="inline-data slds-form-element__static" value="{!card.createDateDT}" />
+                                </dd>
+                                <dt class="slds-dl--horizontal__label">
+                                    <ui:outputText class="slds-form-element__label" value="Last modified:" />
+                                </dt>
+                                <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                                    <ui:outputDateTime format="DD-MMM-YYYY" class="inline-data slds-form-element__static" value="{!card.modifiedDateDT}" /> 
+                                </dd>
+                            </dl>
+                        </lightning:tile>
+                    </lightning:layoutItem>       
+                </aura:iteration>
+            </aura:set>
+        </aura:if>
+    </lightning:layout>
+    {!v.body}
+</aura:component>

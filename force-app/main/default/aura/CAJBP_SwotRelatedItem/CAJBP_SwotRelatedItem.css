@@ -1,0 +1,38 @@
+/**
+ * Created by amirhafeez on 19/03/2020.
+ */
+
+.THIS {
+}
+
+.THIS .sortable-ghost {
+    width: 100%;
+    opacity: .5;
+    background: #C8EBFB;
+}
+
+.THIS .sortable-chosen {
+    /*opacity: .5;
+    background: rgba(224, 228, 255, 0.86);*/
+}
+
+.THIS .sortable-drag {
+    opacity: .5;
+    background: rgba(224, 228, 255, 0.86);
+    /*padding: 10px;*/
+}
+
+.THIS .list-group-item {
+    cursor: grab;
+}
+
+.THIS .btn-container {
+    margin-left: 5px;
+    position: relative;
+    top: -2px;
+}
+
+.THIS .btn-position {
+    position: relative;
+    top: -0.1em;
+}

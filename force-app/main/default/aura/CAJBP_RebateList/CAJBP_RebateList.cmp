@@ -1,0 +1,52 @@
+<!--
+ * @author			Jan Majling
+ * @date			09/08/2018
+ * @group			CAJBP
+ * @description		Displays list of rebates assigned to the provided scorecard
+ *
+ * history
+ * 09/08/2018	Jan Majling			Created
+ -->
+<aura:component controller="CAJBP_RebateListController" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+	<aura:attribute name="recordId" type="Id"/>
+	<aura:attribute name="title" type="String"/>
+	<aura:attribute name="icon" type="String"/>
+
+	<aura:attribute name="rebates" type="CAJBP_Rebate__c[]" access="private"/>
+	<aura:attribute name="describeInfo" type="Map" access="private"/>
+	<aura:attribute name="isLoading" type="Boolean" access="private" default="true"/>
+	<aura:attribute name="bodyClass" type="String" access="private" default="content"/>
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	<aura:handler event="force:refreshView" action="{!c.doInit}" />
+	<aura:registerEvent name="eventAction" type="c:BPG_EventAction"/>
+
+	<c:BPG_ApexProvider aura:id="apexProvider"/>
+	<c:CAJBP_RefreshIt needle="Rebate" />
+
+    <lightning:card iconName="{!v.icon}" class="slds-card_boundary">
+        <aura:set attribute="title">
+            <aura:if isTrue="{!not(empty(v.rebates))}">
+                <div class="title">Rebates ({!v.rebates.length})</div>
+                <aura:set attribute="else">
+                    <div class="title">Rebates</div>
+                </aura:set>
+            </aura:if>
+        </aura:set>
+        <div class="{!v.bodyClass}">
+            <aura:if isTrue="{!v.isLoading}">
+                <lightning:spinner size="medium" variant="brand"/>
+            </aura:if>
+
+            <aura:if isTrue="{!not(empty(v.rebates))}">
+                <lightning:layout multipleRows="true" class="container">
+                    <aura:iteration items="{!v.rebates}" var="item">
+                        <lightning:layoutItem size="12" largeDeviceSize="4" smallDeviceSize="12" padding="around-small">
+                            <c:CAJBP_RebateListItem rebate="{!item}" describeInfo="{!v.describeInfo}"/>
+                        </lightning:layoutItem>
+                    </aura:iteration>
+                </lightning:layout>
+            </aura:if>
+        </div>
+    </lightning:card>
+</aura:component>

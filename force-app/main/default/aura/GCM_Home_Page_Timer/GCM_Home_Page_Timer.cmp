@@ -1,0 +1,6 @@
+<aura:component implements="lightning:availableForFlowScreens,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" controller="GCM_C2S_Controller">
+    <aura:handler name="init" value="{!this}" action="{!c.init}"  />
+    <div aura:id="ModalDialogPlaceholder" />   
+    <lightning:button value="Finish" label="Finish" variant="brand" onclick="{!c.handleStatusChange}"/>
+    <lightning:button value="Refresh" label="Refresh" variant="brand" onclick="{!c.doRefresh}"/>
+</aura:component>

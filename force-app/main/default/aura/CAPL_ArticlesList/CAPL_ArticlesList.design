@@ -1,0 +1,5 @@
+<design:component >
+	<design:attribute name="header" label="Header" description="header of the component" />
+	<design:attribute name="by" label="By" description="a word between date and user" />
+	<design:attribute name="views" label="Views" description="views word under number of views" />
+</design:component>

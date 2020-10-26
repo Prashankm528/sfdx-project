@@ -1,0 +1,111 @@
+body {
+    background-color: #fafafa;
+}
+
+@media only screen and (max-width: 480px) {
+    .country {
+        display: none;
+    }
+}
+
+h3.country {
+    font-size: 14px;
+}
+
+.wrapper {
+    margin:0 auto;
+    max-width: 780px;
+}
+
+.survey-description-holder {
+    padding-top: 18px;
+}
+
+.survey-container {
+    margin-top:32px;
+    margin-bottom: 64px;
+}
+
+@media only screen and (max-width: 632px) {
+    .survey-container {
+        margin:0 auto;
+        box-shadow: none;
+    }
+}
+
+h5 {
+    font-size: 14px;
+    color:#525759;
+    margin-top:8px;
+}
+
+.survey-footer-holder {
+    text-align: center;
+}
+
+.survey-submit-button {
+    float:none;
+    width:100%;
+    max-width: 300px;
+}
+
+.footer {
+    padding: 19px 0 19px 0;
+}
+
+@media screen and (max-width: 780px) {
+    .footer {
+        padding: 19px 10px 19px 10px;
+    }
+}
+
+.copyright-holder {
+    float:left;
+}
+
+.legal-holder {
+    float: right;
+    margin-top:-3px;
+}
+
+.copyright-holder, .legal-holder {
+    font-family: CastrolSansCon-Regular, Arial, sans-serif;
+    color: #525759;
+    font-size: 14px;
+}
+
+.copyright-holder a, .legal-holder a {
+    font-size: 14px;
+    color: #525759;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 480px) {
+    .copyright-holder, .legal-holder, .copyright-holder a, .legal-holder a {
+        font-size: 12px;
+    }
+}
+
+/* FOOTER FIXED TO BOTTOM */
+html, body {
+    height: 100%;
+}
+
+.page-outer-wrapper {
+    min-height: 100%;
+    margin-bottom: -53px; /* equal to footer height */
+}
+
+.page-outer-wrapper:after {
+    content: "";
+    display: block;
+}
+
+.footer, .page-outer-wrapper:after {
+    height: 53px; 
+}
+
+.footer {
+    border-top: 1px #d9d9d9 solid;
+    box-sizing: border-box;
+}

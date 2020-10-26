@@ -1,0 +1,55 @@
+
+<template>
+  
+     
+    <!-- <div class="disabledbutton"> -->
+        <div >
+    <div class="slds-box slds-box_x-small slds-theme_shade ">
+        <p><strong>Locations</strong></p>
+      </div><br/>
+    <div class="slds-m-around_medium">
+    <p>Choose Location for your Package</p><br/>
+   
+    <lightning-layout vertical-align="end" >
+        <lightning-layout-item   size ="2">
+            <lightning-combobox
+            name="progress"
+            label="AVAILABLE ACTIONS"
+            value={value}
+            placeholder="Select Progress"
+            options={options}
+            onchange={handleChange} ></lightning-combobox>
+        </lightning-layout-item>
+        <lightning-layout-item size="8">
+
+        </lightning-layout-item>
+        <lightning-layout-item size="2">
+            <lightning-input name="enter-search" placeholder="Search Locations" type="search" ></lightning-input>
+        </lightning-layout-item>
+    </lightning-layout>
+       <br/>
+       <lightning-input  type="checkbox" data-id="checkbox" label="Select All Location"  onchange={selectAllCheckbox} ></lightning-input><br/>
+       <div class="scrollable">
+        <lightning-layout>
+            
+           <template for:each={locationItems} for:item="LoacationItem">
+               <p key={LoacationItem.Id}>
+                <lightning-layout-item size="3">
+                    <lightning-input class="test"  data-id="checkboxAll"  type="checkbox" label={LoacationItem.AITM_Location__r.Name} 
+                        data-record-id={LoacationItem.Id} value={LoacationItem.Id}  onchange={handleItemClicked} checked={checkbox} ></lightning-input>
+                </lightning-layout-item>
+               </p>
+                
+            </template>
+        </lightning-layout>
+       </div> <br/>
+
+      <div class="slds-clearfix ">
+        <div class="slds-float_right">
+            <lightning-button label="Next" variant="Brand" onclick={handleCustomer}></lightning-button>
+        </div>
+      </div>
+    </div>
+      
+ </div>
+</template>

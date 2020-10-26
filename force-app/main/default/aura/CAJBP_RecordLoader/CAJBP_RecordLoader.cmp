@@ -1,0 +1,19 @@
+<aura:component description="CAJBP_RecordLoader" implements="flexipage:availableForRecordHome,force:hasRecordId">
+    <aura:attribute name="id" type="String" default="jbp" required="true"/>
+    <aura:attribute name="record" type="Object"/>
+    <aura:attribute name="fields" type="String"/>
+    <aura:attribute name="error" type="String"/>
+    <aura:attribute name="targetFields" type="String[]" access="private"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:registerEvent name="recordLoadedEvent" type="c:CAJBP_RecordLoadedEvent"/>
+
+    <aura:if isTrue="{!and(not(empty(v.recordId)), not(empty(v.targetFields)))}">
+        <force:recordData aura:id="recordLoader"
+            recordId="{!v.recordId}"
+            fields="{!v.targetFields}"
+            targetFields="{!v.record}"
+            targetError="{!v.error}"
+            recordUpdated="{!c.handleRecordUpdated}"/>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,19 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+    <div class="slds-align_absolute-center video-container">
+        <div class="slds-align_absolute-center video-section">
+            <p class="slds-align_absolute-left training-title">Training Video Part 1</p>
+            <video width="640" height="480" controls="controls">
+                <source src="{!$Resource.DUP_TrainingPart1}" type="video/mp4" />
+            </video>
+        </div>
+        
+        <div class="slds-align_absolute-center video-section">
+            <p class="slds-align_absolute-left training-title">Training Video Part 2</p>
+            <video width="640" height="480" controls="controls">
+                <source src="{!$Resource.DUP_TrainingPart2}" type="video/mp4" />
+            </video>
+        </div>
+
+        
+    </div>    
+</aura:component>

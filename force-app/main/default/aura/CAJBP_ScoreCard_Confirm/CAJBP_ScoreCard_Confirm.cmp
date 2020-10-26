@@ -1,0 +1,43 @@
+<!--
+ * @author			Venkatesh Muniyasamy
+ * @date			24/04/2020
+ * @group			CAJBP
+ * @description		Validate whether the latest scorecard values are entered.
+ *
+ * history
+ * 24/04/2020 	Venkatesh Muniyasamy	Created
+ -->
+<aura:component controller="CAJBP_ScorecardConfirm" implements="force:hasRecordId,flexipage:availableForAllPageTypes" description="CAJBP Scorecard Confirmation">
+
+<aura:handler name="init" value="{!this}" action="{!c.onLoad}"/>
+<aura:attribute name="ytdMonth" type="String"/>
+
+<aura:registerEvent name="tabViewEvent" type="c:CAJBP_TabViewEvent"/>
+<aura:registerEvent name="refreshScorecardEvent" type="c:CAJBP_RefreshScorecardEvent"/>
+
+<c:BPG_ApexProvider aura:id="apexProvider"/>
+
+<aura:attribute name="showYTDConfirm" type="boolean" default="false"/>
+    <div class="slds-m-around_xx-large">
+        <aura:if isTrue="{!v.showYTDConfirm}">
+            <div role="dialog" class="slds-modal slds-fade-in-open ">
+                <div class="slds-modal__container">
+
+                    <header class="slds-modal__header">
+                        <h1 class="slds-text-heading--medium">Confirmation</h1>
+                    </header>
+
+                    <div class="slds-modal__content slds-p-around--medium">
+                        <center><b>Have you updated the YTD Values for the Month of {!v.ytdMonth}?</b></center>
+                    </div>
+
+                    <footer class="slds-modal__footer">
+                        <lightning:button name='No' label='No' onclick='{!c.handleConfirmNo}'/>
+                        <lightning:button variant="brand" name='Yes' label='Yes' onclick='{!c.handleConfirmYes}'/>
+                    </footer>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>
+        </aura:if>
+    </div>
+</aura:component>

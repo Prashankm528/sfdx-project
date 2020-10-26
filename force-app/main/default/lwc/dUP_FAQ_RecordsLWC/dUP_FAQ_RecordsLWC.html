@@ -1,0 +1,25 @@
+<template>
+    <div>
+        <lightning-card title="FAQ" icon-name="action:question_post_action">
+            <template if:true={FAQrecords}>
+                <div class="slds-m-around_small">
+                    <lightning-input type = "search" onchange = {handleSearch} class = "slds-m-bottom_small" placeholder = "Search here" >
+                    </lightning-input> 
+
+                    <lightning-datatable 
+                        key-field="Id" 
+                        data={FAQrecords} 
+                        columns={columns} 
+                        hide-checkbox-column="true" 
+                        show-row-number-column="true"
+                        onrowaction={navigateToRecordViewPage}>
+                    </lightning-datatable>
+                </div>
+            </template> 
+
+            <template if:true={error}>
+                error :{error}
+            </template>
+        </lightning-card>
+    </div>
+</template>

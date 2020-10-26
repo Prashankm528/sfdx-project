@@ -1,0 +1,12 @@
+.THIS .slds-accordion__summary-action {
+    background-color: rgb(243, 242, 242);
+    width:832.656px;
+    height:32px;
+}
+
+.THIS.slds-m-vertical--none {
+    margin-top: 0!important;
+    margin-bottom: 0!important;
+    width : 611.328px;
+    height : 300px;
+}

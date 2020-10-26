@@ -1,0 +1,10 @@
+.THIS {
+	margin-bottom: -.75rem;
+}
+
+.THIS .slds-section__title-action:hover,
+.THIS .slds-section__title-action:focus,
+.THIS .slds-section__title-action:active {
+	background: inherit;
+	box-shadow: none;
+}

@@ -1,0 +1,9 @@
+.THIS .successCls{
+    color : green;
+}
+.THIS .errorCls{
+    color : red;
+}
+.THIS .errorBorderCls{
+    border : 1px solid red;
+}

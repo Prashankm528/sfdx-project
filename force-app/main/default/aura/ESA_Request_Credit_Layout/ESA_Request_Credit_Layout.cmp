@@ -1,0 +1,62 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="flag" type="Boolean" default="True"/>
+    <aura:attribute name="flag1" type="Boolean" />
+    <aura:attribute name="errormsg" type="Boolean" />
+    <aura:attribute name="retype" type="String"/>
+    <aura:if isTrue="{!v.errormsg}">
+        <ui:message title="Error" severity="error" closable="true">
+            Error! You do not have Edit Permission to other business
+        </ui:message>
+        <aura:set attribute="else" >
+            <aura:if isTrue="{!v.retype == 'ESA_Vendor'}" >   
+                <ui:message title="Error" severity="error" closable="false">
+                    Credit Request is not applicable for Vendors!
+                </ui:message>
+                <aura:set attribute="else" >
+                    <aura:if isTrue="{!v.flag1}">
+                        <ui:message title="Error" severity="error" closable="false">
+                            Credit Assessment Request is not allowed for your group!!
+                        </ui:message>        
+                        <p class="test-id__section-header-button slds-button slds-m-vertical--none">
+                            <span class="test-id__section-header-icon slds-icon_container slds-m-right_x-small"></span></p>
+                        <aura:set attribute="else" >
+                            <lightning:recordEditForm aura:id="myForm" recordId="{!v.recordId}" objectApiName="Account"  density="comfy" onload="{!c.handleOnload}" onsuccess="{!c.handleSuccess}" onsubmit="{!c.handleOnSubmit}" onerror="{!c.onError}">
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>
+                                            <lightning:inputField aura:id='identifier' fieldName="OLCM_Unique_identifier__c" required = "true" />
+                                            <lightning:outputField fieldName="Unique_Identifier_Help__c" />
+                                            <lightning:inputField aura:id='bpforecast' fieldName="OLCM_BP_Annual_Margin_Forecast__c" />
+                                            <lightning:inputField aura:id='bphistory' fieldName="OLCM_BP_Annual_Margin_History__c"/>
+                                            <lightning:inputField aura:id ='tfsales' fieldName="OLCM_Total_Forecast_Sales__c" required = "true"/>
+                                            <lightning:inputField aura:id='nodays' fieldName="OLCM_Invoice_Frequency_Number__c" required = "true" />
+                                            <lightning:inputField aura:id='payterm' fieldName="OLCM_Payment_Term_Number__c" required = "true" />
+                                            <lightning:inputField aura:id='addDays' fieldName="OLCM_Additional_Days_Number__c" required = "true" />
+                                            <lightning:inputField aura:id='vatpercent' fieldName="OLCM_Recoverable_VAT_Percentage__c"/>
+                                            <lightning:inputField aura:id='motpercent' fieldName="OLCM_Recoverable_MOT_Percent__c"/>                           
+                                        </span>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>
+                                            <lightning:outputField fieldName="OLCM_Credit_Control_Area__c" />
+                                            <br></br>
+                                            <lightning:outputField fieldName="OLCM_Credit_Segment__c"/>
+                                            <br></br>
+                                            <lightning:outputField fieldName="OLCM_Peak_Exposure_Number__c" /> 
+                                            <br></br>
+                                            <lightning:outputField fieldName="OLCM_Gross_Requested_Credit__c"  />                        
+                                            <lightning:outputField fieldName="Salesforce_ID__c" />
+                                            <br></br>                                                    
+                                        </span>
+                                    </div>
+                                </div>
+                                <lightning:button class="slds-m-top_small slds-align_absolute-center" variant="brand" type="submit" name="Save" label="Save"  />
+                            </lightning:recordEditForm>
+                        </aura:set>        
+                    </aura:if>
+                </aura:set>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+</aura:component>

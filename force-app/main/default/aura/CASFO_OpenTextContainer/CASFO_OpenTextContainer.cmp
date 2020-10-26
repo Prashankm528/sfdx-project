@@ -1,0 +1,25 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="CASFO_PrivacyStatementControllerClass">
+    <aura:attribute name="erpId" type="String"/>
+    <aura:attribute name="isValidSalesOrg" type="Boolean"/>
+    <aura:attribute name="errorMsg" type="String"/>
+    <aura:attribute name="accountFields" type="Account"/>
+    
+    <aura:handler name="change" value="{!v.accountFields}" action="{!c.checkAccSalesOrg}" />
+    <force:recordData
+        recordId="{!v.recordId}"
+        fields="Account_ERP_ID__c, Sales_Organisation__c, Record_Type__c, ParentId, Parent.ParentId, Parent.Account_ERP_ID__c, Parent.Parent.ParentId, Parent.Parent.Account_ERP_ID__c"
+        targetFields="{!v.accountFields}"
+    />
+    
+    <div class="opentext">
+        <aura:if isTrue="{!and(v.isValidSalesOrg, empty(v.errorMsg))}">
+            <iframe name="OpenText" src="{! $Label.c.CASFO_OpenText_iframe_container + v.erpId }"></iframe>
+            
+            <aura:set attribute="else">
+                <span class="slds-align_absolute-center slds-text-heading_medium" style="padding-top: 10px">
+                {!v.errorMsg}
+            	</span>
+            </aura:set>
+        </aura:if>
+    </div>
+</aura:component>

@@ -1,0 +1,93 @@
+<!--****************************************************************************************
+*   Date:           2019-10-18
+*   Author:         Alessandro Miele - IBM
+*   Description:    Component to show the single reviewed document store     
+****************************************************************************************-->
+<aura:component description="single document store view" controller="DUP_ApprovedDocumentRequestController">
+    <aura:attribute name="readOnly" type="Boolean" default="true" access="public"/>
+    <aura:attribute name="documentId" type="Id" access="public"/>
+    <aura:attribute name="documentStatus" type="String"/> 
+    <aura:attribute name="docStatusSelected" type="String"/> 
+    <aura:attribute name="documents" type="List" access="public"/>
+    <aura:attribute name="documentsOption" type="String" access="public"/>
+    <aura:attribute name="record" type="DUP_Document_Store__c" access="public"/>
+    <aura:attribute name="document" type="Object" access="public"/>
+    <aura:attribute name="recordId" type="String" access="public"/>
+    <aura:attribute name="documentStoreId" type="String" access="public"/>
+    <aura:attribute name="contentDocument" type="ContentDocumentLink[]" access="public"/>
+    <aura:attribute name="fileInfoList" type="Object[]" access="public"/>
+    <aura:attribute name="isSpinner" type="Boolean" access="public"/>
+
+    <aura:html tag="style">
+      .forceContentPreviewPlayerTopToolbar .file-preview-buttons {
+          display: none !important;
+      } 
+    </aura:html>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class="slds-box">
+        <div class="slds-section forcePageBlockSection" aura:id="sectionDiv">
+            <h1 class="slds-section__title" onclick="{!c.toggleSection}"> 
+                <div class="slds-button slds-section__title-action">
+                    <lightning:icon iconName="utility:switch" class="section-icon slds-section__title-action-icon slds-button__icon slds-button__icon_left " size="x-small" />
+                    <span class="{!'slds-text-align_center slds-badge slds-m-right_x-small slds-tex slds-p-top_xx-small slds-p-left_small slds-p-right_small dup-badge ' +
+                                 (equals($Label.c.DUP_Document_Requirement_Mandatory, v.documentsOption) ? 'dup-badge-text__red' :
+                                 equals($Label.c.DUP_Document_Requirement_Frozen, v.documentsOption) ? 'dup-badge-text__blue' : 'dup-badge-text__dimgray')}"
+                          title="{!concat('DUP Requirement: ', v.documentsOption)}">
+                        <strong>
+                            <aura:if isTrue="{!v.documentsOption == 'Mandatory'}">
+                                M
+                                <aura:set attribute="else">
+                                    <div class="blueOne">
+                                        O
+                                    </div>
+                                </aura:set>
+                            </aura:if> 
+                        </strong>
+                    </span>                   
+                    
+                    <lightning:icon iconName="utility:record" alternativeText="{!v.documents}"  title="" class="{slds-p-right_x-small slds-p-bottom_xxx-small greenOne}" size="x-small"/>                                         
+                    
+                    <span class="slds-truncate">{!v.documents} </span>
+                </div>
+            </h1>
+            
+            <div class="slds-form slds-form_stacked slds-section__content toggle" aura:id="linksSection">
+                <div class="slds-grid slds-wrap slds-p-around_medium slds-gutters">
+                    <div class="slds-col slds-size_12-of-12 slds-box slds-m-bottom--medium">
+                        <div class="slds-grid slds-wrap slds-gutters">                           
+                            <div class="slds-col slds-size_3-of-12 slds-align_absolute-center">
+                                <div class=""> 
+                                    Document Status: {!v.documentStatus}
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_9-of-12">
+                                <aura:iteration items="{!v.contentDocument}" var="file">        
+                                    <c:DUP_ApprovedSingleFileView documentStore="{!v.record}" 
+                                                        documentId="{!v.documentId}"
+                                                        contentDocument="{!v.contentDocument}"
+                                                        context="ErrorFile"
+                                                        fileInfoList="{!v.fileInfoList}"
+                                                        contentVersionId="{!file.ContentDocument.LatestPublishedVersionId}"
+                                                        fileId="{!file.ContentDocumentId}"
+                                                        fileTitle="{!file.ContentDocument.Title}"
+                                                        fileExtension="{!file.ContentDocument.FileExtension}"
+                                                        fileStatus="{!file.ContentDocument.LatestPublishedVersion.DUP_Status__c}"
+                                                        sharepointError="{!file.ContentDocument.LatestPublishedVersion.DUP_SharepointError__c}"
+                                                        isSpinner="{!v.isSpinner}"/>
+                                </aura:iteration>
+                                <aura:iteration items="{!v.fileInfoList}" var="file">        
+                                    <c:DUP_ApprovedSingleFileView documentStore="{!v.record}" 
+                                                        documentId="{!v.documentId}"
+                                                        fileInfoList="{!v.fileInfoList}"
+                                                        context="fileInSharepoint"
+                                                        fileTitle="{!file.url}"
+                                                        fileStatus="{!file.status}"/>
+                                </aura:iteration> 
+                            </div>
+                        </div>
+                    </div>                                               
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

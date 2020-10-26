@@ -1,0 +1,59 @@
+.THIS .lightningInputRichText {
+    height: 280px;
+}
+
+.THIS .slds-email-composer__combobox {
+	padding: 3px 50px;
+}
+
+.THIS .slds-badge {
+    vertical-align:  middle;
+}
+
+.THIS .slds-input {
+    border-width:  0px;
+    border-radius:  0px;
+}
+
+.THIS .slds-docked-composer__header {
+	background-color: #018b46;
+	color: #ffffff;
+	text-transform: uppercase;
+    border-bottom: 0;
+    border-radius: 0;
+    height: 4rem;
+}
+
+.THIS .slds-docked-composer:hover, .THIS .slds-docked-composer:focus {
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.7) !important;
+}
+
+.THIS .slds-docked-composer {
+	-webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    border: 2px solid #018b46 !important;
+    height: 4rem;
+}
+
+.THIS .slds-docked-composer.slds-is-open {
+    height: 500px !important;
+}
+
+.THIS .slds-icon-standard-email {
+    background-color: #018b46;
+}
+
+.THIS .slds-icon-utility-erect-window svg {
+	fill: #fff;
+}
+
+.THIS .slds-input:focus, .THIS .slds-input:active {
+    border-color: rgba(217, 217, 221, 1);
+    box-shadow: 0 0 0 0;
+}
+
+.THIS .slds-rich-text-editor.slds-has-focus {
+	border-color: rgba(217, 217, 221, 1) !important;
+    box-shadow: 0 0 0 0;
+}

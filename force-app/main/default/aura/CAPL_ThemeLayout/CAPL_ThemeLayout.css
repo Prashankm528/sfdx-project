@@ -1,0 +1,178 @@
+.THIS.navHeader {
+	background-image: url('/s/sfsites/c/resource/CAPL_Resources/CAPL_Resources/images/download_2.png');
+    position: relative;
+    -webkit-transition: background .8s ease;
+    transition: background .8s ease;
+    background-repeat: no-repeat;
+    background-size: 100% 60px !important;
+}
+
+.THIS .forceCommunitySearchBox .body-search {
+	margin-top: -20px;
+    float: right;
+}
+
+.THIS .profileMenuRegion {
+	margin-top: -4px;
+}
+
+.THIS .profileIcon {
+	height: 32px !important;
+}
+
+.THIS .navMenuHeader {
+	height: 54.58px;		
+	max-width: 80rem;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.THIS.mainContentArea {
+	max-width: 80rem !important;
+	min-height: 35rem;
+}
+
+.THIS .castrolLogo {
+	padding-left: 100px;
+    height: 35px !important;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.THIS .menuList {
+	margin-top: -10px;
+} 
+
+.THIS .bpLogo img {
+	height: 60px;
+}
+
+.THIS .bpLogo {
+	background-image: url('/s/sfsites/c/resource/CAPL_Resources/CAPL_Resources/images/CAPL_CastrolBackground.png');
+    background-size: auto 60px;
+    background-repeat: no-repeat;
+    height: 54px;
+    margin-top: -1rem;
+}
+
+.THIS .searchComponent {
+	margin-top: 7px;
+}
+
+.THIS .forceCommunityGlobalNavigation > * {
+    max-width: 80rem !important;
+    width: 100% !important;
+}
+
+.THIS .slds-list__item span {
+	padding-left: 24px; 
+	padding-right: 24px;
+}
+
+.THIS.logoContainer{
+	background-color: #007833;
+    text-align: center;
+}
+
+.THIS.logoContainer img {
+	height: 102px;		
+	background: linear-gradient(90deg, #007833 0%, #99CC00 100%);
+}
+
+.THIS .forceCommunityGlobalSearchInput {
+	width: 100%;
+	min-width: inherit;
+}
+
+.THIS .forceSearchInputDesktop .inputWrapper {
+	background-color: #fcfdfc;
+}
+
+.THIS .profileName {
+	font-weight: initial !important;
+    text-transform: initial !important;
+    max-width: 75% !important;
+    text-shadow: none !important;
+}
+
+.THIS .forceSearchInputDesktop {
+	height: 25.24px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 3px;
+    font-size: 10px;
+    margin-top: -10px;
+}
+
+.THIS .forceSearchInputDesktop .contentWrapper {
+	border: .7px solid #b9b9b9 !important;
+	border-radius: 3px !important;
+} 
+
+.THIS .forceSearchInputDesktop .contentWrapper .slds-input-has-icon--left,
+.THIS .forceSearchInputDesktop .contentWrapper .slds-input {
+	color: #161616;
+    opacity: .23;
+    padding-top: 1px;
+    margin-left: -10px;
+}
+
+.THIS .selfServiceUserProfileMenu .selfServiceProfileMenuTrigger .profileIcon {
+	height: 22.57px;
+    width: auto;
+}
+
+.THIS .profileName {
+	margin-top: -2px;
+    font-size: 12px !important;
+}
+    
+.THIS .selfServiceUserProfileMenu .uiMenuItem a {
+	font-size: 12px;
+}
+
+.THIS .showOnMobile {
+	display: none;
+}
+
+/* mobile */
+@media only screen and (max-width:40.063em) {
+
+	.THIS .showOnMobile {
+		display: block;
+	}
+
+    .THIS .bpLogo img {
+    	padding-left: 100px;
+    }
+
+	.THIS .notificationProfilePanel {
+		padding-right: 15px;
+    	padding-top: 18px;
+	}    
+    
+    .THIS .forceSearchInputDesktop {
+        width: fit-content;
+        width: -moz-fit-content;
+    }
+    
+    .THIS .forceSearchInputDesktop .contentWrapper .slds-input-has-icon--left,
+    .THIS .forceSearchInputDesktop .contentWrapper .slds-input {
+        padding-top: 5px;
+    }
+    
+    .THIS .searchComponent {
+        margin-top: 9px;
+    }
+    
+    .THIS.logoContainer img {
+        height: 102px;		
+        object-fit: cover;
+    }
+
+    .THIS .slds-p-horizontal_medium {
+    	padding-left: 0px;
+    	padding-right: 0px;
+    }
+}

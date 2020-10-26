@@ -1,0 +1,29 @@
+<aura:component implements="flexipage:availableForRecordHome" access="global" controller="CHCRM_KAP_PBVTree_Ctl">
+	<aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="items" type="Object"/>
+    <aura:attribute name="mapping" type="Object"/>
+    <aura:attribute name="selectedId" type="String" default=""/>
+    <aura:attribute name="selectedName" type="String" default=""/>
+    <aura:attribute name="pbvList" type="Object" />
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col">
+            <lightning:tree items="{! v.items }" header="PB Code" onselect="{! c.handleSelect }"/>        
+        </div>
+         <div class="slds-col slds-box">
+            <fieldset class="slds-form-element">
+                <legend class="slds-form-element__legend slds-form-element__label">PBV Code</legend>
+                <div class="slds-form-element__control">
+                    <aura:iteration items="{!v.pbvList}" var="item" indexVar="key">
+                        <span class="slds-radio">
+                            <input type="radio" id="{!item.label}" value="{!item.value}" name="radio" onchange="{!c.onGroup}"/>
+                            <label class="slds-radio__label" for="{!item.label}">
+                                <span class="slds-radio_faux"></span>
+                                <span class="slds-form-element__label">{!item.label}</span>
+                            </label>
+                        </span>
+                    </aura:iteration>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</aura:component>

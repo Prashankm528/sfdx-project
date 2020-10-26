@@ -1,0 +1,10 @@
+.THIS .par {
+        text-align: justify;
+        font-family : arial;
+        font-size: 100%;
+        background-color: rgb(255,255,255);
+        border: rgb(255,255,255);
+    }
+    .THIS .html .brandQuaternaryBgr{
+        background:transparent!important;
+    }

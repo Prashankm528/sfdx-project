@@ -1,0 +1,28 @@
+<!--
+ * @author			Jan Majling
+ * @date			09/08/2018
+ * @group			CAJBP
+ * @description		Renders collapsible section with title and body
+ *
+ * history
+ * 09/08/2018	Jan Majling			Created
+ -->
+<aura:component>
+	<aura:attribute name="title" type="String" />
+
+	<div class="slds-section slds-is-open" aura:id="collapsibleSectionContainer">
+		<h3 class="slds-section__title slds-theme_shade">
+			<lightning:buttonStateful
+				labelWhenOff="{!v.title}"
+				labelWhenOn="{!v.title}"
+				iconNameWhenOff="utility:chevrondown"
+				iconNameWhenOn="utility:chevronright"
+				onclick="{!c.handleSectionHeaderClick}"
+				class="slds-section__title-action"
+			/>
+		</h3>
+		<div class="slds-section__content">
+			{!v.body}
+		</div>
+	</div>
+</aura:component>

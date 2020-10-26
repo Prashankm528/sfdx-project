@@ -1,0 +1,18 @@
+.THIS .bp-brand-yes {
+    background-color: #99CC00;
+    color: #FFFFFF;
+}
+
+.THIS .bp-brand-cancel {
+    color: #000099;
+}
+
+/* spacing between fields for readability */
+.THIS .slds-form-element {
+    margin-top: 0.5rem;
+}
+
+/* for State/Province field which is not inhereting the margin like others */
+.THIS .slds-form_compound .slds-form-element__row .slds-form-element + .slds-form-element {
+    margin-top: .5rem;
+}

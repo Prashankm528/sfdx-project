@@ -1,0 +1,88 @@
+<aura:component description="single document store view" controller="DUP_ApprovedDocumentRequestController">
+    <aura:attribute name="documentId" type="Id" access="public"/>
+    <aura:attribute name="documentStore" type="DUP_Document_Store__c" access="public"/>
+    <aura:attribute name="fileId" type="String" access="public"/>
+    <aura:attribute name="fileTitle" type="String" access="public"/>
+    <aura:attribute name="fileExtension" type="String" access="public"/>
+    <aura:attribute name="fileStatus" type="String" access="public"/>
+    <aura:attribute name="countDocStoreUploaded" type="Integer" access="public"/> 
+    <aura:attribute name="contentDocument" type="ContentDocumentLink[]" access="public"/>
+    <aura:attribute name="contentVersionId" type="String" access="public"/>
+    <aura:attribute name="fileInfoList" type="Object[]" access="public"/>
+    <aura:attribute name="context" type="String" access="public"/>
+    <aura:attribute name="sharepointError" type="String"/>
+    <aura:attribute name="isSpinner" type="Boolean" access="public"/>
+    <aura:attribute name="isSuperUser" type="Boolean" access="public"/>
+    <aura:attribute name="isModalOpen" type="Boolean" access="public"/>
+    <aura:attribute name="sentToSP" type="Boolean" access="public"/>
+    <aura:attribute name="tempFileTitle" type="String" />
+    
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <div class="dup-document-details">
+        <div class="slds-col slds-size_12-of-12 slds-align_absolute-center file-button-container"> 
+            <div class="slds-col slds-size_9-of-12 slds-align_absolute-center"> 
+                <div class="slds-hide" aura:id="previewElement"> 
+                    {!v.sharepointError}&nbsp;<a href="" id="{!v.fileId}" onclick="{!c.previewFile}">{!v.fileTitle}.{!v.fileExtension}</a> 
+                </div>
+                <div class="slds-hide" aura:id="sharepointLink">                               
+                    <a href="{!v.fileTitle}" id="{!v.fileTitle}" >{!v.fileTitle}</a>  
+                </div>
+            </div>
+            
+            <div class="slds-col slds-size_3-of-12 slds-align_absolute-center button-container">
+                <div class="slds-hide" aura:id="operationButton">
+                    <lightning:button variant="brand" label="Send to Sharepoint" onclick="{!c.sendToSP}"/> 
+                   <!-- <c:DUP_DownloadButton fileId="{!v.fileId}"/> --></div>
+                    <div class="slds-p-around_medium lgc-bg">
+                    <lightning:buttonMenu alternativeText="Show menu" variant="border-filled" iconName="utility:settings" onselect="{!c.handleMenuSelect}" class="{!v.sentToSP ?'slds-hide':''}">
+                        <lightning:menuItem value="download" label="Download" iconName="utility:download" class="{!v.isSuperUser ?'':'slds-hide'}" />
+                        <lightning:menuItem value="rename" label="Rename" iconName="utility:edit"/> 
+                    </lightning:buttonMenu>
+        		
+
+                </div>
+                
+            </div> 
+
+    </div>
+    </div>
+    <div>
+        <!--Use aura:if tag to display/hide popup based on isModalOpen value-->  
+        <aura:if isTrue="{!v.isModalOpen}">
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Rename File</h2>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <lightning:input name="inputName" label="File Name" value="{!v.tempFileTitle}" aura:id="fileName"/>
+						
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral"
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeModel }"/> 
+                        <lightning:button variant="brand"
+                                          label="Save"
+                                          title="Save"
+                                          onclick="{!c.saveFileName}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>     
+
+</aura:component>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuraDefinitionBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>48.0</apiVersion>
+    <description>on clicking quick action button on Opportunity, cloning will get initiated for Current Opportunity with Opportunity Line Items,Opportunity Line item schedule , Contract Agreement, managed cluases</description>
+</AuraDefinitionBundle>

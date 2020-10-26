@@ -1,0 +1,58 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:appHostable">
+
+	<style>
+		.caplFooter {
+		    height: 62px;
+		    background-color: #eaeaea;
+		    padding-top: 23px;
+		}
+
+		.footerCenterContent {
+			max-width: 80rem;
+		    margin-left: auto;
+		    margin-right: auto; 
+		    padding: 0px 20px;
+		}
+
+		@media only screen and (max-width:40.063em) {
+			.hideDetails {
+				display: none;
+			}
+
+			.blockLink {
+				display: block;
+			}
+
+			.caplFooter {
+				height: inherit;
+			}
+		}
+	</style>
+
+	<aura:attribute name="userGuideline" type="String" access="public" default="User guideline"/>
+	<aura:attribute name="termsAndConditions" type="String" access="public" default="Terms &#38; Conditions"/>
+	<aura:attribute name="privacyStatement" type="String" access="public" default="Privacy Statement"/>
+	
+	<aura:attribute name="castrolLimited" type="String" access="public" default="&#169; Castrol Limited 2018 | Support email: professionalleague@castrol.com"/>
+
+
+    <div class="caplFooter">
+    	<div class="slds-grid_align-center slds-grid slds-wrap footerCenterContent">
+	    	<div class="slds-size--1-of-2" style="text-align: left;">
+	    		{!v.castrolLimited}
+			</div>
+			<div class="slds-size--1-of-2" style="text-align: right;">
+				<a href="" class="blockLink" style="color: #525759;" onclick="{!c.goToUserGuideline}">{!v.userGuideline}</a>
+				<span class="hideDetails">
+					&nbsp; | &nbsp;
+				</span>
+	    		<a href="" class="blockLink" style="color: #525759;" onclick="{!c.goToTermsAndConditions}">{!v.termsAndConditions}</a>
+	    		<span class="hideDetails">
+					&nbsp; | &nbsp;
+				</span>
+	    		<a href="" class="blockLink" style="color: #525759;" onclick="{!c.goToPrivacyStatement}">{!v.privacyStatement}</a>
+			</div>
+		</div>
+	</div>
+
+</aura:component>

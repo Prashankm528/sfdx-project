@@ -1,0 +1,34 @@
+<design:component label="Joint Business Plan Layout">
+    <flexipage:template>
+        <flexipage:region name="loaders" label="Loaders Region" defaultWidth="LARGE"/>
+        <flexipage:region name="header" label="Header Region" defaultWidth="LARGE"/>
+        <flexipage:region name="path" label="Path Region" defaultWidth="LARGE"/>
+        <flexipage:region name="main" label="Main Region" defaultWidth="MEDIUM"/>
+        <flexipage:region name="rightPanel" label="Right Panel Region" defaultWidth="SMALL">
+            <flexipage:formfactor type="MEDIUM" width="SMALL"/>
+        </flexipage:region>
+        <flexipage:region name="customerContact" label="Customer Contact Region" defaultWidth="SMALL">
+            <flexipage:formfactor type="MEDIUM" width="SMALL"/>
+        </flexipage:region>
+        <flexipage:region name="other" label="Other Region" defaultWidth="SMALL">
+            <flexipage:formfactor type="MEDIUM" width="SMALL"/>
+        </flexipage:region>
+        <flexipage:region name="summary" label="Summary Region" defaultWidth="MEDIUM"/>
+        <flexipage:region name="prospect" label="Prospect Region" defaultWidth="MEDIUM"/>
+        <flexipage:region name="insights" label="Insights Region" defaultWidth="MEDIUM"/>
+        <flexipage:region name="scorecardHeader" label="Scorecard Header Region" defaultWidth="MEDIUM"/>
+        <flexipage:region name="rebates" label="Rebates Region" defaultWidth="MEDIUM"/>
+        <flexipage:region name="productMix" label="Product Mix Region" defaultWidth="MEDIUM"/>
+        <flexipage:region name="waysOfWorking" label="Ways of Working Region" defaultWidth="MEDIUM"/>
+        <flexipage:region name="scorecardFooter" label="Scorecard Footer Region" defaultWidth="MEDIUM"/>
+        <flexipage:region name="objectives" label="Objectives Region" defaultWidth="MEDIUM"/>
+        <flexipage:region name="activities" label="Activities Region" defaultWidth="MEDIUM"/>
+        <flexipage:region name="activityCalendar" label="Activities Region" defaultWidth="MEDIUM"/>
+        <flexipage:region name="jaf" label="JAF Region" defaultWidth="MEDIUM"/>
+        <flexipage:region name="dashboard" label="Dashboard Region" defaultWidth="MEDIUM"/>
+    </flexipage:template>
+    <design:supportedFormFactors>
+        <design:supportedFormFactor type="Small"/>
+        <design:supportedFormFactor type="Large"/>
+    </design:supportedFormFactors>
+</design:component>

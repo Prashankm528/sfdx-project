@@ -1,0 +1,120 @@
+.THIS .profilePhoto{
+	border-radius: 50%;
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+}
+
+.THIS .profilePhotoIcon {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+}
+
+.THIS .profilePhotoIcon svg {
+    fill: #d1d1d1;
+}
+
+.THIS .slds-modal__content {
+    max-height: 500px !important;
+    height: auto !important;
+    overflow-y: inherit !important;
+}
+.THIS .slds-notify {
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+.THIS .errorAlert {
+    font-size: 1.2rem !important;
+}
+.THIS .errorMessage {
+    color: red;
+    text-align: left;
+}
+
+.THIS .previewImage {
+	min-height: 200px;
+    min-width: 200px;
+    object-fit: contain;
+}
+
+.THIS .profilePhotoWithoutBorderRadius {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+}
+
+.THIS .disabledLink {
+    pointer-events: none;
+}
+
+.THIS.userProfile {
+    background: #fff;
+    object-fit: contain;
+    border-radius: 2px !important;
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    padding: 20px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+}
+
+.THIS .userName {
+    text-transform: uppercase;
+    color: #737779;
+    font-size: 2rem;
+}
+
+.THIS .userActivity {
+    border-top: 1px solid #d1d1d1;
+    padding-top: 1rem;
+}
+
+.THIS .activityName {
+    color: #d2d2d2;
+    text-transform: uppercase;
+}
+
+.THIS .activityCount {
+    color: #737779;
+    font-size: 1.5rem;
+}
+
+.THIS .userFieldName {
+    color: #aeafb0;
+    text-transform: uppercase;
+}
+
+.THIS .userFieldValue, .THIS .userFieldValue a {
+    color: #74797a;
+}
+
+.THIS .userFieldValue {
+    margin-bottom: 1rem;
+}
+
+.THIS .userInfo {
+    background-color: #f8f8f8;
+    border-radius: 7px;
+}
+
+.THIS .editButton {
+    width: 100%;
+    text-align: right;
+    margin-top: -2rem;
+}
+
+.THIS .editButton button {
+    color: #2b9a63;
+    background-color: #f8f8f8;
+    border: 0px;
+}
+
+.THIS .photoIcon{
+    text-align: center;
+}

@@ -1,0 +1,155 @@
+<!--
+ * @author			Jan Majling
+ * @date			09/08/2018
+ * @group			CAJBP
+ * @description		Renders 'New' button and guides users through creating a new rebate.
+ *
+ * history
+ * 09/08/2018	Jan Majling				Created
+ * 25/07/2019	Venkatesh Muniyasamy	Modified to use the component as New Override Button
+ * 02/09/2019	Venkatesh Muniyasamy	Modified as part of Record Type changes
+ * 04/10/2019 	Venkatesh Muniyasamy	Modified for new rebate wizard
+ -->
+<aura:component controller="CAJBP_CreateRebateController" implements="lightning:actionOverride,force:lightningQuickActionWithoutHeader,force:hasRecordId,lightning:isUrlAddressable" description="CAJBP_CreateRebate">
+    <aura:attribute name="scoreCardId" type="Id"/>
+    <aura:attribute name="currencyId" type="string" />
+	<aura:attribute name="isModalOpen" type="Boolean" default="false" />
+	<aura:attribute name="rebateType" type="String" default="Single" />
+	<aura:attribute name="recordTypeValues" type="String[]"/>
+	<aura:attribute name="rebateRecordTypesById" type="Map" />
+	<aura:attribute name="recordTypeId" type="Id"/>
+	<aura:attribute name="rebateTypeOptions" type="List" default="[
+		{'label': 'Single Rebate', 'value': 'Single'},
+		{'label': 'Multiple Rebate', 'value': 'Multiple'}
+	]"/>
+	<aura:attribute name="targetType" type="String" default="Volume" />
+	<aura:attribute name="targetTypeOptions" type="List" default="[
+		{'label': 'Volume', 'value': 'Volume'},
+		{'label': 'Turnover', 'value': 'Turnover'}
+    ]"/>
+    <aura:attribute name="calculationType" type="String" default="PPL" />
+	<aura:attribute name="calculationTypeOptions" type="List" default="[
+		{'label': 'Price Per Litre', 'value': 'PPL'},
+		{'label': 'Percentage', 'value': 'Percentage'}
+    ]"/>
+    <aura:attribute name="calculationPercentageTypeOptions" type="List" default="[
+    {'label': 'Percentage', 'value': 'Percentage'}
+]"/>
+	<aura:attribute name="sellType" type="String" default="Sell-In" />
+	<aura:attribute name="sellTypeOptions" type="List" default="[
+		{'label': 'Sell-In', 'value': 'Sell-In'},
+		{'label': 'Sell-Out', 'value': 'Sell-Out'}
+	]"/>
+	<aura:attribute name="showRebateWizard" type="Boolean" default="false"/>
+	<aura:attribute name="selectRecordType" type="Boolean" default="true"/>
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	<ltng:require styles="{!$Resource.CAJBP_Styles}" />
+
+	<c:LEX_Utils_Apex aura:id="LEX_Utils_Apex" />
+
+	<body>
+	    <div class="modal-header slds-modal__header">
+            <h2 class="slds-text-heading--medium">New Rebate: {!v.rebateType}&nbsp;{!v.targetType}&nbsp;{!v.calculationType}&nbsp;{!v.sellType}&nbsp;Rebate</h2>
+        </div>
+
+        <!-- actual rebate LWC form -->
+        <aura:if isTrue="{!v.showRebateWizard}">
+            <c:cajbpRebateWizard aura:id="rebatewizard" scoreCardId="{!v.scoreCardId}" currencyId="{!v.currencyId}"
+                recordTypeId = "{!v.recordTypeId}" onrebatecreated="{!c.rebateCreated}"
+                oncancelrebate="{!c.closeModal}" onbackrebate="{!c.backRebate}"
+                recordTypeValues="{!v.recordTypeValues}"/>
+        </aura:if>
+
+        <!-- rebate record type selection form -->
+        <aura:if isTrue="{!v.selectRecordType}">
+            <lightning:layout multipleRows="true" class="slds-p-left--x-large">
+                <lightning:layoutItem
+                    size="12"
+                    mediumDeviceSize="6"
+                    padding="around-small"
+                >
+                    <lightning:radioGroup
+                        name="radioGroupRebateType"
+                        label="Select Single or Multiple Rebate Type"
+                        options="{!v.rebateTypeOptions}"
+                        value="{!v.rebateType}"
+                        type="radio"
+                    />
+                </lightning:layoutItem>
+                <lightning:layoutItem
+                    size="12"
+                    mediumDeviceSize="6"
+                    padding="around-small"
+                >
+                    <lightning:radioGroup
+                        name="radioGroupTargetType"
+                        label="Select a Target Type"
+                        options="{!v.targetTypeOptions}"
+                        value="{!v.targetType}"
+                        type="radio"
+                        onchange="{!c.targetTypeChanged}"
+                    />
+                </lightning:layoutItem>
+                <lightning:layoutItem
+                    size="12"
+                    mediumDeviceSize="6"
+                    padding="around-small"
+                >
+                    <lightning:radioGroup
+                        name="radioGroupCalculationType"
+                        aura:id="radioGroupCalculationTypeId"
+                        label="Select a Calculation Type"
+                        options="{!v.calculationTypeOptions}"
+                        value="{!v.calculationType}"
+                        type="radio"
+                    />
+                </lightning:layoutItem>
+                <lightning:layoutItem
+                    size="12"
+                    mediumDeviceSize="6"
+                    padding="around-small"
+                >
+                    <lightning:radioGroup
+                        name="radioGroupSellType"
+                        label="Select a Sell-in or Sell-out Target"
+                        options="{!v.sellTypeOptions}"
+                        value="{!v.sellType}"
+                        type="radio"
+                    />
+                </lightning:layoutItem>
+            </lightning:layout>
+            <footer class="modal-footer slds-modal__footer">
+                <div class="slds-grid slds-grid_align-end slds-size_1-of-1">
+                    <lightning:button class="slds-button slds-button--neutral" onclick="{!c.closeModal}">
+                        {!$Label.c.CAJBP_NewRebateCancelButton}
+                    </lightning:button>
+                    <lightning:button class="slds-button slds-button--brand" onclick="{!c.nextStep}">
+                        {!$Label.c.CAJBP_NewRebateNextButton}
+                    </lightning:button>
+                </div>
+            </footer>
+        </aura:if>
+    </body>
+    <aura:html tag="style">
+        .slds-p-around--medium {
+            padding: 0rem !important;
+        }
+        .slds-modal__content{
+            height:unset !important;
+            max-height:unset !important;
+        }
+        .cuf-content {
+            padding: 0 0rem !important;
+        }
+        .uiModal--medium .modal-container {
+            width: 70% !important;
+            max-width: 840px !important;
+            min-width: 480px !important;
+        }
+        .slds-modal__container {
+            width: 70% !important;
+            max-width: 840px !important;
+            min-width: 480px !important;
+        }
+    </aura:html>
+</aura:component>

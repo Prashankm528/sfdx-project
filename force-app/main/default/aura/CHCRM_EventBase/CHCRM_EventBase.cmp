@@ -1,0 +1,4 @@
+<aura:component abstract="true">
+    <aura:registerEvent name="onNotification" type="c:CHCRM_CallBackInfo" />    
+    {!v.body}
+</aura:component>

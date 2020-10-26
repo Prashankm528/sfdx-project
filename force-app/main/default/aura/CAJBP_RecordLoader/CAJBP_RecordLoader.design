@@ -1,0 +1,4 @@
+<design:component label="CAJBP Record Loader">
+    <design:attribute name="id" label="Target Id" description="Unique identifier for this record payload."/>
+    <design:attribute name="fields" label="Target Fields" description="The fields to query for this record."/>
+</design:component>

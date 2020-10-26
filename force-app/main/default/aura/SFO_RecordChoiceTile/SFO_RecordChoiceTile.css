@@ -1,0 +1,10 @@
+.THIS {
+}
+
+.THIS.choice-container {
+}
+
+.THIS .choice-select {
+    position: absolute;
+    left: -0.1em;
+}

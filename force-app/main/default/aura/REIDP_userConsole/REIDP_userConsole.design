@@ -1,0 +1,3 @@
+<design:component label="RE IDP User Console">
+	<design:attribute name="recordId" label="User Id" description="Record Id of Community User"  />	
+</design:component>

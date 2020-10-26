@@ -1,0 +1,45 @@
+<template>
+    <div class={headerClass}>
+        <template if:false={readOnly}>
+            <h3 class="slds-section__title">
+                <button aria-controls={id} aria-expanded={isOpen} class="slds-button slds-section__title-action" onclick={toggleSection}>
+                    <lightning-icon icon-name="utility:switch" class="slds-section__title-action-icon slds-button__icon slds-button__icon_left" size="x-small">
+                    </lightning-icon>
+                    <template if:true={iconName}>
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name={iconName} size="small"></lightning-icon>
+                        </div>
+                        <div class="slds-media__body" style="margin-left: -3px;">
+                            <span class="slds-truncate" title={title}>{title}</span>
+                        </div>
+                    </template>
+                    <template if:false={iconName}>
+                        <div class="slds-media__body">
+                            <span class="slds-truncate" title={title}>{title}</span>
+                        </div>
+                    </template>
+                </button>
+            </h3>
+        </template>
+        <template if:true={readOnly}>
+            <h3 class="slds-section__title slds-theme_shade">
+                <template if:true={iconName}>
+                    <div class="slds-media__figure slds-p-horizontal_small">
+                        <lightning-icon icon-name={iconName} size="small"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body" style="margin-left: -15px;">
+                        <span class="slds-truncate" title={title}>{title}</span>
+                    </div>
+                </template>
+                <template if:false={iconName}>
+                    <div class="slds-media__body">
+                        <span class="slds-truncate slds-p-horizontal_small" title={title}>{title}</span>
+                    </div>
+                </template>
+            </h3>
+        </template>
+        <div aria-hidden={isClosed} class="slds-section__content" id={id}>
+            <slot></slot>
+        </div>
+    </div>
+</template>

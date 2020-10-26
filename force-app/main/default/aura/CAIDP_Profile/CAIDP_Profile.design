@@ -1,0 +1,22 @@
+<design:component >
+	<design:attribute name="cancelLabel" default="Cancel" label="Cancel Label" description="The label for Cancel Button."/>
+    <design:attribute name="editLabel" default="Edit" label="Edit Label" description="The label for Edit Button."/>
+    <design:attribute name="detailsLabel" default="Profile Details" label="Profile Details Label" description="The label for Profile Details."/>
+    <design:attribute name="nameLabel" default="Name" label="Name Label" description="The label for Name."/>
+    <design:attribute name="emailLabel" default="Email/Username" label="Email/Username Label" description="The label for Email/Username."/>
+    <design:attribute name="businessLabel" default="Business Name" label="Business Name Label" description="The label for Business Name."/>
+    <design:attribute name="addressLabel" default="Address" label="Address Label" description="The label for Address."/>
+    <design:attribute name="phoneLabel" default="Phone" label="Phone Label" description="The label for Phone."/>
+    <design:attribute name="mobileLabel" default="Mobile" label="Mobile Label" description="The label for Mobile."/>
+    <design:attribute name="infoLabel" default="Additional Information" label="Additional Information Label" description="The label for Additional Information."/>
+    <design:attribute name="aboutLabel" default="About Me" label="About Me Label" description="The label for About Me."/>
+    <design:attribute name="fnameLabel" default="First Name" label="First Name Label" description="The label for First Name."/>
+    <design:attribute name="lnameLabel" default="Last Name" label="Last Name Label" description="The label for Last Name."/>
+    <design:attribute name="streetLabel" default="Street" label="Street Label" description="The label for Street."/>
+    <design:attribute name="cityLabel" default="City" label="City Label" description="The label for City."/>
+    <design:attribute name="stateLabel" default="State" label="State Label" description="The label for State."/>
+    <design:attribute name="zipLabel" default="Zip/Postal Code" label="Zip/Postal Code Label" description="The label for Zip/Postal Code."/>
+    <design:attribute name="countryLabel" default="Country" label="Country Label" description="The label for Country."/>
+    <design:attribute name="errorLabel" default="Country should be selected" label="Error Label" description="The label for Error."/>
+    <design:attribute name="saveLabel" default="Save" label="Save Label" description="The label for Save."/>
+</design:component>

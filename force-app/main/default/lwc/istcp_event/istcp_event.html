@@ -1,0 +1,27 @@
+<template>
+    <lightning-formatted-text class="eventDateTime slds-text-align_right slds-float_right slds-p-top_small slds-p-horizontal_small" 
+        value={dateTime}></lightning-formatted-text>
+
+    <lightning-accordion-section name={name} label={name}>
+        <div class="slds-box slds-box_xx-small eventBox">
+            <lightning-layout multiple-rows horizontal-align="spread">
+                <lightning-layout-item flexibility="auto">
+                    <lightning-formatted-text class="fieldLabel" value={fieldLabel1}></lightning-formatted-text>
+                    <lightning-formatted-text class="fieldValue slds-p-left_x-small" value={fieldValue1}></lightning-formatted-text>
+                </lightning-layout-item>
+
+                <lightning-layout-item  flexibility="auto" class="slds-text-align_right">
+                    <lightning-formatted-text class="fieldLabel" value={fieldLabel2}></lightning-formatted-text>
+                    <lightning-formatted-text class="fieldValue slds-p-left_x-small" value={fieldValue2}></lightning-formatted-text>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" class="slds-p-top_x-small">
+                    <div>
+                        <lightning-formatted-text class="fieldLabel" value={fieldLabel3}></lightning-formatted-text>
+                    </div>
+                    <lightning-formatted-text class="fieldValue" value={fieldValue3}></lightning-formatted-text>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </lightning-accordion-section>
+</template>

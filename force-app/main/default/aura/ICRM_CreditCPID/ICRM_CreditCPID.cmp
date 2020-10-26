@@ -1,0 +1,57 @@
+<!--
+  @Component Name     : ICRM_CreditCPID.cmp    
+  @Description        : Component to show iframe with Credit Limit Hierarchy report in SF
+  @Author             : Santosh Verma
+  @Group              : IST
+  @Last Modified By   :  
+  @Last Modified On   :  
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author      		      Modification
+  ==============================================================================
+  1.0    19.08.2019                 Santosh verma             Initial Version
+-->
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,flexipage:availableForAllPageTypes" access="global" 
+                controller="ICRM_Credit_CDID_DynPickList"> 
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="options" type="List" access="PUBLIC" />
+    <aura:attribute name="selectedValue" type="String" access="PUBLIC"/>
+    <aura:attribute name="selValue" type="String"/>
+    <aura:attribute name="HoldRecordId" type="Object"/>
+    <aura:attribute name="HdRec" type="Object"/>
+    <aura:attribute name="recError" type="String"/>
+    <aura:registerEvent name="CreditEvent" type="c:ICRM_CreditFireEvent"/>
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      layoutType="FULL"
+                      targetFields="{!v.HoldRecordId}"
+                      targetError="{!v.recError}"
+                      /> 
+    
+    
+    <aura:if isTrue="{!v.HoldRecordId.ICRM_BP_Entity__c == false}">
+        <table>
+            <tr style="width: 100%;">
+                <td class="slds-card__header-title slds-truncate slds-m-right--xx-small" style="width: 50%;">&nbsp;Credit Limit</td> 
+                <td style="color:rgb(62, 62, 60);font-size:.85rem;width:50%;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://onecreditportal.bpweb.bp.com/webapi/#/About" target="_blank">OCP Link</a></td> 
+            </tr>
+        </table>
+        <table>
+            
+            <tr>
+                <td  style="color:rgb(62, 62, 60);font-size:.75rem;width:7%;" >  
+                    &nbsp;&nbsp;&nbsp;BP Entity</td>  
+                <td style="padding-bottom: 17px"> 
+                    
+                    <lightning:select name="CPId" label="" aura:id="CPId" value="{!v.selectedValue}" onchange="{!c.onbuttonclick1}"> 
+                        <aura:iteration items="{!v.options}" var="option">
+                            
+                            <option  text="{!option.Name +'&nbsp;&nbsp;   ('+option.BPI_ICOS_ID__c+')'}" value="{!option.BPI_ICOS_ID__c}" selected="{!option.BPI_ICOS_ID__c}"/>
+                            
+                        </aura:iteration>
+                    </lightning:select>  
+                </td>
+            </tr>
+        </table>
+    </aura:if> 
+</aura:component>

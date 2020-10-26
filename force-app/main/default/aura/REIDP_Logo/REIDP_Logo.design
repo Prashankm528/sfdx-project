@@ -1,0 +1,3 @@
+<design:component  label="RE IDP Logo">
+	<design:attribute name="network" label="Network" description="contains Network name it is used on" />
+</design:component>

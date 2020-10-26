@@ -1,0 +1,14 @@
+<template>
+    <div class="slds-hide">{recordId}{caseNumber}</div>
+    <div class="slds-p-left_x-small slds-p-bottom_x-small">
+    <lightning-combobox
+        label="Template"
+        name="Template"
+        placeholder="Choose Template"
+        value={value}
+        onchange={handleChange}
+        options={options}>
+    </lightning-combobox>
+    </div>
+    <lightning-button label="Generate Document" title="Non-primary action" onclick={generateDocument} class="slds-m-left_x-small"></lightning-button>
+</template>

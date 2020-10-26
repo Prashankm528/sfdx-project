@@ -1,0 +1,4 @@
+<design:component>
+	<design:attribute name="title" label="Title" description="Title of the section displayed on the grey background." default="Title" />
+	<design:attribute name="icon" label="Icon" description="Icon displayed on the left side of the title." default="utility:chevrondown" />
+</design:component>

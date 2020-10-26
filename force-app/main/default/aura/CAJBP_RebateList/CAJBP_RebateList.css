@@ -1,0 +1,17 @@
+/**
+ * Created by amirhafeez on 11/10/2019.
+ */
+.THIS {
+}
+
+.THIS .container {
+    margin-top: -1.2em;
+}
+
+.THIS .title {
+    font-weight: 800 !important;
+}
+
+.THIS .content {
+    min-height: 200px;
+}

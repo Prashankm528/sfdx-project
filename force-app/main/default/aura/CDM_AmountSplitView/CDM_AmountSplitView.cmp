@@ -1,0 +1,170 @@
+<aura:component >
+    
+    <aura:attribute name="childRecords" type="Object[]"
+                    description="store map value based on key" />
+     <aura:attribute name="country" type="String"/>
+    <aura:attribute name="recordId" type="String"
+                    description="Record Id" />
+      <aura:attribute name="recordEditAccess" type="Boolean" default="false"/>
+    <aura:attribute name="splitAmount" type="Boolean"
+                    description="it defines split true or false" />
+	<aura:attribute name="userRole" type="String" description="get current user role"/> 
+     <aura:attribute name="cdmStatus" type="String"/>
+    <aura:attribute name="viewRecord" type="Boolean" default="false"/>
+    <aura:attribute name="approvalStatus" type="String"/>
+    
+    <aura:if isTrue="{!and(!empty(v.childRecords), v.splitAmount,!empty(v.recordId))}">
+        
+        <div class="slds-card"  style="width: 100rem">
+            <div class="slds-p-around_medium">    
+                <aura:iteration items="{!v.childRecords}" var="field" indexVar="index">
+                    
+                    <div class="slds-grid slds-grid--vertical-stretch">
+                        <div>
+                            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-hint-parent">
+                                <span class="slds-form-element__label">Sub Gross Amt</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static"> {!field.CDM_Sub_Gross_Amount__c}</div>
+                                    <button class="slds-button slds-button_icon" title="Edit: Status" onclick="{!c.editRecord}" style="{!and(v.recordEditAccess,(v.cdmStatus == 'Draft' || v.cdmStatus == 'Failed' || v.userRole == 'CDM_Operations_User'))? 'display:inline' : 'display:none'}">
+                                        <lightning:icon iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                                        
+                                    </button>
+                                </div>
+                            </div></div>
+                        
+                        <div>
+                            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-hint-parent">
+                                <span class="slds-form-element__label">Sub Net Amount</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static"> {!field.CDM_Sub_Net_Amount__c}</div>
+                                    <button class="slds-button slds-button_icon" title="Edit: Status" onclick="{!c.editRecord}" style="{!and(v.recordEditAccess,(v.cdmStatus == 'Draft' || v.cdmStatus == 'Failed' || v.userRole == 'CDM_Operations_User'))? 'display:inline' : 'display:none'}">
+                                        <lightning:icon iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                                        
+                                        
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                             <aura:if isTrue="{!if(v.country == 'Switzerland',true,false)}">
+                             <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-hint-parent">
+                                <span class="slds-form-element__label">D/C</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static"> {!field.CDM_D_C__c}</div>
+                                    <button class="slds-button slds-button_icon" title="Edit: Status" onclick="{!c.editRecord}" style="{!and(v.recordEditAccess,(v.cdmStatus == 'Draft' || v.cdmStatus == 'Failed' || v.userRole == 'CDM_Operations_User'))? 'display:inline' : 'display:none'}">
+                                        <lightning:icon iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                                        
+                                        
+                                    </button>
+                                </div>
+                            </div>
+                            </aura:if>
+                           
+                        </div>
+                        
+                        <div>
+                            
+                            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-hint-parent">
+                                <span class="slds-form-element__label">Sub Tax Amount</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static"> {!field.CDM_Sub_Tax_Amount__c}</div>
+                                    <button class="slds-button slds-button_icon" title="Edit: Status" onclick="{!c.editRecord}" style="{!and(v.recordEditAccess,(v.cdmStatus == 'Draft' || v.cdmStatus == 'Failed' || v.userRole == 'CDM_Operations_User'))? 'display:inline' : 'display:none'}">
+                                        <lightning:icon iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                                        
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            
+                            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-hint-parent">
+                                <span class="slds-form-element__label">GL Account</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static"> {!field.CDM_GL_Account__c}</div>
+                                    <button class="slds-button slds-button_icon" title="Edit: Status" onclick="{!c.editRecord}" style="{!and(v.recordEditAccess,(v.cdmStatus == 'Draft' || v.cdmStatus == 'Failed' || v.userRole == 'CDM_Operations_User'))? 'display:inline' : 'display:none'}">
+                                        <lightning:icon iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                                        
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            
+                            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-hint-parent">
+                                <span class="slds-form-element__label">Profit Center</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static"> {!field.CDM_Profit_Center__c}</div>
+                                    <button class="slds-button slds-button_icon" title="Edit: Status" onclick="{!c.editRecord}" style="{!and(v.recordEditAccess,(v.cdmStatus == 'Draft' || v.cdmStatus == 'Failed' || v.userRole == 'CDM_Operations_User'))? 'display:inline' : 'display:none'}">
+                                        <lightning:icon iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                                        
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                         <div>
+                            
+                            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-hint-parent">
+                                <span class="slds-form-element__label">Cost Center</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static"> {!field.CDM_Cost_Center__c}</div>
+                                    <button class="slds-button slds-button_icon" title="Edit: Status" onclick="{!c.editRecord}" style="{!and(v.recordEditAccess,(v.cdmStatus == 'Draft' || v.cdmStatus == 'Failed' || v.userRole == 'CDM_Operations_User'))? 'display:inline' : 'display:none'}">
+                                        <lightning:icon iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                                        
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            
+                            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-hint-parent">
+                                <span class="slds-form-element__label">Sub Tax Code</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static"> {!field.CDM_Sub_Tax_Code__c}</div>
+                                    <button class="slds-button slds-button_icon" title="Edit: Status" onclick="{!c.editRecord}" style="{!and(v.recordEditAccess,(v.cdmStatus == 'Draft' || v.cdmStatus == 'Failed' || v.userRole == 'CDM_Operations_User'))? 'display:inline' : 'display:none'}">
+                                        <lightning:icon iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                                        
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                         <div>
+                            
+                            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-hint-parent">
+                                <span class="slds-form-element__label">Sub Item Text</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static"> {!field.CDM_Sub_Item_Text__c}</div>
+                                    <button class="slds-button slds-button_icon" title="Edit: Status" onclick="{!c.editRecord}" style="{!and(v.recordEditAccess,(v.cdmStatus == 'Draft' || v.cdmStatus == 'Failed' || v.userRole == 'CDM_Operations_User'))? 'display:inline' : 'display:none'}">
+                                        <lightning:icon iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                                        
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                         <div>
+                            
+                            <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-hint-parent">
+                                <span class="slds-form-element__label">Sub Tax Rate</span>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-form-element__static"> {!field.CDM_Sub_Tax_Rate__c? field.CDM_Sub_Tax_Rate__c +'%':field.CDM_Sub_Tax_Rate__c} </div>
+                                    <button class="slds-button slds-button_icon" title="Edit: Status" onclick="{!c.editRecord}" style="{!and(v.recordEditAccess,(v.cdmStatus == 'Draft' || v.cdmStatus == 'Failed' || v.userRole == 'CDM_Operations_User'))? 'display:inline' : 'display:none'}">
+                                        <lightning:icon iconName="utility:edit" size="xx-small" alternativeText="edit"/>
+                                        
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </aura:iteration>
+            </div></div>
+    </aura:if>
+    
+    
+</aura:component>

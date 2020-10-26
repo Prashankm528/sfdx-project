@@ -1,0 +1,10 @@
+td {
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+  }
+  .highlight{
+    background: rgba(227, 250, 229, 0.74);
+  }

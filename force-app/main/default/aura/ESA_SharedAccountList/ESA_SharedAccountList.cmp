@@ -1,0 +1,49 @@
+<aura:component controller="ESA_SharedAccountController" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <aura:attribute name="accountList" type="List"/>
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="accountId" type="Id"/>
+    <aura:handler event="force:navigateToSObject" action="{!c.navigate}"/>
+    <lightning:navigation aura:id="navService"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class ="related_list_themed_border_top">
+        <div class="slds-border">
+            <div class="slds-box">  
+                <lightning:icon iconName="standard:account" alternativeText="Accounts" div="icon" size="small"/>
+                <div class="slds-list_inline">
+                    <dt class="slds-card__header-title" title="Label"> &nbsp;&nbsp;&nbsp;&nbsp;Shared Accounts</dt>
+                </div>
+                <br></br>
+                <div class="slds-border_top">
+                    <div class="slds-border_bottom">
+                        <div class="slds-border_right">
+                            <div class="slds-border_left">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout border='1'">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th class="entry" scope="col"><div class="slds-truncate" title="Account Name"><div style="slds-col slds-size_2-of-8">Account Name</div></div></th>
+                                            <th class="entry" scope="col"><div class="slds-truncate" title="Account Type">Account Type</div></th>
+                                            <th class="entry" scope="col"><div class="slds-truncate" title="Account Owner">Account Owner</div></th>
+                                            <th class="entry" scope="col"><div class="slds-truncate" title="Business Unit">Business Unit</div></th>
+                                            <th class="entry" scope="col"><div class="slds-truncate" title="Sales Org">Sales Area</div></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <aura:iteration items="{!v.accountList}" var="acc">
+                                            <tr>
+                                                <td><div class="slds-truncate" data-value="{!acc.Id}" onclick="{!c.navigate}"><a>{!acc.Name}</a></div></td>
+                                                <td><div class="slds-truncate">{!acc.ESA_Relationship_Type__c}</div></td>
+                                                <td><div class="slds-truncate">{!acc.Owner.Name}</div></td>
+                                                <td><div class="slds-truncate">{!acc.ESA_Business_Unit__c}</div></td>
+                                                <td><div class="slds-truncate">{!acc.ESA_Sales_Organisation__c}</div></td>
+                                            </tr>
+                                        </aura:iteration>            
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

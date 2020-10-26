@@ -1,0 +1,30 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller="CHCRM_KAPSovController">    
+    <aura:handler name="DeleteSovEvent" event="c:CHCRM_KAP_SOV_Delete_EVENT" action = "{!c.init}"/>
+    <aura:attribute name="mainData" type="Object"/>    
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:attribute name="isloading" type="boolean" default = "false"/>
+    
+    <aura:attribute name="isDraft" type="Boolean" default="false"/>     
+    <aura:handler event="force:refreshView" action="{!c.init}" />
+    
+    <lightning:card title="SOV 信息" iconName="standard:sales_cadence_target"
+                    class="slds-card slds-card_boundary headerBottomBorder forceRelatedListCardDesktop">
+        <aura:set attribute="actions">
+            <lightning:button label="Add SOV" title="Add SOV"
+                              iconName="utility:add" iconPosition="left"
+                              onclick="{!c.createSOVData}" variant="brand" disabled="{!if(v.isDraft,'false','true')}"/>
+        </aura:set>
+        <aura:if isTrue="{!v.isloading}"> 
+            <div class="exampleHolder">
+                <lightning:spinner alternativeText="Loading" size="large" />
+            </div>
+        </aura:if>
+        <aura:iteration items="{!v.mainData}" var="item" indexVar = "index">
+            <c:CHCRM_KAP_SOV_Item_CMP editMainRowIndex = "{!index}" sovTitleId = "{!item.sovTitleId}" 
+                                financeList = "{!item.financeList}" projectList = "{!item.projectList}"
+                                allSOVdata = "{!v.mainData}" yearHeader = "{!item.yearHeader}"
+                                isDraft = "{!v.isDraft}"
+                                />
+        </aura:iteration>
+    </lightning:card>           
+</aura:component>

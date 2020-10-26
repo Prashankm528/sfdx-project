@@ -1,0 +1,155 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:appHostable,force:hasRecordId" controller="CAPL_VideoDetailClass">
+
+	<style>
+ 
+		.fa {
+		    font-size: 14px;
+		}
+
+		.fa-clock-o {
+			margin-right: 7px;
+    		vertical-align: middle;
+    		
+		}
+
+		.fa-clock-o::before {
+			content: '&#128339;';
+			font-size: 1rem;
+			font-style: initial;
+		}
+
+		#container {
+		    overflow: hidden;
+		    background: #fff;
+		    object-fit: contain;
+		    border-radius: 2px;
+		    background-color: #ffffff;
+		    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12);
+		}
+
+		h2 {
+		    padding-top: 20px;
+		    padding-left: 20px;
+		    padding-right: 20px;
+		    font-weight: 300;
+		    text-align: left;
+		    font-size: 24px;
+		}
+
+		.createdDate {
+		    padding-left: 20px;
+		    padding-right: 20px;
+		    padding-bottom: 10px;
+		    font-weight: 300;
+		    text-align: left;
+		    font-size: 14px;
+		}
+
+		.description {
+		    padding-left: 20px;
+		    padding-right: 20px;
+		    padding-top: 10px;
+		    padding-bottom: 10px;
+		    font-weight: 300;
+		    text-align: left;
+		    font-size: 14px;
+		}
+
+		.record {
+			width: 100%;
+		}
+
+		#videoPlayer {
+			/*width: 560px; 
+			height: 315px;*/
+			width: 96%;
+    		height: auto;
+		}
+
+		hr {
+			margin: 0rem; 
+			width: 96%; 
+			margin-left: auto; 
+			margin-right: auto;
+		}
+
+		iframe {
+			width: 96%;
+    		height: 350px !important;
+		}
+
+		@media only screen and (max-width:40.063em) {
+			iframe {
+				width: 84% !important;
+				height: 50% !important;
+			}
+
+			hr {
+				width: 85%;
+			}
+
+			#videoPlayer {
+				width: 84% !important;
+				height: 50% !important;
+			}
+
+			.record {
+				width: 100%;
+			}
+		}
+	</style>
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+ 
+ 	<aura:attribute name="videoId" type="String" default="" />
+    <aura:attribute name="video" type="sObject" default="{}" />
+    <aura:attribute name="isNewVideo" type="Boolean" access="public" default="false"/>
+    <aura:attribute name="documentId" type="String" access="public" />
+
+    <aura:attribute name="secondsAgo" type="String" access="public"/>
+    <aura:attribute name="minuteAgo" type="String" access="public"/>
+    <aura:attribute name="minutesAgo" type="String" access="public"/>
+    <aura:attribute name="hourAgo" type="String" access="public"/>
+    <aura:attribute name="hoursAgo" type="String" access="public"/>
+    <aura:attribute name="dayAgo" type="String" access="public"/>
+    <aura:attribute name="daysAgo" type="String" access="public"/>
+    <aura:attribute name="monthAgo" type="String" access="public"/>
+    <aura:attribute name="monthsAgo" type="String" access="public"/>
+    <aura:attribute name="yearAgo" type="String" access="public"/>
+    <aura:attribute name="yearsAgo" type="String" access="public"/>
+
+    <div class="slds-grid_align-center slds-grid slds-wrap" style="margin-top: 2rem;">	    
+   		<div class="record">
+			<div class="slds-text-align_center">
+				<div id="container">
+					<h2>
+						{!v.video.CAPL_Title__c}
+					</h2>
+					<p class="createdDate">
+						<i class="fa fa-clock-o"></i>
+						{!v.video.RelativeTime}
+					</p>
+					<hr/>
+					<p class="description">
+						{!v.video.CAPL_Description__c}
+					</p>
+					<p style="margin-bottom: 1rem;">
+						<aura:if isTrue="{!v.isNewVideo}">
+							<video id="videoPlayer" controls="true">
+								<source src="{!v.documentId}" type="video/mp4" />
+								<source src="{!v.documentId}" type="video/webm" />
+								<source src="{!v.documentId}" type="video/ogg" />
+								Your browser does not support HTML5 video.
+							</video>
+						</aura:if>
+						<aura:if isTrue="{!!v.isNewVideo}">
+							<aura:unescapedHtml value="{!v.video.CAPL_LinkToVideo__c}"/>
+						</aura:if>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</aura:component>

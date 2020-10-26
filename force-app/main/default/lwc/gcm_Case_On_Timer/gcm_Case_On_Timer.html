@@ -1,0 +1,15 @@
+<template>
+    <lightning-card title="Case On Timer" icon-name="standard:case">
+        <template if:true={caseNumber}>
+            <div class = "slds-p-left_medium">Case Number: {caseNumber}</div>
+            <div class = "slds-p-left_medium">
+                You started working on the case since:
+                <lightning-formatted-date-time value={startTime} year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit" hour12="false">
+                </lightning-formatted-date-time>
+            </div>
+        </template>
+        <div class = "slds-p-left_medium">
+            <lightning-button variant="base" label="Refresh" title="Refresh Data" onclick={connectedCallback}></lightning-button>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,88 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" controller="CAIDP_ManagePermissionSetsController" access="global">
+
+	<aura:attribute name="allApps" type="List" default="[]"/>
+    <aura:attribute name="selectedApps" type="List" default="[]"/>
+    <aura:attribute name="selectedAppsSize" type="Integer" default="0"/>
+    <aura:attribute name="selectedPermissions" type="List" default="[]"/>
+    <aura:attribute name="isOpen" type="boolean" default="false" />
+    <aura:attribute name="orgUrl" type="String" default="" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
+
+    <article class="slds-card slds-card_boundary">
+	  <div class="slds-card__header slds-grid">
+	    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+	      <div class="slds-media__figure">
+	        <span class="slds-icon_container slds-icon-standard-connected_apps">
+	          <lightning:icon iconName="standard:connected_apps" variant="connected_apps"/>
+	        </span>
+	      </div>
+	      <div class="slds-media__body">
+	        <h2>
+ 			  <span class="slds-card__header-link slds-truncate slds-text-heading_small">{!'Connected Apps (' + v.selectedAppsSize + ')'}</span>
+	        </h2>
+	      </div>
+	    </header>
+	    <div class="slds-no-flex">
+	      <button class="slds-button slds-button_neutral" onclick="{!c.openModal}">Manage Connected Apps</button>
+	    </div>
+	  </div>
+	  <div class="slds-card__body">
+	    <table class="slds-table slds-table_fixed-layout slds-table_bordered slds-no-row-hover slds-table_cell-buffer">
+	      <thead>
+	        <tr class="slds-text-title_caps">
+	          <th scope="col">
+	            <div class="slds-truncate" title="Name">Permission Set</div>
+	          </th>
+	          <th scope="col">
+	            <div class="slds-truncate" title="Name">Description</div>
+	          </th>
+	        </tr>
+	      </thead>
+	      <tbody>
+	      	<aura:iteration items="{!v.selectedPermissions}" var="app">
+	      	  <tr class="slds-hint-parent">
+		          <th scope="row">
+		            <div class="slds-truncate"><a href="{!v.orgUrl + '/' + app.Id}">{!app.Label}</a></div>
+		          </th>
+		          <th scope="row">
+		            <div class="slds-truncate">{!app.Description}</div>
+		          </th>
+		      </tr>
+	      	</aura:iteration>
+	      </tbody>
+	    </table>
+	  </div>
+	  <footer class="slds-card__footer">
+<!-- 	  	<a href="javascript:void(0);">View All <span class="slds-assistive-text">Connected Apps</span></a> -->
+	  </footer>
+	</article>
+
+    <aura:if isTrue="{!v.isOpen}">
+	    <div class="demo-only" style="height: 640px;">
+		  <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+		    <div class="slds-modal__container">
+		      <header class="slds-modal__header">
+		        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeModal}">
+		          X
+		          <span class="slds-assistive-text">Close</span>
+		        </button>
+		        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Manage Connected Apps</h2>
+		      </header>
+		      <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+		      	<lightning:dualListbox aura:id="selectOptions" name="Select Options" 
+	                           sourceLabel="Available Permission Sets" 
+	                           selectedLabel="Selected Permission Sets" 
+	                           options="{!v.allApps}"
+	                           value="{!v.selectedApps}"/>
+		      </div>
+		      <footer class="slds-modal__footer">
+		        <button class="slds-button slds-button_neutral" onclick="{!c.closeModal}">Cancel</button>
+		        <button class="slds-button slds-button_brand" onclick="{!c.savePermissions}">Save</button>
+		      </footer>
+		    </div>
+		  </section>
+		  <div class="slds-backdrop slds-backdrop_open"></div>
+		</div>
+	</aura:if>    
+</aura:component>

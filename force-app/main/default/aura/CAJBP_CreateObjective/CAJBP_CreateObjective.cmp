@@ -1,0 +1,18 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" description="CAJBP_CreateObjective">
+    <div>
+        <c:cajbpCreateObjective recordId="{!v.recordId}" oncancel="{!c.cancel}" oncreated="{!c.success}"/>
+    </div>
+
+    <aura:html tag="style">
+        .slds-p-around--medium {
+            padding: 0rem !important;
+        }
+        .slds-modal__content{
+            height:unset !important;
+            max-height: unset !important;
+        }
+        .cuf-content {
+            padding: 0 0rem !important;
+        }
+    </aura:html>
+</aura:component>

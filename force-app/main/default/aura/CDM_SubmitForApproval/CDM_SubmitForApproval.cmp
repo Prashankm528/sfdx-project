@@ -1,0 +1,68 @@
+<!-- CDM_EformSubmitForApproval Component which is used for custom submission for approval  -->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" 
+                controller="CDM_CreditDebitNoteFormController" access="global" >
+	<!-- <aura:attribute name="recordId" type="String"/>  -->
+     <aura:attribute name="comments" type="String"/>
+    <aura:attribute name="approverId" type="String"/>
+    <aura:attribute name="validApprover" type="Boolean" default="false"/>
+     <aura:attribute name="approversList" type="Sobject[]"/>
+     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    
+    <div class="slds-show" style="height: 640px;" aura:id="recMadal">
+        <section role="dialog" 
+                 tabindex="-1" 
+                 aria-labelledby="modal-heading-01" 
+                 aria-modal="true" 
+                 aria-describedby="modal-content-id-1" 
+                 class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                            title="Close" onclick="{!c.closeRecordTypeModal}">
+                        
+                        
+                        <lightning:Icon iconName="utility:close" alternativeText="Close" /> 
+                    </button>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    
+                    
+                    
+                    <legend class="form-element__legend slds-form-element__label slds-m-left_xx-large" data-aura-rendered-by="63:2010;a">Select a Request Type</legend>
+                    <div class="slds-m-left_xx-large">
+                        <aura:if isTrue="{!v.validApprover}">
+                            
+                            
+                            
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title ">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-hyphenate" title=" Approvers Confirmation"> Submit for Approval</span>
+                                    </h1>
+                                </div>
+                            </div>
+                            
+                            <lightning:textarea name="input1" label="Comments" value="{!v.comments}" />
+                            <div class="slds-align_center" style="height: 5rem;">
+                                <lightning:button variant="brand"  label="Submit" title="Submit" onclick="{! c.submit }" />
+                            </div>  
+                            
+                        </aura:if>  
+                    </div>
+                    
+                </div>
+                
+                
+                
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.closeRecordTypeModal}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.newRecord}" >Next</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+    
+</aura:component>

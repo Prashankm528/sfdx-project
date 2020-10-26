@@ -1,0 +1,82 @@
+<template>
+    <lightning-card title={userFirstName} icon-name="standard:user">
+        <table>
+            <tr>               
+                <td style="width: 33%" rowspan="3">
+                    <span class="gcm_text_left slds-p-left_medium"><img style="width: 90%" src={userPictureURL}></img></span>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td>
+                    <template if:false={isGSYSUser}>
+                      <div class="slds-p-left_medium lgc-bg">
+                            <lightning-icon icon-name="standard:list_email" alternative-text="My Team's Unread Emails" title="My Team's Unread Emails"></lightning-icon>&nbsp; 
+                            <a onclick={navigateToAwatingEmailsListView}>{emailsAwaitingMyTeam}</a>
+                            <!-- <a href="/00O7E000001O8hwUAC?pv0=status%20-%20Open">{emailsAwaitingMyTeam}</a> -->
+                        </div>
+                    </template>
+                </td>
+
+                <td>
+                    <div class="slds-p-left_medium lgc-bg">                      
+                        <lightning-icon icon-name="standard:multi_picklist" alternative-text="My Team's Open Cases" title="My Team's Open Cases"></lightning-icon>&nbsp; 
+                        <a onclick={casesBacklogMyTeamListView}>{casesBacklogMyTeam}</a>
+                        <!-- <a onclick={casesBacklogMyTeamListViewDisplay}>{casesBacklogMyTeam}</a> -->
+                    </div>
+                </td>
+
+                <td>
+                    <div class="slds-p-left_medium lgc-bg">                      
+                        <lightning-icon icon-name="standard:dashboard" alternative-text="My Team's Overdue Cases" title="My Team's Overdue Cases"></lightning-icon>&nbsp; 
+                        <a onclick={casesOverDueMyTeamListView}>{casesOverdueMyTeam}</a>
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td>
+                   <template if:true={isCSRUser}>
+                    <template if:false={isGSYSCSRUser}>
+                        <div class="slds-p-left_medium lgc-bg">
+                            <lightning-icon icon-name="standard:email" alternative-text="Number of emails awaiting for you." title="Number of emails awaiting for you."></lightning-icon>&nbsp; 
+                            {myEmailsAwaiting}
+                        </div>
+                    </template> 
+                </template>
+                </td>
+
+                <td>
+                    <template if:true={isCSRUser}>
+                        <div class="slds-p-left_medium lgc-bg">
+                            <lightning-icon icon-name="standard:picklist_type" alternative-text="Number of cases awaiting for you." title="Number of cases awaiting for you."></lightning-icon>&nbsp; 
+                            {myBacklogCases}
+                        </div> 
+                    </template>
+                </td>
+
+                <td>
+                    <template if:true={isCSRUser}>
+                        <div class="slds-p-left_medium lgc-bg">
+                            <lightning-icon icon-name="custom:custom53" alternative-text="Number of overdue cases assigned to you." title="Number of overdue cases assigned to you."></lightning-icon>&nbsp; 
+                            {myOverdueCases}
+                        </div>
+                     </template>                   
+                </td> 
+                <td></td>              
+            </tr>
+        </table>
+        <br/>
+
+        <!-- US 1123776 Supervisor 360  - Team status  Prasad Kulkarni-->
+        <!--<c-gcm-team-status></c-gcm-team-status>-->
+
+        <div class = "slds-p-left_medium">
+            <lightning-button variant="base" label="Refresh" title="Refresh Data" onclick={connectedCallback}></lightning-button>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,15 @@
+.gcm_up {
+    color : green;
+}
+
+.gcm_down {
+    color : red;
+}
+
+.zoom {
+    padding: 50px;
+    transition: transform .2s; /* Animation */
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+  }

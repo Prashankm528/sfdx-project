@@ -1,0 +1,74 @@
+<!--****************************************************************************************
+*   Date:           2019-10-18
+*   Author:         Alessandro Miele - IBM
+*   Description:    Main component to show all the document stores reviewed     
+****************************************************************************************-->
+<aura:component controller="DUP_ApprovedDocumentRequestController" implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global">
+    
+    <aura:attribute name="projectDocument" type="DUP_Document_Store__c[]" access="public"/>
+    <aura:attribute name="documentsToUpdate" type="Object[]" access="public"/>
+    <aura:attribute name="documents" type="List" access="public"/>
+    <aura:attribute name="documentsOption" type="String" access="public"/>
+    <aura:attribute name="supportSection" type="Object" access="public"/>		
+    <aura:attribute name="isSpinner" type="Boolean" access="public"/>		
+    <aura:attribute name="isSharepointSuccess" type="Boolean" access="public"/>	
+    <aura:attribute name="recordId" type="String" access="public"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	<aura:attribute name="progress" type="Integer" default="0"/>
+    <aura:attribute name="apexJob" type="AsyncApexJob"/>
+	 <aura:attribute name="isActive" type="Boolean" default="false"/>
+	
+	<aura:if isTrue="{!v.isSpinner}">
+        <lightning:spinner size="medium" variant="brand" />
+    </aura:if>
+    <div class="slds-grid slds-wrap slds-p-around_medium slds-gutters">
+        <div class="slds-col slds-size_12-of-12 slds-box slds-m-bottom--medium">
+            <div class="slds-grid slds-wrap slds-gutters">
+                <div class="slds-col slds-size_12-of-12 slds-align_absolute-center slds-m-vertical_xx-small">
+                    <lightning:button variant="brand" label="Send All Documents to Sharepoint" title="Send All Documents to Sharepoint" onclick="{!c.sendAllToSP}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	 <div>
+        <aura:renderIf isTrue="{!v.isActive}">
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                <div class="slds-modal__container">                    
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                       <aura:if isTrue="{!v.apexJob != null}">
+            <aura:if isTrue="{!v.apexJob.JobItemsProcessed != v.apexJob.TotalJobItems}">
+                 Processing {!v.apexJob.JobItemsProcessed} of {!v.apexJob.TotalJobItems}. Please do not refresh till its done!
+            </aura:if>
+            <aura:if isTrue="{!v.apexJob.Status == 'Completed'}">
+                Processing Finished, Please check below for links or errors(if Any).
+            </aura:if>
+            <lightning:progressBar value="{!v.progress}" size="large" variant="circular"/>
+        </aura:if>   
+                    </div>
+                  <!--  <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" label="Run in Background" onclick="{!c.handleCancel}" />
+                    </footer>
+-->
+                </div>
+            </section>
+        </aura:renderIf>
+
+        <div class="{!'slds-backdrop ' + ((v.isActive) ? 'slds-backdrop_open' : 'slds-backdrop_close')}"></div>
+    </div>
+
+	
+
+    <div>
+        <aura:iteration items="{!v.projectDocument}" var="document">        
+            <c:DUP_ReviewedDocumentStoreView record="{!document}"
+                                    recordId= "{!v.recordId}"
+                                    documents="{!document.DUP_Document_Name__c}"
+                                    documentsOption = "{!document.DUP_Options__c}"
+                                    documentId="{!document.Id}"
+                                    documentStatus="{!document.DUP_Document_Status__c}"
+                                    isSpinner="{!v.isSpinner}"/>
+        </aura:iteration>    
+    </div>
+    
+</aura:component>

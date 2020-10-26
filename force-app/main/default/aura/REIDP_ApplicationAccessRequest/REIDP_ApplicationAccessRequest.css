@@ -1,0 +1,43 @@
+.THIS .slds-table thead th span {
+    font-weight: 600;
+    color: #666666;
+}
+
+.THIS .btn {
+    float: left;
+}
+
+.THIS .slds-button_neutral {
+    color: #FFFFFF;
+    background-color: #009343;
+    border-color: transparent;
+}
+
+.THIS .slds-button_neutral:active:hover {
+    color: #FFFFFF;
+    background-color: #055d2d !important;
+}
+
+.THIS button:disabled:hover {
+    color: #FFFFFF;
+    background: c7c7c7;
+    cursor: not-allowed;
+}
+
+.THIS .bckgnd_gray .slds-button_neutral{
+    color: #FFFFFF;
+    background-color: #999999 !important;
+}
+
+.THIS .btn_next button {
+    min-width: 100%;
+}
+
+.THIS .input-group .lightningInput {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.THIS .p .app-title {
+    color:#F00023;
+}

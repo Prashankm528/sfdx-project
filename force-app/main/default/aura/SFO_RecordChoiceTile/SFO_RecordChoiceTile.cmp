@@ -1,0 +1,43 @@
+<aura:component access="global">
+    <aura:attribute name="record" type="Map" access="global" required="true"/>
+    <aura:attribute name="layoutType" type="String" access="global" default="inline" required="true"/>
+    <aura:attribute name="choiceType" type="String" access="global" default="multiple" required="true"/>
+    <aura:attribute name="recordIcon" type="String" access="global"/>
+    <aura:attribute name="valueField" type="String" access="global" default="Id" required="true"/>
+
+    <aura:attribute name="value" type="String" access="global"/>
+    <aura:attribute name="isSelected" type="Boolean" access="global" default="false"/>
+    <aura:attribute name="onChange" type="Aura.Action" access="global"/>
+
+    <aura:attribute name="label" type="String" access="private"/>
+    <aura:attribute name="layoutClass" type="String" access="private"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <li class="slds-item choice-container">
+        <div class="choice-select">
+            <aura:if isTrue="{!v.choiceType == 'single'}">
+                <lightning:input type="radio" label="" variant="label-hidden" name="options" value="{!v.value}" checked="{!v.isSelected}" onchange="{!v.onChange}"/>
+            </aura:if>
+            <aura:if isTrue="{!v.choiceType == 'multiple'}">
+                <lightning:input type="checkbox" label="" variant="label-hidden" name="{!v.value}" value="{!v.value}" checked="{!v.isSelected}" onchange="{!v.onChange}"/>
+            </aura:if>
+        </div>
+        <lightning:layout>
+            <lightning:layoutItem size="12">
+                <lightning:tile label="{!v.label}">
+                    <aura:set attribute="media">
+                        <aura:if isTrue="{!not(empty(v.recordIcon))}">
+                            <lightning:icon iconName="{!v.recordIcon}" size="medium"/>
+                        </aura:if>
+                    </aura:set>
+                    <dl class="{!v.layoutClass}">
+                        <aura:iteration items="{!v.record}" var="field" start="2">
+                            <c:SFO_RecordChoiceTileItem item="{!field}"/>
+                        </aura:iteration>
+                    </dl>
+                </lightning:tile>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </li>
+</aura:component>

@@ -1,0 +1,27 @@
+.THIS.SpinnerClass{
+    position: relative;
+    display: inline-block;
+    margin-left: 15px;
+    width: 55px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.THIS.treeGridBox
+{
+  min-height: 300px;
+  padding: 10px;
+  border: 2px solid DodgerBlue;
+  border-style : left border;
+  border-left-width: 10px; 
+  border-radius: 8px;
+  margin: 0;
+}
+.THIS.paddingLeft
+{
+    padding-top: 15px;
+    padding-left: 340px;
+}
+/*.THIS.ButtonClass {
+    background-color: #16325c;
+    padding: 12px;
+}*/

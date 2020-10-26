@@ -1,0 +1,256 @@
+div.header {
+	padding: 10px;
+    position: running(header);
+}
+
+body {font-family: 'Arial Unicode MS'; font-size: 13px;}
+thead {display: table-header-group;}
+tfoot {display: table-footer-group;}
+
+.cajbp-table-break {}
+.cajbp-swots {}
+.cajbp-rebates {}
+.cajbp-objectives {}
+.cajbp-activity-year {}
+.cajbp-summary {}
+.cajbp-reset {}
+.cajbp-heading-section {}
+
+.cajbp-line-split {}
+
+.cajbp-table-break table {page-break-inside: auto;}
+.cajbp-table-break tr    {page-break-inside: avoid; page-break-after: auto;}
+
+.cajbp-activity-year table {
+    -fs-table-paginate: paginate;
+	table-layout: fixed;
+	border-collapse: collapse;
+	border-spacing: 2px;
+	font-size: 10px !important;
+}
+
+.cajbp-activity-year tbody {
+    background-color: #E4F0F5;
+}
+
+.cajbp-activity-year td {
+    border: 0px solid #BEBEBE;
+    padding: 5px;
+	text-align: left;
+    font-weight: unset;
+    word-break: break-all;
+    width: 20%;
+}
+
+.cajbp-activity-year th {
+    border: 0px solid #BEBEBE;
+    padding: 5px;
+	text-align: center;
+    font-weight: unset;
+    word-break: break-all;
+    width: 20%;
+}
+
+.cajbp-activity-year thead,
+.cajbp-activity-year tfoot {
+    background-color: #3F87A6;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.cajbp-objectives table {
+    table-layout: fixed;
+	border-spacing: 2px;
+    letter-spacing: 1px;
+    font-size: 10px !important;
+    margin-top: -5px;
+    word-break: break-all;
+    width: 100%;
+}
+
+.cajbp-objectives tbody {
+    background-color: #E4F0F5;
+}
+
+.cajbp-objectives td {
+    border: 0px solid #BEBEBE;
+    padding: 5px;
+	text-align: left;
+    font-weight: unset;
+    word-break: break-all;
+}
+
+.cajbp-objectives th {
+    border: 0px solid #BEBEBE;
+    padding: 5px;
+	text-align: center;
+    font-weight: unset;
+    word-break: break-all;
+}
+
+.cajbp-objectives thead,
+.cajbp-objectives tfoot {
+    background-color: #3F87A6;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.cajbp-rebates table {
+    table-layout: fixed;
+	border-spacing: 2px;
+    letter-spacing: 1px;
+    font-size: 10px !important;
+    margin-top: -5px;
+    word-break: break-all;
+    width: 100%;
+}
+
+.cajbp-rebates tbody {
+    background-color: #E4F0F5;
+}
+
+.cajbp-rebates td {
+    border: 0px solid #BEBEBE;
+    padding: 5px;
+	text-align: left;
+    font-weight: unset;
+    word-break: break-all;
+}
+
+.cajbp-rebates th {
+    border: 0px solid #BEBEBE;
+    padding: 5px;
+	text-align: center;
+    font-weight: unset;
+    word-break: break-all;
+}
+
+.cajbp-rebates thead,
+.cajbp-rebates tfoot {
+    background-color: #3F87A6;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.cajbp-swots table {
+    table-layout: fixed;
+	border-spacing: 2px;
+    letter-spacing: 1px;
+    word-break: break-all;
+    font-size: 10px !important;
+    width: 100%;
+}
+
+.cajbp-swots tbody {
+    background-color: #E4F0F5;
+}
+
+.cajbp-swots th {
+    border: 0px solid #BEBEBE;
+    padding: 5px;
+	text-align: left;
+    font-weight: unset;
+    word-break: break-all;
+}
+
+.cajbp-swots td {
+    border: 0px solid #BEBEBE;
+    padding: 5px;
+    text-align: left;
+    font-weight: unset;
+    word-break: break-all;
+}
+
+.cajbp-swots thead,
+.cajbp-swots tfoot {
+    background-color: #3F87A6;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.cajbp-swots ul {
+    width: 400px;
+}
+
+.cajbp-swots .reset {
+    list-style-type: none;
+}
+
+.content {
+    float: left;
+    width: 100%;
+    letter-spacing: 1px;
+}
+
+.new-page {
+    display: block;
+    page-break-after: always !important;
+    page-break-before: always !important;
+}
+
+.cajbp-heading-section {
+    display: inline-block;
+    background: #C9C9C9;
+    background-image: url("../images/banner.jpeg");
+    background-repeat: no-repeat;
+    min-height: 60px;
+    width: 100%;
+    color: #FFFFFF;
+}
+
+.cajbp-heading-section .panel-heading {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.cajbp-heading-section .panel-body-multi {
+    position: relative;
+    padding: 10px;
+}
+
+.cajbp-heading-section .panel-body-single {
+    position: relative;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.cajbp-summary table {
+    table-layout: fixed;
+    margin-top: -40px;
+    border-spacing: 20px;
+    border-collapse: separate;
+    letter-spacing: 1px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+.cajbp-summary .no-border {
+    border-bottom: 0px;
+}
+.cajbp-summary td {
+    border-bottom: 1px solid #C8C8C8;
+}
+.cajbp-summary td,
+.cajbp-summary th {
+    text-align: left;
+    padding: 5px;
+}
+.cajbp-summary .label {
+    font-weight: bold;
+}
+
+.cajbp-image .container {
+
+}
+.cajbp-image img {
+    display: inline-block;
+    width: 90%;
+    height: 90%;
+}
+
+.cajbp-reset table {
+    border: 0px;
+}
+.cajbp-reset td {
+    border-bottom: 0px;
+}

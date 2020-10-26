@@ -1,0 +1,25 @@
+<template>
+    <li class="item slds-accordion__list-item slds-border--bottom">
+        <section class="slds-accordion__section">
+            <div class="slds-accordion__summary">
+                <div slot="header">
+                    <h3 class="slds-accordion__summary-heading">
+                        <button aria-controls={name} aria-expanded="false" class="slds-button slds-button_reset slds-accordion__summary-action" onclick={expand}>
+                            <svg class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left slds-icon slds-icon-text-default slds-icon_x-small" aria-hidden="true">
+                                <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#switch"></use>
+                            </svg>
+                            <span class="summary label">{label}</span>
+                        </button>
+                    </h3>
+                </div>
+            </div>
+            <div class="slds-accordion__content" id={name}>
+                <slot>
+                    <div class="slds-p-horizontal--medium summary-text">
+                        <lightning-formatted-text value={summary}></lightning-formatted-text>
+                    </div>
+                </slot>
+            </div>
+        </section>
+    </li>
+</template>

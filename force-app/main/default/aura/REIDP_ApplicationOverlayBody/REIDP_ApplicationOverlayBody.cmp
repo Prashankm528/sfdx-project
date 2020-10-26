@@ -1,0 +1,7 @@
+<aura:component >
+    <aura:attribute name="YouSureLabel" type="String" access="private" required="false" default="{!$Label.c.IDPSureForRequestLabel}"/>
+    
+    <div>
+        <p>{!v.YouSureLabel}</p>
+    </div>
+</aura:component>

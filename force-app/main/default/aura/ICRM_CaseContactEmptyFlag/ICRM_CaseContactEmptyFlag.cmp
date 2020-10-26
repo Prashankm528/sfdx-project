@@ -1,0 +1,26 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    
+    <aura:attribute name="record" type="Object"/>
+    <aura:attribute name="simpleRecord" type="Object"/>
+    <aura:attribute name="recordError" type="String"/>
+    <aura:attribute name="noContact" type="Boolean" />
+    <aura:handler event="force:refreshView" action="{!c.reloadComponent}" />
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      layoutType="FULL"
+                      targetFields="{!v.simpleRecord}"
+                      targetError="{!v.recordError}"
+                      recordUpdated="{!c.recordUpdated}"
+                      />
+    
+    <aura:if isTrue="{!v.noContact}">
+        
+        <lightning:card iconName="utility:error" title="Error Message" >
+            <div style="background-color: yellow; font-weight: bold; color: black; text-indent: 30px;">
+                The Contact Field is empty on this record!
+            </div>
+        </lightning:card>
+        
+    </aura:if>
+    
+</aura:component>

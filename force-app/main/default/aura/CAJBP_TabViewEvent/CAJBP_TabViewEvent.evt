@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="CAJBP_TabViewEvent">
+    <aura:attribute name="tabId" type="String"/>
+    <aura:attribute name="navigate" type="Boolean" default="false"/>
+</aura:event>

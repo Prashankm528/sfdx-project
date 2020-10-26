@@ -1,0 +1,6 @@
+<aura:component controller="SFO_CustomLinksController" description="SFO_OpenTab">
+    <aura:attribute name="linkName" type="String" required="true"/>
+    <aura:attribute name="configName" type="String" required="true"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+</aura:component>

@@ -1,0 +1,12 @@
+.THIS.dup-document-details {
+    min-height: 69.2px;
+    display: flex;
+}
+
+.THIS .button-container{
+    width: auto;
+}
+
+.THIS .file-button-container{
+    display: flex;
+}

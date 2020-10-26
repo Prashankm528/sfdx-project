@@ -1,0 +1,113 @@
+<aura:component implements="force:appHostable" controller="CHCRM_KAP_UploadCsvFilesController">
+    
+    <aura:attribute name="accept" type="List" default="['.csv']"/>
+    <aura:attribute name="fileName" type="String" default="没有选中文件" />
+    <aura:attribute name="templateType" type="String" default=""/>
+    <aura:attribute name="emails" type="String" default="" />
+    <aura:attribute name="isError" type="Boolean" default="false" />
+    <aura:attribute name="errorMsg" type="String" default="" />
+    <aura:attribute name="showInfo" type="Boolean" default="false" />
+    <aura:attribute name="isDisabled" type="Boolean" default="false" />
+    
+    <aura:attribute name="canView" type="Boolean" />
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    
+    <lightning:card title="导入KAP相关数据" iconName="standard:lightning_usage">
+        <aura:if isTrue="{!v.isError}">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                <span class="slds-assistive-text">error</span>
+                <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" title="Description of icon when needed">                  
+                </span>
+                <h2>{!v.errorMsg}</h2>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.canView}">        
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_1-of-6">
+                </div>
+                <div class="slds-col slds-size_4-of-6">
+                    
+                    <div class="slds-grid slds-gutters slds-wrap">
+                        <div class="slds-col slds-size_1-of-3">
+                            <div class="slds-m-around_medium">
+                                <lightning:input aura:id="fileId"
+                                                 name="fileUpload" 
+                                                 type="file" 
+                                                 label="请导入.csv文件" 
+                                                 multiple="false" 
+                                                 accept="{!v.accept}" 
+                                                 onchange="{! c.handleFilesChange }"/>
+                                <div style="margin:10px" class="slds-text-body_middle slds-text-color_blue">{!v.fileName} </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <div class="slds-m-around_medium">
+                                <lightning:select label="数据模板类型" value="{!v.templateType}">
+                                    <option value="">--请选择--</option>
+                                    <option value="PBV">PBV</option>
+                                    <option value="SKU">SKU</option>
+                                    <option value="CustomerGrp">CustomerGrp</option>
+                                </lightning:select>
+                            </div>
+                            <div class="slds-m-around_medium">
+                                <lightning:textarea value="{! v.emails }" placeholder="user1@bp.com;user2@bp.com;" label="附加通知邮箱 (默认邮件通知数据上传用户)" />
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                        </div>
+                        
+                        <div class="slds-col slds-size_1-of-4">
+                            
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning:button variant="brand" label="Upload" onclick="{!c.uploadSave}" disabled = "{!v.isDisabled}"/>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4">
+                        </div>
+                        
+                    </div>                
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <div class="slds-m-around_medium">
+                        <fieldset class="slds-box slds-theme_default">
+                            <legend class="slds-text-heading_xx-small">模板下载</legend>
+                            <ul>
+                                <li>&nbsp;&nbsp;<a href="/sfc/servlet.shepherd/version/download/0683L000000ASNI?asPdf=false&amp;operationContext=CHATTER">PBV模板</a></li>
+                                <li>&nbsp;&nbsp;<a href="/sfc/servlet.shepherd/version/download/0683L000000ASNr?asPdf=false&amp;operationContext=CHATTER">SKU模板</a></li>
+                                <li>&nbsp;&nbsp;<a href="/sfc/servlet.shepherd/version/download/0683L000000ASNX?asPdf=false&amp;operationContext=CHATTER">CustomerGrp模板</a></li>
+                            </ul>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.canView == false}">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                <span class="slds-assistive-text">警告</span>
+                <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" title="Description of icon when needed">                  
+                </span>
+                <h2>您无权限使用此功能！</h2>
+            </div>
+        </aura:if>
+    </lightning:card>
+    
+    <aura:if isTrue="{!v.showInfo}"> 
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate"></h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" >
+                    <div aura:id="container" class="slds-card">
+                        数据已经导入，请等候邮件通知。
+                    </div>                    
+                </div>
+                <footer class="slds-modal__footer" style="text-align:center">                        
+                    <lightning:button variant="brand" label="OK" onclick="{!c.refreshView}"/>                        
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div> 
+    </aura:if>
+    
+</aura:component>

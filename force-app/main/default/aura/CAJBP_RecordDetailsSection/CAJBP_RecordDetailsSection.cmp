@@ -1,0 +1,55 @@
+<!--
+ * @author			Jan Majling
+ * @date			11/09/2018
+ * @group			CAJBP
+ * @description		Displays desired fields from the provided record
+ *
+ * history
+ * 11/09/2018	Jan Majling			    Created
+ * 24/04/2020   Venkatesh Muniyasamy    Updated for the Scorecard Month update
+ -->
+<aura:component controller="CAJBP_RecordDetailsSectionController" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+	<aura:attribute name="recordId" type="Id" />
+	<aura:attribute name="relationshipName" type="String" />
+	<aura:attribute name="recordDataId" type="Id" />
+	<aura:attribute name="recordDataObjectName" type="String" />
+	<aura:attribute name="header" type="String" />
+	<aura:attribute name="fields" type="String" />
+	<aura:attribute name="fieldsToRender" type="String[]" />
+	<aura:attribute name="columns" type="Integer" />
+	<aura:attribute name="mode" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="c:CAJBP_RefreshScorecardEvent" action="{!c.refreshRecordData}"/>
+    <aura:attribute name="showForm" type="Boolean" default="true"/>
+
+	<c:LEX_Utils_Apex aura:id="LEX_Utils_Apex" />
+    <aura:if isTrue="{!v.showForm}">
+        <aura:if isTrue="{!v.recordDataId != null}">
+            <aura:if isTrue="{!v.header != null}">
+                <c:BPG_ExpandableSection title="{!v.header}" open="true">
+                    <div class="slds-p-horizontal--x-small">
+                        <lightning:recordForm
+                            recordId="{!v.recordDataId}"
+                            objectApiName="{!v.recordDataObjectName}"
+                            fields="{!v.fieldsToRender}"
+                            columns="{!v.columns}"
+                            mode="{!v.mode}"
+                        />
+                    </div>
+                </c:BPG_ExpandableSection>
+            </aura:if>
+
+            <aura:if isTrue="{!v.header == null}">
+                <div class="slds-p-horizontal--x-small">
+                    <lightning:recordForm
+                        recordId="{!v.recordDataId}"
+                        objectApiName="{!v.recordDataObjectName}"
+                        fields="{!v.fieldsToRender}"
+                        columns="{!v.columns}"
+                        mode="{!v.mode}"
+                    />
+                </div>
+            </aura:if>
+        </aura:if>
+    </aura:if>
+</aura:component>

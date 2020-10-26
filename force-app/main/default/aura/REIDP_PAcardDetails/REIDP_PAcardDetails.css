@@ -1,0 +1,12 @@
+.THIS h3 {
+   text-transform: uppercase;
+   color: rgb(0, 112, 210);
+}
+
+.THIS .cardSettings {
+    margin-right: 25%;
+}
+    
+.THIS .inline-data {
+	padding: 0;        
+}

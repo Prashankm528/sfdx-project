@@ -1,0 +1,5 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:appHostable">
+    <div> 
+        <c:dUP_CommunityHeaderLWC/> 
+    </div> 
+</aura:component>

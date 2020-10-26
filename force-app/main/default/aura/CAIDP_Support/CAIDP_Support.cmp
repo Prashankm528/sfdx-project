@@ -1,0 +1,101 @@
+<aura:component controller="CAIDP_LightningHelpController" implements="forceCommunity:availableForAllPageTypes" access="global">
+
+	<aura:attribute name="supportEmail" type="String" access="private" default="custcare@castrol.com"/>
+	<aura:attribute name="userEmail" type="String" access="private" default=""/>
+    <aura:attribute name="subject" type="String" access="private" default=""/>
+    <aura:attribute name="body" type="String" access="private" default=""/>
+    <aura:attribute name="validity" type="Boolean" access="private" default="true"/>
+    <aura:attribute name="mailStatus" type="Boolean" access="private" default="false"/>
+    <aura:attribute name="message" type="String" access="private" default=""/>
+    <aura:attribute name="modalClass" type="String" access="private" default="slds-theme--success"/>
+
+    <aura:attribute name="toLabel" type="String" access="public" required="true" default="To" />
+    <aura:attribute name="fromLabel" type="String" access="public" required="true" default="From" />
+    <aura:attribute name="sendLabel" type="String" access="public" required="true" default="Send" />
+    <aura:attribute name="subjectLabel" type="String" access="public" required="true" default="Subject" />
+    <aura:attribute name="subjectError" type="String" access="public" required="true" default="Subject is required" />
+    <aura:attribute name="mailBodyLabel" type="String" access="public" required="true" default="Mail Body" />
+    <aura:attribute name="mailBodyError" type="String" access="public" required="true" default="Type your question here" />
+    <aura:attribute name="statusLabel" type="String" access="public" required="true" default="Mail Status" />
+    <aura:attribute name="closeLabel" type="String" access="public" required="true" default="Close" />
+    <aura:attribute name="successLabel" type="String" access="public" required="true" default="Email was sent successfully to" />
+    <aura:attribute name="errorLabel" type="String" access="public" required="true" default="Error while sending email" />
+
+	<aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+
+	<div style="height: 500px; min-width: 615px; overflow-x: auto;">
+	  <div class="slds-docked_container">
+	    <section class="slds-docked-composer slds-grid slds-grid_vertical" role="dialog" aria-labelledby="dialog-heading-id-1" aria-describedby="dialog-content-id-1">
+	      <header class="slds-docked-composer__header slds-grid slds-shrink-none" aria-live="assertive" onclick="{!c.showSection}">
+	        <div class="slds-media slds-media_center slds-no-space">
+	          <div class="slds-media__figure slds-m-right_x-small">
+	            <span class="slds-icon_container">
+	            	<lightning:icon iconName="standard:email" variant="email" size="small"/>
+	            </span>
+	          </div>
+	          <div class="slds-media__body">
+	            <h2 class="slds-hyphenate" id="dialog-heading-id-1">{!$Label.c.CastrolSupport}</h2>
+	          </div>
+	        </div>
+	        <div class="slds-col_bump-left slds-shrink-none">
+	          <button class="slds-button slds-button_icon slds-button_icon" title="Support Email">
+	          	<lightning:icon iconName="utility:erect_window" variant="erect_window" size="x-small" class="slds-button__icon"/>
+	          </button>
+	        </div>
+	      </header>
+	      <div class="slds-docked-composer__body" id="dialog-content-id-1">
+	        <div class="slds-email-composer">
+	          <div class="slds-form-element slds-email-composer__combobox" >
+	            <label class="slds-form-element__label">{!v.toLabel}</label>
+	            <div class="slds-form-element__control">
+	            	<lightning:badge label="{!v.supportEmail}" />
+	            </div>
+	          </div>
+	          <div class="slds-form-element slds-email-composer__combobox" >
+	            <label class="slds-form-element__label">{!v.fromLabel}</label>
+	            <div class="slds-form-element__control">
+	            	<lightning:badge label="{!v.userEmail}" />
+	            </div>
+	          </div>
+	          <div class="slds-form-element">
+	            <label class="slds-form-element__label slds-assistive-text">{!v.subjectLabel}</label>
+	            <div class="slds-form-element__control">
+	              <ui:inputText class="slds-input" aura:id="subject" required="true" value="{!v.subject}" placeholder="{!v.subjectLabel}"/>
+	            </div>
+	          </div>
+	          <div class="slds-form-element">
+                <label class="slds-form-element__label slds-assistive-text">{!v.mailBodyLabel}</label>
+                <div class="slds-form-element__control">
+                   <lightning:inputRichText aura:id="body" value="{!v.body}" messageWhenBadInput="{!v.mailBodyError}" valid="{!v.validity}"/>
+                </div>
+              </div>
+	      	</div>
+	      </div>
+	      <footer class="slds-docked-composer__footer slds-shrink-none">
+	        <div class="slds-col_bump-left slds-text-align_right">
+	          <button class="slds-button slds-button--brand" onclick="{!c.sendMail}">{!v.sendLabel}</button>
+	        </div>
+	      </footer>
+	    </section>
+	  </div>
+	</div>
+
+	<aura:if isTrue="{!v.mailStatus}">
+      <div role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal--prompt">
+         <div class="slds-modal__container">
+            <div id="modal_header" class="{!'slds-modal__header ' + v.modalClass + ' slds-theme--alert-texture'}">
+               <h2 class="slds-text-heading--medium" id="prompt-heading-id">{!v.statusLabel}</h2>
+            </div>
+            <div class="slds-modal__content slds-p-around--medium">
+               <div>
+                  <p>{!v.message}</p>
+               </div>
+            </div>
+            <div class="slds-modal__footer slds-theme--default">
+               <button class="slds-button slds-button--brand" onclick="{!c.closeMessage}">{!v.closeLabel}</button>
+            </div>
+         </div>
+      </div>
+      <div class="slds-backdrop slds-backdrop--open"></div>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,75 @@
+<template>
+<div if:true={isLoadedComp}>
+    <lightning-spinner style="position: fixed;" alternative-text="Loading..."></lightning-spinner>
+    <div style="position: fixed;" class="slds-backdrop slds-backdrop_open"></div>
+</div>
+<div class="slds-p-left_x-small slds-p-bottom_x-small">
+<div class="slds-p-top_x-small slds-p-left_x-small slds-p-bottom_x-small">
+    Instructions:
+    <ul class="slds-m-around_x-small">
+        <li>Select a data import template from the dropdown.</li>
+        <li>Choose a comma-separated file.</li>
+        <li>Click "Read File".  Wait for the file content to appear in the text area below.</li>
+        <li>Click "Import Data".  This will initiate the data import process.</li>
+    </ul>
+</div>
+
+<lightning-combobox
+    label="Template"
+    name="Template"
+    placeholder="Choose Template"
+    value={value}
+    onchange={handleChange}
+    options={options}>
+</lightning-combobox>
+</div>
+<input type="file" class="slds-p-top_x-small slds-p-left_x-small slds-p-bottom_x-small gcm_upload_file" name="uploadedfile">
+<lightning-textarea class="slds-p-top_x-small slds-p-left_x-small gcm_file_headers" readonly label="File Sample Format.  First Line = Header"></lightning-textarea>
+<lightning-textarea class="slds-p-top_x-small slds-p-left_x-small gcm_file_contents" readonly value="" label="File Contents" ></lightning-textarea>
+<div class="slds-p-top_x-small slds-p-left_x-small slds-p-bottom_x-small gcm_message"></div>
+<lightning-button label="Read File" title="Preview File Contents" onclick={readFile} class="slds-m-left_x-small"></lightning-button>
+<lightning-button label="Import Data" title="Import Data" onclick={importDataHandler} class="slds-m-left_x-small"></lightning-button>
+
+
+
+<template if:true={bShowModal}>
+
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+        <header class="slds-modal__header">
+            <div class="gcm_text_message">
+                Please Wait....
+            </div>
+        </header>
+
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <div class="slds-p-top_x-small slds-p-left_x-small slds-p-bottom_x-small gcm_table_result">
+            
+                <table >
+                    <tbody>
+                        <tr>
+                            <td class="gcm_text_left slds-truncate"><b></b></td>
+                        </tr>
+                        <tr>
+                            <td><br/></td>
+                        </tr>
+                        <tr>
+                            <td class="gcm_text_right slds-truncate"><b></b></td>
+                        </tr>
+                    </tbody>        
+                </table>
+                <br/>
+                <lightning-button icon-name="utility:download" variant="brand" label="Export Logs" title="Export Logs" onclick={DownloadLog} class="slds-m-left_x-small"></lightning-button>
+                &emsp; &emsp; 
+                <lightning-button  variant="brand" label="Close" title="Close" onclick={CloseModal} class="slds-m-left_x-small"></lightning-button>
+            </div>
+            </div>
+            </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <lightning-input type="text"  readonly name="input1" class="hidden gcm_file_log_id" value="" label="" ></lightning-input>
+
+
+</template>

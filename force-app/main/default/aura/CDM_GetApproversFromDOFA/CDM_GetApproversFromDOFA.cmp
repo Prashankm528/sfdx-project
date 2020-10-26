@@ -1,0 +1,39 @@
+<!-- CDM_GetApproersFromDOFA Component which is used for get approvers from DOFA system using csv file upload  -->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                controller="CDM_GetApproversFromDOFA" access="global" >
+
+ 
+   <aura:attribute name="showLoadingSpinner" type="boolean" default="false" />
+
+   <aura:attribute name="fileName" type="String" default="No File Selected.." />
+ 
+ <div class="slds-card">
+  <div class="slds-card__header slds-grid">
+      <h1>
+          <span class="slds-page-header__title slds-truncate" title=" Upload DOFA Approvers .csv file"> Upload DOFA Approvers .csv file</span>
+      </h1>
+      
+      
+     
+     </div>
+     <div class="slds-card__body slds-card__body_inner">
+       <lightning:input aura:id="fileId" onchange="{!c.handleFilesChange}" 
+                        type="file" name="file" label="Upload .csv file" multiple="false"/>
+   <div class="slds-text-body_small slds-text-color_error">{!v.fileName} </div>
+ 
+ 
+   <aura:if isTrue="{!v.showLoadingSpinner}">
+      <div class="slds-text-body_small slds-text-color_error">Uploading... 
+         <img src="/auraFW/resources/aura/images/spinner.gif" class="spinner-img" alt="Loading"/>'
+      </div>
+   </aura:if>
+   
+ <br/>
+ 
+   <button class="slds-button slds-button_brand" onclick="{!c.doSave}">Upload</button>
+     </div>
+    </div>
+    
+    
+  
+</aura:component>

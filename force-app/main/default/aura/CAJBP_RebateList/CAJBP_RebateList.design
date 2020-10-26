@@ -1,0 +1,4 @@
+<design:component label="CAJBP Rebates">
+	<design:attribute name="title" label="Header Title" description="Title of the component." default="Rebates" />
+	<design:attribute name="icon" label="Header Icon" description="Icon is displayed in the header section, next to the title." default="custom:custom17" />
+</design:component>

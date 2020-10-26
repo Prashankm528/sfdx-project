@@ -1,0 +1,7 @@
+<design:component label="CAJBP Record Details Section">
+	<design:attribute name="relationshipName" label="Relationship Name" description="Relationship to the child object. Leave empty if you want to display fields from the main(parent) record." />
+	<design:attribute name="header" label="Header title" description="Title of the section. If empty, no header will be displayed" default="" />
+	<design:attribute name="fields" label="Fields to display" description="List of fields to be displayed separated by coma." default="" />
+	<design:attribute name="columns" label="Number of columns" description="Specify the number of columns." default="2" />
+	<design:attribute name="mode" label="Mode" description="User interaction allowed for the fields." datasource="Edit,View,Readonly" default="View" />
+</design:component>

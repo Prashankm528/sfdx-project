@@ -1,0 +1,17 @@
+<!--
+    This is used to conditionally render a section on the Joint Business Plan custom layout.
+    Applies a visual representation in the app builder of the layout being rendered conditionally.
+-->
+<aura:component description="CAJBP_LayoutRenderer">
+    <aura:attribute name="expression" type="Boolean"/>
+    <aura:attribute name="onConfig" type="Boolean" default="true"/>
+    <aura:attribute name="isConfig" type="Boolean" default="false" access="private"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <aura:if isTrue="{!or(v.expression, v.isConfig)}">
+        <div class="{!if(and(v.isConfig, v.onConfig), 'conditional', '')}">
+            {!v.body}
+        </div>
+    </aura:if>
+</aura:component>

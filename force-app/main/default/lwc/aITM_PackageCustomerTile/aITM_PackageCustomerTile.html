@@ -1,0 +1,205 @@
+
+<template>
+ 
+  <div class="spinner">
+    <template if:true={isLoading}>
+         <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+         </lightning-spinner>
+    </template>
+  </div>
+  <div class="slds-m-around-medium ">
+ <template for:each={locationLineItems} for:item="keyValue" for:index="index">
+    <div class="slds-clearfix" key={keyValue.key}>
+      <div class="slds-float_left">
+        <strong> <lightning-input type="checkbox" label={keyValue.key}  data-target-id={keyValue.key} onchange={getLocationId} ></lightning-input> </strong>
+      </div>
+      <div class="slds-float_right">
+        <template if:true={statusReadOnly}>
+        <label class="slds-form-element__label" for="unique-id-of-input">Status</label>
+        <span class="slds-badge">{selectedStatus}
+          <lightning-button-icon icon-name="utility:edit" onclick={changeStatus}></lightning-button-icon>
+        </span>  
+      </template>
+      <template if:false={statusReadOnly}>
+        <lightning-combobox
+            value={value}
+            options={options}
+            onchange={handleChange} ></lightning-combobox>
+        </template>
+      </div>
+    </div>
+  <!--  <lightning-layout vertical-align="center" key={keyValue.key} >
+      <lightning-layout-item   size ="2">
+      
+       <strong> <lightning-input type="checkbox" label={keyValue.key}  data-target-id={keyValue.key} onchange={getLocationId} ></lightning-input> </strong>
+      </lightning-layout-item>
+      <lightning-layout-item size ="8">
+        <hr>
+      </lightning-layout-item>
+      <lightning-layout-item size ="2">
+        <label class="slds-form-element__label" for="unique-id-of-input">Status</label>
+        <span class="slds-badge">Awaiting price</span>
+      </lightning-layout-item>
+    </lightning-layout>  -->
+   <!-- <div class="slds-grid slds-grid_vertical-align-center" key={keyValue.key}>
+      <div class="slds-col slds-size_1.5-of-12">
+        <strong> <lightning-input type="checkbox" label={keyValue.key} ></lightning-input> </strong>
+      </div>
+      
+        <div class="slds-col slds-size_9-of-12">
+          <hr>
+        </div>
+        <div class="slds-col slds-size_1.5-of-12">
+          <label class="slds-form-element__label" for="unique-id-of-input">Status</label>
+        <span class="slds-badge">Awaiting price</span>
+        </div>
+      
+    </div> -->
+
+    <lightning-layout vertical-align="center" key={keyValue.key} >
+      <lightning-layout-item   size ="12">
+        <lightning-textarea  label="Internal Notes" ></lightning-textarea>
+      </lightning-layout-item>
+    
+     <!-- <lightning-layout-item size ="2" class="slds-m-around-medium">
+          Location Contibution to Package 
+      </lightning-layout-item>
+
+          <lightning-layout-item size ="1" class="slds-m-around-medium">
+          <div class="slds-form-element">
+            <div class="slds-form-element__control slds-has-divider--bottom">
+                <label class="slds-form-element__label">Currency</label> USD
+                <div  class="slds-grid_vertical-align-bottom">
+               
+                   
+                   <div class="slds-form-element">
+                       <lightning-formatted-text ></lightning-formatted-text>
+                   </div>
+                   
+                </div>
+              </div>
+           </div>
+         
+      </lightning-layout-item> -->
+      
+    </lightning-layout>  <br  key={keyValue.key}/>
+
+    
+
+    <table  key={keyValue.key} class="slds-table slds-table--bordered slds-table--cell-buffer" role="grid">      
+      <thead>  
+          <tr class="slds-text-title--caps">
+              <th>           
+                  
+                      
+                    <lightning-input data-target-id={keyValue.key} type="checkbox" onchange={selectcheckbox} ></lightning-input>
+                      <span class="slds-form-element__label"></span>
+                 
+              </th>
+              <th scope="col">
+                  <div class="slds-truncate" title="Customers">Customers</div>
+              </th>
+              <th scope="col" >
+                  <div class="slds-truncate" title="Start Date">Start <br/> Date</div>
+              </th>
+               
+              <th scope="col" >
+                  <div class="slds-truncate" title="End Date">End <br/>Date</div>
+              </th>
+               
+              <th scope="col" >
+                  <div class="slds-truncate" title="Delivery Point">Delivery <br/> Point</div>
+              </th>
+              <th scope="col" >
+                <div class="slds-truncate" title="Requested Volume">Requested <br/> Volume</div>
+              </th>
+            <th scope="col" >
+              <div class="slds-truncate" title="Offered Volume">Offered <br/> Volume</div>
+            </th>
+            <th scope="col" >
+              <div class="slds-truncate" title="Percentage offered">Percentage  <br/> offered</div>
+            </th>
+            <th scope="col" >
+              <div class="slds-truncate" title="Pricing Basis">Pricing <br/> Basis</div>
+            </th>
+            <th scope="col" >
+              <div class="slds-truncate" title="Diffrenential Offered">Diffrenential<br/> (Offered)</div>
+            </th>
+            <th scope="col" >
+              <div class="slds-truncate" title="Diffrenential Package">Diffrenential  <br/> (Package)</div>
+            </th>
+            <th scope="col" >
+              <div class="slds-truncate" title="Unit Of Measure">Unit Of <br/> Measure</div>
+            </th>
+            <th scope="col" >
+              <div class="slds-truncate" title="Currency">Currency</div>
+            </th>
+            <th scope="col" >
+              <div class="slds-truncate" title="Customer Cost Saving">Customer <br/> Cost <br/>Saving</div>
+            </th>
+            
+         
+
+          </tr>
+      </thead>
+      <tbody>        
+       <template for:each={keyValue.value} for:item="value"> 
+            <tr key={value.Id}>
+                <th>
+                    
+                      <lightning-input type="checkbox" data-id={keyValue.key} data-record-id={keyValue.key} value={value.AITM_Tender_Location__r.Id}  data-target-id={value.Id} onchange={handleclickCheckBox} ></lightning-input>
+                        
+                    
+                </th>
+                <td data-label="Customers">
+                    <lightning-input data-id={value.Id} value={value.AITM_Account__r.Name} onblur={handleAccountName}></lightning-input>
+                </td>
+                <td data-label="Start Date">
+                  <lightning-input data-id={value.Id} type="Date" value={value.AITM_Start_Date__c} onblur={handleStartDate}></lightning-input>
+                </td>
+                <td data-label="End Date">
+                  <lightning-input data-id={value.Id} type="Date" value={value.AITM_End_Date__c} onblur={handleEndDate}></lightning-input>
+                </td>
+                <td data-label="Delivery Point">
+                  <lightning-input data-id={value.Id} value={value.AITM_Delivery_Point__c} onblur={handleDeliveryPoints}></lightning-input>
+                </td>
+                  <td data-label="Requested Volume">
+                    <lightning-input data-id={value.Id} value={value.AITM_Volume__c} onblur={handleVolume}></lightning-input>
+                  </td>
+                <td data-label="Offered Volume">
+                  <lightning-input data-id={value.Id} value={value.AITM_Offered_Volume__c} onblur={handleOffered}></lightning-input>
+                </td>
+                <td data-label="Percentage offered">
+                  <lightning-input data-id={value.Id} value={value.AITM_Percentage_Volume_Offered__c} onblur={handlePercentage}></lightning-input>
+                </td>
+                <td data-label="Pricing Basis">
+                  <lightning-input data-id={value.Id} value={value.AITM_DEPE_Pricing_Basis__c} onblur={handlePricing}></lightning-input>
+                </td>
+                <td data-label="Diffrenential Offered">
+                  <lightning-input data-id={value.Id} value={value.AITM_Offered_Differential__c} disabled></lightning-input>
+              </td>
+                <td data-label="Diffrenential Package">
+                  <lightning-input  data-id={value.Id} value={value.AITM_Percentage_Volume_Offered__c} onblur={handleDiffPackage}></lightning-input>
+                </td>
+                <td data-label="Unit Of Measure">
+                  <lightning-input data-id={value.Id} value={value.AITM_Unit_Of_Measure__c} onblur={handleMeasure}></lightning-input>
+                </td>
+                <td data-label="Currency">
+                  <lightning-input data-id={value.Id} value={value.AITM_Currency__c} onblur={handleCurrency}></lightning-input>
+                </td>
+                <td data-label="Customer Cost Saving">
+                  <lightning-input data-id={value.Id} ></lightning-input>
+              </td>
+              
+            <td  data-label="LOCATION NAME">
+              <a href="#" data-id={value.Id} onclick={openLineItemRecord}>more...</a>
+            </td>
+            
+              </tr>
+     </template>
+    </tbody>
+      </table><br key={keyValue.key} />
+  </template>
+  </div>
+</template>
+

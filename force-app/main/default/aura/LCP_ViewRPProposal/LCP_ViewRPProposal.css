@@ -1,0 +1,14 @@
+.THIS.select-auto-width
+{
+    width:300px !important;
+}
+.THIS .hide{
+    display : None;
+}
+.THIS .alignfields{
+    width : 25%;
+}
+.THIS .modify{
+    margin-top: -53px;
+    margin-left: 215px;
+}

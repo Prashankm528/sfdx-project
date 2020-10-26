@@ -1,0 +1,27 @@
+.header-container {
+    height: 30px;
+    z-index: 9;
+}
+
+c-cajbp-svg-provider {
+    position: relative;
+    top: -7px;
+    width: 60px;
+    float: right;
+    pointer-events: none;
+}
+
+.card-body {
+    margin-top: -12px;
+    background-color: rgb(242, 242, 242);
+}
+
+.card-footer {
+    margin-top: -12px;
+}
+
+.actions {
+    position: relative;
+    left: -12px;
+    float: right;
+}

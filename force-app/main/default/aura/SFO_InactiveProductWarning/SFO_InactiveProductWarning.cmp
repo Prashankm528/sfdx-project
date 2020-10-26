@@ -1,0 +1,44 @@
+<aura:component controller="CASFO_InactiveProductWarningController" implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="public">
+
+    <aura:attribute name="warningType" type="Integer" default="0"
+        description="Indicates type of warning message (if there are one or more inactive products"/>
+    <aura:attribute name="productNames" type="List" default="" 
+        description="Shows names of the product which is inactive if there is any."/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:if isTrue="{!v.warningType == 1}">
+        <div class="slds-box slds-theme--shade slds-theme--alert-texture">
+            <span><lightning:icon iconName="utility:warning" size="medium" alternativeText="Warning Inactive Product"/></span>
+            &nbsp;
+            <strong>{!$Label.c.Opportunity_Inactive_Product_War + ' ' + v.productNames[0]}</strong>
+        </div>
+    </aura:if>
+
+    <aura:if isTrue="{!v.warningType == 2}">
+        <div class="slds-box slds-theme--shade slds-theme--alert-texture">
+            <span><lightning:icon iconName="utility:warning" size="medium" alternativeText="Warning Inactive Product"/></span>
+            &nbsp;
+            <strong>{!$Label.c.Opportunity_Inactive_Products_War + ':'}</strong>
+            <div class="slds-p-left--xx-large slds-p-top--medium">
+                <aura:iteration items="{!v.productNames}" var="productName">
+                    <p><strong>{!productName}</strong></p>
+                </aura:iteration>
+            </div>
+        </div>
+    </aura:if>
+
+    <aura:if isTrue="{!v.warningType == 3}">
+        <div class="slds-box slds-theme--shade slds-theme--alert-texture">
+            <span><lightning:icon iconName="utility:warning" size="medium" alternativeText="Warning Inactive Product"/></span>
+            &nbsp;
+            <strong>{!$Label.c.Opportunity_Inactive_Products_War + ':'}</strong>
+            <div class="slds-p-left--xx-large slds-p-top--medium">
+                <aura:iteration items="{!v.productNames}" var="productName">
+                    <p><strong>{!productName}</strong></p>
+                </aura:iteration>
+                <p><strong>...</strong></p>
+            </div>
+           </div>
+    </aura:if>
+</aura:component>

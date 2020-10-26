@@ -1,0 +1,61 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" 
+                controller="CHCRM_KAP_ActionPlan_StatusUpdate_Ctrl" 
+                access="global">
+    <!--attribute-->
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="width" type="String" default="50%"/>
+    <aura:attribute name="hide" type="Boolean" default="false"/>
+    <aura:attribute name="loading" type="Boolean" default="false"/>
+    <!--handler-->
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+	
+    <aura:html tag="style">
+        <!-- set modal width-->
+        .slds-modal__container { 
+        width : {!v.width} !important;
+        max-width : {!v.width} !important;
+        }
+        
+        <!-- unset modal height, set footer and header-->
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }
+        .slds-modal__content {
+        height: unset !important;
+        max-height: unset !important;
+        }
+        
+        <!-- set button display none-->
+        .slds-button {display: none;}
+        
+        <!-- hide modal-->
+        <aura:if isTrue="{!v.hide}">
+            .slds-backdrop {
+            background: rgba(43, 40, 38, 0) !important;
+            }
+            .backgroundSpinner{
+            background: rgba(0, 0, 0, 0) !important;
+            }
+            .modal-body {
+            display: none !important;
+            }
+            .modal-header  {
+            display: none !important;
+            }
+            .modal-footer  {
+            display: none !important;
+            }             
+            .closeIcon {
+            display:none !important;
+            }
+            .desktop {
+            overflow: visible !important;
+            }            
+        </aura:if>
+    </aura:html>
+    
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    <aura:if isTrue="{! v.loading }">
+        <lightning:spinner alternativeText="Loading" />
+    </aura:if>
+</aura:component>

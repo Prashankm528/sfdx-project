@@ -1,0 +1,10 @@
+<!--
+ * @author			Venkatesh Muniyasamy
+ * @date			24/04/2020
+ * @group			CAJBP
+ * @description		Validate whether the latest scorecard values are entered.
+ *
+ * history
+ * 24/04/2020 	Venkatesh Muniyasamy	Created
+-->
+<aura:event type="APPLICATION" description="Refresh Scorecard Detail"/>

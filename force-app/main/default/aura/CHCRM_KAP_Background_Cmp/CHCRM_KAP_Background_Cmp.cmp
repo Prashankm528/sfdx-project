@@ -1,0 +1,40 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" extends="c:CHCRM_KAP_Base_CMP">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="objApiName" type="String" default="CHCRM_Key_Account_Plan__c"/>  
+   
+    <div aura:id="container" class="slds-card">
+        <h3 class="slds-theme_shade label slds-p-around_x-small slds-m-bottom_medium">背景</h3>
+        <lightning:recordForm recordId="{!v.recordId}"
+                              objectApiName="{!v.objApiName}"
+                              mode="{!if(v.isDraft,'view','readonly')}"                  
+                              fields="CHCRM_Background__c"/>
+	</div>
+    <div aura:id="container" class="slds-card">
+        <h3 class="slds-theme_shade label slds-p-around_x-small slds-m-bottom_medium">发展趋势</h3>
+        <lightning:recordForm recordId="{!v.recordId}"
+                              objectApiName="{!v.objApiName}"
+                              mode="{!if(v.isDraft,'view','readonly')}"                  
+                              fields="CHCRM_Development_Trend__c"/>
+	</div>
+    <div aura:id="container" class="slds-card">
+        <h3 class="slds-theme_shade label slds-p-around_x-small slds-m-bottom_medium">战略</h3>
+        <lightning:recordForm recordId="{!v.recordId}"
+                              objectApiName="{!v.objApiName}"
+                              mode="{!if(v.isDraft,'view','readonly')}"                  
+                              fields="CHCRM_Strategy__c"/>
+	</div>
+    <div aura:id="container" class="slds-card">
+        <h3 class="slds-theme_shade label slds-p-around_x-small slds-m-bottom_medium">目标</h3>
+        <lightning:recordForm recordId="{!v.recordId}"
+                              objectApiName="{!v.objApiName}"
+                              mode="{!if(v.isDraft,'view','readonly')}"                  
+                              fields="CHCRM_Objects__c"/>
+	</div>
+    <div aura:id="container" class="slds-card">
+        <h3 class="slds-theme_shade label slds-p-around_x-small slds-m-bottom_medium">产能/全盘用油量</h3>
+        <lightning:recordForm recordId="{!v.recordId}"
+                              objectApiName="{!v.objApiName}"
+                              mode="{!if(v.isDraft,'view','readonly')}"                  
+                              fields="CHCRM_Production_Capacity__c"/>
+	</div>
+</aura:component>

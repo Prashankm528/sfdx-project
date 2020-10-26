@@ -1,0 +1,71 @@
+<!--
+ * @author			Jan Majling
+ * @date			19/09/2018
+ * @group			CAJBP
+ * @description		Renders JBP Bridge Chart
+ *
+ * history
+ * 19/09/2018	Jan Majling			    Created
+ * 22/05/2020   Venkatesh Muniyasamy    Updated.
+ -->
+<aura:component controller="CAJBP_JbpBridgeChartController"
+        implements="flexipage:availableForRecordHome,force:hasRecordId"
+	    access="global">
+
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="colorLastYear" type="String" default="#2F4F4F" />
+	<aura:attribute name="colorTotal" type="String" default="#009A4E" />
+	<aura:attribute name="colorActivity" type="String" default="#6A8DB6" />
+	<aura:attribute name="colorRisk" type="String" default="#FE4110" />
+	<aura:attribute name="colorTarget" type="String" default="#AC9F83" />
+	<aura:attribute name="maxLabelLength" type="Integer" default="16" />
+	<aura:attribute name="dataTypeOptions" type="List" default="[]" />
+	<aura:attribute name="dataType" type="String" default="estimated"/>
+	<aura:attribute name="chartData" type="CAJBP_JBPBridgeChartController.ChartData" default="null" />
+	<aura:attribute name="chartInstance" type="SObject" default="null" />
+	<aura:attribute name="chartImageEncoded" type="String" default="null" />
+	<aura:attribute name="title" type="String" default=""/>
+	<aura:attribute name="downloadFilename" type="String" default=""/>
+	<aura:handler event="force:refreshView" action="{!c.doInit}" />
+
+	<c:BPG_ApexProvider aura:id="apexProvider"/>
+
+	<ltng:require
+        scripts="{!join(',',
+            $Resource.CAJBP_Chartjs,
+            $Resource.CAJBP_ChartjsAnnotation,
+            $Resource.CAJBP_ChartjsDatalabels
+        )}"
+        afterScriptsLoaded="{!c.doInit}"/>
+	
+	<lightning:card class="slds-card_boundary">
+		 <aura:set attribute="title">
+            <strong>{!v.title}</strong>
+        </aura:set>
+		<aura:set attribute="actions">
+			<lightning:radioGroup
+				name="dataTypeGroup"
+				options="{!v.dataTypeOptions}"
+				value="{!v.dataType}"
+				type="button"
+				onchange="{!c.updateChart}"/>
+		</aura:set>
+		<div class="chart">
+			<div class="slds-p-horizontal_medium">
+				<div class="chart__holder">
+					<canvas aura:id="bridgeChart" class="chart__canvas" width="400px" height="400px"></canvas>
+				</div>
+				<div class="chart__footer">
+					<aura:if isTrue="{!v.chartImageEncoded != null}">
+						<a aura:id="chartDownload" href="{!v.chartImageEncoded}"
+							class="slds-button"
+							download="{!v.downloadFilename}">
+
+							{!$Label.c.CAJBP_JBPBridgeChartDownload}
+						</a>
+					</aura:if>
+				</div>
+			</div>
+		</div>
+	</lightning:card>
+</aura:component>

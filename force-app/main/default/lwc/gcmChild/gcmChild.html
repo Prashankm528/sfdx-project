@@ -1,0 +1,10 @@
+<template>
+    <div class="slds-m-horizontal_xx-small slds-m-bottom_x-small">      
+        <template if:true = {approved}>           
+            <lightning-icon class="left-align" icon-name="action:approval" alternative-text={substatus} title={substatus}></lightning-icon>
+        </template>
+        <template if:true = {pendingApproval}>           
+            <lightning-icon class="left-align" icon-name="action:defer" alternative-text={substatus} title={substatus}></lightning-icon>
+        </template>
+    </div>
+</template>

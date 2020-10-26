@@ -1,0 +1,37 @@
+<!--
+ * @author Amal Ali-Muradbeyli
+ * @company Bluewolf, an IBM Company
+ * @date 9/2017
+ *
+ * This is a high level component which contains sub-components for various tabs 
+ * needed to display all details related to user
+ *
+ -->
+
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="REIDP_PAConsumerDetailsController">
+    <aura:attribute name="lookupInfo" type="REIDP_PAConsumerDetailsController.ConsumerDetails" description="Attribute that holds data returned from API call"/>
+    <aura:attribute name="showDetails" type="boolean" default="false" description="Attribute that is used to hide component if error is returned from API call"/>
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="errorMessage" type="String"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:spinner aura:id="consumerDetailsSpinner" variant="brand"  size="large"/>
+    <lightning:card class="slds-p-horizontal_medium">
+        <aura:if isTrue="{!v.showDetails}">
+            <lightning:tabset >
+                <lightning:tab label="Consumer details">
+                    <c:REIDP_PAconsumerDetails recordId="{!v.recordId}" lookupInfo="{!v.lookupInfo}"/>
+                </lightning:tab>
+                <lightning:tab label="Card details">
+                    <c:REIDP_PAcardDetails recordId="{!v.recordId}"/>
+                </lightning:tab>
+                <lightning:tab label="Transaction History">
+                    <c:REIDP_PAtransactionHistory recordId="{!v.recordId}"/>
+                </lightning:tab>
+            </lightning:tabset>
+            <aura:set attribute="else">
+                <ui:outputText class="slds-form-element__static" value="{!v.errorMessage}" />  
+            </aura:set>
+        </aura:if> 
+    </lightning:card>    
+</aura:component>

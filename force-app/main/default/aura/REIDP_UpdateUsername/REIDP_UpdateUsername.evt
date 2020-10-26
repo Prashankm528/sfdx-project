@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="Responsible for passing updated username from child to parent">
+    <aura:attribute name="newUsername" type="String"/>
+</aura:event>

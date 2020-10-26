@@ -1,0 +1,8 @@
+<design:component >
+	<design:attribute name="appLauncherLabel" default="Open App Launcher" label="App Launcher Label" description="The label for App Launcher."/>
+    <design:attribute name="homeLabel" default="Home" label="Home Label" description="The label for Home Button."/>
+    <design:attribute name="profileLabel" default="My Profile" label="Profile Label" description="The label for Profile Button."/>
+    <design:attribute name="logoutLabel" default="Logout" label="Logout Label" description="The label for Logout Button."/>
+    <design:attribute name="helpLabel" default="Help" label="Help Label" description="The label for Help Button."/>
+    <design:attribute name="faqLabel" default="FAQ" label="FAQ Label" description="The label for FAQ Button."/>
+</design:component>

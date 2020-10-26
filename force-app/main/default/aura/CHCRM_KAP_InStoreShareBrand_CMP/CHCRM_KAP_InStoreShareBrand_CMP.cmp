@@ -1,0 +1,77 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller = "CHCRM_KAP_InStoreShareBrand_Ctrl">
+	
+    <aura:attribute name="tableData" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="errors" type="Object" default="[]"/>
+    <aura:attribute name="draftValues" type="Object" default="[]"/>
+    <aura:attribute name="tableDataSize" type="Integer" default="0"/>
+    <aura:attribute name="isDraft" type="Boolean" default="false"/>
+    <aura:attribute name="isAdd" type="Boolean" default="false"/>
+    <aura:attribute name="isEditForm" type="Boolean" default="false"/>
+    <aura:attribute name="editRecordId" type="String" default=""/>
+    <aura:attribute name="inStoreShareFields" type="String[]" default="['CHCRM_Supplier__c',                                                                  
+                                                                  'CHCRM_Validity_of_contract__c'
+                                                                  ]"/><!--'CHCRM_Product_Category__c',-->
+    
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:handler event="force:refreshView" action="{!c.init}" />
+    <lightning:notificationsLibrary aura:id="notifLib" />
+    
+    <aura:attribute name="isloading" type="boolean" default = "false"/>
+    
+    <lightning:card title="{!'In Store Share (By Brand) ('+v.tableDataSize + ')'}" iconName="standard:lightning_usage"
+                    class="slds-card slds-card_boundary headerBottomBorder forceRelatedListCardDesktop">
+        <aura:set attribute="actions">
+            <lightning:button label="New" title="New"
+                              iconPosition="left"
+                              onclick="{!c.addInStoreShareBrand}" variant="Neutral" disabled="{!if(v.isDraft,'false','true')}"/>
+        </aura:set>
+        <lightning:datatable columns="{! v.columns }"
+                             data="{! v.tableData }"
+                             keyField="id"
+                             aura:id="tableId"
+                             hideCheckboxColumn="true"
+                             showRowNumberColumn = "false"
+                             errors="{! v.errors }"
+                             draftValues="{! v.draftValues }"
+                             onsave="{! c.handleSaveEdition }"
+                             oncancel = "{! c.init }"
+                             />
+        
+    </lightning:card>
+    
+    <aura:if isTrue="{!v.isEditForm}">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <aura:if isTrue="{!v.isloading}"> 
+                <div class="exampleHolder">
+                    <lightning:spinner alternativeText="Loading" size="large" />
+                </div>
+            </aura:if>
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{! c.closeForm}">
+                        X
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">In Store Share (By Brand)</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" >
+                    <div aura:id="container" class="slds-card">
+                        <lightning:recordForm 
+                                              aura:id="editForm"
+                                              recordId="{!v.editRecordId}"
+                                              objectApiName="CHCRM_KAP_In_Store_Share_Brand__c"
+                                              mode="{!if(v.isDraft,'edit','readonly')}"                  
+                                              fields="{!v.inStoreShareFields}"
+                                              columns="1"
+                                              onsubmit = "{!c.onSubmit}"
+                                              onsuccess = "{!c.closeForm}"
+                                              class="none-cancel"
+                                              />
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div> 
+    </aura:if>
+</aura:component>

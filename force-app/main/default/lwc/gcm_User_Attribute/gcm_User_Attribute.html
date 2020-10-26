@@ -1,0 +1,73 @@
+<template>
+    <template if:true={visible}>
+    <lightning-card title="IMPORTANT: Please Complete Your Profile" icon-name="standard:user">
+    <div class="slds-m-left_medium slds-m-right_medium">
+        <lightning-combobox
+            label="Sales Organisation"
+            name="SalesOrganisation"
+            placeholder="Sales Organisation"
+            value={chosenOrganisation}
+            onchange={handleChangeOrganisation}
+            options={organisation}>
+        </lightning-combobox>
+        <lightning-combobox
+            label="Business Unit"
+            name="BusinessUnit"
+            placeholder="Business Unit"
+            value=""
+            onchange={handleAddBusiness}
+            options={business}>
+        </lightning-combobox>
+        <template if:true={chosenBusinesses}>
+            <template for:each={chosenBusinesses} for:item="thisBusiness">
+                <lightning-button class="slds-p-top_small slds-p-bottom_small slds-p-right_medium" key={thisBusiness} variant="base" label={thisBusiness} title={thisBusiness} value={thisBusiness} onclick={handleRemoveBusiness}></lightning-button>
+            </template>
+        </template>
+        <lightning-combobox
+            label="Team Name"
+            name="TeamName"
+            placeholder="Team Name"
+            value={chosenTeam}
+            onchange={handleChangeTeam}
+            options={team}>
+        </lightning-combobox>
+        <div>
+            <lightning-input type="text" value={chosenManagerName} label="Enter Manager Name" class="gcm_manager" autocomplete="off" onchange={handleSearchManager}></lightning-input>
+            <div style="position: relative; left: 0px" class="slds-p-left_medium slds-p-right_medium">
+                <template if:true={optionsManagerVisible}>
+                    <div class="slds-dropdown slds-dropdown_left">
+                        <ul class="slds-dropdown__list" role="menu" aria-label="Show More">
+                            <template for:each={optionsManager} for:item="thisOption">
+                                <li style="width:100%" key={thisOption.Id} class="slds-dropdown__item" role="presentation">
+                                    <div class="slds-p-right_medium">
+                                        <lightning-button
+                                            variant="base"
+                                            label={thisOption.Name}
+                                            title={thisOption.Name}
+                                            value={thisOption.Id}
+                                            onclick={handleSelectManager}
+                                            class="slds-m-left_x-small">
+                                        </lightning-button>
+                                    </div>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </template>
+            </div>
+        </div>
+        <div class="slds-checkbox slds-p-top_small slds-p-bottom_small">
+            <input type="checkbox" name="options" class="gcm_genesys" id="checkbox-unique-cc-id" value="checkbox-unique-cc-id" checked="" onchange={handleChangeCallCenter} />
+            <label class="slds-checkbox__label" for="checkbox-unique-cc-id">
+                <span class="slds-checkbox_faux"></span>
+                <span class="slds-form-element__label slds-p-left_small">Genesys User</span>
+            </label>
+        </div>
+        <div class="slds-m-top_medium">
+            <lightning-button variant="brand" label="Save" title="Save" onclick={saveUser}></lightning-button>
+        </div>
+    </div>
+    </lightning-card>
+    <div class="slds-m-around_medium gcm_message"></div>
+    </template>
+</template>

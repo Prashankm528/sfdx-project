@@ -1,0 +1,15 @@
+.THIS .slds-button_success {
+    color: #FFFFFF;
+    background-color: #009343 !important;
+    border-color: transparent !important;
+}
+
+.THIS .slds-button_success:active {
+    color: #FFFFFF;
+    background-color: #055d2d !important;
+    border-color: transparent;
+}
+
+.THIS .slds-notify_container {
+    margin-top: 5% !important;
+}

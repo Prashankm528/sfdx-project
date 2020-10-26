@@ -1,0 +1,83 @@
+<template>
+    <lightning-layout>
+        <lightning-layout-item>
+            <!-- User avatar -->
+            <c-istcp_user-avatar></c-istcp_user-avatar>
+            
+            <!-- Left navigation menu -->
+            <div class="slds-p-top_x-small">
+                <c-istcp_menu></c-istcp_menu>
+            </div>
+        </lightning-layout-item>
+        
+        <lightning-layout-item class="slds-p-left_x-small">
+            <lightning-layout multiple-rows>
+                
+                <!-- Welcome banner -->
+                <lightning-layout-item size="12">
+                    <c-istcp_welcome-banner></c-istcp_welcome-banner>
+                </lightning-layout-item>
+                
+                <!-- News -->
+                <lightning-layout-item size="8" class="slds-p-top_x-small">
+                    <c-istcp_carousel></c-istcp_carousel>
+                </lightning-layout-item>
+                
+                <!-- Actions -->
+                <lightning-layout-item size="4" class="slds-p-top_x-small slds-p-left_x-small">
+                    <c-istcp_tiles-container></c-istcp_tiles-container>
+                </lightning-layout-item>
+                
+                <!-- Market pricing -->
+                <lightning-layout-item size="8" class="slds-p-top_x-large">
+                    <c-istcp_market-container></c-istcp_market-container>
+                </lightning-layout-item>
+
+                <!-- Upcoming events -->
+                <lightning-layout-item size="4" class="slds-p-top_x-large slds-p-left_x-small">
+                    <c-istcp_events-container></c-istcp_events-container>
+                </lightning-layout-item>
+
+                <!-- Documents -->
+                <lightning-layout-item size="8" class="slds-p-top_x-large">
+                    <c-istcp_generic-l-w-c-component></c-istcp_generic-l-w-c-component>
+                </lightning-layout-item>
+
+                <!-- Bottom links -->
+                <lightning-layout-item flexibility="auto">
+                    <lightning-layout multiple-rows horizontal-align="spread" class="slds-p-horizontal_large">
+                        <lightning-layout-item>
+                            <p class="slds-m-top_small slds-text-align_left">bp p.l.c.</p>
+                            <p class="slds-m-top_small slds-text-align_left">Copyright © 1996-2020</p>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item>
+                            <a href="javascript:void(0);">
+                                <p class="slds-m-top_small slds-text-align_left">Legal notice</p>
+                            </a>
+                            <a href="javascript:void(0);">
+                                <p class="slds-m-top_small slds-text-align_left">Sitemap</p>
+                            </a>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item>
+                            <a href="javascript:void(0);">
+                                <p class="slds-m-top_small slds-text-align_left">Privacy statement</p>
+                            </a>
+                            <a href="javascript:void(0);">
+                                <p class="slds-m-top_small slds-text-align_left">Cookie preferences</p>
+                            </a>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item>
+                            <a href="javascript:void(0);">
+                                <p class="slds-m-top_small slds-text-align_left">Contact us</p>
+                            </a>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

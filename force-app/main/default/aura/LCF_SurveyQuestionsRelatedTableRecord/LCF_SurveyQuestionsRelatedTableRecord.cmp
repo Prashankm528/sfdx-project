@@ -1,0 +1,9 @@
+<aura:component >
+    <aura:attribute name="question" type="SurveyQuestionResponse__c" />
+    <tr class="slds-wrap">
+    	<td class="slds-size_2-of-6"><ui:outputTextArea class="slds-hyphenate" value="{!v.question.lcf_Survey_Question__c}" /></td>
+        <td class="slds-size_2-of-6"><ui:outputTextArea class="slds-hyphenate" value="{!v.question.lcf_Hideable_Response__c}" /></td>	
+        <td class="slds-size_1-of-6"><ui:outputText class="slds-truncate" value="{!v.question.lcf_CES_Level__c}" /></td>
+        <td class="slds-size_1-of-6"><ui:outputText value="{!v.question.lcf_NPS_Level__c}" /></td>
+    </tr>         
+</aura:component>

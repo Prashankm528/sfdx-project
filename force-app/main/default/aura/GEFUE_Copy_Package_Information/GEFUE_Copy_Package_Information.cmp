@@ -1,0 +1,22 @@
+<aura:component controller="GEFUE_Update_Site_Opportunities" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+    <div>
+        <header class="slds-modal__header">
+            <h2 class="slds-modal__title">Copy Package Information</h2>
+        </header>
+        <div class="slds-p-vertical_small slds-text-body_medium">
+            Do you want to copy Package information to Site Opportunities?
+        </div>
+        <footer class="slds-float_right">
+            <lightning:button class="slds-button slds-m-horizontal_small"
+                              variant="brand"
+                              label="Yes"
+                              title="Yes"
+                              onclick="{!c.submitDetails}"/>
+            <lightning:button class="slds-button slds-m-horizontal_small"
+                              variant="neutral"
+                              label="No"
+                              title="No"
+                              onclick="{!c.closeModal}"/>
+        </footer>
+    </div>
+</aura:component>

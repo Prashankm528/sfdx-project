@@ -1,0 +1,66 @@
+<!--
+* @author         Amirhafeez
+* @date           11/10/2019
+* @group          CAJBP
+* @description    Edit rebate.
+*
+* history
+* 09/08/2018     Amirhafeez              Created
+* 04/10/2019     Venkatesh Muniyasamy    Modified for new rebate wizard
+* 20/02/2020     Venkatesh Muniyasamy    Modified for new rebate wizard
+-->
+<aura:component description="CAJBP_EditRebate" extends="c:BPG_EventActionConsumer" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+    <aura:attribute name="name" type="String" default="CAJBP_EDIT_REBATE" access="private"/>
+    <aura:attribute name="record" type="Object" access="private"/>
+
+    <aura:method name="call" action="{!c.onCall}"></aura:method>
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+
+    <force:recordData aura:id="recordLoader"
+        recordId="{!v.recordId}"
+        fields="RecordTypeId,RecordType.Name,RecordType.DeveloperName,CAJBP_Scorecard__c,CAJBP_Joint_Business_Plan__c,CurrencyIsoCode"
+        targetFields="{!v.record}"
+        recordUpdated="{!c.handleRecordUpdated}"/>
+
+    <aura:if isTrue="{!not(empty(v.detail))}">
+        <div>
+             <div class="modal-header slds-modal__header">
+                <h2 class="slds-text-heading--medium">Edit Rebate: {!v.detail.recordTypeName}</h2>
+             </div>
+
+            <c:cajbpRebateWizard aura:id="rebatewizard"
+                            scoreCardId="{!v.detail.scoreCardId}"
+                            recordTypeId="{!v.detail.recordTypeId}"
+                            onrebatecreated="{!c.rebateCreatedAction}"
+                            oncancelrebate="{!c.onCancel}"
+                            recordRebateId="{!v.detail.recordId}"
+                            recordTypeValues="{!v.detail.recordTypeValues}"
+                            currencyId="{!v.detail.currencyId}"/>
+        </div>
+	</aura:if>
+
+    <aura:html tag="style">
+        .slds-p-around--medium {
+            padding: 0rem !important;
+        }
+        .slds-modal__content{
+            height:unset !important;
+            max-height:unset !important;
+        }
+        .cuf-content {
+            padding: 0 0rem !important;
+        }
+        .uiModal--medium .modal-container {
+            width: 60% !important;
+            max-width: 52.0625rem !important;
+            min-width: 40rem !important;
+        }
+        .slds-modal__container {
+            width: 60% !important;
+            max-width: 52.0625rem !important;
+            min-width: 40rem !important;
+        }
+    </aura:html>
+</aura:component>

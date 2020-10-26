@@ -1,0 +1,102 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader,force:hasRecordId,lightning:actionOverride,lightning:isUrlAddressable" access="global" controller ="GEFUE_Branded_Fetch_Product" >
+    <!-- attributes -->
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.reInit}" />
+    <aura:attribute name="recordId" type="Id" access="global"/>
+    <aura:attribute name="parentId" type="Id" access="global"/>
+    <aura:attribute name="data" type="List"/>
+    <aura:attribute name="selectedRows" type="Object"/>
+    <aura:attribute name="filteredData" type="List"/>
+    <aura:attribute name="UnfilteredData" type="List" />
+    <aura:attribute name="columns" type="List"/>
+    <!-- Opportunity Line Item columns -->
+    <aura:attribute name="oliColumns" type="List"/>
+    <aura:attribute name="draftValues" type="Object"/>
+    <aura:attribute name="filter" type="String" />
+    <aura:attribute name="lgtMode" type="String" default="New"/>
+    <aura:attribute name="terminalValidation" type="Boolean" default="true"/>
+    <aura:attribute name="isNew" type="Boolean" default="true"/>
+    <aura:attribute name="onNext" type="Boolean" default="true"/>
+    <aura:attribute name="isRowSelected" type="Boolean" default="true"/>
+    <aura:attribute name="hideOnSave" type="Boolean" default="false"/>
+    <aura:attribute name="hide" type="Boolean" default="true"/>
+    <aura:attribute name="errors" type="Object"/>
+    
+    
+    <!-- handlers-->
+    <aura:handler name="init" value="{!this }" action="{!c.doInit }"/>
+    
+    <aura:if isTrue="{!v.terminalValidation}"> 
+        <aura:if isTrue="{!v.onNext}">
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon class="slds-modal__close" iconName="utility:close" variant="bare-inverse" onclick="{!c.onCancel}" alternativeText="Close" title="Close" />
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate"> 
+                            <aura:if isTrue="{!v.isNew}">Add Products <aura:set attribute="else">Edit Products</aura:set></aura:if> </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="slds-p-vertical_small slds-text-body_large  slds-table--header-fixed">
+                            <span>
+                                <lightning:input onchange="{!c.searchTable}" type="search" label="Searh" variant="label-hidden" placeholder="Search Products..." aura:id="searchKey"/>
+                            </span>
+                            <br/>
+                            <div class="slds-table--header-fixed_container" style="height:330px">
+                                <lightning:datatable	
+                                                     aura:id="productTable"
+                                                     columns="{!v.columns}"
+                                                     data="{!v.data}"
+                                                     keyField="id"
+                                                     onrowselection="{! c.handleRowAction }"
+                                                     />
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <lightning:button label="Cancel" title="Cancel" onclick="{!c.onCancel}"/>
+                                <lightning:button variant="brand" label="Next" title="Next" onclick="{!c.onNext}" disabled="{!v.isRowSelected}"/>
+                            </footer>
+                        </div>
+                    </div>
+                </div>          
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+            
+            <aura:set attribute="else">
+                <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <lightning:buttonIcon class="slds-modal__close" iconName="utility:close" variant="bare-inverse" onclick="{!c.onCancel}" alternativeText="Close" title="Close" />
+                            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate"> 
+                                <aura:if isTrue="{!v.isNew}">Edit Selected Products<aura:set attribute="else">Edit Selected Products</aura:set></aura:if> </h2>
+                            <aura:if isTrue="{!v.hide}">
+                                <div class="slds-m-top_x-small slds-text-color_error">Please enter Quantity number only for selected Products</div>
+                            </aura:if>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <div class="slds-p-vertical_small slds-text-body_large  slds-table--header-fixed">
+                                
+                                
+                                <lightning:datatable
+                                                     aura:id="selectedProdList"
+                                                     data="{!v.selectedRows}"
+                                                     columns="{!v.oliColumns}"
+                                                     showRowNumberColumn="true"
+                                                     hideCheckboxColumn="true"
+                                                     draftValues="{!v.draftValues}"
+                                                     onsave="{! c.handleSaveEdition }"
+                                                     keyField="productId"
+                                                     onrowaction="{! c.handleSelectedRowAction }"
+                                                     errors="{!v.errors}"
+                                                     suppressBottomBar="{!v.hideOnSave}"
+                                                     oncancel ="{!c.onCancel}"
+                                                     >
+                                </lightning:datatable>
+                                
+                            </div>
+                        </div>
+                    </div>          
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+                
+            </aura:set>
+        </aura:if>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,77 @@
+<template>
+    <lightning-card title="My Approved & Pending Approval Cases" icon-name="standard:case">
+        <div class="slds-p-left_medium slds-p-right_medium">
+            <template if:true={cases}>
+                <template for:each={cases} for:item="thisCase" for:index="index">
+                    <template if:true={thisCase.showBorder}>
+                        <div key={thisCase.Id} style="width: 100%" class="slds-p-top_small"></div>
+                        <div key={thisCase.Id} style="width: 100%" class="slds-p-top_small slds-border_top"></div>
+                    </template>
+                    <table key={thisCase.Id}>   
+                     
+                    <tr> 
+                        <td style="width: 33%">Case Number:</td>
+                        <td>
+                            <button class="gcm_button gcm_caseNumber" onclick={handleNavigateCase} value={thisCase.Id}>{thisCase.CaseNumber}</button>
+                            
+                                <c-gcm-child key={thisCase.Id} substatus={thisCase.Sub_Status__c}> </c-gcm-child>
+                            
+                        
+                            
+                        </td>
+                        
+                          
+                                      
+                    </tr>
+                   
+                    <tr>
+                        <td style="width: 33%">Account:</td>
+                        <td>
+                                <button class="gcm_button" onclick={handleNavigateAccount} value={thisCase.AccountId}>{thisCase.Account.Name}</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 33%">Due:</td>
+                        <td>
+                            <lightning-formatted-date-time  value={thisCase.Due__c} year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit" hour12="false" time-zone-name="short" time-zone="Africa/Johannesburg">
+                            </lightning-formatted-date-time>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 33%">Type:</td>
+                        <td>{thisCase.Type}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 33%">Area:</td>
+                        <td>{thisCase.Area__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 33%">Sub Area:</td>
+                        <td>{thisCase.Sub_Area__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 33%">Status:</td>
+                        <td>{thisCase.Status}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 33%">Sub Status:</td>
+                        <td>{thisCase.Sub_Status__c}</td>
+                    </tr>
+                </table>
+                </template>
+            </template>
+        </div>
+        <div class = "slds-p-left_medium">
+            <span>
+                <lightning-button variant="base" label="Refresh" title="Refresh Data" onclick={connectedCallback}></lightning-button>
+            </span>
+            <span>
+                <lightning-button class="slds-p-left_medium" variant="base" label="Previous" title="Previous Page" onclick={handlePage} value=-1></lightning-button>
+            </span>
+            <span>
+                <lightning-button class="slds-p-left_medium" variant="base" label="Next" title="Next Page" onclick={handlePage} value=1></lightning-button>
+            </span>
+        </div>
+
+    </lightning-card>
+</template>

@@ -1,0 +1,47 @@
+<template>
+    <article class="slds-card">
+        <template if:true={isLoading}>
+            <lightning-spinner size="small" alternative-text="loading"></lightning-spinner>
+        </template>
+        <div class="slds-grid slds-einstein-header slds-card__header">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-grid slds-grid_vertical-align-center slds-size_3-of-4 slds-medium-size_2-of-3">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="custom:custom26" size="small"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-truncate" title={title}>
+                            <a href={viewAllUrl} class="slds-card__header-link" title={title}>
+                                <span class="slds-text-heading_small">{title}</span>
+                            </a>
+                        </h2>
+                    </div>
+                </div>
+                <div class="header-container slds-size_1-of-4 slds-medium-size_1-of-3">
+                    <c-cajbp-svg-provider svg-name="header"></c-cajbp-svg-provider>
+                </div>
+            </header>
+        </div>
+        <div class="slds-card__body card-body">
+            <c-cajbp-accordion>
+                <template for:each={businessGoals} for:item="goal">
+                    <c-cajbp-accordion-section key={goal.Id} label={goal.Name}
+                            summary={goal.CAJBP_Description__c}
+                            name={goal.Id} wrap unlink animation="lightSpeedIn">
+                    </c-cajbp-accordion-section>
+                </template>
+            </c-cajbp-accordion>
+        </div>
+        <footer class="slds-card__footer card-footer">
+            <template if:true={viewAll}>
+                <a class="slds-card__footer-action" href={viewAllUrl}>
+                    View All
+                    <span class="slds-assistive-text"></span>
+                </a>
+            </template>
+            <template if:false={viewAll}>
+                <div style="min-height: 18px;"></div>
+            </template>
+        </footer>
+    </article>
+</template>

@@ -1,0 +1,395 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:appHostable" controller="CAPL_ForumGuidelineClass">
+
+	<style>
+		.uiInput.uiInputCheckbox.uiInput--default.uiInput--checkbox {
+			margin-top: 1rem;
+		}
+
+		.uiLabel-left.form-element__label.uiLabel {
+			padding-left: .5rem;
+		}
+
+		.uiInput.uiInputCheckbox.uiInput--default.uiInput--checkbox input[type="checkbox"] {
+			float: left;
+			margin-top: 4px;
+		}
+		.forumGuideline {
+			background: #fff;
+		    object-fit: contain;
+		    border-radius: 2px !important;
+		    background-color: #ffffff;
+		    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12);
+		}
+	</style>
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+ 
+    <aura:attribute name="documentURL" type="String" access="public"/>
+
+    <div class="slds-grid_align-center slds-grid slds-wrap">
+		<div class="forumGuideline slds-size_10-of-12">
+			<div class="slds-box_x-small slds-m-around_x-small">
+				<div style="padding: 2rem;">
+					<p>
+						<!-- <iframe style="box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12); width: 100%; height: 500px" src="{!v.documentURL}" /> -->
+
+						<p style="text-decoration: underline; text-align: center; font-weight: bold;"> 
+							Castrol Professional Lig Üyeleri için
+							<br/>
+							Kullanım Kılavuzu
+						</p>
+						<br/>
+						<br/>
+						<p style="font-weight: bold; text-align: center;"> 
+							Genel Kurallar
+						</p>
+						<br/>
+						<p style="font-weight: bold;">
+							Castrol Professional Lig Üyelerinden Beklenenler
+						</p>
+						<br/>
+						<p>
+							<ul>
+								<li>
+									Yürürlükteki kanunlara uygun davranmak
+								</li>
+								<li>
+									Katılım göstermek
+								</li>
+								<li>
+									Dürüst olmak
+								</li>
+								<li>
+									Profesyonel olmak
+								</li>
+								<li>
+									Kendi profesyonel bilgi birikiminizi oluşturmak
+								</li>
+								<li>
+									Öğrenmek ve Bilgi paylaşımı yapmak
+								</li>
+								<li>
+									Şüpheye düştüğünde danışmak
+								</li>
+								<li>
+									Uzmanlığını paylaşmak
+								</li>
+								<li>
+									Başkalarına saygı göstermek
+								</li>
+								<li>
+									Sık sık siteye girip, gelişmeleri takip etmek
+								</li>
+								<li>
+									Eğlenmek!
+								</li>
+							</ul>
+						</p>
+						<br/>
+						<p style="font=weight: bold;">
+							Yapılmaması Gerekenler
+						</p>
+						<p>
+							<ul>
+								<li>
+									Markayı haksız yere kötülemek
+								</li>
+								<li>
+									Hakaret etmek
+								</li>
+								<li>
+									Saygısızlık yapmak
+								</li>
+								<li>
+									Kimliğinizi yanlış temsil etmek
+								</li>
+								<li>
+									Küfürlü konuşmak
+								</li>
+								<li>
+									Marka logosunu kötüye kullanmak
+								</li>
+								<li>
+									Spam ileti göndermek
+								</li>
+								<li>
+									Irk istismarı yapmak
+								</li>
+								<li>
+									Gizliliği ihlal etmek
+								</li>
+								<li>
+									Profesyonel sohbetlere politika karıştırmak
+								</li>
+							</ul>
+						</p>
+						<br/>
+						<p style="text-decoration: underline; text-align: center; font-weight: bold;"> 
+							Dört Farklı Alanda Dikkat Edilmesi Gereken Kurallar
+						</p>
+						<br/>
+						<p>
+							<ul>
+								<li>
+									Topluluk 
+									<br/>
+									<ul>
+										<li class="circleListType">
+											Kullanıcıların forum kullanımı/forumdaki davranışları ile ilgili uyulması gereken
+											hususlar
+										</li>
+									</ul>
+								</li>
+								<li>
+									Marka 
+									<br/>
+									<ul>
+										<li class="circleListType">
+											Marka ve rekabetle ilgili uyulması gereken hususlar
+										</li>
+									</ul>
+								</li>
+								<li>
+									Geliştirme 
+									<br/>
+									<ul>
+										<li class="circleListType">
+											Forumun en iyi şekilde nasıl kullanılacağıyla ilgili öneriler
+										</li>
+									</ul>
+								</li>
+								<li>
+									Hukuki 
+									<br/>
+									<ul>
+										<li class="circleListType">
+											Forumda kullanıcıları ve markayı etkileyen hukuki boyutlarla ilgili kurallar
+										</li>
+									</ul>
+								</li>
+
+								<li>
+									Topluluk 
+									<br/>
+									<ul>
+										<li class="decimalListType">
+											Diğer üyelere saygı göstermek
+											<br/>
+											<ul>
+												<li class="squareListType">
+													Kendimize nasıl davranılmasını istiyorsak diğer üyelerede öyle
+													davranmamız gerekiyor. Diğer kullanıcılara saygı duymamız önemli bir
+													gereklilik.
+												</li>
+											</ul>
+										</li>
+										<li class="decimalListType">
+											Sağduyulu olmak
+											<br/>
+											<ul>
+												<li class="squareListType">
+													Herhangi bir tavsiye alırken / değerlendirirken sağduyumuzu kullanalım.
+												</li>
+											</ul>
+										</li>
+										<li class="decimalListType">
+											Özgün olmak
+											<br/>
+											<ul>
+												<li class="squareListType">
+													Hak sahibinin önceden izni olmaksızın telifli materyalleri paylaşmamaya
+													dikkat etmeliyiz.
+												</li>
+											</ul>
+										</li>
+										<li class="decimalListType">
+											İletinin birden fazla yerde paylaşılmamasına dikkat etmek
+											<br/>
+											<ul>
+												<li class="squareListType">
+													Aynı sorguları farklı ileti dizilerinde paylaşmayalım, aksi halde ileti belirli
+													tartışmalar için alakasız hale gelebilir.
+												</li>
+											</ul>
+										</li>
+										<li class="decimalListType">
+											Çalıntı yapmamak
+											<br/>
+											<ul>
+												<li class="squareListType">
+													Başka bir kullanıcı veya kaynaktan izinsiz içerik alıntısı yapmamalıyız.
+												</li>
+											</ul>
+										</li>
+										<li class="decimalListType">
+											Kendinizi tanıtmak
+											<br/>
+											<ul>
+												<li class="squareListType">
+													Forumları sitenize veya ürününüze yönlendiren bağlantılarla doldurmayın
+													veya kendi web sitenizi, işinizi ya da forumlarınızı tanıtmaya çalışmayınız.
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+
+								<li>
+									Marka 
+									<br/>
+									<ul>
+										<li class="decimalListType">
+											Çıkar çatışması
+											<br/>
+											<ul>
+												<li class="squareListType">
+													Adil olmamız gerekiyor. Kendi işiniz için olumlu/olumsuz
+													değerlendirmeler paylaşmak veya teşvik amaçlı herhangi bir olumlu
+													paylaşımda bulunmak yasaktır.
+												</li>
+											</ul>
+										</li>
+										<li class="decimalListType">
+											Eleştiri
+											<br/>
+											<ul>
+												<li class="squareListType">
+													Castrol markası/ürünleri için eleştirilerinizi memnuniyetle kabul ederiz
+													ancak markanın/ürünün yanlış temsil edilmesine izin vermemiz
+													mümkün değildir
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+
+								<li>
+									Geliştirme 
+									<br/>
+									<ul>
+										<li class="decimalListType">
+											Davranışlarımızla örnek olmak önemlidir.
+											<br/>
+											<ul>
+												<li class="circleListType">
+													Topluluğun değerlerini sergileyerek yeni kullanıcılara yol göstermek.
+												</li>
+											</ul>
+										</li>
+										<li class="decimalListType">
+											Katılım göstermek
+											<br/>
+											<ul>
+												<li class="circleListType">
+													Tartışmalarda gelişime yönelik değerli bilgiler ve önerilerle proaktif olmak
+												</li>
+											</ul>
+										</li>
+										<li class="decimalListType">
+											Fikirlerinizi paylaşmak
+											<br/>
+											<ul>
+												<li class="circleListType">
+													Bir topluluğun gelişmesini sağlayan şey, harika fikirler ve görüşlerdir,
+													sizlerden bunları bekliyoruz.
+												</li>
+											</ul>
+										</li>
+										<li class="decimalListType">
+											Başkalarını cesaretlendirmek
+											<br/>
+											<ul>
+												<li class="circleListType">
+													Tartışmalara katılmaları ve müdahil olmaları için diğer kullanıcılara
+													cesaret vermeniz çok kıymetli olacaktır.
+												</li>
+											</ul>
+										</li>
+										<li class="decimalListType">
+											Sağlıklı tartışmalar yürütmek
+											<br/>
+											<ul>
+												<li class="circleListType">
+													Topluluğun amacına mani olan tartışmalara dahil olmayın. Olumlu bir
+													ortam sağlamak için sağlıklı tartışmalar yürütmek önemlidir.
+												</li>
+											</ul>
+										</li>
+										<li class="decimalListType">
+											Araştırma yapmak
+											<br/>
+											<ul>
+												<li class="circleListType">
+													Forumda yeni bir ileti dizisi başlatmadan önce ilgili sorguları daima
+													araştırmakta fayda olacaktır.
+												</li>
+											</ul>
+										</li>
+										<li class="decimalListType">
+											Betimleyici olmak
+											<br/>
+											<ul>
+												<li class="circleListType">
+													Yeni bir ileti dizisi oluştururken, Konu Başlığını etkin bir şekilde
+													betimlemek önemlidir.
+												</li>
+											</ul>
+										</li>
+										<li class="decimalListType">
+											Yapıcı olmak
+											<br/>
+											<ul>
+												<li>
+													Yapıcı geri bildirimler/yorumlar daha iyi karşılanır ve olumsuz görüşlere
+													karşın pozitifliği destekler.
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+
+								<li>
+									Hukuki 
+									<br/>
+									<ul>
+										<li class="decimalListType">
+											Yasaya aykırılık
+											<br/>
+											<ul>
+												<li class="squareListType">
+													Yerel yasaları veya herhangi birinin hakkını ihlal edilmemeli.
+												</li>
+											</ul>
+										</li>
+										<li class="decimalListType">
+											Gizlilik
+											<br/>
+											<ul>
+												<li class="squareListType">
+													Hiçbir kullanıcının özeline girilmemeli / herhangi bir kişisel bilgiyi forumda kimseyle paylaşılmamalı.
+												</li>
+											</ul>
+										</li>
+										<li class="decimalListType">
+											Gerçek dışı planlar
+											<br/>
+											<ul>
+												<li class="squareListType">
+													Piyango, ikramiye planları, miras, çok seviyeli pazarlama planları ve diğer benzer duyurular hakkında spam e-postaları paylaşılmamalı.
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</p>
+
+						<ui:inputCheckbox aura:id="isAgreeCheckbox" label="I agree" change="{!c.agreeGuideline}"/>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</aura:component>

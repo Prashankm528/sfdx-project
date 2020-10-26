@@ -1,0 +1,198 @@
+<aura:component >
+    <div class="slds-text-heading--large slds-m-top--xx-large">
+        <b>Terms of Use and Privacy Statement for BP employees using Salesforce</b>
+    </div>
+    <div class="slds-m-top--large">
+        These terms of use govern how BP employees will use Salesforce.
+    </div>
+    <h3 class="slds-section-title--divider slds-m-top--large">
+        <b>1. Introduction - What is Salesforce</b>
+    </h3>
+    <p class="slds-m-top--large">
+        <b>1.1</b> Salesforce is a cloud based account management system provided by Salesforce. It is used by BP employees to centralise customer information and allows users to: input data, generate reports, and manage business development opportunities (“<b>the App</b>”). By accessing and using the App, you accept these terms of use and agree to comply with them with respect to the App (“<b>Terms of Use</b>”).  The Terms of Use may be amended at any time by BP from time to time without specific notice to you.  Any updated legal notice will be posted on the App, and you should review the legal notice prior to using the App.
+    </p>
+    <p class="slds-m-top--large">
+        <b>1.2</b> All activities on or relating to the App need to be in accordance with the <a href="http://codeofconduct.bpweb.bp.com/">BP Code of Conduct and Values and Behaviours</a>, and the <a href="http://securityatbp.bpweb.bp.com/en/ds/psg_protecting_information.aspx">BP Protecting our information policy</a>.
+    </p>
+    <p class="slds-m-top--large">
+        <b>1.3</b> Anyone who does not comply with the Terms of Use when using the App may be permanently or temporarily refused access, and may face disciplinary action, up to and including termination of employment.
+    </p>
+    <p class="slds-m-top--large">
+        <b>1.4</b> If you do not accept these terms then you should delete your Salesforce account.
+    </p>
+    <p class="slds-m-top--large">
+        <b>1.5</b> The App is provided by Salesforce and maintained by <b><i>BP International Limited</i></b>.
+    </p>
+    <p class="slds-m-top--large">
+        <b>1.6</b> Unless specified otherwise, references to "<b>BP</b>", the "<b>BP Group</b>", “<b>we</b>”, “<b>our</b>” or “<b>us</b>” in this legal notice shall mean BP International Limited and its subsidiaries and affiliates.
+    </p>
+    <h3 class="slds-section-title--divider slds-m-top--large">
+        <b>2. Terms of Use</b>
+    </h3>
+    <p class="slds-m-top--large">
+        <b>2.1</b> The Terms of Use set out BP's terms of use with respect to all BP employees, (each a "<b>User</b>", collectively "<b>Users</b>").
+    </p>
+    <p class="slds-m-top--large">
+        <b>2.2</b> By using the App, Users consent to these Terms of Use and confirm that they will comply with such Terms of Use. Users also acknowledge and agree that BP may amend these Terms of Use from time to time. A User’s continued use of the App will constitute continued consent to these Terms of Use.
+    </p>
+    <h3 class="slds-section-title--divider slds-m-top--large">
+        <b>3. Responsibility</b>
+    </h3>
+    <p class="slds-m-top--large">
+        <b>3.1</b>  Users must exercise considerable care using the App and be aware that making comments or conducting conversations which relate to BP, its business and its employees, customers, suppliers, contractors or other third parties it engages with can affect the reputation and business of BP.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.2</b> By registering and using the App, the User agrees to read, accept and comply with the following BP policies:
+        <ul class="slds-m-top--large">
+            <li><a href="http://codeofconduct.bpweb.bp.com/">BP Code of Conduct and values and behaviours</a></li>
+            <li><a href="http://securityatbp.bpweb.bp.com/en/ds/psg_protecting_information.aspx">BP protecting our information policy</a></li>
+            <li><a href="http://legal.bpweb.bp.com/Data_Privacy/DataPrivacy_BPStandardsPolicies_BCRRules.aspx">BP data privacy policy</a></li>
+            <li><a href="http://securityatbp.bpweb.bp.com/en/local_assets/documents/ds/qg_ref/Information_classification.pdf">BP information classification</a></li>
+        </ul>
+    </p>
+    <p class="slds-m-top--large">
+        (together the "<b>Associated Policies</b>"). If these links are not functional the latest versions of these policies can be requested from your BP line manager or BP point of contact. If there is a conflict between the standards in these associated policies, the higher/more restrictive standard applies.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3</b> Additionally, by registering and using the App, the User agrees to specifically adhere to the following:
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.1</b> Ensure that you comply with Salesforce own terms of use for the App (which can be found in <a href="http://www.sfdcstatic.com/assets/pdf/misc/SALESFORCEIQ-EULA-OFS-iOS-Mobile-App.pdf">here</a>) in addition to these Terms of Use.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.2</b> Ensure that all use of the App is consistent with the relevant BP policies including the Associated Policies referred to above.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.3</b> Exercise care and not post, disclose or share any BP secret information. For further clarification on the various BP information classification levels, please review the BP protecting our information policy.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.4</b> Not engage in any conduct on the App which could be considered discriminatory, bullying or harassing based on age, race, ethnicity, national origin, religion, gender, disability status, military status, sexual orientation, gender identity, or any other legally protected class, status or characteristic.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.5</b> Report inappropriate use or content.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.6</b> Ensure that content you submit for the App is suitable for publication and display and must not be indecent or obscene. It must not include symbols, statements or words that are offensive to the general public or to individuals of a particular socioeconomic group, sexual orientation, ethnicity, race or religion. It must not breach any laws or network standards and must not include any threats to any third parties. It must not invade the privacy or any rights of any other person or entity.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.7</b> Ensure that content you submit for use on the App must not contain third party copyright material and must not infringe any right of privacy, right of publicity, copyright or any other third party rights.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.8</b> Not access, copy or use Salesforce accounts of other Users or provide your account information to others, including user names and passwords to any other person.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.3.9</b> Keep your account details safe and treat such information as confidential. You must not disclose it to any third party.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.4</b> Additionally, BP reserves the right to monitor, intercept, review and remove User content as it deems necessary.
+    </p>
+    <p class="slds-m-top--large">
+        <b>3.5</b> Information and documents shared by using the App may be discoverable for litigation and investigative purposes. 
+    </p>
+    <h3 class="slds-section-title--divider slds-m-top--large">
+        <b>4. Breach of Policy</b>
+    </h3>
+    <p class="slds-m-top--large">
+        <b>4.1</b> A User who acts in breach of these Terms of Use or other Associated Policies may be permanently or temporarily blocked or otherwise refused User access to the App without notice and/or face other disciplinary action, up to and including termination of employment.
+    </p>
+    <p class="slds-m-top--large">
+        <b>4.2</b> If a User believes there has been a violation of any of the policies listed in this Terms of Use or its Associated Policies (above) or have any complaints or enquiries about content on the App (including privacy-related concerns) or notice any particular errors or inconsistencies please contact <a href="mailto:myit@bp.com">myit@bp.com</a>.
+    </p>
+    <h3 class="slds-section-title--divider slds-m-top--large">
+        <b>5. Personal Data and Data Privacy</b>
+    </h3>
+    <p class="slds-m-top--large">
+        <b>5.1</b> When an individual is set up with an account, they will be required to provide basic personal data in order to use the App. This will include name, email address and BP network identification (NTID). 
+    </p>
+    <p class="slds-m-top--large">
+        <b>5.2</b> A User’s personal data will only be used by BP in accordance with the Privacy Statement under clause 7 which each User should read carefully, in particular the rules about respecting the privacy of other users of the App.  
+    </p>
+    <h3 class="slds-section-title--divider slds-m-top--large">
+        <b>6. Governing law</b>
+    </h3>
+    <p class="slds-m-top--large">
+        <b>6.1</b> Your use of the App, these Terms of Use and any non-contractual obligations arising out of or in connection with them shall be governed by and construed in accordance with the laws of England and Wales.  Disputes arising out of or in connection with these Terms of Use shall be subject to the exclusive jurisdiction of the courts of England and Wales.
+    </p>
+    <p class="slds-m-top--large">
+        <b>6.2</b> In the event that any or any part of the terms contained in these Terms of Use shall be determined by any competent authority to be invalid, unlawful or unenforceable to any extent, such term shall to that extent be severed from the remaining terms which shall continue to be valid and enforceable to the fullest extent permitted by law.
+    </p>
+    <h3 class="slds-section-title--divider slds-m-top--large">
+        <b>7. Privacy Statement</b>
+    </h3>
+    <p class="slds-m-top--large">
+        This Privacy Statement governs the use of the App and explains how BP uses your personal data in connection with the App, the ways in which your data is protected and also how to exercise your data privacy rights.
+        The data on the App is owned and controlled by BP International Limited (“BP”). Salesforce (the company behind the App) only acts as a service provider on BP’s behalf in facilitating the publication of BP’s data on the App.
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.1</b> What personal data do we collect?
+    </p>
+    <p class="slds-m-top--large">
+        To access the App, the User must register and provide their name, NTID, and BP email address. 
+        Users may post and exchange messages on the App communication tool called  “Chatter”, that relates to BP’s business and such messages may incidentally include your personal data, such as your name, expertise and details of BP projects and work that you have been involved in. The users decide what type of content they want to share on Chatter (as long as this content complies with the Terms of Use and BP policies), so it is possible that other types of personal data could be contained within instant  messages.
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.2</b> What do we use your personal data for?
+    </p>
+    <p class="slds-m-top--large">
+        BP uses the personal data that you provide upon registration to provide the Salesforce service.
+        Your personal data may also be used for technical support and troubleshooting purposes, e.g. if you have a problem logging into the App.
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.3</b> Privacy rules and principles governing your use of Salesforce
+    </p>
+    <p class="slds-m-top--large">
+        <p>Your activity in the App is governed by the following privacy principles which you must comply with:</p>
+        
+        <ul class="slds-list_dotted slds-m-top--small">
+            <li>
+                The App is not suitable for posting or discussing personal information or documents, including information about an individual’s private life.
+            </li>
+            <li>
+                Respect people’s privacy and integrity. People have privacy rights in respect of information relating to their professional life, as well as their personal life. Exercise good judgement and common sense whenever you post on Salesforce.
+            </li>
+            <li>
+                App users must comply with all associated BP policies (as set out in section 3 of the Terms of Use) including the BP data privacy policy and all user-facing guidance documents that are issued by BP relating to the App.
+            </li>
+        </ul>
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.4</b> Who can access and see your personal data on Salesforce?
+    </p>
+    <p class="slds-m-top--large">
+        Only other registered Salesforce users within BP can view personal data. Messages posted on the App are accessible to all users across BP, or can be restricted to a specific audience when posted in a private group.
+        BP reserves the right to access, review and remove content posted on the App to ensure compliance with  the Terms of Use and Privacy Statement and associated BP Policies, as well as for purposes of internal investigations, litigation and where necessary to respond to requests from courts, tribunals, regulators and government bodies.
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.5</b> Sharing of your personal data with third parties
+    </p>
+    <p class="slds-m-top--large">
+        Your personal data will be kept confidential by BP and will not be shared with any third parties, except as required by law or with BP’s service providers for maintenance and support in connection with IT problems.        </p>
+    <p class="slds-m-top--large">
+        <b>7.6</b> Cookies
+    </p>
+    <p class="slds-m-top--large">
+        Salesforce uses cookies to authenticate users, to remember users’ preferences and settings and for general site analytics (individuals are not identified through the use of these cookies). By using the Salesforce platform, you are agreeing to the use of cookies for these purposes.
+        More information about cookies (including how to turn off cookies on your browser) is available at <a href="http://www.allaboutcookies.org/">www.allaboutcookies.org</a>.
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.7</b> How is your personal data is kept secure?
+    </p>
+    <p class="slds-m-top--large">
+        Salesforce provides a closed network to BP, which is defined by BP’s email domain. BP’s data is hosted by Salesforce in Germany and backed up in a server in the UK, but Salesforce does not own or control BP’s data (including your personal data) and cannot use this data for its own purposes.
+        BP’s service provider, Infosys, has access to data on the App for the sole purpose of providing IT support for the App.   BP has a contract with Infosys which places strict data security and confidentiality obligations on Infosys to ensure that your personal data is kept secure. Infosys cannot use this data for its own purposes. 
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.8</b> How can you access your personal data, verify its accuracy and, if necessary, change it?
+    </p>
+    <p class="slds-m-top--large">
+        You can access your personal data connected to your use of the App at any time. You also have a right to have your personal data deleted in certain circumstances. 
+        To access your personal data or request that it is corrected or deleted, you must send a request to the administrator at <a href="mailto:myit@bp.com">myit@bp.com</a>.
+    </p>
+    <p class="slds-m-top--large">
+        <b>7.9</b> Privacy-related queries or complaints
+    </p>
+    <p class="slds-m-top--large slds-m-bottom--large">
+        Please contact the administrator at <a href="mailto:myit@bp.com">myit@bp.com</a> if you have any privacy-related questions or complaints.
+        This Privacy Statement and all disputes and claims arising out of it or in connection with the use of personal data on the App are to be governed by the law of England and Wales.
+    </p>
+</aura:component>

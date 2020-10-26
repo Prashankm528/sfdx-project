@@ -1,0 +1,20 @@
+/**
+ * Created by amirhafeez on 25/09/2019.
+ */
+
+.THIS {
+}
+
+.THIS .tile-item {
+    min-height: 160px !important;
+    /*max-height: 160px !important;*/
+}
+
+.THIS .action-items {
+    position: absolute;
+    bottom: 0;
+}
+
+.THIS .item-title {
+    font-weight: 800;
+}

@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="Event will be fire when you change amount vlaues in split required yes or no">
+    <aura:attribute name="sumAmount" type="Decimal" />
+</aura:event>

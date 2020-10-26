@@ -1,0 +1,71 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller="CHCRM_KAPPowerMapController">
+    
+    <aura:attribute name="powerMapColumns" type="List"/>
+    <aura:attribute name="powerMapDatatable" type="Object"/>
+    <aura:attribute name="isEdit" type="Boolean" default="false"/>
+    <aura:attribute name="isloading" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:attribute name="editRecordId" type="String"/>
+    <aura:attribute name="powerMapFields" type="String[]" default="[
+                                                                   'CHCRM_Sales_Channel__c',    
+                                                                   'CHCRM_Position__c',
+                                                                   'CHCRM_Power_Map_Role__c',
+                                                                   'CHCRM_Contact_Name__c',
+                                                                   'CHCRM_Contact_Information__c',
+                                                                   'CHCRM_Decision_Fatigue__c',
+                                                                   'CHCRM_Current_Relationship__c',
+                                                                   'CHCRM_Target_Relationship__c',
+                                                                   'CHCRM_Improve_Relationship_Way__c',
+                                                                   'CHCRM_Castrol_Position__c',
+                                                                   'CHCRM_Castrol_Owner__c',
+                                                                   'CHCRM_Power_Map_Remark__c',
+                                                                   ]"/>
+    
+    <lightning:card title="决策矩阵 (Power Map)" iconName="standard:lightning_usage"
+                    class="slds-card slds-card_boundary headerBottomBorder forceRelatedListCardDesktop">
+        <div style="height:300px">
+            <lightning:datatable columns="{! v.powerMapColumns }"
+                                 data="{! v.powerMapDatatable }"
+                                 keyField="id"
+                                 hideCheckboxColumn = "true"
+                                 showRowNumberColumn = "true"
+                                 onrowaction="{!c.handleRowAction}"
+                                 />
+        </div>
+    </lightning:card>
+    
+    <aura:if isTrue="{!v.isEdit}">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <aura:if isTrue="{!v.isloading}"> 
+                <div class="exampleHolder">
+                    <lightning:spinner alternativeText="Loading" size="large" />
+                </div>
+            </aura:if>
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{! c.closeEditForm}">
+                        X
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">编辑 决策矩阵 (Power Map)</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" >
+                    <div aura:id="container" class="slds-card">
+                        <lightning:recordForm 
+                                              aura:id="editForm"
+                                              recordId="{!v.editRecordId}"
+                                              objectApiName="CHCRM_KAP_Power_Map__c"
+                                              mode="edit"                  
+                                              fields="{!v.powerMapFields}"
+                                              columns="2"
+                                              onsubmit = "{!c.onSubmit}"
+                                              onsuccess = "{!c.closeEditForm}"
+                                              class="none-cancel"
+                                              />
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div> 
+    </aura:if>
+</aura:component>

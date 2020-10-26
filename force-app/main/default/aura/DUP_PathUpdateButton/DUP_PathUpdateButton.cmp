@@ -1,0 +1,50 @@
+<!--****************************************************************************************
+*       Date:        18Feb2020
+*       Author:      Wipro Team
+*       Description: Main component for the update of document request status
+***************************************************************************************** !-->
+<aura:component controller="DUP_PathUpdateController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <aura:attribute name="openPopup" type="Boolean" default="false"/>
+    <aura:attribute name="showPrev" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="itemList" type="list"/>
+    <aura:attribute name="recordId" type="String" access="public"/>
+    <aura:attribute name="status" type="String" access="public"/>
+    <aura:attribute name="emailBody" type="String" access="public"/>
+    <aura:attribute name="allSelectedDocs" type="object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:handler event="c:DUP_DisablePathButton" action="{!c.handledisableButton}"/>
+    
+    <lightning:button variant="brand" onclick="{!c.showModal}" label="Mark Status as Complete" name="forward" title="Primary action" class="buttonBorder slds-float--right slds-m-bottom--x-small slds-m-right--x-large" disabled="{!v.status=='DUP_Approved' || v.status=='DUP_Cancelled'}"></lightning:button>
+    
+    <aura:renderIf isTrue="{!v.openPopup}">
+        <div >
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header" role="banner">
+                        <h1 class="slds-page-header__title slds-m-right_small
+                                   slds-truncate slds-align-left">Saved Documents</h1>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium" style="height:50%;" id="modal-content-id-1">
+                        <div style="height:50%;">
+                        <lightning:datatable aura:id="mainTable" hideCheckboxColumn="true" keyField="Id" data="{!v.allSelectedDocs}" columns="{!v.columns}" class="mainTable slds-max-medium-table_stacked slds-table_col-bordered slds-table_bordered slds-table--striped" />                        
+                        </div>
+                        <div></div>
+                        <h2 class="slds-border--bottom slds-m-bottom--large slds-m-top--medium slds-text-font_monospace slds-text-heading--medium">Email Preview</h2>
+                        <aura:unescapedHtml value="{!v.emailBody}"></aura:unescapedHtml>
+                        
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button label="Proceed" onclick="{!c.updateStage}" class="slds-m-top_medium" />
+                        <lightning:button label="Cancel" name="cancel" onclick="{!c.showModal}" class="slds-m-top_medium" />
+                        
+                    </footer>
+                </div>
+            </section>
+        </div>
+    </aura:renderIf>
+    
+    
+    
+</aura:component>

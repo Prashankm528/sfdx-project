@@ -1,0 +1,18 @@
+<template>
+    <lightning-card title="My BP documentation">
+        <lightning-layout horizontal-align="spread" vertical-align="center">
+            <lightning-layout-item class="slds-p-top_small slds-p-horizontal_small" size="12">
+                <lightning-combobox label="Select document type" value={selectedDocumentType} options={documentTypes} onchange={documentTypeChanged} variant="label-inline"></lightning-combobox>
+            </lightning-layout-item>
+        </lightning-layout>
+        
+        <template if:true={showGenericComponent}>
+            <div class="slds-p-top_small slds-p-left_small">
+                <c-istcp_generic-l-w-c-component runtime-invocations={runtimeInvocations}></c-istcp_generic-l-w-c-component>
+                <a onclick={handleClick}>
+                    <p class="slds-m-top_small slds-text-align_center">View all</p>
+                </a>
+            </div>
+        </template>
+    </lightning-card>
+</template>

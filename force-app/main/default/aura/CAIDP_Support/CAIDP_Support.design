@@ -1,0 +1,13 @@
+<design:component >
+	<design:attribute name="toLabel" default="To" label="To" description="To Label"/>
+	<design:attribute name="fromLabel" default="From" label="From" description="From Label"/>
+	<design:attribute name="sendLabel" default="Send" label="Send Label" description="Send Label"/>
+	<design:attribute name="subjectLabel" default="Subject" label="Subject Label" description="Subject Label"/>
+	<design:attribute name="subjectError" default="Subject is required" label="Subject Error" description="Subject Error"/>
+	<design:attribute name="mailBodyLabel" default="Mail Body" label="Mail Body Label" description="Mail Body Label"/>
+	<design:attribute name="mailBodyError" default="Type your question here" label="Mail Body Error" description="Mail Body Error"/>
+	<design:attribute name="statusLabel" default="Mail Status" label="Mail Status Label" description="Mail Status"/>
+	<design:attribute name="closeLabel" default="Close" label="Close Label" description="Close Label"/>
+	<design:attribute name="successLabel" default="Email was sent successfully to" label="Success Label" description="Success Label"/>
+	<design:attribute name="errorLabel" default="Error while sending email" label="Error Label" description="Error Label"/>
+</design:component>

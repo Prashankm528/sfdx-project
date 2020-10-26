@@ -1,0 +1,27 @@
+<!--
+ * @author			Venkatesh Muniyasamy
+ * @date			11/12/2019
+ * @group			CAJBP
+ * @description		Renders JAF fields based on the recordtype choosen.
+ *
+ * history
+ * 11/12/2019	Venkatesh Muniyasamy	    New JAF
+ -->
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" Description="Create_JAF">
+    <div>
+        <c:cajbpcreatejaf aura:id="createjaf" recordId="{!v.recordId}" oncanceljaf="{!c.cancelJAF}" onjafcreated="{!c.closeJAF}"/>
+    </div>
+
+    <aura:html tag="style">
+        .slds-p-around--medium {
+            padding: 0rem !important;
+        }
+        .slds-modal__content{
+            height:unset !important;
+            max-height:unset !important;
+        }
+        .cuf-content {
+            padding: 0 0rem !important;
+        }
+    </aura:html>
+</aura:component>

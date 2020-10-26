@@ -1,0 +1,3 @@
+<design:component >
+    <design:attribute name="redirectToURL"  label="URL Of Castrol Community" />
+</design:component>

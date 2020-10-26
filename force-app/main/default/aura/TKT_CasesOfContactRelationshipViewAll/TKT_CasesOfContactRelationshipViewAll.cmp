@@ -1,0 +1,36 @@
+<!--
+  @Component Name     : TKT_CasesofContactRelationshipViewAll.cmp    
+  @Description        : To show Cases of Contacts where logged in user is in Relationship 
+  @Author             : Himanshu Bansal
+  @Group              : TKT
+  @Last Modified By   :  
+  @Last Modified On   :  
+  @Modification Log   : 
+  -->
+<aura:component controller="TKT_CasesofContactRelationship" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.onPageReferenceChange}"/>
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.onPageReferenceChange}"/>
+	
+    <aura:attribute name="caseList" type="List"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="caseColumns" type="List"/>
+      
+    <aura:if isTrue="{!v.toggleSpinner}">
+            <div class ="slds-is-relative">
+                <lightning:spinner aura:id="mySpinner" alternativeText="Loading Case records..." variant="brand" />        
+            </div>
+    </aura:if>
+	<div class="slds-box" >
+		<lightning:card iconName="standard:case" title= "My Related Contacts' Open Cases"> 
+           	
+                
+                 <lightning:datatable
+                        columns="{!v.caseColumns}"
+                        data="{!v.caseList}"
+                        keyField="id"
+						showRowNumberColumn="true"
+                        hideCheckboxColumn="true"/>
+         
+		</lightning:card>
+    </div>
+</aura:component>

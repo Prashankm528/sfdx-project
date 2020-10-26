@@ -1,0 +1,20 @@
+.hidden
+{
+display: none;
+}
+.Nothidden
+{
+display: block;
+}
+.style_success {
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+    color: #ffffff;
+    font-size: 16px;
+    background-color: #0bb119;
+}
+.style_fail {
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+    color: #ffffff;
+    font-size: 16px;
+    background-color: #a02c0f;
+}

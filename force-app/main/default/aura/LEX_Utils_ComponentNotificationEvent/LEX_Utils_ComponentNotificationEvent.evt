@@ -1,0 +1,12 @@
+<!--
+ - @Author: Vit Bares
+ - @Email: vit.bares@bluewolfgroup.com
+ - @Company: Bluewolf
+ - @Created: 02/02/2018
+ - @Description: 
+ -->
+
+<aura:event type="COMPONENT" description="LEX_Utils_ComponentNotificationEvent">
+    <aura:attribute name="message" type="String" default="" />
+    <aura:attribute name="data" type="Object" default="{}" />
+</aura:event>

@@ -1,0 +1,54 @@
+.THIS textarea {
+    height: 15rem;
+}
+
+.THIS .dup-select-col {
+    width: 5%;
+}
+
+.THIS .dup-certified {
+    width: 5%;
+}
+
+.THIS .dup-document-name-col {
+    width: 25%;
+}
+
+.THIS .dup-downloadable-template-col {
+    width: 25%;
+}
+
+.THIS .dup-counterparty-contact-col {
+    width: 25%;
+}
+
+.THIS .dup-view-description {
+    width: 15%;
+}
+
+.THIS .dup-add-document-table {  
+    width: 100%;
+}
+
+.THIS.dup-document-row{
+    width: 500px;
+}
+.THIS .fileNames{
+    display: block;
+    width: 250px;
+    
+}
+.THIS .pillSize{
+    width: 100%;
+    
+}
+.THIS .dup-listTopContainer ul {
+    background:#fff;
+    border:1px solid #eaeaea;
+    z-index: 3;
+    position: absolute;
+    width: 100%;
+}
+.THIS ul.dup-listContainer li{
+    border:1px solid #ededed;
+}

@@ -1,0 +1,136 @@
+<template>
+    <lightning-card icon-name="standard:case">
+        <a slot="title" onclick={navigateToMyCasesListView}>My Cases</a>
+        <div class="slds-p-left_medium slds-p-right_medium">
+            <template if:true={cases}>
+                <template for:each={cases} for:item="thisCase" for:index="index">
+                    <template if:true={thisCase.showBorder}>
+                        <div key={thisCase.Id} style="width: 100%" class="slds-p-top_small"></div>
+                        <div key={thisCase.Id} style="width: 100%" class="slds-p-top_small slds-border_top"></div>
+                    </template>
+                    <table key={thisCase.Id}>        
+                    <tr>
+                        <td style="width: 40%">Case Number:</td>
+                        <td style="width: 40%">
+                            <button class="gcm_button" onclick={handleNavigateCase} value={thisCase.Id}>{thisCase.CaseNumber}</button>
+                        </td>
+                        <td style="width: 20%">
+                            <template if:true={thisCase.slaMissed}>
+                                <img src={redFlag} style="width:20px;height:20px;">
+                            </template> 
+                            
+                            <template if:true={thisCase.nearingSla}>
+                                <img src={yellowFlag} style="width:20px;height:20px;">
+                            </template>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 40%">Account:</td>
+                        <td style="width: 40%">
+                            <button class="gcm_button" onclick={handleNavigateAccount} value={thisCase.AccountId}>{thisCase.Account.Name}</button>
+                        </td>
+                        <td style="width: 20%">
+                            <template if:true={thisCase.nearingSla}>
+                                <span style="color:orange">
+                                    {thisCase.slaNearingPercent}%
+                                </span>
+                            </template>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 40%">Due:</td>
+                        <td style="width: 40%">
+                            <template if:true={thisCase.slaMissed}>
+                                <span style="color:red">
+                                    <lightning-formatted-date-time value={thisCase.Due__c} year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit" hour12="false" time-zone-name="short" time-zone={usertimezone}>
+                                    </lightning-formatted-date-time>
+                                </span>
+                            </template> 
+
+                            <template if:false={thisCase.slaMissed}>
+                                <template if:true={thisCase.nearingSla}>
+                                    <span style="color:orange">
+                                        <lightning-formatted-date-time value={thisCase.Due__c} year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit" hour12="false" time-zone-name="short" time-zone={usertimezone}>
+                                        </lightning-formatted-date-time>
+                                    </span>
+                                </template>
+
+                                <template if:false={thisCase.nearingSla}>
+                                    <lightning-formatted-date-time value={thisCase.Due__c} year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit" hour12="false" time-zone-name="short" time-zone={usertimezone}>
+                                    </lightning-formatted-date-time>
+                                </template>
+                            </template>                           
+                        </td>
+                        <td style="width: 20%"></td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 40%">Case Last Worked on:</td>
+                        <td style="width: 40%">
+                            <lightning-formatted-date-time value={thisCase.LastModifiedDate} year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit" hour12="false" time-zone-name="short" time-zone={usertimezone}>
+                            </lightning-formatted-date-time>
+                        </td>
+                        <td style="width: 20%"></td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="width: 40%">Type:</td>
+                        <td style="width: 40%">{thisCase.Type}</td>
+                        <td style="width: 20%"></td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 40%">Area:</td>
+                        <td style="width: 40%">{thisCase.Area__c}</td>
+                        <td style="width: 20%"></td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 40%">Sub Area:</td>
+                        <td style="width: 40%">{thisCase.Sub_Area__c}</td>
+                        <td style="width: 20%"></td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 40%">Service Experience Level:</td>
+                        <td style="width: 40%">{thisCase.GCM_Service_Level_Priority__c}</td>
+                        <td style="width: 20%"></td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 40%">Status:</td>
+                        <td style="width: 40%">{thisCase.Status}</td>
+                        <td style="width: 20%"></td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 40%">Sub-Status:</td>
+                        <td style="width: 40%">{thisCase.Sub_Status__c}</td>
+                        <td style="width: 20%"></td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 40%">Channel:</td>
+                        <td style="width: 40%">{thisCase.GCM_Case_Channel__c}</td>
+                        <td style="width: 20%"></td>
+                    </tr>
+                </table>
+                </template>
+            </template>
+        </div>
+        <div class = "slds-p-left_medium">
+            <span>
+                <lightning-button variant="base" label="Refresh" title="Refresh Data" onclick={connectedCallback}></lightning-button>
+            </span>
+            <span>
+                <lightning-button class="slds-p-left_medium" variant="base" label="Previous" title="Previous Page" onclick={handlePage} value=-1></lightning-button>
+            </span>
+            <span>
+                <lightning-button class="slds-p-left_medium" variant="base" label="Next" title="Next Page" onclick={handlePage} value=1></lightning-button>
+            </span>
+        </div>
+
+    </lightning-card>
+</template>

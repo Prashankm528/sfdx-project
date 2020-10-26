@@ -1,0 +1,28 @@
+<template>
+    <lightning-card title="Document Upload">
+        <div class="slds-grid slds-p-top_medium">  
+            <div class="slds-col">
+                <lightning-combobox class="slds-p-horizontal_small" name="fileTypeField" label="Document type" value="" placeholder="Document Type" options={fileTypes} onchange={onFileTypeSelection} required disabled={featureDisabled}></lightning-combobox>
+                <template if:true={renderDueDayField}>
+                    <lightning-combobox class="slds-p-horizontal_small" name="periodField" label="Period" value="" placeholder="Period" options={periods} onchange={onDueDateSelection} required disabled={featureDisabled}></lightning-combobox>
+                </template>
+            </div>
+            <div class="slds-col">
+                    <lightning-combobox class="slds-p-horizontal_small" name="bpNumbersField" label="Companies" value="" placeholder="Companies" options={bpNumbers} onchange={onBPNumberSelection} required disabled={featureDisabled}></lightning-combobox>
+            </div>
+        </div>
+        <div style="margin-left:4%">
+            <div>
+                <lightning-input label="" name="file uploader" record-id={recordId} onchange={handleFilesChange} type="file" multiple></lightning-input>
+            </div><br/>
+            <div class="slds-text-body_small slds-text-color_error">{fileName}
+            <template if:true={showLoadingSpinner}>
+                    <lightning-spinner alternative-text="Uploading......" size="medium"></lightning-spinner>
+                </template>
+            </div><br/>
+            <div>
+                <lightning-button class="slds-m-top--medium" label={UploadFile} onclick={handleSave} variant="brand" disabled={isTrue}></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>

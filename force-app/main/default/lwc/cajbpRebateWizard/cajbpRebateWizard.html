@@ -1,0 +1,468 @@
+<!--
+ * @author			Venkatesh Muniyasamy
+ * @date			04/10/2019
+ * @group			CAJBP
+ * @description		Renders Rebate fields based on the recordtype choosen.
+ *
+ * history
+ * 14/08/2019	Amir Hafeez			    Created POC
+ * 04/10/2019	Venkatesh Muniyasamy	Implemented the Component
+ * 20/11/2019   Venkatesh Muniyasamy    Modified the component for Volume Percentage and Edge compatability
+ * 06/02/2019   Venkatesh Muniyasamy    Modified the component for JBP Currency Assigment and reformating
+ * 21/02/2019   Venkatesh Muniyasamy    Updated for Custom Label
+ -->
+
+<!-- Rebate Wizard -->
+<template>
+    <div class="slds-modal__content slds-p-around_medium slds-scrollable slds-is-relative">
+        <lightning-record-edit-form record-id={_recordId} record-type-id={recordTypeId}
+                class="lightning-record-edit-form" object-api-name="CAJBP_Rebate__c"
+                onsuccess={handleSuccess} onload={handleLoad}>
+
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+            <lightning-messages></lightning-messages>
+            <!--To display the Scorecard and Selected Record Type-->
+            <div class="slds-grid">
+                <div class="slds-col slds-size_1-of-1 slds-hide">
+                    <span><lightning-input-field field-name="CAJBP_Scorecard__c" value={_scoreCardId} class="scoreCard" disabled></lightning-input-field></span>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-hide">
+                        <span><lightning-input-field field-name="CAJBP_Rebate_Type_Name__c" class="rtypeid" disabled></lightning-input-field></span>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <span>
+                        <div><lightning-input-field field-name="CurrencyIsoCode" value={_currencyId} class="currencyid" disabled></lightning-input-field></div>
+                    </span>
+                </div>
+            </div>
+            <div class="slds-p-bottom_xx-small"></div>
+            <!--Section: Volumer Pence Per Litre-->
+            <template if:true={isSingleVolumePPL}>
+                <c-cajbp-expandable-section title="Target Volume" is-open>
+                    <div class="slds-grid slds-p-horizontal--medium">
+                        <div class="slds-col slds-size_1-of-3">
+                            <span><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">Volume</label><lightning-input-field field-name="CAJBP_Volume_Target__c" onchange={checkTargetRebatePPL} class="target-volume" variant="label-hidden" required>
+                                </lightning-input-field></span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-p-left_xx-small">
+                            <span>
+                                <abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">{label.ppllabel}</label>
+                                <lightning-helptext icon-name="utility:info" content={label.pplother}></lightning-helptext>
+                                <lightning-input label="Price Per Litre" type="Number" onchange={checkTargetRebatePPL} step="0.01"  class="targetppl" required variant="label-hidden">
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Price_Per_Litre__c" class="target-price-per-litre" required>
+                                </lightning-input-field></div>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-p-left_xx-small">
+                            <span>
+                                <lightning-input label="Rebate Amount" class="targetamountppl" disabled>
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Target_Rebate_Amount__c" class="target-amount-ppl" required>
+                                </lightning-input-field></div>
+                            </span>
+                        </div>
+                    </div>
+                </c-cajbp-expandable-section>
+            </template>
+            <template if:true={isMultipleVolumePPL}>
+                <c-cajbp-expandable-section title="Threshold Volume" is-open>
+                    <div class="slds-grid slds-p-horizontal--medium">
+                        <div class="slds-col slds-size_1-of-3">
+                            <span><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">Volume</label><lightning-input-field field-name="CAJBP_Threshold_Volume_Target__c" onchange={checkThresholdRebatePPL} class="threshold-volume slds-truncate" variant="label-hidden" required>
+                                </lightning-input-field></span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-p-left_xx-small">
+                            <span>
+                                <abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">{label.ppllabel}</label>
+                                <lightning-helptext icon-name="utility:info" content={label.pplother}></lightning-helptext>
+                                <lightning-input label="Price Per Litre" type="Number" onchange={checkThresholdRebatePPL} step="0.01"  class="thresholdppl" required variant="label-hidden">
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Threshold_Price_Per_Litre__c" onchange={checkThresholdRebatePPL} class="threshold-price-per-litre" required>
+                                </lightning-input-field></div>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-p-left_xx-small">
+                            <span>
+                                <lightning-input label="Rebate Amount" class="thresholdamountppl" disabled>
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field  field-name="CAJBP_Threshold_Rebate_Amount__c" class="threshold-amount-ppl" disabled>
+                                </lightning-input-field></div>
+                            </span>
+                        </div>
+                    </div>
+                </c-cajbp-expandable-section>
+                <c-cajbp-expandable-section title="Target Volume" is-open>
+                    <div class="slds-grid slds-p-horizontal--medium">
+                        <div class="slds-col slds-size_1-of-3">
+                            <span><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">Volume</label><lightning-input-field field-name="CAJBP_Volume_Target__c" onchange={checkTargetRebatePPL} class="target-volume" variant="label-hidden" required>
+                                </lightning-input-field></span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-p-left_xx-small">
+                            <span>
+                                <abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">{label.ppllabel}</label>
+                                <lightning-helptext icon-name="utility:info" content={label.pplother}></lightning-helptext>
+                                <lightning-input label="Price Per Litre" type="Number" onchange={checkTargetRebatePPL} step="0.01"  class="targetppl" required variant="label-hidden">
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Price_Per_Litre__c" class="target-price-per-litre" required>
+                                </lightning-input-field></div>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-p-left_xx-small">
+                            <span>
+                                <lightning-input label="Rebate Amount" class="targetamountppl" disabled>
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Target_Rebate_Amount__c" class="target-amount-ppl" required>
+                                </lightning-input-field></div>
+                            </span>
+                        </div>
+                    </div>
+                </c-cajbp-expandable-section>
+                <c-cajbp-expandable-section title="Stretch Volume" is-open>
+                    <div class="slds-grid slds-p-horizontal--medium">
+                        <div class="slds-col slds-size_1-of-3">
+                            <span><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">Volume</label><lightning-input-field field-name="CAJBP_Stretch_Volume_Target__c" onchange={checkStretchRebatePPL} class="stretch-volume" variant="label-hidden" required>
+                                </lightning-input-field>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-p-left_xx-small">
+                            <span>
+                                <abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">{label.ppllabel}</label>
+                                <lightning-helptext icon-name="utility:info" content={label.pplother}></lightning-helptext>
+                                <lightning-input label="Price Per Litre" type="Number" onchange={checkStretchRebatePPL} step="0.01"  class="stretchppl" required variant="label-hidden">
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Stretch_Price_Per_Litre__c" onchange={checkStretchRebatePPL} class="stretch-price-per-litre" required>
+                                </lightning-input-field></div>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-p-left_xx-small">
+                            <span>
+                                <lightning-input label="Rebate Amount" class="stretchamountppl" disabled>
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field  field-name="CAJBP_Stretch_Rebate_Amount__c"  class="stretch-amount-ppl" disabled>
+                                </lightning-input-field></div>
+                            </span>
+                        </div>
+                    </div>
+                </c-cajbp-expandable-section>
+            </template>
+            <!--Section: Turnover Percentage-->
+            <template if:true={isSingleTurnoverPercentage}>
+                <c-cajbp-expandable-section title="Target Turnover" is-open>
+                    <div class="slds-grid slds-p-horizontal--medium">
+                        <div class="slds-col slds-size_1-of-3">
+                            <span>
+                                <label class="slds-form-element__label slds-no-flex">{label.turnoverlabel}</label>
+                                <lightning-input label="Turnover" type="Number" onchange={checkTargetRebatePercentage} class="targetturnover" required variant="label-hidden">
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Turnover_Target__c"  onchange={checkTargetRebatePercentage} class="target-turnover" required>
+                                </lightning-input-field></div>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-p-left_xx-small">
+                            <span><div style="padding-bottom:1px"><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">% Rebate</label></div><lightning-input-field  field-name="CAJBP_Target_Percentage_Rebate__c" onchange={checkTargetRebatePercentage} class="target-percentage" variant="label-hidden" required>
+                                </lightning-input-field>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-p-left_xx-small">
+                            <span>
+                                <lightning-input label="Rebate Amount" class="targetamountpercentage" disabled>
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Target_Rebate_Amount__c"  class="target-amount-percentage" disabled>
+                                </lightning-input-field></div>
+                            </span>
+                        </div>
+                    </div>
+                </c-cajbp-expandable-section>
+            </template>
+            <div class="slds-p-bottom_xx-small"></div>
+            <template if:true={isMultipleTurnoverPercentage}>
+                <c-cajbp-expandable-section title="Threshold Turnover" is-open>
+                    <div class="slds-grid slds-p-horizontal--medium">
+                        <div class="slds-col slds-size_1-of-3">
+                            <span>
+                                <label class="slds-form-element__label slds-no-flex">{label.turnoverlabel}</label>
+                                <lightning-input label="Turnover" type="Number" onchange={checkThresholdRebatePercentage} class="thresholdturnover" required variant="label-hidden">
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Threshold_Turnover_Target__c"  onchange={checkThresholdRebatePercentage} class="threshold-turnover" required>
+                                </lightning-input-field></div>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-p-left_xx-small">
+                            <span><div style="padding-bottom:1px"><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">% Rebate</label></div><lightning-input-field  field-name="CAJBP_Threshold_Percentage_Rebate__c" onchange={checkThresholdRebatePercentage} class="threshold-percentage" variant="label-hidden" required>
+                                </lightning-input-field>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-p-left_xx-small">
+                            <span>
+                                <lightning-input label="Rebate Amount" class="thresholdamountpercentage" disabled>
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Threshold_Rebate_Amount__c"  class="threshold-amount-percentage" disabled>
+                                </lightning-input-field></div>
+                            </span>
+                        </div>
+                    </div>
+                </c-cajbp-expandable-section>
+                <c-cajbp-expandable-section title="Target Turnover" is-open>
+                    <div class="slds-grid slds-p-horizontal--medium">
+                        <div class="slds-col slds-size_1-of-3">
+                            <span>
+                                <label class="slds-form-element__label slds-no-flex">{label.turnoverlabel}</label>
+                                <lightning-input label="Turnover" type="Number" onchange={checkTargetRebatePercentage} class="targetturnover" required variant="label-hidden">
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Turnover_Target__c"  onchange={checkTargetRebatePercentage} class="target-turnover" required>
+                                </lightning-input-field></div>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-p-left_xx-small">
+                            <span><div style="padding-bottom:1px"><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">% Rebate</label></div><lightning-input-field  field-name="CAJBP_Target_Percentage_Rebate__c" onchange={checkTargetRebatePercentage} class="target-percentage" variant="label-hidden" required>
+                                </lightning-input-field>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-p-left_xx-small">
+                            <span>
+                                <lightning-input label="Rebate Amount" class="targetamountpercentage" disabled>
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Target_Rebate_Amount__c"  class="target-amount-percentage" disabled>
+                                </lightning-input-field></div>
+                            </span>
+                        </div>
+                    </div>
+                </c-cajbp-expandable-section>
+                <c-cajbp-expandable-section title="Stretch Turnover" is-open>
+                    <div class="slds-grid slds-p-horizontal--medium">
+                        <div class="slds-col slds-size_1-of-3">
+                            <span>
+                                <label class="slds-form-element__label slds-no-flex">{label.turnoverlabel}</label>
+                                <lightning-input label="Turnover" type="Number" onchange={checkStretchRebatePercentage} class="stretchturnover" required variant="label-hidden">
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Stretch_Turnover_Target__c"  onchange={checkStretchRebatePercentage} class="stretch-turnover" required>
+                                </lightning-input-field></div>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-p-left_xx-small">
+                            <span><div style="padding-bottom:1px"><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">% Rebate</label></div><lightning-input-field  field-name="CAJBP_Stretch_Percentage_Rebate__c" onchange={checkStretchRebatePercentage} class="stretch-percentage" variant="label-hidden" required>
+                                </lightning-input-field>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-p-left_xx-small">
+                            <span>
+                                <lightning-input label="Rebate Amount" class="stretchamountpercentage" disabled>
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Stretch_Rebate_Amount__c"  class="stretch-amount-percentage" disabled>
+                                </lightning-input-field></div>
+                            </span>
+                        </div>
+                    </div>
+                </c-cajbp-expandable-section>
+            </template>
+            <!--Section: Volume Percentage-->
+            <template if:true={isSingleVolumePercentage}>
+                <c-cajbp-expandable-section title="Target Volume" is-open>
+                    <div class="slds-grid slds-wrap slds-p-horizontal--medium">
+                        <div class="slds-col slds-size_1-of-5">
+                            <span><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">Volume</label><lightning-input-field field-name="CAJBP_Volume_Target__c"  onchange={checkTargetRebateVolumeTurnover} class="target-volume" variant="label-hidden" required>
+                                </lightning-input-field>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5  slds-p-left_xx-small">
+                            <span>
+                                <abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">{label.ppllabel}</label>
+                                <lightning-helptext icon-name="utility:info" content={label.pplvolumepercentage}></lightning-helptext>
+                                <lightning-input label="Price Per Litre" type="Number" onchange={checkTargetRebateVolumeTurnover} step="0.01" class="targetppl" required variant="label-hidden">
+                                </lightning-input>
+                            <div class="slds-hide">
+                                <lightning-input-field field-name="CAJBP_Price_Per_Litre__c" onchange={checkTargetRebateVolumeTurnover} class="target-price-per-litre" required>
+                                </lightning-input-field>
+                            </div>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5 slds-p-left_xx-small">
+                            <span>
+                                <label class="slds-form-element__label slds-no-flex">{label.turnoverlabel}</label>
+                                <lightning-helptext icon-name="utility:info" content={label.turnoverpercentage}></lightning-helptext>
+                                <lightning-input label="Turnover" class="targetturnover" disabled variant="label-hidden">
+                                </lightning-input>
+                                <div class="slds-hide">
+                                    <lightning-input-field field-name="CAJBP_Turnover_Target__c"  class="target-turnover" disabled>
+                                    </lightning-input-field>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5  slds-p-left_xx-small">
+                            <span><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">% Rebate</label><lightning-input-field  field-name="CAJBP_Target_Percentage_Rebate__c" onchange={checkTargetRebateVolumeTurnover} class="target-percentage" variant="label-hidden" required>
+                                </lightning-input-field>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5 slds-p-left_xx-small">
+                            <span>
+                                <lightning-input label="Rebate Amount" class="targetamount" disabled>
+                                </lightning-input>
+                                <div class="slds-hide">
+                                    <lightning-input-field field-name="CAJBP_Target_Rebate_Amount__c"  class="target-amount" disabled>
+                                    </lightning-input-field>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </c-cajbp-expandable-section>
+            </template>
+            <template if:true={isMultipleVolumePercentage}>
+                <c-cajbp-expandable-section title="Threshold Volume" is-open>
+                    <div class="slds-grid slds-wrap slds-p-horizontal--medium">
+                        <div class="slds-col slds-size_1-of-5">
+                            <span><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">Volume</label><lightning-input-field field-name="CAJBP_Threshold_Volume_Target__c"  onchange={checkThresholdRebateVolumeTurnover} class="threshold-volume" variant="label-hidden" required>
+                                </lightning-input-field>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5  slds-p-left_xx-small">
+                            <span><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">{label.ppllabel}</label>
+                                <lightning-helptext icon-name="utility:info" content={label.pplvolumepercentage}></lightning-helptext>
+                                <lightning-input label="Price Per Litre" type="Number" onchange={checkThresholdRebateVolumeTurnover} step="0.01"  class="thresholdppl" variant="label-hidden" required>
+                                </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Threshold_Price_Per_Litre__c" onchange={checkThresholdRebateVolumeTurnover} class="threshold-price-per-litre" required>
+                                    </lightning-input-field>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5 slds-p-left_xx-small">
+                            <span><label class="slds-form-element__label slds-no-flex">{label.turnoverlabel}</label>
+                                <lightning-helptext icon-name="utility:info" content={label.turnoverpercentage}></lightning-helptext>
+                                <lightning-input label="Turnover" class="thresholdturnover" variant="label-hidden" disabled>
+                                </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Threshold_Turnover_Target__c"  class="threshold-turnover" disabled>
+                                    </lightning-input-field>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5  slds-p-left_xx-small">
+                            <span><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">% Rebate</label><lightning-input-field  field-name="CAJBP_Threshold_Percentage_Rebate__c" onchange={checkThresholdRebateVolumeTurnover} class="threshold-percentage" variant="label-hidden" required>
+                                </lightning-input-field>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5 slds-p-left_xx-small">
+                            <span>
+                                <lightning-input label="Rebate Amount" class="thresholdamount" disabled>
+                                </lightning-input>
+                            <div class="slds-hide"><lightning-input-field field-name="CAJBP_Threshold_Rebate_Amount__c"  class="threshold-amount" disabled>
+                                </lightning-input-field>
+                            </div>
+                            </span>
+                        </div>
+                    </div>
+                </c-cajbp-expandable-section>
+                <c-cajbp-expandable-section title="Target Volume" is-open>
+                    <div class="slds-grid slds-wrap slds-p-horizontal--medium">
+                        <div class="slds-col slds-size_1-of-5">
+                            <span><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">Volume</label><lightning-input-field field-name="CAJBP_Volume_Target__c"  onchange={checkTargetRebateVolumeTurnover} class="target-volume" variant="label-hidden" required>
+                                </lightning-input-field>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5  slds-p-left_xx-small">
+                            <span>
+                                <abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">{label.ppllabel}</label>
+                                <lightning-helptext icon-name="utility:info" content={label.pplvolumepercentage}></lightning-helptext>
+                                <lightning-input label="Price Per Litre" type="Number" onchange={checkTargetRebateVolumeTurnover} step="0.01"  class="targetppl" required variant="label-hidden">
+                                </lightning-input>
+                            <div class="slds-hide">
+                                <lightning-input-field field-name="CAJBP_Price_Per_Litre__c" onchange={checkTargetRebateVolumeTurnover} class="target-price-per-litre" required>
+                                </lightning-input-field>
+                            </div>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5 slds-p-left_xx-small">
+                            <span>
+                                <label class="slds-form-element__label slds-no-flex">{label.turnoverlabel}</label>
+                                <lightning-helptext icon-name="utility:info" content={label.turnoverpercentage}></lightning-helptext>
+                                <lightning-input label="Turnover" class="targetturnover" disabled variant="label-hidden">
+                                </lightning-input>
+                                <div class="slds-hide">
+                                    <lightning-input-field field-name="CAJBP_Turnover_Target__c"  class="target-turnover" disabled>
+                                    </lightning-input-field>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5  slds-p-left_xx-small">
+                            <span><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">% Rebate</label><lightning-input-field  field-name="CAJBP_Target_Percentage_Rebate__c" onchange={checkTargetRebateVolumeTurnover} class="target-percentage" variant="label-hidden" required>
+                                </lightning-input-field>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5 slds-p-left_xx-small">
+                            <span>
+                                <lightning-input label="Rebate Amount" class="targetamount" disabled>
+                                </lightning-input>
+                                <div class="slds-hide">
+                                    <lightning-input-field field-name="CAJBP_Target_Rebate_Amount__c"  class="target-amount" disabled>
+                                    </lightning-input-field>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </c-cajbp-expandable-section>
+                <c-cajbp-expandable-section title="Stretch Volume" is-open>
+                    <div class="slds-grid slds-wrap slds-p-horizontal--medium">
+                        <div class="slds-col slds-size_1-of-5">
+                            <span><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">Volume</label><lightning-input-field field-name="CAJBP_Stretch_Volume_Target__c"  onchange={checkStretchRebateVolumeTurnover} class="stretch-volume" variant="label-hidden" required>
+                                </lightning-input-field>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5 slds-p-left_xx-small">
+                            <span><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">{label.ppllabel}</label>
+                                <lightning-helptext icon-name="utility:info" content={label.pplvolumepercentage}></lightning-helptext>
+                                <lightning-input label="Price Per Litre" type="Number" onchange={checkStretchRebateVolumeTurnover} step="0.01"  class="stretchppl" variant="label-hidden" required>
+                                </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Stretch_Price_Per_Litre__c" onchange={checkStretchRebateVolumeTurnover} class="stretch-price-per-litre" required>
+                                    </lightning-input-field>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5 slds-p-left_xx-small">
+                            <span><label class="slds-form-element__label slds-no-flex">{label.turnoverlabel}</label>
+                                <lightning-helptext icon-name="utility:info" content={label.turnoverpercentage}></lightning-helptext>
+                                <lightning-input label="Turnover" class="stretchturnover" disabled variant="label-hidden">
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Stretch_Turnover_Target__c"  class="stretch-turnover" disabled>
+                                    </lightning-input-field>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5  slds-p-left_xx-small">
+                            <span><abbr class="slds-required">*</abbr><label class="slds-form-element__label slds-no-flex">% Rebate</label><lightning-input-field  field-name="CAJBP_Stretch_Percentage_Rebate__c" onchange={checkStretchRebateVolumeTurnover} class="stretch-percentage" variant="label-hidden" required>
+                                                    </lightning-input-field>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5 slds-p-left_xx-small">
+                            <span><lightning-input label="Rebate Amount" class="stretchamount" disabled>
+                                    </lightning-input>
+                                <div class="slds-hide"><lightning-input-field field-name="CAJBP_Stretch_Rebate_Amount__c"  class="stretch-amount" disabled>
+                                    </lightning-input-field>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </c-cajbp-expandable-section>
+            </template>
+        </lightning-record-edit-form>
+    </div>
+    <div class="modal-footer slds-modal__footer">
+        <div class="slds-grid slds-grid_align-end slds-size_1-of-1">
+            <template if:true={isNew}>
+                <lightning-button class="slds-p-right_xx-small" variant="neutral" label="Back" onclick={backRebate}></lightning-button>
+            </template>
+            <lightning-button class="slds-p-right_xx-small" variant="neutral" label="Cancel" onclick={cancelRebate}></lightning-button>
+
+            <template if:false={isSaving}>
+                <lightning-button variant="brand"
+                    type="submit"  name="save" onclick={saveRebate}  label="Save">
+                </lightning-button>
+            </template>
+            <template if:true={isSaving}>
+                <lightning-button variant="brand"
+                    type="submit"  name="save"  label="Save" disabled>
+                </lightning-button>
+            </template>
+        </div>
+    </div>
+</template>

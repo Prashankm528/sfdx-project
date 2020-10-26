@@ -1,0 +1,11 @@
+.reset-link {
+    text-decoration: none !important;
+}
+
+.label {
+    font-size: 0.875rem;
+}
+
+.summary-text {
+    overflow-wrap: break-word;
+}

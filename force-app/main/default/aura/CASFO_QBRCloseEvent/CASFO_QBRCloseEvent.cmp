@@ -1,0 +1,207 @@
+<aura:component implements="force:hasRecordId,force:lightningQuickActionWithoutHeader"
+                controller="CASFO_QBRCloseEventController"
+                access="global" >
+    
+    <aura:attribute name="event" type="Event"/>
+    <aura:attribute name="contacts" type="Contact[]" description="List of related contacts on Event"/>
+    
+    <aura:attribute name="CESSet" type="Boolean" default="false"/>
+    <aura:attribute name="NPSSet" type="Boolean" default="false"/>
+    
+    <aura:attribute name="cesOptions" type="String[]" default="1,2,3,4,5"/>
+    <aura:attribute name="npsOptions" type="String[]" default="0,1,2,3,4,5,6,7,8,9,10"/>
+    
+    <aura:attribute name="state"
+                    type="Integer"
+                    default="0"
+                    description="1 = not QBR
+                                 2 = closed QBR
+                                 3 = completed - questions
+                                 4 = cancelled
+                                 5 = completed - confirm"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <!-- To get rid of additional padding inherited from QuickAction -->
+    <aura:html tag="style">
+    	.cuf-content {
+        	padding: 0 0rem !important;
+        }
+        
+        .slds-p-around--medium {
+        	padding: 0rem !important;
+        }
+        
+        .slds-modal__content{
+        	height:unset !important;
+        	max-height:unset !important;
+        }
+    </aura:html>
+    
+    <div> 
+        <header class="slds-modal__header">
+            <h2 class="slds-text-heading_medium slds-hyphenate">{!$Label.c.CALCF_QBR_ClosingHeader}</h2>
+        </header>
+        
+        <!-- Modal content wrapper -->
+        <div class="slds-modal__content">
+    
+        <!-- Not QBR Event -->
+    	<aura:if isTrue="{! v.state == 1}">
+    		<div class="slds-align_absolute-center slds-text-heading_medium slds-m-around_large">
+        		{!$Label.c.CALCF_QBR_ClosingNotQBR}
+        	</div>
+    	</aura:if>
+            
+        <!-- Already Closed -->
+        <aura:if isTrue="{! v.state == 2}">
+            <div class="slds-align_absolute-center slds-text-heading_medium slds-m-around_large">
+                {!$Label.c.CALCF_QBR_ClosingClosed}
+            </div>
+        </aura:if>
+        
+       	<!-- Completed with sales questions -->
+    	<aura:if isTrue="{! or(v.state == 3, v.state == 4)}">
+			<div class="slds-m-around_large">            
+                <div class="slds-form-element slds-m-vertical--medium">
+                    <div class="slds-form-element__control">
+                        <lightning:select label="Status" aura:id="statusPicklist"
+                                          value="{!v.event.CASFO_QBR_Meeting_Status__c}"
+                                          required="true"
+                                          onchange="{!c.onStatusPicklist}">
+                            <option text="Completed" value="Completed" selected="true"/>
+                            <option text="Cancelled" value="Cancelled" selected="false"/>
+    					</lightning:select>
+                    </div>
+                </div>
+   
+            
+          		<aura:if isTrue="{!v.state == 3}">
+              		<div class="slds-m-vertical_small">
+         				<p>{!$Label.c.CALCF_QBR_ClosingQuestionInfo}</p>
+              		</div>
+            
+                    <!-- TODO could be replaced with lightning component once it will support horizontal layout -->
+                    <!-- Radio CES/NPS Questions START -->
+                   
+                    <fieldset class="slds-form-element">
+                        <legend class="slds-form-element__legend slds-form-element__label">
+                            {!$Label.c.CALCF_QBR_ClosingCESQuestion}
+                        </legend>
+                        
+                        <div class="slds-form-element__control slds-m-vertical_small">
+                            <lightning:layout>
+                                <aura:iteration items="{!v.cesOptions}" var="cesOption">
+                                    <lightning:layoutItem >
+                                        <lightning:input aura:id="radio"
+                                                         type="radio" 
+                                                         name="CESQuestion" 
+                                                         value="{!cesOption}"
+                                                         label="{!cesOption}"
+                                                         onchange="{!c.radioCES}"/>
+                                    </lightning:layoutItem>
+                                </aura:iteration>
+                            </lightning:layout>
+                        </div>
+                        
+                        <legend class="slds-form-element__legend slds-form-element__label">
+                            {!$Label.c.CALCF_QBR_ClosingNPSQuestion}
+                        </legend>
+                        	<div class="slds-form-element__control slds-m-vertical_small">
+                                <lightning:layout>
+                                    <aura:iteration items="{!v.npsOptions}" var="npsOption">
+                                        <lightning:layoutItem >
+                                            <lightning:input aura:id="radio"
+                                                             type="radio" 
+                                                             name="NPSQuestion" 
+                                                             value="{!npsOption}"
+                                                             label="{!npsOption}"
+                                                             onchange="{!c.radioNPS}"/>
+                                        </lightning:layoutItem>
+                                    </aura:iteration>
+                                </lightning:layout>
+                        	</div>
+                    </fieldset>
+              
+                    <!-- Radio CES/NPS Questions END-->
+                    
+                    <div class="slds-m-vertical_small">
+                        <lightning:textarea label="{!$Label.c.CALCF_QBR_ClosingNoAnswer}" 
+                                            value="{!v.event.CALCF_QBR_Sales_Q_Not_Filled_Reason__c}"
+                                           	onchange="{!c.reason}"/>
+                    </div>
+                    
+     			</aura:if>
+            </div>
+      	</aura:if>
+   
+        <aura:if isTrue="{!v.state == 4}">
+           	<div class="slds-m-around_large">
+           		<lightning:textarea label="{!$Label.c.CALCF_QBR_ClosingCancelledReason}" 
+                                    value="{!v.event.CASFO_QBR_Cancelled_Reason__c}"/>
+           	</div>
+        </aura:if>
+
+        <aura:if isTrue="{!v.state == 5}">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_info" role="alert">
+                <h2><b>{!$Label.c.CALCF_QBR_ClosingSurveyWarning}</b></h2>
+            </div>
+            
+            <div class="slds-m-around_large">
+                <b class="slds-m-bottom_large">{!$Label.c.CALCF_QBR_ClosingConfirmContacts}</b>
+
+                <aura:iteration items="{!v.contacts}" var="contact">
+                    <article class="slds-card">
+                        <div class="slds-card__header slds-grid">
+                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                <div class="slds-media__figure">
+                                    <span class="slds-icon_container slds-icon-standard-account" title="account">
+                                        <lightning:icon iconName="standard:contact"/>
+                                        <span class="slds-assistive-text">Contact</span>
+                                    </span>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h2 class="slds-card__header-title">
+                                        <p class="slds-card__header-link slds-truncate" title="Card Header">
+                                            <span>
+                                                <a class="slds-card__header-link slds-truncate"
+                                                   href="{!'/lightning/r/Contact/'+ contact.Id + '/view'}" 
+                                                   target="_blank">
+                                                    	{!contact.Name}
+                                                </a>
+                                            </span>
+                                        </p>
+                                    </h2>
+                                </div>
+                                <aura:if isTrue="{!contact.Survey_Opt_Out__c}">
+                                    <div>
+                                        <h2 class="slds-card__header-title">
+                                            <lightning:icon iconName="utility:warning"/>
+                                            Opted Out Contact
+                                        </h2>
+                                    </div>
+                               	</aura:if>
+                            </header>
+                        </div>
+                    </article>
+                </aura:iteration>
+         	</div>
+            
+            <div class="slds-m-bottom_large"></div>   
+        </aura:if>
+		</div>
+    
+        <div class="slds-modal__footer">
+            <div class="slds-col">
+                <lightning:button label="Cancel" variant="neutral" onclick="{! c.cancel}"/>
+                <aura:if isTrue="{! v.state >= 3}">
+                    <lightning:button aura:id="closeButton" 
+                                      label="Close" 
+                                      variant="brand" 
+                                      disabled="true" 
+                                      onclick="{! c.save}"/>
+                </aura:if>
+            </div>
+        </div>
+	</div>
+</aura:component>

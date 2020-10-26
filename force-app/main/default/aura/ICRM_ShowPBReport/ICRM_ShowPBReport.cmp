@@ -1,0 +1,16 @@
+<aura:component controller="BPG_PowerBIController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <!--defining attributes start-->
+    <aura:attribute name="PBReportName" type="String"/>
+    <aura:handler event="c:ICRM_GetPBReportEvent" action="{!c.handleApplicationEvent}"/>
+    <aura:attribute name="height" type="String" default="800px"/>
+    <aura:attribute name="width" type="String" default="100%"/>
+    <aura:attribute name="embedURL" type="String" default="" />
+    <!--defining attributes end-->
+    <iframe  
+            width="{!v.width}" 
+            height="{!v.height}" 
+            src="{!v.embedURL}" 
+            frameborder="0" 
+            allowFullScreen="true">   	
+    </iframe>
+</aura:component>

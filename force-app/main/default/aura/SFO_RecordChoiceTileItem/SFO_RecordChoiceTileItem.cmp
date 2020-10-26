@@ -1,0 +1,41 @@
+<aura:component access="global">
+    <aura:attribute name="item" type="Map" access="global"/>
+
+    <aura:if isTrue="{!v.item.visible}">
+        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="{!v.item.label}">{!v.item.label}:</dt>
+        <dd class="slds-item_detail slds-truncate" title="{!v.item.value}">
+            <aura:if isTrue="{!v.item.type == 'CURRENCY'}">
+                <lightning:formattedNumber value="{!v.item.value}" style="currency" currencyDisplayAs="code"/>
+            </aura:if>
+            <aura:if isTrue="{!v.item.type == 'PERCENT'}">
+                <lightning:formattedNumber value="{!v.item.value}" style="percent" minimumFractionDigits="2"/>
+            </aura:if>
+            <aura:if isTrue="{!v.item.type == 'INTEGER' || v.item.type == 'DOUBLE' || v.item.type == 'LONG'}">
+                <lightning:formattedNumber value="{!v.item.value}"/>
+            </aura:if>
+            <aura:if isTrue="{!v.item.type == 'EMAIL'}">
+                <lightning:formattedEmail value="{!v.item.value}"/>
+            </aura:if>
+            <aura:if isTrue="{!v.item.type == 'PHONE'}">
+                <lightning:formattedPhone value="{!v.item.value}"/>
+            </aura:if>
+            <aura:if isTrue="{!v.item.type == 'DATE'}">
+                <lightning:formattedDateTime value="{!v.item.value}" year="numeric"
+                    month="numeric" day="numeric" timeZone="UTC"/>
+            </aura:if>
+            <aura:if isTrue="{!v.item.type == 'DATETIME'}">
+                <lightning:formattedDateTime value="{!v.item.value}" year="numeric" month="numeric" day="numeric"
+                        hour="2-digit" minute="2-digit" timeZone="{!$Locale.timezone}"/>
+            </aura:if>
+            <aura:if isTrue="{!v.item.type == 'TIME'}">
+                <lightning:formattedTime value="{!v.item.value}"/>
+            </aura:if>
+            <aura:if isTrue="{!v.item.type == 'STRING' || v.item.type == 'TEXTAREA' || v.item.type == 'PICKLIST' || v.item.type == 'MULTIPICKLIST'}">
+                <lightning:formattedText value="{!v.item.value}" linkify="false"/>
+            </aura:if>
+            <aura:if isTrue="{!v.item.type == 'BOOLEAN'}">
+                <lightning:input type="checkbox" label="" variant="label-hidden" name="{!v.item.field}" checked="{!v.item.value}" disabled="true"/>
+            </aura:if>
+        </dd>
+    </aura:if>
+</aura:component>
