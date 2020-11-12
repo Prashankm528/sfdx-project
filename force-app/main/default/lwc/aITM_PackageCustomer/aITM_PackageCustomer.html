@@ -1,18 +1,18 @@
 
 <template>
+  
     <div class="slds-box slds-box_x-small slds-theme_shade ">
         <p><strong>Customer/Pricing</strong></p>
       </div><br/>
-
+     
       <lightning-layout vertical-align="end" >
         <lightning-layout-item   size ="2">
+          <strong>
             <lightning-combobox
-            name="progress"
             label="AVAILABLE ACTIONS"
-            value={value}
-            placeholder="Select Progress"
-            options={options}
-            onchange={handleChange} ></lightning-combobox>
+            value={value}  
+            options={Options}
+            onchange={handleChange} ></lightning-combobox></strong>
         </lightning-layout-item>
         <lightning-layout-item size ="8">
             <lightning-button class="slds-m-left_x-small" label="Delete" variant="Brand" onclick={deleteRecord}></lightning-button>
@@ -25,10 +25,10 @@
             <lightning-input name="enter-search" placeholder="Search Locations" type="search" ></lightning-input>
         </lightning-layout-item>
       </lightning-layout>  
-    <br/>
+    <br/> <br/><br/>
     
     <div class="scrollable">
-      <c-a-i-t-m_-package-customer-tile location-line-items ={locationLineItem} ></c-a-i-t-m_-package-customer-tile>
+      <c-a-i-t-m_-package-customer-tile location-statuses ={locationStatus} location-line-items ={locationLineItem} ></c-a-i-t-m_-package-customer-tile>
       
     </div>
       <div class="slds-clearfix slds-m-around_medium">

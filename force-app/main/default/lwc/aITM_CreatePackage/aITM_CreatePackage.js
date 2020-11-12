@@ -1,4 +1,4 @@
-import { LightningElement, api, wire , track } from 'lwc';
+import { LightningElement, api, wire ,track } from 'lwc';
 import getTenderLocationLineItems from '@salesforce/apex/AITM_AddTenderPackage.getTenderLocationLineItems';
 import getTenderLocationAdd from '@salesforce/apex/AITM_AddTenderPackage.getTenderLocationAddPackage';
 import getTenderLocationEdit from '@salesforce/apex/AITM_AddTenderPackage.getTenderLocationEditPackage';
@@ -15,15 +15,15 @@ import PACKAGE_NOTES from '@salesforce/schema/AITM_Tender_Package__c.AITM_Intern
 import PACKAGE_TENDER from '@salesforce/schema/AITM_Tender_Package__c.AITM_Tender__c';
 import ID_FIELD from '@salesforce/schema/AITM_Tender_Package__c.Id';
 
-let countrySet = new Set();
-let managerSet = new Set();
+
 export default class AITM_CreatePackage extends NavigationMixin(LightningElement) {
 
     @api recordId; //Tender Id
     @api packId; //  package id passed from table
-    
-    @track mapkeyValueStore = [];
+    selectedValueList = [];
+    @track mapkeyValueStore = []; 
     Name;
+    @track mapkeyValueStatus= []; //map of location and status
     // Fields needed to create package
     packName;
     description;
@@ -32,7 +32,7 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
     tenderRecord;
     showLocation = true;
     showCustomer = false;
-    
+    searchOptions; //options for Available Options
     currentStep;
     PackageId; // created Package Id
     isLoading = false;
@@ -47,20 +47,12 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
     selectedLocationValue = [];
     locationAlreadySelected =[];
     disableCreate =false;
+    inEditPackageCase =[];
+    //selectedLocationset = new set();
 
-    @wire(getRecord, { recordId: '$userId', fields:NAME_FIELD1 })
-    user;
+    
 
-    get name1() {
-        if(this.userId =='0052z000000K0izAAC'|| this.userId =='0052z000000K0iuAAC'){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    // To get thh package NAme if package Id is there
+    // To get the package detail on edit with Packid - package id on edit
     @wire(getRecord, { recordId: '$packId', fields: [PACKAGE_NAME, PACKAGE_DESCRIPTION, PACKAGE_NOTES]})
     Package;
 
@@ -90,44 +82,24 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
     }
 
     connectedCallback(){
-      //  if(!this.packId){
-            this.getTenderLocationAdd();     
-      //  }
-      /* if(this.packId){
-        this.getTenderLocationEdit();
-       }*/
-   } 
-  /* renderedCallback(){
-        if(this.packId || this.PackageId){
-            this.template.querySelector('c-a-i-t-m_-package-location').selectedLocation();
-        }
-   }*/
-   
-  /* getTenderLocationEdit(){
-    getTenderLocationEdit({TenderId: this.recordId, PackId:this.packId })
-    .then(result=>{
-      this.tenderLocation = result;
-      console.log('Tender location are' + this.tenderLocation);
-      this.error= undefined;
-    })
-    .catch(error=>{
-      this.tenderLocation = Undefined;
-      this.error= error;
-    })
-   }*/
+      
+        //this.getTenderLocationAdd();     
+   }
 
-   getTenderLocationAdd(){
+// to get the location data
+  /* getTenderLocationAdd(){
     getTenderLocationAdd({TenderId: this.recordId})
       .then(result=>{
         this.tenderLocation = result;
-        console.log('Tender location are' + this.tenderLocation);
+        console.log('Tender location are' + JSON.stringify(this.tenderLocation));
+        setTimeout(()=>this.template.querySelector('c-a-i-t-m_-package-location').availableAction(this.tenderLocation));
         this.error= undefined;
       })
       .catch(error=>{
         this.tenderLocation = Undefined;
         this.error= error;
       })
-
+    
       if(this.packId){
         getTenderLocationEdit({TenderId: this.recordId, PackId : this.packId})
         .then(result=>{
@@ -142,18 +114,10 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
             this.tenderLocationSelected = Undefined;
             this.error= error;
         }) 
-    }
-    for(let i=0; i<this.tenderLocation.length; i++){
-            managerSet.add(tenderLocation[i].AITM_Location_Manager__r.Name);
-            countrySet.add(tenderLocation[i].AITM_Location__r.AITM_Country__c)
-
+        
     }
 
-    this.searchOptions = managerSet.map(type => {
-        return {label: type.Name, value: type.Id}
-    });
-    this.searchOptions.unshift({ label: 'All Types', value: '' });
-   }
+   }*/
 
     @wire(getRecord, { recordId: '$recordId', fields:NAME_FIELD })
     Tender({error, data}){
@@ -188,25 +152,31 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
        // this.template.querySelector("c-a-i-t-m_-package-location").locationEnabled();
 
         if(!this.PackageId && !this.packId ){
-            const fields = {};
-            fields[PACKAGE_NAME.fieldApiName] = this.packName;
-            fields[PACKAGE_DESCRIPTION.fieldApiName] = this.description;
-            fields[PACKAGE_TENDER.fieldApiName] = this.recordId;
-            fields[PACKAGE_NOTES.fieldApiName] = this.notes;
-            const recordInput = { apiName: PACKAGE_OBJECT.objectApiName, fields };
+            if(this.packName){
+                const fields = {};
+                fields[PACKAGE_NAME.fieldApiName] = this.packName;
+                fields[PACKAGE_DESCRIPTION.fieldApiName] = this.description;
+                fields[PACKAGE_TENDER.fieldApiName] = this.recordId;
+                fields[PACKAGE_NOTES.fieldApiName] = this.notes;
+                const recordInput = { apiName: PACKAGE_OBJECT.objectApiName, fields };
 
-            createRecord(recordInput)
-                .then(packages => {
-                    this.PackageId = packages.id;
-                    this.isLoading = false;
-                    console.log(this.PackageId);
-                
-                    this.ShowToastNotification('Success', 'Package created', 'success');
-                })
-                .catch(error => {
-                    this.isLoading = false;
-                    this.ShowToastNotification('Error creating record',  'error occured', 'error');
-                });   
+                createRecord(recordInput)
+                    .then(packages => {
+                        this.PackageId = packages.id;
+                        this.isLoading = false;
+                        console.log(this.PackageId);
+                    
+                        this.ShowToastNotification('Success', 'Package created', 'success');
+                    })
+                    .catch(error => {
+                        this.isLoading = false;
+                        this.ShowToastNotification('Error creating record',  'error occured', 'error');
+                    });  
+                } 
+
+                else{
+                    this.ShowToastNotification('Error creating record',  'Please fill the package Name', 'error');
+                }
         }
         else{
             const fields = {};
@@ -230,33 +200,57 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
 
     // customer screen with the clone record
     showCustomerScreen(event){
-        alert('test1');
+       this.isLoading = true;
+       this.LocationList =[];
+       this.mapkeyValueStore = []
+     //  this.TenderLocationLineItems = [];
+      // this.inEditPackageCase = []
         //this.LocationList = event.detail;
         console.log('Pacakge Id edit' + this.packId);
-        for (var item of event.detail.values()){
+        console.log('Pacakge Id edit' + this.PackageId);
+       // console.log('set size is ' + event.detail.globalmySet);
+        console.log('global set size is ' + event.detail.globalmySet.size );
+        for (var item of event.detail.globalmySet.values()){
+            
             this.LocationList.push(item);
             }
             console.log('List from set' +  this.LocationList ); // All selected locations from location page
-        let inEditPackageCase = this.packId? this.locationAlreadySelected : null ;
-        console.log('Edit location line item Id' + inEditPackageCase);
-        alert(inEditPackageCase);
+       
+        this.inEditPackageCase =  (this.packId || this.PackageId)  ? event.detail.locationAlreadySelected : null ;
+       console.log('Edit location line item Id value are' + this.inEditPackageCase);
+       if(this.inEditPackageCase){
+           for(let i=0; i< this.inEditPackageCase.length; i++){
+                this.selectedValueList.push(this.inEditPackageCase[i]);
+           }
+       }
+     // alert('tset' +this.selectedValueList);
+     // alert('Kunal')
+      //JSON.stringify(this.selectedValueList[0])
         //getting tender location items on basis og tender id, tender location and package Id
         getTenderLocationLineItems({
+            
             TenderId: this.recordId,
+           
             newTenderLocationtoInsert : this.LocationList,
-            TenderLocationAlreadyInserted : inEditPackageCase,
+            TenderLocationAlreadyInserted : this.selectedValueList,
             PackageId : this.PackageId,
-            editPackageId : this.packId,
+            editPackageId : this.packId
 
 
         })
         .then(result=>{
             this.TenderLocationLineItems = result;
             console.log('location Line item list is' +  this.TenderLocationLineItems);
-            for(var key in result){
+            for(let i=0; i< this.TenderLocationLineItems.length; i++){
+                this.mapkeyValueStore.push(this.TenderLocationLineItems[i]);
+            }
+           /* for(var key in result){
 
                 this.mapkeyValueStore.push({key:key,value:result[key]});
-               }
+                this.mapkeyValueStatus.push({key:key,value:'Priced'});
+               } */
+              this.isLoading = false;
+             // console.log('MapkeyValueStatus is :' +  JSON.stringify(this.mapkeyValueStatus));
             console.log('MapkeyValue is :' +  JSON.stringify(this.mapkeyValueStore));
             //this.error= undefined;
           })
@@ -273,12 +267,15 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
     }
 
     showLocationScreen(event){
-        alert('back to location screen');
+       
+        //this.isLoading = true;
         this.showLocation = true;
         this.showCustomer = false;
         this.currentStep = "1";
-        setTimeout(()=>this.template.querySelector('c-a-i-t-m_-package-location').selectedLocation());
-        //this.template.querySelector('c-a-i-t-m_-package-location').selectedLocation();
+        if(this.PackageId){
+            setTimeout(()=>this.template.querySelector('c-a-i-t-m_-package-location').selected(this.LocationList));
+        }
+       
     }
 
 
@@ -291,5 +288,9 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
                 variant: variant
             })
         );
+        this.isLoading = false;
+        if(!this.packName){
+            this.disableCreate =false;
+        }
     }
 }

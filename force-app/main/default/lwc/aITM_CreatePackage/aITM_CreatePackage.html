@@ -53,39 +53,27 @@
         <br/><br/>
         <div style="width:400px;margin-left:600px;">
             <lightning-progress-indicator current-step={currentStep} type="base"   variant="base">
-                <lightning-progress-step label="Locations" value="1">
-                    <p>Locations</p>
+               <lightning-progress-step label="Locations" value="1">
+                   
                 </lightning-progress-step>
 
-                <lightning-progress-step label="Customers" value="2">Customers</lightning-progress-step>
+               <lightning-progress-step label="Customers" value="2"></lightning-progress-step> 
                 
                
             </lightning-progress-indicator>
+           
+       </div>
+       <div >
+           <span style="margin-left:620px;">Locations</span>
+           <span style="margin-left:240px;">Customers</span>
        </div>
       <br/><br/>
 
-   <!--  <div class="slds-clearfix slds-m-around_medium">
-        <div class="slds-float_left">
-            <template if:true={showSave}>
-                <lightning-button label="Previous" variant="Brand" onclick={showLocationScreen}></lightning-button>
-            </template>
-        </div>
-        <div class="slds-float_right">
-            <template if:true={showNext}>
-                <lightning-button label="Next" variant="Brand" onclick={createPackage}></lightning-button>
-            </template>
-           <template if:true={showSave}>
-                <lightning-button label="Save" variant="Brand" onclick={updatePackage} disabled={disableSave}></lightning-button>
-            </template>
-        </div>
-      </div>-->
-   
-      
-      <template if:true={name1}>
+    
       <!--Location starts here-->
-  <template if:true={showLocation} >
+ <template if:true={showLocation} >
      
-         <c-a-i-t-m_-package-location  location-items={tenderLocation} pack-id={packId} package={PackageId} onnext={showCustomerScreen} >
+         <c-a-i-t-m_-package-location   location-items={tenderLocation} tender-id={recordId}  pack-id={packId} package={PackageId} onnext={showCustomerScreen} >
 
          </c-a-i-t-m_-package-location>
         
@@ -94,10 +82,10 @@
 
       <!--Customer startrs Here-->
    <template if:true={showCustomer}>
-        <c-a-i-t-m_-package-customer location-line-item={mapkeyValueStore} onback={showLocationScreen}></c-a-i-t-m_-package-customer>
+        <c-a-i-t-m_-package-customer location-status={mapkeyValueStatus} location-line-item={mapkeyValueStore} tender-id={recordId} onback={showLocationScreen}></c-a-i-t-m_-package-customer>
      </template> 
       <!--Customer ends Here-->
-    </template>
+  
     </div>
 
 </template>

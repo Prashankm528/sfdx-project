@@ -7,40 +7,58 @@
          </lightning-spinner>
     </template>
   </div>
+  <c-a-i-t-m_-modal-popup onupdatedeliverypoint={updatePoint}></c-a-i-t-m_-modal-popup>
   <div class="slds-m-around-medium ">
  <template for:each={locationLineItems} for:item="keyValue" for:index="index">
-    <div class="slds-clearfix" key={keyValue.key}>
+   <!-- <div class="slds-clearfix" key={keyValue}  data-index={index}>
       <div class="slds-float_left">
-        <strong> <lightning-input type="checkbox" label={keyValue.key}  data-target-id={keyValue.key} onchange={getLocationId} ></lightning-input> </strong>
+        <strong> <lightning-input type="checkbox" label={keyValue.iATAWithlocationName}  data-value={keyValue.locationId} onchange={getLocationId} ></lightning-input> </strong>
       </div>
-      <div class="slds-float_right">
-        <template if:true={statusReadOnly}>
+      <div class="slds-float_right" data-index={index}>
+        <lightning-combobox
+        data-index={index}
+        data-target-id={keyValue}
+        name={statusReadOnly}
+        value={keyValue.locationStatus}
+        options={options}
+        onchange={handleChange} ></lightning-combobox>
+     
+    
+      <template if:true={statusReadOnly}>
         <label class="slds-form-element__label" for="unique-id-of-input">Status</label>
         <span class="slds-badge">{selectedStatus}
-          <lightning-button-icon icon-name="utility:edit" onclick={changeStatus}></lightning-button-icon>
+          <lightning-button-icon  data-index={index} data-target-id={keyValue.key}  icon-name="utility:edit" onclick={changeStatus}></lightning-button-icon>
         </span>  
       </template>
-      <template if:false={statusReadOnly}>
+      <template if:false={statusReadOnly} >
         <lightning-combobox
+            data-index={index}
+            data-target-id={keyValue.key}
+            name={statusReadOnly}
             value={value}
             options={options}
             onchange={handleChange} ></lightning-combobox>
-        </template>
+        </template> 
       </div>
-    </div>
-  <!--  <lightning-layout vertical-align="center" key={keyValue.key} >
-      <lightning-layout-item   size ="2">
+    </div> -->
+    <lightning-layout vertical-align="center" key={keyValue.key} >
+      <lightning-layout-item   size ="4">
       
-       <strong> <lightning-input type="checkbox" label={keyValue.key}  data-target-id={keyValue.key} onchange={getLocationId} ></lightning-input> </strong>
+       <strong> <strong> <lightning-input type="checkbox" label={keyValue.iATAWithlocationName}  data-value={keyValue.locationId} onchange={getLocationId} ></lightning-input> </strong> </strong>
       </lightning-layout-item>
-      <lightning-layout-item size ="8">
-        <hr>
+      <lightning-layout-item size ="6">
+        
       </lightning-layout-item>
       <lightning-layout-item size ="2">
-        <label class="slds-form-element__label" for="unique-id-of-input">Status</label>
-        <span class="slds-badge">Awaiting price</span>
+        <lightning-combobox
+        data-index={index}
+        data-target-id={keyValue}
+        name={statusReadOnly}
+        value={keyValue.locationStatus}
+        options={options}
+        onchange={handleChange} ></lightning-combobox>
       </lightning-layout-item>
-    </lightning-layout>  -->
+    </lightning-layout>  
    <!-- <div class="slds-grid slds-grid_vertical-align-center" key={keyValue.key}>
       <div class="slds-col slds-size_1.5-of-12">
         <strong> <lightning-input type="checkbox" label={keyValue.key} ></lightning-input> </strong>
@@ -56,12 +74,12 @@
       
     </div> -->
 
-    <lightning-layout vertical-align="center" key={keyValue.key} >
-      <lightning-layout-item   size ="12">
-        <lightning-textarea  label="Internal Notes" ></lightning-textarea>
+    <lightning-layout vertical-align="center" key={keyValue} >
+      <lightning-layout-item   size ="9">
+        <lightning-textarea class="slds-p-right_small"  label="Internal Notes" ></lightning-textarea>
       </lightning-layout-item>
     
-     <!-- <lightning-layout-item size ="2" class="slds-m-around-medium">
+   <lightning-layout-item size ="2" class="slds-m-around-medium">
           Location Contibution to Package 
       </lightning-layout-item>
 
@@ -80,19 +98,19 @@
               </div>
            </div>
          
-      </lightning-layout-item> -->
+      </lightning-layout-item> 
       
-    </lightning-layout>  <br  key={keyValue.key}/>
+    </lightning-layout>  <br  key={keyValue}/>
 
     
 
-    <table  key={keyValue.key} class="slds-table slds-table--bordered slds-table--cell-buffer" role="grid">      
+    <table  key={keyValue} class="slds-table slds-table--bordered slds-table--cell-buffer" role="grid">      
       <thead>  
           <tr class="slds-text-title--caps">
               <th>           
                   
                       
-                    <lightning-input data-target-id={keyValue.key} type="checkbox" onchange={selectcheckbox} ></lightning-input>
+                    <lightning-input data-target-id={keyValue.locationId} type="checkbox" onchange={selectcheckbox} ></lightning-input>
                       <span class="slds-form-element__label"></span>
                  
               </th>
@@ -134,62 +152,83 @@
             <th scope="col" >
               <div class="slds-truncate" title="Currency">Currency</div>
             </th>
-            <th scope="col" >
+           <!-- <th scope="col" >
               <div class="slds-truncate" title="Customer Cost Saving">Customer <br/> Cost <br/>Saving</div>
-            </th>
+            </th> -->
             
          
 
           </tr>
       </thead>
       <tbody>        
-       <template for:each={keyValue.value} for:item="value"> 
+       <template for:each={keyValue.locationLineItemsList} for:item="value"> 
             <tr key={value.Id}>
                 <th>
                     
-                      <lightning-input type="checkbox" data-id={keyValue.key} data-record-id={keyValue.key} value={value.AITM_Tender_Location__r.Id}  data-target-id={value.Id} onchange={handleclickCheckBox} ></lightning-input>
+                      <lightning-input type="checkbox" data-id={keyValue.locationId} data-record-id={keyValue.locationId} value={value.AITM_Tender_Location__r.Id}  data-target-id={value.Id} onchange={handleclickCheckBox} ></lightning-input>
                         
                     
                 </th>
                 <td data-label="Customers">
-                    <lightning-input data-id={value.Id} value={value.AITM_Account__r.Name} onblur={handleAccountName}></lightning-input>
+                   <!-- <lightning-input class="customerValueCSS" onfocus={oldvalue} data-id={value.Id} data-record-id={value.AITM_Account__r.Id} value={value.AITM_Account__r.Name} onblur={handleAccountName}></lightning-input> -->
+                   <a href="#" class="customerValueCSS" data-id={value.AITM_Account__r.Id} onclick={openCustomerRecord}>{value.AITM_Account__r.Name}</a>
                 </td>
                 <td data-label="Start Date">
-                  <lightning-input data-id={value.Id} type="Date" value={value.AITM_Start_Date__c} onblur={handleStartDate}></lightning-input>
+                  <lightning-input class="dateValueCSS" onfocus={oldvalue} data-id={value.Id} type="Date" value={value.AITM_Start_Date__c} onblur={handleStartDate}></lightning-input>
                 </td>
                 <td data-label="End Date">
-                  <lightning-input data-id={value.Id} type="Date" value={value.AITM_End_Date__c} onblur={handleEndDate}></lightning-input>
+                  <lightning-input class="dateValueCSS" onfocus={oldvalue} data-id={value.Id} type="Date" value={value.AITM_End_Date__c} onblur={handleEndDate}></lightning-input>
                 </td>
                 <td data-label="Delivery Point">
-                  <lightning-input data-id={value.Id} value={value.AITM_Delivery_Point__c} onblur={handleDeliveryPoints}></lightning-input>
+                  <lightning-layout vertical-align="center">
+                    <lightning-layout-item >
+                        <lightning-input class="customValueCSS" onfocus={oldvalue} data-id={value.Id} value={value.AITM_Delivery_Point__c} 
+						            onblur={handleDeliveryPoints}></lightning-input>
+                      </lightning-layout-item>
+                      <lightning-layout-item  class="slds-p-top_medium">
+                        <lightning-button-icon icon-name="utility:search"
+                        data-record-id={value.Id}
+                        data-id={value.AITM_Tender_Location__r.AITM_Location__r.Id}
+                        variant="bare"
+                        alternative-text="Edit Record"
+                        onclick={editRecord}></lightning-button-icon>
+                      </lightning-layout-item>
+                      </lightning-layout>
+            
+      
                 </td>
                   <td data-label="Requested Volume">
-                    <lightning-input data-id={value.Id} value={value.AITM_Volume__c} onblur={handleVolume}></lightning-input>
+                    <lightning-input class="customValueCSS"   onfocus={oldvalue}
+                    data-id={value.Id} value={value.AITM_Volume__c} onblur={handleVolume}></lightning-input>
                   </td>
                 <td data-label="Offered Volume">
-                  <lightning-input data-id={value.Id} value={value.AITM_Offered_Volume__c} onblur={handleOffered}></lightning-input>
+                  <lightning-input class="customValueCSS" onfocus={oldvalue} data-id={value.Id} value={value.AITM_Offered_Volume__c} onblur={handleOffered}></lightning-input>
                 </td>
                 <td data-label="Percentage offered">
-                  <lightning-input data-id={value.Id} value={value.AITM_Percentage_Volume_Offered__c} onblur={handlePercentage}></lightning-input>
+                  <lightning-input class="customValueCSS" onfocus={oldvalue} data-id={value.Id} value={value.AITM_Percentage_Volume_Offered__c} onblur={handlePercentage}></lightning-input>
                 </td>
                 <td data-label="Pricing Basis">
-                  <lightning-input data-id={value.Id} value={value.AITM_DEPE_Pricing_Basis__c} onblur={handlePricing}></lightning-input>
+                  <lightning-input class="customValueCSS" onfocus={oldvalue} data-id={value.Id} value={value.AITM_DEPE_Pricing_Basis__c} onblur={handlePricing}></lightning-input>
                 </td>
                 <td data-label="Diffrenential Offered">
-                  <lightning-input data-id={value.Id} value={value.AITM_Offered_Differential__c} disabled></lightning-input>
+                  <lightning-input  onfocus={oldvalue} data-id={value.Id} value={value.AITM_Offered_Differential__c} disabled></lightning-input>
               </td>
                 <td data-label="Diffrenential Package">
-                  <lightning-input  data-id={value.Id} value={value.AITM_Percentage_Volume_Offered__c} onblur={handleDiffPackage}></lightning-input>
+                  <lightning-input class="customValueCSS" onfocus={oldvalue} data-id={value.Id} value={value.AITM_Package_Offered_Differential__c} onblur={handleDiffPackage}></lightning-input>
                 </td>
                 <td data-label="Unit Of Measure">
-                  <lightning-input data-id={value.Id} value={value.AITM_Unit_Of_Measure__c} onblur={handleMeasure}></lightning-input>
+                  <lightning-input class="customValueCSS" onfocus={oldvalue} data-id={value.Id} value={value.AITM_Unit_Of_Measure__c} onblur={handleMeasure}></lightning-input>
                 </td>
                 <td data-label="Currency">
-                  <lightning-input data-id={value.Id} value={value.AITM_Currency__c} onblur={handleCurrency}></lightning-input>
+                  <lightning-combobox
+                  onfocus={oldvalue} data-id={value.Id}
+                 
+                  value={value.AITM_Currency__c}
+                  options={searchOptions}
+                  onchange={handleCurrency} ></lightning-combobox>
+                 <!-- <lightning-input class="customValueCSS" onfocus={oldvalue} data-id={value.Id} value={value.AITM_Currency__c} onblur={handleCurrency}></lightning-input> -->
                 </td>
-                <td data-label="Customer Cost Saving">
-                  <lightning-input data-id={value.Id} ></lightning-input>
-              </td>
+               
               
             <td  data-label="LOCATION NAME">
               <a href="#" data-id={value.Id} onclick={openLineItemRecord}>more...</a>

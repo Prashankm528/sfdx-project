@@ -1,0 +1,43 @@
+.customValueCSS{
+    transition: transform .2s;
+    cursor: pointer;
+    border-radius: 6px;
+    /*width: 2.7rem !important;
+    height: 1.5rem !important;*/
+}
+
+.customValueCSS:hover{
+    -ms-transform: scale(1.2);
+    -webkit-transform: scale(1.2); 
+    transform: scale(1.2); 
+    width: 6rem;
+    /*width: 2.7rem !important;*/
+}
+
+.dateValueCSS{
+    transition: transform .2s;
+    cursor: pointer;
+    border-radius: 6px;
+    width: 8rem
+    /*width: 2.7rem !important;
+    height: 1.5rem !important;*/
+}
+
+
+
+.customerValueCSS{
+    transition: transform .2s;
+    cursor: pointer;
+    border-radius: 6px;
+    /*width: 2.7rem !important;
+    height: 1.5rem !important;*/
+}
+
+
+.customerValueCSS:hover{
+    -ms-transform: scale(1.2);
+    -webkit-transform: scale(1.2); 
+    transform: scale(1.2); 
+    width: 14rem;
+    /*width: 2.7rem !important;*/
+}
