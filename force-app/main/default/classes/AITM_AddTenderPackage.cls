@@ -5,6 +5,7 @@ public with sharing class AITM_AddTenderPackage {
      public static Set<String> setOfManagers =  new Set<String>();
      public static List<String> listOfOptionToFilter =  new List<String>();
      public static List<locationInCustomersComponent> loccustomerList;
+     private static final ID ID_TLLI_RECORD_TYPE_DEFAULT = Schema.SObjectType.AITM_Tender_Location_Line_Item__c.getRecordTypeInfosByName().get('Default').getRecordTypeId();
 
 
     @AuraEnabled
@@ -39,6 +40,7 @@ public with sharing class AITM_AddTenderPackage {
          system.debug('size is' +locationlineItems.size());
 
          if(!TenderLocationAlreadyInserted.isEmpty()){
+             string packId = string.isBlank(editPackageId)? PackageId : editPackageId;
              locationlineItemsInserted = [SELECT Id, AITM_Tender_Location__r.AITM_Round__c, AITM_Pricing_Basis__c,
             AITM_Delivery_Method__c, AITM_Tender_Package__c,AITM_End_Date__c, AITM_Start_Date__c,AITM_Delivery_Point__c,
             AITM_Location_Delivery_Point__c, AITM_Product_Default__c, AITM_Tender_Id__c,AITM_Volume__c,AITM_Tender_Location__r.AITM_IATA_ICAO__c,
@@ -48,7 +50,7 @@ public with sharing class AITM_AddTenderPackage {
             AITM_Record_Type_Name__c, AITM_Tender_Location__r.AITM_Location__r.Name,AITM_Account__r.Name, AITM_Tender_Location__r.AITM_Location__r.Id,
             AITM_Offered_Differential__c,AITM_Title__c, AITM_Tender_Location__r.AITM_Status__c,AITM_Percentage_Volume_Offered__c,AITM_Unit_Of_Measure__c,AITM_Currency__c,AITM_Location__r.AITM_IATA_ICAO__c
             FROM AITM_Tender_Location_Line_Item__c 
-            WHERE AITM_Tender_Package__c =:editPackageId   AND AITM_Tender_Location__c in: TenderLocationAlreadyInserted 
+            WHERE AITM_Tender_Package__c =:packId   AND AITM_Tender_Location__c in: TenderLocationAlreadyInserted 
             AND  AITM_Is_Current_Round__c = true AND AITM_Tender__c = :tenderId 
             AND AITM_Tender__r.AITM_Select_to_Apply_Old_Taxes_and_Fees__c = false order by AITM_Tender_Location__r.AITM_Location__r.Name asc ];
          }
@@ -203,7 +205,7 @@ public with sharing class AITM_AddTenderPackage {
         Map<string , List<locationItem>> LocationCustomerMap =  new Map<string , List<locationItem>>();
         List<AITM_Tender_Location_Line_Item__c> locationlineItems = [SELECT Id, AITM_Tender_Package__c,AITM_Tender_Id__c,AITM_Volume__c,recordType.Name, 
         AITM_Tender__c, AITM_Tender__r.AITM_Tender_Sector__c, AITM_Delivery_Point_Info__c,AITM_Tender_Location__c,AITM_Offered_Volume__c,AITM_Tender_Location__r.AITM_Current_Round__c,
-        AITM_Tender__r.AITM_Select_to_Apply_Old_Taxes_and_Fees__c, AITM_Account__c, AITM_TENDER_PACKAGE__r.Name,
+        AITM_Tender__r.AITM_Select_to_Apply_Old_Taxes_and_Fees__c, AITM_Account__c, AITM_Tender_Package__r.Name, AITM_Tender_Package__r.AITM_Package_Counter__c,
         AITM_Tender_Location__r.AITM_IATA_ICAO__c, AITM_Tender_Location__r.AITM_Location__r.Name,AITM_Tender_Location__r.AITM_Country__c,
 		AITM_Tender_Location__r.AITM_Status__c, AITM_Tender_Location__r.AITM_Location_Manager__c, AITM_Tender_Location__r.AITM_Location_Manager__r.Name,
         AITM_Tender_Location__r.AITM_Round__c, Owner.Name, AITM_Tender_Result__c,AITM_Tender_Location__r.AITM_Include_In_Revised_Offer__c,
@@ -215,14 +217,11 @@ public with sharing class AITM_AddTenderPackage {
 
         system.debug('list value is ' + locationlineItems.size());
         
-        List<String> listOfCommonLocationName = new List<String>();
         for(AITM_Tender_Location_Line_Item__c cloneLocationLine : locationlineItems){
-            String locationName = cloneLocationLine.AITM_Tender_Location__r.AITM_Location__r.Name;
-            //if(!listOfCommonLocationName.contains(locationName)){
-                listOfCommonLocationName.add(locationName);
                 locationItem locationItems = new locationItem();
                 locationItems.Packageid =  cloneLocationLine.AITM_TENDER_PACKAGE__c;
-                locationItems.PackageName = cloneLocationLine.AITM_TENDER_PACKAGE__r.Name;
+                locationItems.PackageName = cloneLocationLine.AITM_Tender_Package__r.Name;
+                locationItems.PackageCounter = cloneLocationLine.AITM_Tender_Package__r.AITM_Package_Counter__c;
                 locationItems.recordId = cloneLocationLine.AITM_Tender_Location__r.Id;
                 locationItems.locationIdentificator = cloneLocationLine.AITM_Tender_Location__r.AITM_IATA_ICAO__c;
                 locationItems.locationName = cloneLocationLine.AITM_Tender_Location__r.AITM_Location__r.Name;
@@ -291,6 +290,50 @@ public with sharing class AITM_AddTenderPackage {
         return listOfCurrency;
     }
 
+    @AuraEnabled()
+    public static String getPackageCounter(String TenderId){
+        String counter = null;
+
+        counter = [SELECT AITM_Package_Counter__c FROM AITM_Tender_Package__c WHERE AITM_Tender__c =:TenderId order by createdDate desc limit 1].AITM_Package_Counter__c;
+        if(counter == null){
+            counter = 'Package 1';
+        }else{
+            String[] strArr = counter.split(' ');
+            String strNumber = '';
+            Integer myNumber;
+            if(strArr.size() == 2){
+                strNumber = strArr[1];
+                myNumber = Integer.valueOf(strNumber) + 1;
+                counter = 'Package ' + myNumber;
+            }
+        }
+        return counter;
+    }
+
+    @AuraEnabled
+    public static List<AITM_Tender_Location_Line_Item__c> getListOfLineItemsOnStatusChange(String tenderLocationId){
+        system.debug('locationId' + tenderLocationId);
+        List<AITM_Tender_Location_Line_Item__c> lineItems = new AITM_LocationsDao().getTenderLocationLineItemsByRecordType(tenderLocationId, ID_TLLI_RECORD_TYPE_DEFAULT);
+        return lineItems;
+    }
+    
+    /**
+     * @description updates the record
+     * @param objectName of type string
+     * @param recordId of type string
+     * @param fieldName of type string
+     * @param value of type string
+     * @param lineItems value of type List collection AITM_Tender_Location_Line_Item__c
+     * @return sObject
+     */
+    @AuraEnabled
+    public static sObject updateRecord(String objectName, String recordId, String fieldName, String value, List<AITM_Tender_Location_Line_Item__c> lineItems) {
+        sObject obj;
+        obj = AITM_TenderLocationNewOffer.updateRecord(objectName, recordId, fieldName, value, lineItems);
+        
+        return obj;
+    }
+
    /* @AuraEnabled         
     public static String updateStatusCheck(String TenderLocationId) {
         List<AITM_Tender_Location_Line_Item__c> locationlineItems = new List<AITM_Tender_Location_Line_Item__c>();
@@ -318,6 +361,7 @@ public with sharing class AITM_AddTenderPackage {
         public class locationItem{
         public @AuraEnabled string Packageid;
         public @AuraEnabled string PackageName;
+        public @AuraEnabled string PackageCounter;
         public @AuraEnabled String recordId;
         public @AuraEnabled String locationIdentificator;
         public @AuraEnabled String locationName;

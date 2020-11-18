@@ -1,12 +1,6 @@
-
 <template>
    
-    <div class="spinner">
-        <template if:true={isLoading}>
-             <lightning-spinner alternative-text="Loading" variant="brand" size="large">
-             </lightning-spinner>
-        </template>
-    </div>
+    
   
         
     <div class="c-container" >
@@ -23,7 +17,17 @@
           
         <lightning-layout multiple-rows="true">
             <lightning-layout-item padding="around-small" size="4">
-                <lightning-input label="Package Name" value={PackageName} onchange={handlePackageName}></lightning-input> <!--To show the Package Name if id is there-->
+                <div class="slds-form-element">
+                    <div class="slds-form-element__control slds-input-has-fixed-addon">
+                        <template if:false={packId}>
+                            <lightning-input label="Package Counter" value={packageCounter} disabled="true" style="width: 125px;"></lightning-input>
+                        </template>
+                        <template if:true={packId}>
+                            <lightning-input label="Package Counter" value={PackageCounter} disabled="true" style="width: 125px;"></lightning-input>
+                        </template>
+                        <lightning-input label="Package Name" value={PackageName} onchange={handlePackageName} style="width: 400px;"></lightning-input> <!--To show the Package Name if id is there-->
+                    </div>
+                </div>
                 <lightning-textarea  label="Description"  value={PackageDescription} onchange={handleDescription}></lightning-textarea>
             </lightning-layout-item>
             <lightning-layout-item padding="around-small" size="4">
@@ -87,5 +91,10 @@
       <!--Customer ends Here-->
   
     </div>
-
+    <div class="spinner">
+        <template if:true={isLoading}>
+             <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+             </lightning-spinner>
+        </template>
+    </div>
 </template>

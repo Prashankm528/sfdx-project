@@ -29,6 +29,7 @@ export default class AITM_PackageLocation extends LightningElement {
     selectedCheckboxes = [];
     @track Options;
     searchValue;
+    error;
 
 
     connectedCallback(){
@@ -120,7 +121,7 @@ export default class AITM_PackageLocation extends LightningElement {
         this.error= undefined;
       })
       .catch(error=>{
-        this.tenderLocation = Undefined;
+        this.tenderLocation = undefined;
         this.error= error;
       })
     
@@ -138,7 +139,7 @@ export default class AITM_PackageLocation extends LightningElement {
            
         })
         .catch(error=>{
-            this.tenderLocationSelected = Undefined;
+           this.tenderLocationSelected = undefined;
             this.error= error;
         }) 
        
@@ -189,12 +190,14 @@ export default class AITM_PackageLocation extends LightningElement {
     if(!this.package && !this.packId){
       this.template.querySelector('div').classList.add('disabledbutton');
     }
+   
 
 }
     @api
     selected(locationList){
+        this.isLoading = true;
        console.log('After previous Initial' +this.tenderLocationSelected);
-       alert('test' + locationList);
+     //  alert('test' + locationList);
        
         if(this.package){
             for(let i=0; i<locationList.length;i++){
@@ -207,10 +210,10 @@ export default class AITM_PackageLocation extends LightningElement {
                 }
             //this.tenderLocationSelected = [...locationList];
             console.log('After previous' +this.tenderLocationSelected);
-           
+            setTimeout(()=>this.selectedLocation(this.tenderLocationSelected), 1000);
           
         }
-        setTimeout(()=>this.selectedLocation(this.tenderLocationSelected)); 
+       //  
         
     }
  
@@ -225,6 +228,7 @@ export default class AITM_PackageLocation extends LightningElement {
 
   @api
     selectedLocation(tenderLocationSelected){
+       
         console.log('selected Location value' + tenderLocationSelected);
     if(tenderLocationSelected){
         console.log('inside selected');
@@ -237,6 +241,7 @@ export default class AITM_PackageLocation extends LightningElement {
                     locations[i].checked = true;
                     locations[i].disabled = true;   
                 }
+              //  
 
             }
             if(locations.length == tenderLocationSelected.length){
@@ -246,6 +251,7 @@ export default class AITM_PackageLocation extends LightningElement {
                 checkboxes1.checked = true;
                 checkboxes1.disabled = true;
             }
+            this.isLoading = false;
         }
 
          else if(this.globalmySet){
@@ -257,13 +263,15 @@ export default class AITM_PackageLocation extends LightningElement {
                 locations[i].checked = true;
                 locations[i].disabled = true;   
             }
+            
         }
          this.globalmySet.clear();
       
     } 
+   // this.isLoading =false;
 
    
-    this.isLoading =false;
+    
 
     }
 

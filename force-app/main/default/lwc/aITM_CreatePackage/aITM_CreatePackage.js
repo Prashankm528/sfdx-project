@@ -1,7 +1,9 @@
 import { LightningElement, api, wire ,track } from 'lwc';
+import { refreshApex } from '@salesforce/apex';
 import getTenderLocationLineItems from '@salesforce/apex/AITM_AddTenderPackage.getTenderLocationLineItems';
 import getTenderLocationAdd from '@salesforce/apex/AITM_AddTenderPackage.getTenderLocationAddPackage';
 import getTenderLocationEdit from '@salesforce/apex/AITM_AddTenderPackage.getTenderLocationEditPackage';
+import getPackageCounter from '@salesforce/apex/AITM_AddTenderPackage.getPackageCounter';
 import { getRecord, getFieldValue, createRecord, updateRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import Id from '@salesforce/user/Id';
@@ -12,6 +14,7 @@ import PACKAGE_OBJECT from '@salesforce/schema/AITM_Tender_Package__c';
 import PACKAGE_NAME from '@salesforce/schema/AITM_Tender_Package__c.Name';
 import PACKAGE_DESCRIPTION from '@salesforce/schema/AITM_Tender_Package__c.AITM_Description__c';
 import PACKAGE_NOTES from '@salesforce/schema/AITM_Tender_Package__c.AITM_Internal_Notes__c';
+import PACKAGE_COUNTER from '@salesforce/schema/AITM_Tender_Package__c.AITM_Package_Counter__c';
 import PACKAGE_TENDER from '@salesforce/schema/AITM_Tender_Package__c.AITM_Tender__c';
 import ID_FIELD from '@salesforce/schema/AITM_Tender_Package__c.Id';
 
@@ -25,6 +28,7 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
     Name;
     @track mapkeyValueStatus= []; //map of location and status
     // Fields needed to create package
+    packageCounter;
     packName;
     description;
     notes;
@@ -50,10 +54,13 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
     inEditPackageCase =[];
     //selectedLocationset = new set();
 
-    
+    refreshLineItems(event){
+        alert('test');
+        refreshApex(getTenderLocationLineItems);
+    }
 
     // To get the package detail on edit with Packid - package id on edit
-    @wire(getRecord, { recordId: '$packId', fields: [PACKAGE_NAME, PACKAGE_DESCRIPTION, PACKAGE_NOTES]})
+    @wire(getRecord, { recordId: '$packId', fields: [PACKAGE_NAME, PACKAGE_DESCRIPTION, PACKAGE_NOTES, PACKAGE_COUNTER]})
     Package;
 
     get PackageName(){
@@ -66,6 +73,10 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
 
     get PackageNotes(){
         return getFieldValue(this.Package.data, PACKAGE_NOTES);
+    }
+
+    get PackageCounter(){
+        return getFieldValue(this.Package.data, PACKAGE_COUNTER);
     }
     
 
@@ -82,9 +93,24 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
     }
 
     connectedCallback(){
-      
-        //this.getTenderLocationAdd();     
-   }
+        if(!this.packId){
+            this.getPackageCounter();     
+        }
+    }
+
+    getPackageCounter(){
+        getPackageCounter({TenderId: this.recordId})
+        .then(result=>{
+            this.packageCounter = result;
+            console.log('packageCounter' + JSON.stringify(this.packageCounter));
+            this.error= undefined;
+          })
+          .catch(error=>{
+            alert('inside package counter');
+            this.packageCounter = undefined;
+            this.error= error;
+          })
+    }
 
 // to get the location data
   /* getTenderLocationAdd(){
@@ -148,7 +174,7 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
       
         this.isLoading = true; 
         this.disableCreate =true;
-        this.template.querySelector('c-a-i-t-m_-package-location').locationEnabled();
+        //
        // this.template.querySelector("c-a-i-t-m_-package-location").locationEnabled();
 
         if(!this.PackageId && !this.packId ){
@@ -158,14 +184,15 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
                 fields[PACKAGE_DESCRIPTION.fieldApiName] = this.description;
                 fields[PACKAGE_TENDER.fieldApiName] = this.recordId;
                 fields[PACKAGE_NOTES.fieldApiName] = this.notes;
+                fields[PACKAGE_COUNTER.fieldApiName] = this.packageCounter;
                 const recordInput = { apiName: PACKAGE_OBJECT.objectApiName, fields };
 
                 createRecord(recordInput)
                     .then(packages => {
                         this.PackageId = packages.id;
-                        this.isLoading = false;
+                       
                         console.log(this.PackageId);
-                    
+                        this.template.querySelector('c-a-i-t-m_-package-location').locationEnabled();
                         this.ShowToastNotification('Success', 'Package created', 'success');
                     })
                     .catch(error => {
@@ -203,12 +230,10 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
        this.isLoading = true;
        this.LocationList =[];
        this.mapkeyValueStore = []
-     //  this.TenderLocationLineItems = [];
-      // this.inEditPackageCase = []
-        //this.LocationList = event.detail;
+     
         console.log('Pacakge Id edit' + this.packId);
         console.log('Pacakge Id edit' + this.PackageId);
-       // console.log('set size is ' + event.detail.globalmySet);
+      
         console.log('global set size is ' + event.detail.globalmySet.size );
         for (var item of event.detail.globalmySet.values()){
             
@@ -217,16 +242,12 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
             console.log('List from set' +  this.LocationList ); // All selected locations from location page
        
         this.inEditPackageCase =  (this.packId || this.PackageId)  ? event.detail.locationAlreadySelected : null ;
-       console.log('Edit location line item Id value are' + this.inEditPackageCase);
+       console.log('Edit location line item Id value are' + this.inEditPackageCase);//tenderlocation 
        if(this.inEditPackageCase){
            for(let i=0; i< this.inEditPackageCase.length; i++){
                 this.selectedValueList.push(this.inEditPackageCase[i]);
            }
        }
-     // alert('tset' +this.selectedValueList);
-     // alert('Kunal')
-      //JSON.stringify(this.selectedValueList[0])
-        //getting tender location items on basis og tender id, tender location and package Id
         getTenderLocationLineItems({
             
             TenderId: this.recordId,
@@ -282,13 +303,17 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
 
     ShowToastNotification(title, message, variant){
         this.dispatchEvent(
+            
             new ShowToastEvent({
+                
                 title: title,
                 message: message,
                 variant: variant
             })
+            
         );
         this.isLoading = false;
+        
         if(!this.packName){
             this.disableCreate =false;
         }

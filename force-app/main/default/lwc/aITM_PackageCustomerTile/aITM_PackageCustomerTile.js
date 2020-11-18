@@ -1,5 +1,8 @@
 import { LightningElement, api, wire } from 'lwc';
+import { refreshApex } from '@salesforce/apex';
 import getListOfCurrency from '@salesforce/apex/AITM_AddTenderPackage.getListOfCurrency';
+import updateLocationRecord from '@salesforce/apex/AITM_AddTenderPackage.updateRecord';
+import getListOfLineItemsOnStatusChange from '@salesforce/apex/AITM_AddTenderPackage.getListOfLineItemsOnStatusChange';
 import { NavigationMixin } from 'lightning/navigation';
 import { updateRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -44,7 +47,11 @@ export default class AITM_PackageCustomerTile extends NavigationMixin(LightningE
     statusReadOnly = true;
     LineItemsId;
     isLoading = false;
-
+    LineItemsOnStatusChange;
+    statusToUpdate;
+    error;
+    locationId;
+    locationIndextoUpdate;
     get options() {
         return [
             { label: 'Awaiting price', value: 'Awaiting price' },
@@ -65,6 +72,7 @@ export default class AITM_PackageCustomerTile extends NavigationMixin(LightningE
         console.log('error is ' + error);
     }
   }
+  
 
     editRecord(event){
         this.standAloneLocationId = event.target.dataset.id;
@@ -75,14 +83,113 @@ export default class AITM_PackageCustomerTile extends NavigationMixin(LightningE
     }
 
     handleChange(event){
-        let targetId = event.target.dataset.index;
+        this.locationIndextoUpdate = event.target.dataset.index;
        // alert(targetId);
-
-        this.selectedStatus = this.template.querySelector(`[data-index="${targetId}"]`).value;
-        let status = event.target.value;
-       // alert(status);
-        this.statusReadOnly = true;
+       
+         this.locationId = event.target.dataset.value; // id of locqation
+        console.log('Location Id is ' +this.locationId);
+      // this.selectedStatus = this.template.querySelector(`[data-index="${targetId}"]`).value;
+     
+      // console.log('old status is ' + selectedStatus)
+      
+       
+       this.statusToUpdate = event.target.value;
+       alert('New status is '+ this.statusToUpdate);
+       console.log('New status is' + this.statusToUpdate);
+        this.getLineItemsOnStatusChange(this.locationId,);
+        //this.statusReadOnly = true;
     }
+
+    getLineItemsOnStatusChange(locationId){
+        console.log('inside apex call ' + locationId);
+        getListOfLineItemsOnStatusChange({tenderLocationId: locationId})
+        .then(result=>{
+            this.LineItemsOnStatusChange = result;
+            this.isAllMandatoryInformationProvided(this.LineItemsOnStatusChange);
+            console.log('LineItemsOnStatusChangeSIZE::' + this.LineItemsOnStatusChange.length);
+          })
+          .catch(error=>{
+            this.LineItemsOnStatusChange = Undefined;
+            this.error= error;
+          })
+    }
+
+    isAllMandatoryInformationProvided(lineItems){
+        var result = true;
+        var lineItemsErrors = [];
+        for(var i=0; i<lineItems.length; i++) {
+
+            if(lineItems[i].AITM_Tender_Package__c != null && lineItems[i].AITM_Package_Offered_Differential__c == null ) {
+                lineItemsErrors.push('Offered Package Differential');
+                result = false;
+              }
+             if(lineItems[i].AITM_Pricing_Basis__c == null) {
+              lineItemsErrors.push('pricing basis');
+              result = false;
+            }
+             if(lineItems[i].AITM_Pricing_Basis__c != null && lineItems[i].AITM_Pricing_Basis__r.AITM_Type__c =='C' && lineItems[i].AITM_Current_Value__c == null){
+             lineItemsErrors.push('Current Value');
+              result = false;
+            }
+             if(lineItems[i].AITM_Pricing_Basis__c != null && lineItems[i].AITM_Pricing_Basis__r.AITM_Type__c =='D' && lineItems[i].AITM_Offered_Differential__c == null){
+              lineItemsErrors.push('Offered Differential');
+              result = false;
+            }
+             if(lineItems[i].AITM_Location_Delivery_Point__c == null) {
+              lineItemsErrors.push('delivery point');
+              result = false;
+            }
+            if(lineItems[i].AITM_Currency__c == null) {
+              lineItemsErrors.push('currency');
+              result = false;
+            }
+         if(lineItems[i].AITM_Unit_Of_Measure__c == null) {
+              lineItemsErrors.push('unit of measure');
+              result = false;
+            }
+           
+          
+        } 
+        if (lineItemsErrors.length > 0) {
+          lineItemsErrors = lineItemsErrors.filter(function(item, pos, self) {
+            return self.indexOf(item) == pos;
+          });
+          //this.dispatchEvent(new CustomEvent('refresh', {bubbles: true, composed: true})); 
+          this.template.querySelector(`[data-index="${this.locationIndextoUpdate}"]`).value = this.oldValue;  
+         
+          this.ShowToastNotification('error', 'Please fill in field(s): ' + lineItemsErrors.join(', ') + ' for all Tender Location Items', 'error');
+        }
+        else{
+            this.updateLocationRecord('AITM_Tender_Location__c', this.locationId, 'AITM_Status__c', this.statusToUpdate, lineItems);
+        }
+    
+    }
+
+    updateLocationRecord(objectName, recordId, fieldName, value,lineItems ){
+        updateLocationRecord({objectName:objectName,recordId: recordId, fieldName: fieldName, value: value, lineItems:lineItems})
+        .then(result=>{
+            this.ShowToastNotification('Success', 'Tender Location is updated to '+ value  , 'success');
+          })
+          .catch(error=>{
+            
+          })
+
+    }
+
+    ShowToastNotification(title, message, variant){
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: title,
+                message: message,
+                variant: variant
+            })
+        );
+        this.isLoading = false;
+        if(!this.packName){
+            this.disableCreate =false;
+        }
+    }
+
 
     changeStatus(event){
         let targetId = event.target.dataset.index;
