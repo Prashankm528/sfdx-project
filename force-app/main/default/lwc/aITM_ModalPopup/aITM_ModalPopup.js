@@ -3,6 +3,7 @@ import getDelieveryPointbylocations from '@salesforce/apex/AITM_AddTenderPackage
 export default class AITM_ModalPopup extends LightningElement {
     @track isModalOpen = false;
     delieveryPointList;
+    deliveryPointName;
     locationLineItemId;
     error;
     deliveryPointId;
@@ -32,7 +33,12 @@ export default class AITM_ModalPopup extends LightningElement {
     }
 
     getDelieveryPoint(event){
+        this.deliveryPointName = event.target.dataset.targetId;
         this.deliveryPointId = event.target.dataset.id;
+        console.log('IndeliveryPointiddataset' +this.deliveryPointName);
+        console.log('IndeliveryPointiddataset' + event.target.dataset.id);
+        console.log('locationLineItemsId is' +  this.locationLineItemId);
+       
     }
 
     closeModal() {
@@ -40,8 +46,9 @@ export default class AITM_ModalPopup extends LightningElement {
         this.isModalOpen = false;
     }
     submitDetails() {
-        let params = {"points" : this.deliveryPointId, "lineItemId": locationLineItemId}
-        this.dispatchEvent(new CustomEvent('updateDeliveryPoint', {detail:params}));   
+        alert('Test');
+        let params = {"points" : this.deliveryPointId, "lineItemId": this.locationLineItemId, "name" : this.deliveryPointName }
+        this.dispatchEvent(new CustomEvent('point', {detail:params}));   
         this.isModalOpen = false;
     }
 }

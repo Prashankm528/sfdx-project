@@ -17,15 +17,14 @@ export default class AITM_PackageCustomer extends LightningElement {
    
 
     connectedCallback(){
-       // alert('test');
+       
         this.getTenderLocationAdd();   
         
        
    } 
 
   getTenderLocationAdd(){
-    //alert('test1');
-    //getting all tender location available in the Tender
+    
     getTenderLocationAdd({TenderId: this.tenderId})
       .then(result=>{
         this.tenderLocation = result; // all location by default
@@ -39,7 +38,7 @@ export default class AITM_PackageCustomer extends LightningElement {
    }
 
  availableAction(Availableoptions){
-    //alert('test2');
+    
     console.log('Location items are in packagelocatuion options test' + Availableoptions);
     for(let i=0; i<Availableoptions.length; i++){
        
@@ -64,7 +63,7 @@ export default class AITM_PackageCustomer extends LightningElement {
  }
 
  handleChange(event){
-    //alert('tes3');
+    
     if(this.AllLocations){
         this.tenderLocation = this.AllLocations;
        }
@@ -77,7 +76,7 @@ export default class AITM_PackageCustomer extends LightningElement {
 
         if(this.selectedAvailableActions=='All Locations'){
             this.tenderLocation = this.AllLocations;
-           // this.selectedLocation(this.tenderLocationSelected)
+           
         }
         else if(countrySet.has( this.selectedAvailableActions)){
             this.locationBycountry = this.tenderLocation.filter(progress=>   
@@ -90,7 +89,7 @@ export default class AITM_PackageCustomer extends LightningElement {
             this.locationByManager = this.tenderLocation.filter(progress=>   
                 progress.AITM_Location_Manager__r.Name == this.selectedAvailableActions);
                 this.tenderLocation = this.locationByManager;
-              //  this.selectedLocation(this.tenderLocationSelected)
+              
             }
 
         }
@@ -100,9 +99,8 @@ export default class AITM_PackageCustomer extends LightningElement {
     }
 
     showLocationScreenWithChecked(){
-        //alert('inside parent');
+        
         this.dispatchEvent(new CustomEvent('back'));   
-        //this.template.querySelector('c-a-i-t-m_-package-customer-tile').checkedCustomerScreen();
-        //this.dispatchEvent(new CustomEvent('back', {detail:globalmySet}));   
+       
     }
 }

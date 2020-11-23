@@ -33,10 +33,12 @@ export default class AITM_PackageLocation extends LightningElement {
 
 
     connectedCallback(){
-     
+        
+       
         this.globalmySet = new Set();
        //alert('edit Psck Id is' + this.packId)
-       this.getTenderLocationAdd();   
+        this.getTenderLocationAdd();
+      
        
    } 
    // when all location filetr changes
@@ -133,7 +135,7 @@ export default class AITM_PackageLocation extends LightningElement {
             this.tenderLocationSelected = result;
             console.log(' Selected Tender location are' + JSON.stringify(this.tenderLocationSelected));
             //globalmySet.add(this.tenderLocationSelected);
-            setTimeout(()=> this.selectedLocation(this.tenderLocationSelected));
+            setTimeout(()=> this.selectedLocation(this.tenderLocationSelected), 1000);
 
             this.error= undefined;
            
@@ -186,10 +188,11 @@ export default class AITM_PackageLocation extends LightningElement {
      
  }
    
- renderedCallback(){
-    if(!this.package && !this.packId){
+  renderedCallback(){
+     
+  if(!this.package && !this.packId){
       this.template.querySelector('div').classList.add('disabledbutton');
-    }
+    } 
    
 
 }
@@ -211,6 +214,7 @@ export default class AITM_PackageLocation extends LightningElement {
             //this.tenderLocationSelected = [...locationList];
             console.log('After previous' +this.tenderLocationSelected);
             setTimeout(()=>this.selectedLocation(this.tenderLocationSelected), 1000);
+            //this.selectedLocation(this.tenderLocationSelected)
           
         }
        //  
@@ -228,7 +232,7 @@ export default class AITM_PackageLocation extends LightningElement {
 
   @api
     selectedLocation(tenderLocationSelected){
-       
+        //setTimeout(()=>(this.isLoading = false), 2000);
         console.log('selected Location value' + tenderLocationSelected);
     if(tenderLocationSelected){
         console.log('inside selected');
@@ -242,6 +246,7 @@ export default class AITM_PackageLocation extends LightningElement {
                     locations[i].disabled = true;   
                 }
               //  
+              this.isLoading = false;
 
             }
             if(locations.length == tenderLocationSelected.length){
@@ -251,7 +256,8 @@ export default class AITM_PackageLocation extends LightningElement {
                 checkboxes1.checked = true;
                 checkboxes1.disabled = true;
             }
-            this.isLoading = false;
+            
+          
         }
 
          else if(this.globalmySet){

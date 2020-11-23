@@ -26,8 +26,8 @@ public with sharing class AITM_AddTenderPackage {
     
         
          locationlineItems = [SELECT Id, AITM_Tender_Location__r.AITM_Round__c, AITM_Pricing_Basis__c,
-         AITM_Delivery_Method__c, AITM_Tender_Package__c,AITM_End_Date__c, AITM_Start_Date__c,AITM_Delivery_Point__c,
-         AITM_Location_Delivery_Point__c, AITM_Product_Default__c, AITM_Tender_Id__c,AITM_Volume__c,AITM_Tender_Location__r.AITM_IATA_ICAO__c,
+         AITM_Delivery_Method__c, AITM_Tender_Package__c,AITM_End_Date__c, AITM_Start_Date__c,AITM_Delivery_Point__c,AITM_Location_Delivery_Point__r.AITM_Delivery_Point_External_Name__c,
+         AITM_Location_Delivery_Point__c, AITM_Product_Default__c, AITM_Tender_Id__c,AITM_Volume__c,AITM_Tender_Location__r.AITM_IATA_ICAO__c, AITM_Tender_Location__r.AITM_Internal_Notes_For_Package_Location__c,
          AITM_Tender__c, AITM_Tender__r.AITM_Tender_Sector__c, AITM_Tender_Location__c,AITM_Offered_Volume__c,
          AITM_Tender__r.AITM_Select_to_Apply_Old_Taxes_and_Fees__c, AITM_Account__c,AITM_Account__r.Id, AITM_Package_Offered_Differential__c,
          AITM_Account__r.AITM_Account_Classification__c, recordType.Name, AITM_Previous_TLLI_Id__c, AITM_DEPE_Pricing_Basis__c,
@@ -42,8 +42,8 @@ public with sharing class AITM_AddTenderPackage {
          if(!TenderLocationAlreadyInserted.isEmpty()){
              string packId = string.isBlank(editPackageId)? PackageId : editPackageId;
              locationlineItemsInserted = [SELECT Id, AITM_Tender_Location__r.AITM_Round__c, AITM_Pricing_Basis__c,
-            AITM_Delivery_Method__c, AITM_Tender_Package__c,AITM_End_Date__c, AITM_Start_Date__c,AITM_Delivery_Point__c,
-            AITM_Location_Delivery_Point__c, AITM_Product_Default__c, AITM_Tender_Id__c,AITM_Volume__c,AITM_Tender_Location__r.AITM_IATA_ICAO__c,
+            AITM_Delivery_Method__c, AITM_Tender_Package__c,AITM_End_Date__c, AITM_Start_Date__c,AITM_Delivery_Point__c,AITM_Location_Delivery_Point__r.AITM_Delivery_Point_External_Name__c,
+            AITM_Location_Delivery_Point__c, AITM_Product_Default__c, AITM_Tender_Id__c,AITM_Volume__c,AITM_Tender_Location__r.AITM_IATA_ICAO__c,AITM_Tender_Location__r.AITM_Internal_Notes_For_Package_Location__c,
             AITM_Tender__c, AITM_Tender__r.AITM_Tender_Sector__c, AITM_Tender_Location__c,AITM_Offered_Volume__c, AITM_Package_Offered_Differential__c,
             AITM_Tender__r.AITM_Select_to_Apply_Old_Taxes_and_Fees__c, AITM_Account__c, AITM_Account__r.Id,
             AITM_Account__r.AITM_Account_Classification__c, recordType.Name, AITM_Previous_TLLI_Id__c, AITM_DEPE_Pricing_Basis__c,
@@ -154,7 +154,7 @@ public with sharing class AITM_AddTenderPackage {
     @AuraEnabled
     public static list<AITM_Delivery_Point__c> getDelieveryPointbylocations(string locationId){
         try {
-            return [SELECT Id, AITM_Default_Delivery_Point__c, AITM_Service_Level_Provided__c,  
+            return [SELECT Id, AITM_Default_Delivery_Point__c, AITM_Service_Level_Provided__c,
             AITM_BPInter_Location_DeliveryPoint_Cod__c , AITM_Delivery_Point_External_Name__c , AITM_Location__c
             FROM AITM_Delivery_Point__c WHERE AITM_Location__c =: locationId ];
         } catch (Exception e) {
@@ -167,7 +167,7 @@ public with sharing class AITM_AddTenderPackage {
         
         listOfLocationToShow =  [SELECT Id , Name, AITM_Location__c, AITM_Is_Current_Round__c,AITM_Location__r.Name, AITM_Tender__c ,
         AITM_Location_Manager__r.Name, AITM_Location__r.AITM_Country__c, AITM_IATA_ICAO__c
-        FROM AITM_Tender_Location__c WHERE AITM_Tender__c =:TenderId AND AITM_Is_Current_Round__c = true];
+        FROM AITM_Tender_Location__c WHERE AITM_Tender__c =:TenderId AND AITM_Is_Current_Round__c = true order by AITM_IATA_ICAO__c];
 
     
         return listOfLocationToShow;
@@ -383,6 +383,7 @@ public with sharing class AITM_AddTenderPackage {
             public @AuraEnabled string uniqueKey;
             public @AuraEnabled string locationName;
             public @AuraEnabled string iATAWithlocationName;
+            public @AuraEnabled string locationInternalNotes;
             public @AuraEnabled string locationId;
             public @AuraEnabled string locationStatus;
             public @AuraEnabled list<AITM_Tender_Location_Line_Item__c> locationLineItemsList;
@@ -390,6 +391,7 @@ public with sharing class AITM_AddTenderPackage {
            public locationInCustomersComponent(String uniqueKey, AITM_Location__c location, AITM_Tender_Location__c tenderLocation, list<AITM_Tender_Location_Line_Item__c> locationLineItemsList){
                 this.locationLineItemsList = locationLineItemsList;
                 this.iATAWithlocationName = tenderLocation.AITM_IATA_ICAO__c + ' - ' +location.Name;
+                this.locationInternalNotes = tenderLocation.AITM_Internal_Notes_For_Package_Location__c;
                 this.uniqueKey = uniqueKey;
                 this.locationName = location.Name;
                 this.locationStatus = tenderLocation.AITM_Status__c;

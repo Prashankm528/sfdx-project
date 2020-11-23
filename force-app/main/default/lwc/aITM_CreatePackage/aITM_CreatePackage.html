@@ -1,29 +1,23 @@
-<template>
-   
-    
-  
-        
-    <div class="c-container" >
-       
-        <div class="slds-clearfix slds-m-around_medium slds-box slds-box_x-small" 
-        style="background-color:rgb(157, 228, 228)">
+<template>    
+    <div class="c-container" >   
+        <div class="slds-clearfix slds-m-around_medium slds-box slds-box_x-small" style="background-color:rgb(157, 228, 228)">
             <div class="slds-float_left" >
                 <h1 style ="font-size: large;">Add New Package</h1>
             </div>
             <div class="slds-float_right">
-                <lightning-button label="Delete" ></lightning-button>
+                <lightning-button label="Delete" onclick={deletePackage}></lightning-button>
             </div>
-          </div>
+        </div>
           
         <lightning-layout multiple-rows="true">
             <lightning-layout-item padding="around-small" size="4">
                 <div class="slds-form-element">
                     <div class="slds-form-element__control slds-input-has-fixed-addon">
                         <template if:false={packId}>
-                            <lightning-input label="Package Counter" value={packageCounter} disabled="true" style="width: 125px;"></lightning-input>
+                            <lightning-input label="Package Number" value={packageCounter} disabled="true" style="width: 125px;"></lightning-input>
                         </template>
                         <template if:true={packId}>
-                            <lightning-input label="Package Counter" value={PackageCounter} disabled="true" style="width: 125px;"></lightning-input>
+                            <lightning-input label="Package Number" value={PackageCounter} disabled="true" style="width: 125px;"></lightning-input>
                         </template>
                         <lightning-input label="Package Name" value={PackageName} onchange={handlePackageName} style="width: 400px;"></lightning-input> <!--To show the Package Name if id is there-->
                     </div>
@@ -39,17 +33,22 @@
             </lightning-layout-item>
             <lightning-layout-item padding="around-small" size="4">
                 <div class="header-column">
-                    <p class="Guidance" title="Field 1">Guidance for Success</p>
-                    <p>This is the guide , how to work with the packaging</p>
+                   <strong> <p class="Guidance" title="Field 1">Guidance for Success</p></strong>
+                    <p>Please download the Packaging Evaluation Tool using the button below. Packaging best practice can be viewed 
+                        <a onclick={downloadPpt}> here</a>
+                    </p>
                 </div><br/>
                 <div class="header-column">
-                    <p class="field-title" title="Field 2">Available Actions</p>
+                    <strong><p class="field-title" title="Field 2">Available Actions</p></strong>
                 <template if:false={packId}>
                     <lightning-button label="Save Package" variant="Brand" onclick={createPackage} disabled={disableCreate}></lightning-button>
+                    <lightning-button label="Packaging Evaulation" variant="Brand" class="slds-m-left_x-small"   onclick={DownloadFile}></lightning-button>
                 </template>
                 <template if:true={packId}>
-                    <lightning-button label="Edit Credit Terms" variant="Brand" ></lightning-button>
-                    <lightning-button label="Packaging Evaulation" variant="Brand"  class="slds-m-left_x-small"></lightning-button>
+                    <template if:true={showCustomer}>
+                    <lightning-button label="Edit Credit Terms" class="slds-m-right_x-small" variant="Brand" ></lightning-button>
+                 </template>
+                    <lightning-button label="Packaging Evaulation" variant="Brand"   onclick={DownloadFile}></lightning-button>
                 </template>
                 </div>
             </lightning-layout-item>
@@ -57,44 +56,31 @@
         <br/><br/>
         <div style="width:400px;margin-left:600px;">
             <lightning-progress-indicator current-step={currentStep} type="base"   variant="base">
-               <lightning-progress-step label="Locations" value="1">
-                   
-                </lightning-progress-step>
-
-               <lightning-progress-step label="Customers" value="2"></lightning-progress-step> 
-                
-               
-            </lightning-progress-indicator>
-           
+               <lightning-progress-step label="Locations" value="1"></lightning-progress-step>
+               <lightning-progress-step label="Customers" value="2"></lightning-progress-step>    
+            </lightning-progress-indicator>   
        </div>
        <div >
            <span style="margin-left:620px;">Locations</span>
            <span style="margin-left:240px;">Customers</span>
        </div>
-      <br/><br/>
+       <br/><br/>
 
-    
-      <!--Location starts here-->
- <template if:true={showLocation} >
-     
-         <c-a-i-t-m_-package-location   location-items={tenderLocation} tender-id={recordId}  pack-id={packId} package={PackageId} onnext={showCustomerScreen} >
+        <!--Location starts here-->
+        <template if:true={showLocation} >
+            <c-a-i-t-m_-package-location location-items={tenderLocation} tender-id={recordId} pack-id={packId} package={PackageId} onnext={showCustomerScreen} ></c-a-i-t-m_-package-location>
+        </template> 
+        <!--Location ends Here -->
 
-         </c-a-i-t-m_-package-location>
-        
-      </template> 
-      <!--Location ends Here -->
-
-      <!--Customer startrs Here-->
-   <template if:true={showCustomer}>
-        <c-a-i-t-m_-package-customer location-status={mapkeyValueStatus} location-line-item={mapkeyValueStore} tender-id={recordId} onback={showLocationScreen}></c-a-i-t-m_-package-customer>
-     </template> 
-      <!--Customer ends Here-->
-  
+        <!--Customer startrs Here-->
+        <template if:true={showCustomer}>
+            <c-a-i-t-m_-package-customer location-status={mapkeyValueStatus} location-line-item={mapkeyValueStore} tender-id={recordId} onback={showLocationScreen} onrefresh={refreshLineItems}></c-a-i-t-m_-package-customer>
+        </template> 
+        <!--Customer ends Here-->
     </div>
     <div class="spinner">
         <template if:true={isLoading}>
-             <lightning-spinner alternative-text="Loading" variant="brand" size="large">
-             </lightning-spinner>
+             <lightning-spinner alternative-text="Loading" variant="brand" size="large"></lightning-spinner>
         </template>
-    </div>
+    </div> 
 </template>

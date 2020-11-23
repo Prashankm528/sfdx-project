@@ -8,10 +8,12 @@ import { updateRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import LINEITEM_OBJECT from '@salesforce/schema/AITM_Tender_Location_Line_Item__c';
 import ID_FIELD from '@salesforce/schema/AITM_Tender_Location_Line_Item__c.Id';
+import INTERNAL_NOTES from '@salesforce/schema/AITM_Tender_Location__c.AITM_Internal_Notes_For_Package_Location__c';
+import LOCATIONID_FIELD from '@salesforce/schema/AITM_Tender_Location__c.Id';
 import CUSTOMER_NAME from '@salesforce/schema/AITM_Tender_Location_Line_Item__c.AITM_Account__c';
 import START_DATE from '@salesforce/schema/AITM_Tender_Location_Line_Item__c.AITM_Start_Date__c';
 import END_DATE from '@salesforce/schema/AITM_Tender_Location_Line_Item__c.AITM_End_Date__c';
-import DELIVERY_POINT from '@salesforce/schema/AITM_Tender_Location_Line_Item__c.AITM_Location__r.AITM_Delivery_Point__c';
+import DELIVERY_POINT from '@salesforce/schema/AITM_Tender_Location_Line_Item__c.AITM_Location_Delivery_Point__c';
 import VOLUME from '@salesforce/schema/AITM_Tender_Location_Line_Item__c.AITM_Volume__c';
 import OFFERED_VOLUME from '@salesforce/schema/AITM_Tender_Location_Line_Item__c.AITM_Offered_Volume__c';
 import PERCENTAGE_VOLUME from '@salesforce/schema/AITM_Tender_Location_Line_Item__c.AITM_Percentage_Volume_Offered__c';
@@ -26,7 +28,7 @@ let globalmySet = new Set();
 export default class AITM_PackageCustomerTile extends NavigationMixin(LightningElement) {
     @api locationLineItems ;
     @api locationStatuses;
-    //value = 'Priced'
+    
     selectedid =[]; // multiple selected
     removeId = [];
     standAloneLocationId;
@@ -52,6 +54,12 @@ export default class AITM_PackageCustomerTile extends NavigationMixin(LightningE
     error;
     locationId;
     locationIndextoUpdate;
+    changedInternalNotes;
+    tenderLocationId;
+    
+
+    
+   
     get options() {
         return [
             { label: 'Awaiting price', value: 'Awaiting price' },
@@ -59,6 +67,7 @@ export default class AITM_PackageCustomerTile extends NavigationMixin(LightningE
             { label: 'Not Represented', value: 'Not Represented' },
         ];
     }
+
 //getting Picklist of currency
     @wire(getListOfCurrency)
     currencyTypes({ error, data }) {
@@ -72,6 +81,8 @@ export default class AITM_PackageCustomerTile extends NavigationMixin(LightningE
         console.log('error is ' + error);
     }
   }
+
+ 
   
 
     editRecord(event){
@@ -84,20 +95,12 @@ export default class AITM_PackageCustomerTile extends NavigationMixin(LightningE
 
     handleChange(event){
         this.locationIndextoUpdate = event.target.dataset.index;
-       // alert(targetId);
-       
-         this.locationId = event.target.dataset.value; // id of locqation
-        console.log('Location Id is ' +this.locationId);
-      // this.selectedStatus = this.template.querySelector(`[data-index="${targetId}"]`).value;
-     
-      // console.log('old status is ' + selectedStatus)
-      
-       
-       this.statusToUpdate = event.target.value;
-       alert('New status is '+ this.statusToUpdate);
-       console.log('New status is' + this.statusToUpdate);
+        this.locationId = event.target.dataset.value; // id of locqation
+        console.log('Location Id is ' +this.locationId); 
+        this.statusToUpdate = event.target.value;
+        console.log('New status is' + this.statusToUpdate);
         this.getLineItemsOnStatusChange(this.locationId,);
-        //this.statusReadOnly = true;
+        
     }
 
     getLineItemsOnStatusChange(locationId){
@@ -117,47 +120,101 @@ export default class AITM_PackageCustomerTile extends NavigationMixin(LightningE
     isAllMandatoryInformationProvided(lineItems){
         var result = true;
         var lineItemsErrors = [];
+        let isPackageCustomer = false;
+        
         for(var i=0; i<lineItems.length; i++) {
-
-            if(lineItems[i].AITM_Tender_Package__c != null && lineItems[i].AITM_Package_Offered_Differential__c == null ) {
-                lineItemsErrors.push('Offered Package Differential');
-                result = false;
-              }
-             if(lineItems[i].AITM_Pricing_Basis__c == null) {
-              lineItemsErrors.push('pricing basis');
-              result = false;
+            if(lineItems[i].AITM_Tender_Package__c != null){
+               
+                if(lineItems[i].AITM_Tender_Package__c != null && lineItems[i].AITM_Package_Offered_Differential__c == null ) {
+                    isPackageCustomer = true;
+                    lineItemsErrors.push('Offered Package Differential');
+                    result = false;
+                }
+                if(lineItems[i].AITM_Pricing_Basis__c == null) {
+                    isPackageCustomer = true;
+                    lineItemsErrors.push('pricing basis');
+                    result = false;
+                }
+                if(lineItems[i].AITM_Pricing_Basis__c != null && lineItems[i].AITM_Pricing_Basis__r.AITM_Type__c =='C' && lineItems[i].AITM_Current_Value__c == null){
+                    isPackageCustomer = true;
+                    lineItemsErrors.push('Current Value');
+                    result = false;
+                }
+                if(lineItems[i].AITM_Pricing_Basis__c != null && lineItems[i].AITM_Pricing_Basis__r.AITM_Type__c =='D' && lineItems[i].AITM_Offered_Differential__c == null){
+                    isPackageCustomer = true;
+                    lineItemsErrors.push('Offered Differential');
+                    result = false;
+                }
+                if(lineItems[i].AITM_Location_Delivery_Point__c == null) {
+                    isPackageCustomer = true;
+                    lineItemsErrors.push('delivery point');
+                    result = false;
+                }
+                if(lineItems[i].AITM_Currency__c == null) {
+                    isPackageCustomer = true;
+                    lineItemsErrors.push('currency');
+                    result = false;
+                }
+                if(lineItems[i].AITM_Unit_Of_Measure__c == null) {
+                    isPackageCustomer = true;
+                    lineItemsErrors.push('unit of measure');
+                    result = false;
+                }
             }
-             if(lineItems[i].AITM_Pricing_Basis__c != null && lineItems[i].AITM_Pricing_Basis__r.AITM_Type__c =='C' && lineItems[i].AITM_Current_Value__c == null){
-             lineItemsErrors.push('Current Value');
-              result = false;
-            }
-             if(lineItems[i].AITM_Pricing_Basis__c != null && lineItems[i].AITM_Pricing_Basis__r.AITM_Type__c =='D' && lineItems[i].AITM_Offered_Differential__c == null){
-              lineItemsErrors.push('Offered Differential');
-              result = false;
-            }
-             if(lineItems[i].AITM_Location_Delivery_Point__c == null) {
-              lineItemsErrors.push('delivery point');
-              result = false;
-            }
-            if(lineItems[i].AITM_Currency__c == null) {
-              lineItemsErrors.push('currency');
-              result = false;
-            }
-         if(lineItems[i].AITM_Unit_Of_Measure__c == null) {
-              lineItemsErrors.push('unit of measure');
-              result = false;
-            }
-           
-          
-        } 
+        }  
+        alert(isPackageCustomer);
+            if(!isPackageCustomer){
+                console.log('log 1' +isPackageCustomer);
+                for(var i=0; i<lineItems.length; i++) {
+                    console.log('log 2' +lineItems[i].AITM_Tender_Package__c);
+                if(lineItems[i].AITM_Tender_Package__c == null){
+                    alert('inside');
+                    if(lineItems[i].AITM_Package_Offered_Differential__c == null ) {
+                        lineItemsErrors.push('Offered Package Differential');
+                        result = false;
+                    }
+                    if(lineItems[i].AITM_Pricing_Basis__c == null) {
+                    lineItemsErrors.push('pricing basis');
+                    result = false;
+                    }
+                    if(lineItems[i].AITM_Pricing_Basis__c != null && lineItems[i].AITM_Pricing_Basis__r.AITM_Type__c =='C' && lineItems[i].AITM_Current_Value__c == null){
+                    lineItemsErrors.push('Current Value');
+                    result = false;
+                    }
+                    if(lineItems[i].AITM_Pricing_Basis__c != null && lineItems[i].AITM_Pricing_Basis__r.AITM_Type__c =='D' && lineItems[i].AITM_Offered_Differential__c == null){
+                    lineItemsErrors.push('Offered Differential');
+                    result = false;
+                    }
+                    if(lineItems[i].AITM_Location_Delivery_Point__c == null) {
+                    lineItemsErrors.push('delivery point');
+                    result = false;
+                    }
+                    if(lineItems[i].AITM_Currency__c == null) {
+                    lineItemsErrors.push('currency');
+                    result = false;
+                    }
+                    if(lineItems[i].AITM_Unit_Of_Measure__c == null) {
+                    lineItemsErrors.push('unit of measure');
+                    result = false;
+                    }
+                
+                }
+            
+            } 
+        }
         if (lineItemsErrors.length > 0) {
           lineItemsErrors = lineItemsErrors.filter(function(item, pos, self) {
             return self.indexOf(item) == pos;
           });
           //this.dispatchEvent(new CustomEvent('refresh', {bubbles: true, composed: true})); 
           this.template.querySelector(`[data-index="${this.locationIndextoUpdate}"]`).value = this.oldValue;  
-         
-          this.ShowToastNotification('error', 'Please fill in field(s): ' + lineItemsErrors.join(', ') + ' for all Tender Location Items', 'error');
+         if(isPackageCustomer){
+            this.ShowToastNotification('error', 'Please fill in field(s): ' + lineItemsErrors.join(', ') + ' for all Package Tender Location Items', 'error');
+         }
+         else{
+            this.ShowToastNotification('error', 'Please fill in field(s): ' + lineItemsErrors.join(', ') + ' for all Standalone Tender Location Items ', 'error');
+         }
+          
         }
         else{
             this.updateLocationRecord('AITM_Tender_Location__c', this.locationId, 'AITM_Status__c', this.statusToUpdate, lineItems);
@@ -216,15 +273,12 @@ export default class AITM_PackageCustomerTile extends NavigationMixin(LightningE
 
     }
     
-    /*renderedCallback(){
-        console.log('location status in child' + JSON.stringify(this.locationStatuses));
-    } */
 
     // getting the id of location when clicked on location name
     getLocationId(event){
        // let targetId = event.target.dataset.targetId;//key
        let targetId = event.target.dataset.value;
-       // console.log('Map key is' +targetId)
+       console.log('Map key is' +targetId)
        // let target = this.template.querySelector(`[data-id="${targetId}"]`).value;
        // console.log('Id is' + target );
         
@@ -244,15 +298,30 @@ export default class AITM_PackageCustomerTile extends NavigationMixin(LightningE
     }
 
     updatePoint(event){
+        alert('inside parent');
         let delieveryPointId = event.detail.points;
         let locationLineItemId = event.detail.lineItemId;
+        let deliveryPointName = event.detail.name;
 
         const fields = {};
         fields[ID_FIELD.fieldApiName] = locationLineItemId;
         fields[DELIVERY_POINT.fieldApiName] = delieveryPointId;
         const recordInput = { fields };
+        this.changedDeliveryPoint(locationLineItemId, deliveryPointName);
         this.updateCustomerRecord(recordInput);
+         
 
+    }
+
+    changedDeliveryPoint(lineItemId, deliveryPointName){
+        console.log('lin eitem id is '+ lineItemId);
+        console.log('delivery eitem id is '+ deliveryPointName);
+       // let locationId = this.template.querySelector(`[id="${lineItemId}"]`).value;
+        let locationId1 = this.template.querySelector(`[data-name="${lineItemId}"]`);
+        console.log('Id are ' + locationId1.value );
+        this.template.querySelector(`[data-name="${lineItemId}"]`).value = deliveryPointName;  
+        let locationId2 = this.template.querySelector(`[data-name="${lineItemId}"]`);
+        console.log('Id are new  ' + locationId2.value );
     }
 
     //Select All checkbox
@@ -358,51 +427,27 @@ export default class AITM_PackageCustomerTile extends NavigationMixin(LightningE
                 console.log('Final individual  value in global set are'+ x);
         }
     }
-    /*@api
-    checkedCustomerScreen(){
-        alert('inside grandchild');
-        this.dispatchEvent(new CustomEvent('back', {bubbles: true, composed: true, detail:globalmySet}));   
-        
-    }*/
 
-
-  /*  handleAccountName(event){
-       
-        this.changedAccountName = event.target.value;
-        if(this.oldValue != this.changedAccountName ){
+    handleInternalNotes(event){ 
+        this.changedInternalNotes = event.target.value;
+        console.log(this.changedInternalNotes);
+        if(this.oldValue !=  this.changedStartDate ){
             this.isLoading = true; 
-            //this.LineItemsId = event.target.dataset.id;
-            let customerId =  event.target.dataset.recordId;
-            console.log(this.changedAccountName);
+            this.tenderLocationId = event.target.dataset.id;
             const fields = {};
-            fields[ID_FIELD.fieldApiName] = customerId;
-            fields[CUSTOMER_NAME.fieldApiName] = this.changedAccountName;
+            fields[LOCATIONID_FIELD.fieldApiName] = this.tenderLocationId;
+            fields[INTERNAL_NOTES.fieldApiName] = this.changedInternalNotes;
             const recordInput = { fields };
             this.updateCustomerRecord(recordInput);
         }
-    } */
-
-    handleDeliveryPoints(event){
-       
-        this.isLoading = true; 
-        this.changedDeliveryPoints = event.target.value;
-        console.log(this.changedDeliveryPoints);
-        if(this.oldValue != this.changedDeliveryPoints ){
-            this.isLoading = true; 
-            this.LineItemsId = event.target.dataset.id;
-            const fields = {};
-            fields[ID_FIELD.fieldApiName] = this.LineItemsId;
-            fields[DELIVERY_POINT.fieldApiName] = this.changedDeliveryPoints;
-            const recordInput = { fields };
-            this.updateCustomerRecord(recordInput);
-        }
-            
     }
+    
+  
     handleStartDate(event){
         
         this.changedStartDate = event.target.value;
         console.log(this.changedStartDate);
-        if(this.oldValue != this.changedDeliveryPoints ){
+        if(this.oldValue !=  this.changedStartDate ){
             this.isLoading = true; 
             this.LineItemsId = event.target.dataset.id;
             const fields = {};
@@ -416,7 +461,7 @@ export default class AITM_PackageCustomerTile extends NavigationMixin(LightningE
     handleEndDate(event){
         this.changedEndDate = event.target.value;
         console.log(this.changedEndDate);
-        if(this.oldValue != this.changedDeliveryPoints ){
+        if(this.oldValue != this.changedEndDate ){
             this.LineItemsId = event.target.dataset.id;
             const fields = {};
             fields[ID_FIELD.fieldApiName] = this.LineItemsId;
@@ -550,6 +595,7 @@ export default class AITM_PackageCustomerTile extends NavigationMixin(LightningE
                     
                    
                 })
+                
                 .catch(error => {
                     this.isLoading = false; 
                     this.dispatchEvent(
@@ -560,5 +606,7 @@ export default class AITM_PackageCustomerTile extends NavigationMixin(LightningE
                         })
                     );
                 });
+                refreshApex(this.locationLineItems);
+             //   this.dispatchEvent(new CustomEvent('refresh', {bubbles: true, composed: true})); 
     }
 }

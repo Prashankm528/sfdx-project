@@ -42,3 +42,9 @@
     width: 14rem;
     /*width: 2.7rem !important;*/
 }
+
+.myCustomClass { 
+    -webkit-text-fill-color: rgb(15, 4, 4);
+    font-family: sans-serif;
+  
+}
