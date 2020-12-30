@@ -1,73 +1,55 @@
-
 <template>
-   
-    
-    
-    <!-- <div class="disabledbutton"> -->
-        <div >
-          <div class="slds-clearfix ">
+    <div>
+        <div class="slds-clearfix ">
             <div class="slds-float_right">
                 <lightning-button label="Next" variant="Brand" onclick={handleCustomer}></lightning-button>
             </div>
-          </div>
-          <br/>
-    <div class="slds-box slds-box_x-small slds-theme_shade ">
-        <p style="font-size: large;"><strong>Locations</strong></p>
-      </div><br/>
-    <div class="slds-m-around_medium">
-    <strong><p style="font-size: initial;">Choose Location for your Package</p></strong><br/>
-   
-    <lightning-layout vertical-align="end" >
-    <lightning-layout-item   size ="2">
-      <strong>
-        <lightning-combobox
-        label="AVAILABLE ACTIONS"
-        value={value}  
-        options={Options}
-        onchange={handleChange} ></lightning-combobox></strong>
-        </lightning-layout-item>
-        <lightning-layout-item size="8">
+        </div><br/>
+        <div class="slds-box slds-box_x-small slds-theme_shade ">
+            <p style="font-size: large;"><strong>Locations</strong></p>
+        </div><br/>
+        <div class="slds-m-around_medium">
+          <strong><p style="font-size: initial;">Choose Location for your Package</p></strong><br/>
 
-        </lightning-layout-item>
-        <lightning-layout-item size="2">
-            <lightning-input  name="enter-search"  placeholder="Search Locations" type="search" onchange={handleSearch} ></lightning-input>
-        </lightning-layout-item>
-    </lightning-layout>
-       <br/>
-       <strong> <lightning-input   type="checkbox" data-id="checkbox" label="Select All Location"  onchange={selectAllCheckbox} ></lightning-input></strong><br/>
-       <div class="scrollable">
-         
-        <lightning-layout class="slds-p-around_small" multiple-rows  >
-         <!--   <lightning-layout-item  size="12" >-->
-               
-           <template for:each={tenderLocation} for:item="LoacationItem">
-              
-              
-               <lightning-layout-item key={LoacationItem.Id} size="3" class="slds-p-around_small" >
-                <strong> 
-                   <lightning-input class="test"   data-id="checkboxAll"  type="checkbox" label={LoacationItem.locationName} 
-                        data-record-id={LoacationItem.Id} value={LoacationItem.Id}  onchange={handleItemClicked} checked={checkbox} ></lightning-input>
-                        
-                </strong>
-                </lightning-layout-item>
-           
-              
-            
-            </template>
-               
-          <!-- </lightning-layout-item>--> 
-        </lightning-layout>
-       </div> <br/>
+          <lightning-layout vertical-align="end" >
+              <lightning-layout-item size ="2">
+                  <strong>
+                    <lightning-combobox
+                    data-id="Available"
+                    label="AVAILABLE ACTIONS"
+                    value={value}  
+                    options={Options}
+                    onchange={handleChange} ></lightning-combobox>
+                  </strong>
+              </lightning-layout-item>
 
-     
-    </div>
-    <div class="spinner">
-      <template if:true={isLoading}>
-           <lightning-spinner alternative-text="Loading" variant="brand" size="large">
-           </lightning-spinner>
-      </template>
-  </div>
-      
- </div>
- 
+              <lightning-layout-item size="8"></lightning-layout-item>
+
+              <lightning-layout-item size="2">
+                  <lightning-input  name="enter-search" data-id="search"  placeholder="Search Locations" type="search" onchange={handleSearch} ></lightning-input>
+              </lightning-layout-item>
+          </lightning-layout><br/>
+
+          <strong> <lightning-input   type="checkbox" data-id="checkbox" label="Select All Location"  onchange={selectAllCheckbox} ></lightning-input></strong><br/>
+
+          <div class="scrollable"> 
+              <lightning-layout class="slds-p-around_small" multiple-rows  >      
+                  <template for:each={tenderLocation} for:item="LoacationItem">
+                      <lightning-layout-item key={LoacationItem.Id} size="3" class="slds-p-around_small" >
+                      <strong> 
+                          <lightning-input class="test" data-id="checkboxAll" type="checkbox" label={LoacationItem.locationName} 
+                          data-record-id={LoacationItem.Id} value={LoacationItem.Id}  onchange={handleItemClicked} checked={checkbox} ></lightning-input>      
+                      </strong>
+                      </lightning-layout-item>
+                  </template>
+            </lightning-layout>
+          </div> <br/>  
+        </div>
+        <div class="spinner">
+          <template if:true={isLoading}>
+              <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+              </lightning-spinner>
+          </template>
+        </div>    
+    </div> 
 </template>

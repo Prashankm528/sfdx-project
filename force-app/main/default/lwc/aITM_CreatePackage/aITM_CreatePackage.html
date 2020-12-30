@@ -1,11 +1,11 @@
 <template>    
-    <div class="c-container" >   
+    <div style="margin-top:-40px;" class="c-container" >   
         <div class="slds-clearfix slds-m-around_medium slds-box slds-box_x-small" style="background-color:rgb(157, 228, 228)">
             <div class="slds-float_left" >
                 <h1 style ="font-size: large;">Add New Package</h1>
             </div>
             <div class="slds-float_right">
-                <lightning-button label="Delete" onclick={deletePackage}></lightning-button>
+              <!--  <lightning-button label="Delete" onclick={deletePackage}></lightning-button> -->
             </div>
         </div>
           
@@ -19,17 +19,17 @@
                         <template if:true={packId}>
                             <lightning-input label="Package Number" value={PackageCounter} disabled="true" style="width: 125px;"></lightning-input>
                         </template>
-                        <lightning-input label="Package Name" value={PackageName} onchange={handlePackageName} style="width: 400px;"></lightning-input> <!--To show the Package Name if id is there-->
+                        <lightning-input label="Package Name" onfocus={oldvalue} value={PackageName} onchange={handlePackageName} style="width: 400px;"></lightning-input> <!--To show the Package Name if id is there-->
                     </div>
                 </div>
-                <lightning-textarea  label="Description"  value={PackageDescription} onchange={handleDescription}></lightning-textarea>
+                <lightning-textarea  label="Customer Description" onfocus={oldvalue} value={PackageDescription} onchange={handleDescription}></lightning-textarea>
             </lightning-layout-item>
             <lightning-layout-item padding="around-small" size="4">
                 <div class="header-column">
                     <p class="field-title" title="Field 3">Tender</p>
                     <p><a href="#"  data-id={recordId} onclick={getTender}>{Name}</a></p>
                 </div> <br/>
-                <lightning-textarea  label="Internal Notes" value={PackageNotes} onchange={handleNotes} ></lightning-textarea>
+                <lightning-textarea  label="Internal Notes" onfocus={oldvalue} value={PackageNotes} onchange={handleNotes} ></lightning-textarea>
             </lightning-layout-item>
             <lightning-layout-item padding="around-small" size="4">
                 <div class="header-column">
@@ -41,8 +41,10 @@
                 <div class="header-column">
                     <strong><p class="field-title" title="Field 2">Available Actions</p></strong>
                 <template if:false={packId}>
-                    <lightning-button label="Save Package" variant="Brand" onclick={createPackage} disabled={disableCreate}></lightning-button>
-                    <lightning-button label="Packaging Evaulation" variant="Brand" class="slds-m-left_x-small"   onclick={DownloadFile}></lightning-button>
+                    <template if:false={showCustomer}>
+                        <lightning-button label="Save Package" variant="Brand" class="slds-m-right_x-small" onclick={createPackage} disabled={disableCreate}></lightning-button>
+                    </template>
+                        <lightning-button label="Packaging Evaulation" variant="Brand"   onclick={DownloadFile}></lightning-button>
                 </template>
                 <template if:true={packId}>
                     <template if:true={showCustomer}>
@@ -68,13 +70,13 @@
 
         <!--Location starts here-->
         <template if:true={showLocation} >
-            <c-a-i-t-m_-package-location location-items={tenderLocation} tender-id={recordId} pack-id={packId} package={PackageId} onnext={showCustomerScreen} ></c-a-i-t-m_-package-location>
+            <c-a-i-t-m_-package-location location-items={tenderLocation} tender-id={recordId} pack-id={packId} package={PackageId} onnext={showCustomerScreen} onround={currentround}></c-a-i-t-m_-package-location>
         </template> 
         <!--Location ends Here -->
 
         <!--Customer startrs Here-->
         <template if:true={showCustomer}>
-            <c-a-i-t-m_-package-customer location-status={mapkeyValueStatus} location-line-item={mapkeyValueStore} tender-id={recordId} onback={showLocationScreen} onrefresh={refreshLineItems}></c-a-i-t-m_-package-customer>
+            <c-a-i-t-m_-package-customer location-status={mapkeyValueStatus} pack-id={packId} package={PackageId} location-line-item={mapkeyValueStore} tender-id={recordId} onback={showLocationScreen} onrefresh={refreshLineItems} onclone={cloneLocationLineItem} onselected={filterCustomer} onsave={saveLineItem} onadd={refreshlineItemview} ></c-a-i-t-m_-package-customer>
         </template> 
         <!--Customer ends Here-->
     </div>

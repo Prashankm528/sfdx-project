@@ -1,47 +1,45 @@
 <template>
-  
-  <div class="slds-clearfix slds-m-around_medium">
-    <div class="slds-float_left">  
-        <lightning-button label="Previous" variant="Brand" onclick={showLocationScreenWithChecked}></lightning-button>   
+    <c-a-i-t-m_-add-customer-modal tender-id={tenderId} pack-id={packId} package={Package} ></c-a-i-t-m_-add-customer-modal>
+    <div class="slds-clearfix slds-m-around_medium">
+        <div class="slds-float_left">  
+            <lightning-button label="Previous" variant="Brand" onclick={showLocationScreenWithChecked}></lightning-button>   
+        </div>
+        <div class="slds-float_right">
+            <lightning-button label="Save" variant="Brand" onclick={handleSave} ></lightning-button>
+        </div>
     </div>
-    <div class="slds-float_right">
-        <lightning-button label="Save" variant="Brand" ></lightning-button>
-    </div>
-</div>
-
     <div class="slds-box slds-box_x-small slds-theme_shade ">
         <p style="font-size: large;"><strong>Customer/Pricing</strong></p>
-      </div><br/>
+    </div><br/>
      
-      <lightning-layout vertical-align="end" >
+    <lightning-layout vertical-align="end" >
         <lightning-layout-item   size ="2">
           <strong>
             <lightning-combobox
+            data-id="Available"
+          
             label="AVAILABLE ACTIONS"
             value={value}  
             options={Options}
-            onchange={handleChange} ></lightning-combobox></strong>
+            onchange={handleChange} ></lightning-combobox>
+          </strong>
         </lightning-layout-item>
         <lightning-layout-item size ="8">
             <lightning-button class="slds-m-left_x-small" label="Delete" variant="Brand" onclick={deleteRecord}></lightning-button>
             <lightning-icon icon-name="utility:threedots_vertical" ></lightning-icon>
-            <lightning-button class="slds-m-left_x-small" label="Clone Customer" variant="Brand"></lightning-button>
-            <lightning-button class="slds-m-left_x-small" label="Add Customer" variant="Brand"></lightning-button> 
-        </lightning-layout-item>
-        
+            <lightning-button class="slds-m-left_x-small" label="Clone Customer" variant="Brand" onclick={clonecustomer}></lightning-button>
+            <lightning-button class="slds-m-left_x-small" label="Add Customer" variant="Brand" onclick={addCustomer}></lightning-button> 
+        </lightning-layout-item>  
         <lightning-layout-item size ="2">
-            <lightning-input name="enter-search" placeholder="Search Locations" type="search" ></lightning-input>
+            <lightning-input name="enter-search" placeholder="Search Locations" type="search" onchange={handleSearch}    data-id="search"></lightning-input>
         </lightning-layout-item>
-      </lightning-layout>  
-    <br/> <br/><br/>
+    </lightning-layout>  
+    <br/><br/><br/><br/>
     
     <div class="scrollable">
-      <c-a-i-t-m_-package-customer-tile location-statuses ={locationStatus} location-line-items ={locationLineItem} ></c-a-i-t-m_-package-customer-tile>
-      
+      <c-a-i-t-m_-package-customer-tile location-statuses ={locationStatus} location-line-items ={locationLineItem} ></c-a-i-t-m_-package-customer-tile>  
     </div>
-    <br/>
-    <br/>
+    <br/><br/>
     <div style="margin-top:200px"></div>
-      
-   
+    
 </template>

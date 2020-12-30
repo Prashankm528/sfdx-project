@@ -1,11 +1,13 @@
 import { LightningElement, track, api } from 'lwc';
 import getDelieveryPointbylocations from '@salesforce/apex/AITM_AddTenderPackage.getDelieveryPointbylocations';
+import updateDeliveryRecords from '@salesforce/apex/AITM_AddTenderPackage.updateDeliveryRecords';
 export default class AITM_ModalPopup extends LightningElement {
     @track isModalOpen = false;
     delieveryPointList;
     deliveryPointName;
     locationLineItemId;
     error;
+    errorMsg;
     deliveryPointId;
     radioOptions;
     @api
@@ -35,6 +37,7 @@ export default class AITM_ModalPopup extends LightningElement {
     getDelieveryPoint(event){
         this.deliveryPointName = event.target.dataset.targetId;
         this.deliveryPointId = event.target.dataset.id;
+       // updateDeliveryRecords({deliveryRecordId:event.target.dataset.id, lineItemId:this.locationLineItemId})
         console.log('IndeliveryPointiddataset' +this.deliveryPointName);
         console.log('IndeliveryPointiddataset' + event.target.dataset.id);
         console.log('locationLineItemsId is' +  this.locationLineItemId);
@@ -46,9 +49,20 @@ export default class AITM_ModalPopup extends LightningElement {
         this.isModalOpen = false;
     }
     submitDetails() {
-        alert('Test');
-        let params = {"points" : this.deliveryPointId, "lineItemId": this.locationLineItemId, "name" : this.deliveryPointName }
-        this.dispatchEvent(new CustomEvent('point', {detail:params}));   
         this.isModalOpen = false;
+       // alert('1');
+        updateDeliveryRecords({deliveryRecordId:this.deliveryPointId, lineItemId:this.locationLineItemId})
+        .then(result=>{
+            //this.errorMsg = result;
+            console.log('result is ' +result);
+            let params = {"errormsg" : result,  "name" : this.deliveryPointName, "lineItemId": this.locationLineItemId }
+        this.dispatchEvent(new CustomEvent('point', {detail:params})); 
+          })
+          .catch(error=>{
+            this.error= error;
+          })
+       // let params = {"errormsg" : this.errorMsg,  "name" : this.deliveryPointName }
+       // this.dispatchEvent(new CustomEvent('point', {detail:params}));   
+       
     }
 }

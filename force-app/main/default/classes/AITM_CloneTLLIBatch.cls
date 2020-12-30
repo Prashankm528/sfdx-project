@@ -16,14 +16,16 @@ public with sharing class AITM_CloneTLLIBatch implements Database.Batchable<SObj
      private final String DEFAULT_RECORD_TYPE_ID = Schema.SObjectType.AITM_Tender_Location_Line_Item__c.getRecordTypeInfosByName().get('Default').getRecordTypeId();
      private List<AITM_Tender_Location_Line_Item__c> tenderLocationLineItemToCloned = new List<AITM_Tender_Location_Line_Item__c>();   
      private map<string,id> mapOfNewTlli = new map<string,id>();
+     private Map<Id, AITM_Tender_Package__c> newTenderPackagesByOldIds = new Map<Id, AITM_Tender_Package__c>();
 
     /**
       * @description overloaded constructor
       * @param newTenderLocationsByOldIds of type Map<Id,AITM_Tender_Location__c>
       */
-        public AITM_CloneTLLIBatch(Map<Id,AITM_Tender_Location__c> newTenderLocationsByOldIds,List<AITM_Tender_Location__c> tenderLocations) {
+        public AITM_CloneTLLIBatch(Map<Id,AITM_Tender_Location__c> newTenderLocationsByOldIds,List<AITM_Tender_Location__c> tenderLocations, Map<Id, AITM_Tender_Package__c> newTenderPackagesByOldIds) {
         this.tenderLocations = tenderLocations;
-        this.newTenderLocationsByOldIds = newTenderLocationsByOldIds;       
+        this.newTenderLocationsByOldIds = newTenderLocationsByOldIds; 
+        this.newTenderPackagesByOldIds = newTenderPackagesByOldIds;
     }
 
     /**
@@ -72,6 +74,11 @@ public with sharing class AITM_CloneTLLIBatch implements Database.Batchable<SObj
                 cloneItem.RecordTypeId = DEFAULT_RECORD_TYPE_ID;
                 cloneItem.AITM_Is_Clone__c = true;
 				cloneItem.AITM_Previous_Round_Differential__c = lineItem.AITM_Offered_Differential__c;
+                
+            	if(lineItem.AITM_Tender_Package__c != null){
+                    AITM_Tender_Package__c packageRecord = newTenderPackagesByOldIds.get(lineItem.AITM_Tender_Package__c);
+                    cloneItem.AITM_Tender_Package__c = packageRecord.Id;
+            	}
                 cloneCreateLineItems.add(cloneItem);
         }
 

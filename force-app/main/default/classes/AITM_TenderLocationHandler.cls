@@ -381,11 +381,15 @@ public with sharing class AITM_TenderLocationHandler implements AITM_TriggerFact
             AITM_Tender_Location__c oldTenderLocation = (AITM_Tender_Location__c) oldSo;
             
             If(!AITM_CheckRecursive.setOfIDsBeforeUpdate.contains(so.Id)){
-              
+            
+            this.setLeadFieldsOnLocation(tenderLocation, oldTenderLocation);
             //from : PricedStatusTenderLocationValidation
             if (this.pricedStageSet(tenderLocation, oldTenderLocation)) {
                 tenderLocationsInScope.put(tenderLocation.Id, tenderLocation);
             }
+                
+                    
+                   
             //from:TenderLocationTotalVolumeToTheGroupRecalculationHandler
             if (this.isNotRepresented(tenderLocation, oldTenderLocation)) {
                 tenderLocation.AITM_Total_Volume_Offered_To_The_Group__c = null;
@@ -455,7 +459,23 @@ public with sharing class AITM_TenderLocationHandler implements AITM_TriggerFact
             //from:TenderLocationChatterNotificationsOnStatusChanges
             sendCountryNotificationList();
         }
-
+        
+         private void setLeadFieldsOnLocation(AITM_Tender_Location__c tenderLocation, AITM_Tender_Location__c oldTenderLocation){
+             Double newfinalOutput = tenderLocation.AITM_Distance_From_Leading_Bid__c != null ? tenderLocation.AITM_Distance_From_Leading_Bid__c : 0;
+             Double newofferedDiff = tenderLocation.AITM_Offered_Differential__c != null ? tenderLocation.AITM_Offered_Differential__c : 0;
+             Double newleadingBid = tenderLocation.AITM_Leading_Bid__c != null ? tenderLocation.AITM_Leading_Bid__c : 0;
+             Double oldfinalOutput = oldTenderLocation.AITM_Distance_From_Leading_Bid__c != null ? oldTenderLocation.AITM_Distance_From_Leading_Bid__c : 0;
+             Double oldofferedDiff = oldTenderLocation.AITM_Offered_Differential__c != null ? oldTenderLocation.AITM_Offered_Differential__c : 0;
+             Double oldleadingBid = oldTenderLocation.AITM_Leading_Bid__c != null ? oldTenderLocation.AITM_Leading_Bid__c : 0;
+             
+             if(oldfinalOutput != newfinalOutput){
+                 newleadingBid = newofferedDiff - newfinalOutput;
+                 tenderLocation.AITM_Leading_Bid__c = newleadingBid;
+             } else if((oldofferedDiff != newofferedDiff) || (oldleadingBid != newleadingBid)){
+                 newfinalOutput = newofferedDiff - newleadingBid;
+                 tenderLocation.AITM_Distance_From_Leading_Bid__c = newfinalOutput;
+             }
+         }
 
         //from : PricedStatusTenderLocationValidation
         private Boolean pricedStageSet(AITM_Tender_Location__c tenderLocation, AITM_Tender_Location__c oldTenderLocation) {
@@ -665,16 +685,34 @@ public with sharing class AITM_TenderLocationHandler implements AITM_TriggerFact
         private void createNewRoundTenderLocations() {
             if (newRoundTenderLocations.size() > 0) {
                 Map<Id, AITM_Tender_Location__c> newTenderLocationsByOldIds = new Map<Id, AITM_Tender_Location__c>();
+                Map<Id, AITM_Tender_Package__c> newTenderPackagesByOldIds = new Map<Id, AITM_Tender_Package__c>();
+                Map<Id, Decimal> mapOftenderIdWithRound = new Map<Id, Decimal>();
                 for (AITM_Tender_Location__c tenderLocation : newRoundTenderLocations) {
                     AITM_Tender_Location__c tenderLocationClone = this.cloneTenderLocation(tenderLocation);
                     newTenderLocationsByOldIds.put(tenderLocation.Id, tenderLocationClone);
+                    Decimal round = tenderLocation.AITM_Current_Round__c - 1;
+                    mapOftenderIdWithRound.put(tenderLocation.AITM_Tender__c, round);
                 }
 
                 Database.insert(newTenderLocationsByOldIds.values(), false);
+                List<AITM_Tender_Package__c> listOfPackages = [SELECT Id, Name, AITM_Tender__c, AITM_Description__c, AITM_Package_Counter__c,AITM_Round__c, AITM_Internal_Notes__c 
+                                                               FROM AITM_Tender_Package__c 
+                                                               WHERE AITM_Tender__c =:mapOftenderIdWithRound.keySet() 
+                                                               AND AITM_Round__c =:mapOftenderIdWithRound.Values()];
+                for(AITM_Tender_Package__c packageRecord : listOfPackages){
+                    AITM_Tender_Package__c packageNewRecord = packageRecord.clone();
+                    packageNewRecord.AITM_Round__c = packageRecord.AITM_Round__c + 1;
+                    newTenderPackagesByOldIds.put(packageRecord.Id, packageNewRecord);
+                }
+                
+                Database.insert(newTenderPackagesByOldIds.values(), false);
+                
                 if(createTenderlocationCheck  == false){
                     this.sendAwaitingPriceNotifications(newTenderLocationsByOldIds.values());
 				}
-                this.createTenderLocationLineItemClone(newTenderLocationsByOldIds);
+                system.debug('values::'+ newTenderPackagesByOldIds.values()[0].id+ ':::'+ newTenderPackagesByOldIds.values());
+                //system.assert(false,'newTenderPackagesByOldIds::'+ newTenderPackagesByOldIds.keySet());
+                this.createTenderLocationLineItemClone(newTenderLocationsByOldIds, newTenderPackagesByOldIds);
             }
         }
 
@@ -690,9 +728,9 @@ public with sharing class AITM_TenderLocationHandler implements AITM_TriggerFact
             sendChatterNotification(tenderLocationsAwaitingPriceToBeNotified, operationalUnit.CHATTER_NOTIFICATION_TYPES.get('NOTIFY_STATUS_CHANGED'));
         }
 
-        private void createTenderLocationLineItemClone(Map<Id, AITM_Tender_Location__c> newTenderLocationsByOldIds) {
+        private void createTenderLocationLineItemClone(Map<Id, AITM_Tender_Location__c> newTenderLocationsByOldIds, Map<Id, AITM_Tender_Package__c> newTenderPackagesByOldIds) {
 		    createTenderlocationCheck = true;
-            AITM_CloneTLLIBatch batch = new AITM_CloneTLLIBatch(newTenderLocationsByOldIds,newRoundTenderLocations);
+            AITM_CloneTLLIBatch batch = new AITM_CloneTLLIBatch(newTenderLocationsByOldIds,newRoundTenderLocations, newTenderPackagesByOldIds);
             database.executeBatch(batch,50);         
         } 
 

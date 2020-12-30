@@ -1,0 +1,7 @@
+.slds-modal__content {
+    overflow: visible;
+    overflow-y: visible;
+}
+.slds-modal__container{ 
+    height : 100vh; width: 80%; max-width: 70vh; 
+  }

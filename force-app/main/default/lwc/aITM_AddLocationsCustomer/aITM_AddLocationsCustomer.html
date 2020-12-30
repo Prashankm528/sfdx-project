@@ -1,0 +1,23 @@
+<template>
+    
+ <template if:true={showVolume}> 
+
+        
+        Volume(Note:this is volume for total contract duration) <br/>
+        <lightning-input></lightning-input>
+        <lightning-input data-index={index}  data-id="checkbox" type="checkbox" label= "Ad-hoc Volume" 
+                onchange={handlevolume}  ></lightning-input>
+        <lightning-layout>
+            <lightning-layout-item>
+                <lightning-input type="date" label="Start date"></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item>
+                <lightning-input type="date" label="End date"></lightning-input>
+            </lightning-layout-item>
+        </lightning-layout>
+            
+    </template>
+         
+           
+    
+</template>
