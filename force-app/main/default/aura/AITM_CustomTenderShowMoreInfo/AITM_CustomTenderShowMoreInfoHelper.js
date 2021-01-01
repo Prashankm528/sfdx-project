@@ -59,6 +59,9 @@
                 component.set("v.taxAndFeeReportID", defaultValuesObj.taxAndFeeReportID);
                 component.set("v.isTenderOld", defaultValuesObj.isTenderOld);
                 component.set("v.additionalNotesReportID", defaultValuesObj.additionalNotesReportID);
+                component.set("v.actualStage", defaultValuesObj.actualStage);
+                component.set("v.showPackageButton", defaultValuesObj.showPackageButton);
+                
             }
         });
         $A.enqueueAction(getDefaultChekboxesValuesAction);

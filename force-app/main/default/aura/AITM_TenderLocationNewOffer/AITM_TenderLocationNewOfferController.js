@@ -99,5 +99,22 @@ closeStraddleConfirmBox: function(component, event, helper){
 updateUnStraddledLineItem: function(component, event, helper){
   component.set("v.isConfirmUnStraddle", false);
   helper.updateUnStraddledLineItem(component, event, helper);
-}
+},
+    
+    showtooltip : function(component, event, helper) {
+        if(event.currentTarget.getAttribute("data-value") == 'OfferTitle'){
+            var hoverRowLineId = event.currentTarget.getAttribute("data-target");
+            component.set("v.hoverRow", parseInt(event.target.dataset.index));
+            component.set("v.hoverRowLineId",hoverRowLineId);
+            component.set("v.showOfferTitleHover", true);
+            var items = component.find("offertitle");
+            var currentIndex = parseInt(event.target.dataset.index);
+        }
+    },
+    
+    hidetooltip : function(component, event, helper) {
+        component.set("v.hoverRowLineId","");
+        var items = component.find("hover");
+        component.set("v.hoverRow",-1);
+    },
 })

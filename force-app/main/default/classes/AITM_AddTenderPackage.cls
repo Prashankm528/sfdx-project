@@ -16,12 +16,22 @@ public with sharing class AITM_AddTenderPackage {
     public final static String CURRENCY_FIELD_NAME = 'AITM_Currency__c';
     public final static String UOM_FIELD_NAME = 'AITM_Unit_Of_Measure__c';
     public static List<locationInCustomersComponent> loccustomerList;
+    public final static String DEFAULT_RECORD_TYPE = 'Default';
+    public final static String DEBRIEF_RECORD_TYPE = 'De-brief';
     private static final ID ID_TLLI_RECORD_TYPE_DEFAULT = Schema.SObjectType.AITM_Tender_Location_Line_Item__c.getRecordTypeInfosByName().get('Default').getRecordTypeId();
     
+    /**
+     * @description returns wrapper having list of package customers after creation and edit package
+     * @param TenderId of type String
+     * @param newTenderLocationtoInsert of type List<String>
+     * @param TenderLocationAlreadyInserted of type List<String>
+     * @param PackageId of type String
+     * @param editPackageId of type String
+     * @return List<locationInCustomersComponent> of type wrapper
+     */
     @AuraEnabled
     public static List<locationInCustomersComponent> getTenderLocationLineItems(String TenderId, List<String> newTenderLocationtoInsert, 
        List<string> TenderLocationAlreadyInserted, String PackageId, String editPackageId) {
-       system.debug('value is ' +'Tender id'+ TenderId+ 'Already Inserted Location' + TenderLocationAlreadyInserted + '' + 'Pack Id is ' + '' + editPackageId + 'Tender location to insert' + newTenderLocationtoInsert);
       
        Map<String, List<AITM_Tender_Location_Line_Item__c>> LocationCustomerMap = new Map<String, List<AITM_Tender_Location_Line_Item__c>>();
        Map<String, AITM_Tender_Location_Line_Item__c> locationLineItemMap = new Map<String, AITM_Tender_Location_Line_Item__c>();
@@ -42,7 +52,7 @@ public with sharing class AITM_AddTenderPackage {
                             AITM_Offered_Differential__c,AITM_Title__c,AITM_Standalone_Customer_Id__c, AITM_Tender_Location__r.AITM_Status__c,AITM_Percentage_Volume_Offered__c,AITM_Unit_Of_Measure__c,AITM_Currency__c,AITM_Location__r.AITM_IATA_ICAO__c
                             FROM AITM_Tender_Location_Line_Item__c 
                             WHERE AITM_Tender_Location__c in: newTenderLocationtoInsert AND AITM_Tender_Package__c = null AND  AITM_Is_Current_Round__c = true AND AITM_Tender__c = :tenderId 
-                            AND AITM_Tender__r.AITM_Select_to_Apply_Old_Taxes_and_Fees__c = false   order by AITM_Tender_Location__r.AITM_Location__r.Name asc ];
+                            AND AITM_Tender__r.AITM_Select_to_Apply_Old_Taxes_and_Fees__c = false AND AITM_Record_Type_Name__c = :DEFAULT_RECORD_TYPE order by AITM_Tender_Location__r.AITM_Location__r.Name asc ];
 
         if(!TenderLocationAlreadyInserted.isEmpty()){
             String packId = String.isBlank(editPackageId)? PackageId : editPackageId;
@@ -57,14 +67,13 @@ public with sharing class AITM_AddTenderPackage {
                                          FROM AITM_Tender_Location_Line_Item__c 
                                          WHERE AITM_Tender_Package__c =:packId AND AITM_Tender_Location__c IN: TenderLocationAlreadyInserted 
                                          AND AITM_Is_Current_Round__c = true AND AITM_Tender__c = :tenderId 
-                                         AND AITM_Tender__r.AITM_Select_to_Apply_Old_Taxes_and_Fees__c = false  order by AITM_Tender_Location__r.AITM_Location__r.Name asc ];
+                                         AND AITM_Tender__r.AITM_Select_to_Apply_Old_Taxes_and_Fees__c = false AND AITM_Record_Type_Name__c = :DEFAULT_RECORD_TYPE order by AITM_Tender_Location__r.AITM_Location__r.Name asc ];
         }
 
         loccustomerList = new List<locationInCustomersComponent>();
         for(AITM_Tender_Location_Line_Item__c cloneLocationLine : locationlineItems){
             locationLineItemMap.put(cloneLocationLine.Id, cloneLocationLine);
         }
-        
            
         for(AITM_Tender_Location_Line_Item__c cloneLocationLine : locationlineItems){
             locationStatusToUpdate.add(cloneLocationLine.AITM_Tender_Location__c);
@@ -114,7 +123,12 @@ public with sharing class AITM_AddTenderPackage {
         }
         return loccustomerList;
     }
-
+    
+    /**
+     * @description returns list of delivery point from location id, used in delivery point change
+     * @param locationId of type String
+     * @return List of type AITM_Delivery_Point__c
+     */
     @AuraEnabled
     public static List<AITM_Delivery_Point__c> getDelieveryPointbylocations(String locationId){
         try {
@@ -126,6 +140,11 @@ public with sharing class AITM_AddTenderPackage {
         }
     }
     
+    /**
+     * @description returns list of tender locations to show on package
+     * @param TenderId of type String
+     * @return List of type AITM_Tender_Location__c
+     */
     @AuraEnabled
     public static List<AITM_Tender_Location__c> getTenderLocationAddPackage(String TenderId){
         List<AITM_Tender_Location__c> listOfLocationToShow =  new List<AITM_Tender_Location__c>();
@@ -136,18 +155,31 @@ public with sharing class AITM_AddTenderPackage {
         return listOfLocationToShow;
     }
     
+    /**
+     * @description returns list of tender locations while adding new customer
+     * @param TenderId of type String
+     * @param PackageId of type String
+     * @param AccountId of type String
+     * @param listOfSelectedLocationIds of type List
+     * @return List of type AITM_Tender_Location__c
+     */
     @AuraEnabled
     public static List<AITM_Tender_Location__c> getTenderLocationToAddCustomer(String packageId, String tenderId, String AccountId, List<Id> listOfSelectedLocationIds){
         List<AITM_Tender_Location__c> listOfLocationToShow = new List<AITM_Tender_Location__c>();
         Set<Id> locationIds = new Set<Id>();
         Set<Id> packageLocIds = new Set<Id>(listOfSelectedLocationIds);
-        List<AITM_Tender_Location_Line_Item__c> locationlineItems = [SELECT AITM_Tender_Location__c FROM AITM_Tender_Location_Line_Item__c 
+        List<AITM_Tender_Location_Line_Item__c> locationlineItems = [SELECT AITM_Tender_Location__c,AITM_Tender_Package__c FROM AITM_Tender_Location_Line_Item__c 
                                                                      WHERE AITM_Is_Current_Round__c = true 
                                                                          AND AITM_Tender__c = :tenderId AND AITM_Account__c = :AccountId
                                                                          AND AITM_Tender__r.AITM_Select_to_Apply_Old_Taxes_and_Fees__c = false 
-                                                                         AND AITM_Tender_Package__c = :packageId AND AITM_Is_Current_Round__c = true];
+                                                                         AND AITM_Record_Type_Name__c = :DEFAULT_RECORD_TYPE 
+                                                                         AND AITM_Tender_Location__c = :packageLocIds AND AITM_Is_Current_Round__c = true];
+        packageLocIds = new Set<Id>();
         for(AITM_Tender_Location_Line_Item__c item : locationlineItems){
-            locationIds.add(item.AITM_Tender_Location__c);
+            packageLocIds.add(item.AITM_Tender_Location__c);
+            if(item.AITM_Tender_Package__c != null && item.AITM_Tender_Package__c == packageId){
+                locationIds.add(item.AITM_Tender_Location__c);
+            }
         }
         
         for(Id objId : packageLocIds){
@@ -164,14 +196,21 @@ public with sharing class AITM_AddTenderPackage {
         }
         return listOfLocationToShow;
     }
-
+    
+    /**
+     * @description returns list of String for editing package
+     * @param TenderId of type String
+     * @param PackId of type String
+     * @param createPackId of type String
+     * @return List of type String
+     */
     @AuraEnabled
     public static List<String> getTenderLocationEditPackage(String TenderId, String PackId, String createPackId ){
         Set<String> locationset = new Set<String>();
         List<AITM_Tender_Location_Line_Item__c> locationlineItems = [SELECT AITM_Tender_Location__r.Id , AITM_Is_Current_Round__c
                                                                      FROM AITM_Tender_Location_Line_Item__c 
                                                                      WHERE AITM_Is_Current_Round__c = true 
-                                                                         AND AITM_Tender__c = :tenderId 
+                                                                         AND AITM_Tender__c = :tenderId AND AITM_Record_Type_Name__c = :DEFAULT_RECORD_TYPE
                                                                          AND AITM_Tender__r.AITM_Select_to_Apply_Old_Taxes_and_Fees__c = false 
                                                                          AND AITM_Tender_Package__c =:PackId AND AITM_Is_Current_Round__c = true];
 
@@ -182,6 +221,11 @@ public with sharing class AITM_AddTenderPackage {
         return locationId;
     }
     
+    /**
+     * @description returns package customers based on tenderid
+     * @param TenderId of type String
+     * @return Map<String, List<locationItem>> of type Map
+     */
     @AuraEnabled
     public static Map<String, List<locationItem>> getLineItemsByPackage(String TenderId){
         List<locationItem> tenderLocationItem = new List<locationItem>();
@@ -195,7 +239,7 @@ public with sharing class AITM_AddTenderPackage {
                                                                      AITM_Tender_Location__r.AITM_Total_Requested_Volume__c,AITM_Record_Type_Name__c,AITM_Tender_Location__r.AITM_Total_Volume_Offered_To_The_Group__c,
                                                                      AITM_Account__r.Name,AITM_Tender_Location__r.AITM_Location_Contribution_To_Package__c
                                                                      FROM AITM_Tender_Location_Line_Item__c 
-                                                                     WHERE AITM_Is_Current_Round__c = true AND AITM_Tender__c = :TenderId 
+                                                                     WHERE AITM_Is_Current_Round__c = true AND AITM_Tender__c = :TenderId AND AITM_Record_Type_Name__c = :DEFAULT_RECORD_TYPE
                                                                      AND AITM_Tender__r.AITM_Select_to_Apply_Old_Taxes_and_Fees__c = false AND AITM_TENDER_PACKAGE__c != null order by AITM_Tender_Package__r.AITM_Package_Counter__c];
 
         for(AITM_Tender_Location_Line_Item__c cloneLocationLine : locationlineItems){
@@ -238,6 +282,11 @@ public with sharing class AITM_AddTenderPackage {
         return LocationCustomerMap;
     }
     
+    /**
+     * @description returns void and deleting package with package customers
+     * @param packageId of type String
+     * @return void
+     */
     @AuraEnabled
     public static void deletePackage(String packageId){
         List<sObject> sObjectRecordsToDelete = new List<sObject>();
@@ -249,22 +298,36 @@ public with sharing class AITM_AddTenderPackage {
         
         Database.delete(sObjectRecordsToDelete, false);
     }
-
+    
+    /**
+     * @description returns wrapper having list of package customers after delete customers
+     * @param tenderId of type String
+     * @param listOfLineItems of type List<Id>
+     * @param PackageId of type String
+     * @return List<locationInCustomersComponent> of type wrapper
+     */
     @AuraEnabled
     public static List<locationInCustomersComponent> deletelocationLineItems(String packageId, String tenderId, List<Id> listOfLineItems){
-
         List<AITM_Tender_Location_Line_Item__c> listOfLineItemsToDelete = [SELECT Id FROM AITM_Tender_Location_Line_Item__c WHERE Id IN:listOfLineItems];
         delete listOfLineItemsToDelete;
         
         List<locationInCustomersComponent> wrapperAfterDelete = fillWrapperToShowUpdatedLineItems(packageId, tenderId);
         return wrapperAfterDelete;
     }
-
+    
+    /**
+     * @description returns list of currencies
+     * @return List of type String
+     */
     @AuraEnabled(cacheable=true)
     public static List<String> getListOfCurrency(){
         return getPickValues(OBJECT_NAME,CURRENCY_FIELD_NAME);
     }
     
+    /**
+     * @description returns list of Unit Of measure values
+     * @return List of type String
+     */
     @AuraEnabled(cacheable=true)
     public static List<String> getListOfUOMoptions(){
         return getPickValues(OBJECT_NAME,UOM_FIELD_NAME);
@@ -286,6 +349,11 @@ public with sharing class AITM_AddTenderPackage {
         return stringValues;
     }
 
+    /**
+     * @description returns package counter value
+     * @param TenderId of type String
+     * @return counter of type String
+     */
     @AuraEnabled()
     public static String getPackageCounter(String TenderId){
         String counter = null;
@@ -304,26 +372,41 @@ public with sharing class AITM_AddTenderPackage {
         }
         return counter;
     }
-
+    
+    /**
+     * @description returns list of package customers on location status change
+     * @param tenderLocationId of type String
+     * @return List of type AITM_Tender_Location_Line_Item__c
+     */
     @AuraEnabled
     public static List<AITM_Tender_Location_Line_Item__c> getListOfLineItemsOnStatusChange(String tenderLocationId){
         List<AITM_Tender_Location_Line_Item__c> lineItems = new AITM_LocationsDao().getTenderLocationLineItemsByRecordType(tenderLocationId, ID_TLLI_RECORD_TYPE_DEFAULT);
         return lineItems;
     }
     
+    /**
+     * @description returns error while updating Delivery point record if validation fails
+     * @param deliveryRecordId of type String
+     * @param lineItemId of type String
+     * @return error of type String
+     */
     @AuraEnabled
     public static String updateDeliveryRecords(String deliveryRecordId, String lineItemId){
         String error = AITM_TenderLocationNewOffer.updateDeliveryRecords(deliveryRecordId, lineItemId);
         return error;
     }
     
+    /**
+     * @description returns wrapper having list of package customers after creation and edit package
+     * @param locationlineItems of type List<AITM_Tender_Location_Line_Item__c>
+     * @return List<locationInCustomersComponent> of type wrapper
+     */
     @AuraEnabled
     public static List<locationInCustomersComponent> wrapperToShowLocationLineItemDetails(List<AITM_Tender_Location_Line_Item__c> locationlineItems){
         List<String> listofTlli = new List<String>();
         loccustomerList = new List<locationInCustomersComponent>();
         Map<String, List<AITM_Tender_Location_Line_Item__c>> LocationCustomerMap = new Map<String, List<AITM_Tender_Location_Line_Item__c>>();
-        
-        //locationlineItemsAlreadyInserted.sort();
+
         for(AITM_Tender_Location_Line_Item__c cloneLocationLine : locationlineItems){
             if(LocationCustomerMap.ContainsKey(cloneLocationLine.AITM_Tender_Location__r.AITM_Location__r.Name)){
                 LocationCustomerMap.get(cloneLocationLine.AITM_Tender_Location__r.AITM_Location__r.Name).add(cloneLocationLine);
@@ -342,37 +425,44 @@ public with sharing class AITM_AddTenderPackage {
         
         return loccustomerList;
     }
-
+    
+    /**
+     * @description returns findrecords based on lookup for pricing basis and Tender Customer
+     * @param tender of type String
+     * @param ObjectName of type String
+     * @param searchKeyWord of type String
+     * @return List of type sobject
+     */
     @AuraEnabled
-    public static List<sobject> findRecords(String searchKeyWord, String ObjectName, string tender) {  
+    public static List<sobject> findRecords(String searchKeyWord, String ObjectName, String tender) {  
         String sQuery;
-       
-        system.debug('ObjectName-->' + ObjectName);
         String searchKey = searchKeyWord + '%';
-        
-        List < sObject > returnList = new List < sObject > ();
-      
-        // Create a Dynamic SOQL Query For Fetch Record List with LIMIT 5 
-        if(ObjectName == 'AITM_Pricing_Basis__c')  
-        {
-        sQuery =  'select id, Name,AITM_Description__c from ' +ObjectName + ' where Name LIKE: searchKey order by createdDate DESC LIMIT 100';
+        List<sObject> returnList = new List<sObject>(); 
+        if(ObjectName == 'AITM_Pricing_Basis__c') {
+            sQuery = 'select id, Name,AITM_Description__c from ' +ObjectName + ' where Name LIKE: searchKey order by createdDate DESC LIMIT 100';
         }
-        else if(ObjectName == 'AITM_Tender_Account__c'){
+        else if(ObjectName == 'AITM_Tender_Account__c') {
             searchKey = '%' + searchKey;
-            sQuery  =  'select id, AITM_Account__c, AITM_Customer_Name__c, AITM_Credit_Days1__c,AITM_Security_Type__c,AITM_Invoice_Frequency__c, AITM_Payment_Currency__c , AITM_GRN__c from ' +ObjectName + ' where AITM_Customer_Name__c LIKE: searchKey AND AITM_Tender__c =:tender order by AITM_Customer_Name__c DESC LIMIT 100';
+            sQuery = 'Select id, AITM_Account__c, AITM_Customer_Name__c, AITM_Credit_Days1__c,AITM_Security_Type__c,AITM_Invoice_Frequency__c, AITM_Payment_Currency__c , AITM_GRN__c from ' +ObjectName + ' where AITM_Customer_Name__c LIKE: searchKey AND AITM_Tender__c =:tender order by AITM_Customer_Name__c DESC LIMIT 100';
         }
         else{
-           sQuery  =  'select id, Name from ' +ObjectName + ' where AITM_Tender__c =:tender AND Name LIKE: searchKey order by createdDate DESC LIMIT 100';
+           sQuery = 'Select id, Name from ' +ObjectName + ' where AITM_Tender__c =:tender AND Name LIKE: searchKey order by createdDate DESC LIMIT 100';
         }
-            List < sObject > lstOfRecords = Database.query(sQuery);
+        List<sObject> lstOfRecords = Database.query(sQuery);
         
-        for (sObject obj: lstOfRecords) {
+        for(sObject obj: lstOfRecords) {
             returnList.add(obj);
         }
-        system.debug('list of records-->' + returnList);
         return returnList;
     }
-        
+    
+    /**
+     * @description returns wrapper having list of package customers after Cloning customer
+     * @param TenderId of type String
+     * @param listOfLineItems of type List<Id>
+     * @param PackageId of type String
+     * @return List<locationInCustomersComponent> of type wrapper
+     */
     @AuraEnabled
     public static List<locationInCustomersComponent> clonelocationLineItems(String packageId, String tenderId, List<Id> listOfLineItems){
         List<AITM_Tender_Location_Line_Item__c> locationlineItemsToBeClone = new List<AITM_Tender_Location_Line_Item__c>();
@@ -411,6 +501,15 @@ public with sharing class AITM_AddTenderPackage {
         return wrapperAfterClone;
     }
     
+    /**
+     * @description returns wrapper having list of package customers after update customers
+     * @param TenderId of type String
+     * @param listoflineItemtoUpdate of type String
+     * @param locationToUpdate of type String
+     * @param packagetoupdate of type String
+     * @param PackageId of type String
+     * @return List<locationInCustomersComponent> of type wrapper
+     */
     @AuraEnabled
     public static List<locationInCustomersComponent> updatelocationLineItems(String packageId, String tenderId, String listoflineItemtoUpdate, String locationToUpdate, String packagetoupdate){
         List<sObject> tenderItems = new List<sObject>();
@@ -436,6 +535,12 @@ public with sharing class AITM_AddTenderPackage {
         return wrapperAfterUpdate;
     }
     
+    /**
+     * @description returns wrapper having list of package customers
+     * @param TenderId of type String
+     * @param PackageId of type String
+     * @return List<locationInCustomersComponent> of type wrapper
+     */
     @AuraEnabled
     public static List<locationInCustomersComponent> fillWrapperToShowUpdatedLineItems(String packageId, String tenderId){
         List<AITM_Tender_Location_Line_Item__c> locationlineItemsAlreadyInserted = [SELECT Id, AITM_Tender_Location__r.AITM_Round__c, AITM_Pricing_Basis__c,
@@ -448,16 +553,11 @@ public with sharing class AITM_AddTenderPackage {
                                                                                     AITM_Offered_Differential__c,AITM_Title__c, AITM_Tender_Location__r.AITM_Status__c,AITM_Percentage_Volume_Offered__c,AITM_Unit_Of_Measure__c,AITM_Currency__c,AITM_Location__r.AITM_IATA_ICAO__c
                                                                                     FROM AITM_Tender_Location_Line_Item__c 
                                                                                     WHERE AITM_Tender_Package__c = :packageId
-                                                                                    AND AITM_Is_Current_Round__c = true AND AITM_Tender__c = :tenderId 
+                                                                                    AND AITM_Is_Current_Round__c = true AND AITM_Tender__c = :tenderId AND AITM_Record_Type_Name__c = :DEFAULT_RECORD_TYPE
                                                                                     AND AITM_Tender__r.AITM_Select_to_Apply_Old_Taxes_and_Fees__c = false order by AITM_Tender_Location__r.AITM_Location__r.Name asc];
         
         List<locationInCustomersComponent> wrapperDataUpdateAfterProcessing = wrapperToShowLocationLineItemDetails(locationlineItemsAlreadyInserted);
         return wrapperDataUpdateAfterProcessing;
-    }
-
-    @AuraEnabled
-    public static void savelocationLineitems(String tenderId,String packageId, String lineitemsToInsert,String startDate, String endDate, String customerId){
-        system.debug('list to insert' + lineitemsToInsert);
     }
     
     /**
@@ -476,14 +576,58 @@ public with sharing class AITM_AddTenderPackage {
         return obj;
     }
     
+    /**
+     * @description returns wrapper having list of package customers saving customer from add customer
+     * @param TenderId of type String
+     * @param lineitemsToInsert of type String
+     * @param startDate of type Date
+     * @param PackageId of type String
+     * @param customerId of type String
+     * @param endDate of type Date
+     * @return List<locationInCustomersComponent> of type wrapper
+     */
+    @AuraEnabled
+    public static List<locationInCustomersComponent> savelocationLineitems(Id tenderId, Id packageId, String lineitemsToInsert,Date startDate, Date endDate, String customerId){
+        List<AITM_Tender_Location_Line_Item__c> itemsToInsert = new List<AITM_Tender_Location_Line_Item__c>();
+        List<AITM_Tender_Location__c> locationToUpdate = new List<AITM_Tender_Location__c>();
+        Set<Id> setOfIds = new Set<Id>();
+
+        List<TenderLocationLineItemWrapper> wrappedLineItems = (List<TenderLocationLineItemWrapper>) JSON.deserialize(lineitemsToInsert, List<TenderLocationLineItemWrapper>.class);
+        
+        for (TenderLocationLineItemWrapper wrappedRecord : wrappedLineItems) {
+            itemsToInsert.add(wrappedRecord.unwrapToInsertLineItems(tenderId, customerId, packageId, startDate, endDate));
+            locationToUpdate.add(wrappedRecord.unwrapToUpdateLocation());
+        }
+        
+        if(itemsToInsert.size() > 0){
+            insert itemsToInsert;
+        }
+        if(locationToUpdate.size() > 0){
+            update locationToUpdate;
+        }
+        
+        List<locationInCustomersComponent> wrapperAfterInsertCustomer = fillWrapperToShowUpdatedLineItems(packageId, tenderId);
+        return wrapperAfterInsertCustomer;
+    }
+    
+    /**
+     * @description returns wrapper 
+     * @return List<locationInCustomersComponent> of type wrapper
+     */
     public class TenderLocationLineItemWrapper{
         public @AuraEnabled Id lineItemId;
+        public @AuraEnabled Id standAloneLocationId;
+        public @AuraEnabled Id locationId;
+        public @AuraEnabled Id tenderId;
+        public @AuraEnabled Id packageId;
+        public @AuraEnabled Id customerId;
         public @AuraEnabled Date startDate;
         public @AuraEnabled Date endDate;
-        public @AuraEnabled Integer offeredVolumeUom;
+        public @AuraEnabled Boolean adHoc;
+        public @AuraEnabled String offeredVolumeUom;
         public @AuraEnabled Integer requestedVolumeUom;
-        public @AuraEnabled Integer differentialPackage;
-        public @AuraEnabled Integer changedPercentage;
+        public @AuraEnabled String differentialPackage;
+        public @AuraEnabled String changedPercentage;
         public @AuraEnabled String unitOfMeasure;
         public @AuraEnabled String updatedcurrency;
         
@@ -503,15 +647,22 @@ public with sharing class AITM_AddTenderPackage {
             }
             if(this.requestedVolumeUom != null){
                 item.AITM_Requested_Volume_USG__c = this.requestedVolumeUom;
+                //item.AITM_Volume__c = this.requestedVolumeUom;
             }
-            if(this.offeredVolumeUom != null){
-                item.AITM_Offered_Volume__c = this.offeredVolumeUom;
+            if(!String.isEmpty(this.offeredVolumeUom) || !String.isBlank(this.offeredVolumeUom)){
+                item.AITM_Offered_Volume__c = Integer.ValueOf(this.offeredVolumeUom);
+            }else{
+                item.AITM_Offered_Volume__c = null;
             }
-            if(this.changedPercentage != null){
-                item.AITM_Percentage_Volume_Offered__c = this.changedPercentage;
+            if(!String.isEmpty(this.changedPercentage) || !String.isBlank(this.changedPercentage)){
+                item.AITM_Percentage_Volume_Offered__c = Integer.ValueOf(this.changedPercentage);
+            }else{
+                item.AITM_Percentage_Volume_Offered__c = 0;
             }
-            if((String.valueOf(this.differentialPackage)) != '' && this.differentialPackage != null){
-                item.AITM_Package_Offered_Differential__c = this.differentialPackage;
+            if(!String.isEmpty(this.differentialPackage) || !String.isBlank(this.differentialPackage)){
+                item.AITM_Package_Offered_Differential__c = Integer.ValueOf(this.differentialPackage);
+            }else{
+                item.AITM_Package_Offered_Differential__c = null;
             }
             if(this.unitOfMeasure != null){
                 item.AITM_Unit_Of_Measure__c = this.unitOfMeasure;
@@ -521,17 +672,59 @@ public with sharing class AITM_AddTenderPackage {
             }
             return item;
         }
+        
+        /**
+         * @description returns tender location line item
+         * @param tenderId of type Id
+         * @param customerId of type Id
+         * @param packageId of type Id
+         * @param standardStartDate of type Date
+         * @param standardEndDate of type Date
+         * @return AITM_Tender_Location_Line_Item__c
+         */
+        public AITM_Tender_Location_Line_Item__c unwrapToInsertLineItems(Id tenderId, Id customerId, Id packageId, Date standardStartDate, Date standardEndDate) {
+            AITM_Tender_Location_Line_Item__c item = new AITM_Tender_Location_Line_Item__c();
+            item.AITM_Tender_Location__c = this.locationId;
+            item.AITM_Location__c = this.standAloneLocationId;
+            item.AITM_Ad_hoc_Volume__c = this.adHoc;
+            item.AITM_Account__c = customerId;
+            item.AITM_Tender__c = tenderId;
+            if(packageId != null){
+                item.AITM_Tender_Package__c = packageId;
+            }
+            item.AITM_Start_Date__c = this.startDate != null ? this.startDate : standardStartDate; 
+            item.AITM_End_Date__c = this.endDate != null ? this.endDate : standardEndDate;
+            if(this.requestedVolumeUom != null){
+                item.AITM_Volume__c = this.requestedVolumeUom;
+            }
+            return item;
+        }
+        
+        /**
+         * @description returns AITM_Tender_Location__c
+         * @return AITM_Tender_Location__c
+         */
+        public AITM_Tender_Location__c unwrapToUpdateLocation() {
+            AITM_Tender_Location__c locationRecord = new AITM_Tender_Location__c();
+            locationRecord.AITM_Status__c = 'Awaiting price';
+            locationRecord.Id = this.locationId;
+            return locationRecord;
+        }
     }
     
+    /**
+     * @description returns wrapper 
+     * @return List<locationInCustomersComponent> of type wrapper
+     */
     public class TenderLocationWrapper{
         public @AuraEnabled Id locationId;
         public @AuraEnabled Integer packageContribution;
         public @AuraEnabled String internalNotes;
         
         /**
-         * @description returns tender location line item
+         * @description returns AITM_Tender_Location__c
          * @param null
-         * @return AITM_Tender_Location_Line_Item__c
+         * @return AITM_Tender_Location__c
          */
         public AITM_Tender_Location__c unwrap() {
             AITM_Tender_Location__c location = new AITM_Tender_Location__c();
@@ -546,6 +739,10 @@ public with sharing class AITM_AddTenderPackage {
         }
     }
     
+    /**
+     * @description returns wrapper 
+     * @return List<TenderPackageWrapper> of type wrapper
+     */
     public class TenderPackageWrapper{
         public @AuraEnabled Id packageId;
         public @AuraEnabled String packName;
@@ -553,9 +750,9 @@ public with sharing class AITM_AddTenderPackage {
         public @AuraEnabled String description;
         
         /**
-         * @description returns tender location line item
+         * @description returns AITM_Tender_Package__c
          * @param null
-         * @return AITM_Tender_Location_Line_Item__c
+         * @return AITM_Tender_Package__c
          */
         public AITM_Tender_Package__c unwrap() {
             AITM_Tender_Package__c packageData = new AITM_Tender_Package__c();
@@ -572,7 +769,11 @@ public with sharing class AITM_AddTenderPackage {
             return packageData;
         }
     }
-
+    
+    /**
+     * @description returns wrapper 
+     * @return List<locationItem> of type wrapper
+     */
     public class locationItem{
         public @AuraEnabled String Packageid;
         public @AuraEnabled String PackageName;
@@ -581,19 +782,23 @@ public with sharing class AITM_AddTenderPackage {
         public @AuraEnabled String locationIdentificator;
         public @AuraEnabled String locationName;
         public @AuraEnabled String country;
-        public @AuraEnabled Decimal volumeUSG;
-        public @AuraEnabled Decimal offeredVolumeUSG;
         public @AuraEnabled String lastTenderResult;
         public @AuraEnabled String locationManager;
         public @AuraEnabled String locationManagerId;
         public @AuraEnabled String status;
-        public @AuraEnabled Decimal round;
-        public @AuraEnabled Decimal currentRound;
         public @AuraEnabled String includeRevisedOffer;
         public @AuraEnabled String defaultDelPoint;
         public @AuraEnabled String pricingResponsibility;
+        public @AuraEnabled Decimal round;
+        public @AuraEnabled Decimal currentRound;
+        public @AuraEnabled Decimal volumeUSG;
+        public @AuraEnabled Decimal offeredVolumeUSG;
     }
-
+    
+    /**
+     * @description returns wrapper 
+     * @return List<locationInCustomersComponent> of type wrapper
+     */
     public class locationInCustomersComponent{
         public @AuraEnabled String uniqueKey;
         public @AuraEnabled String locationName;
@@ -606,6 +811,14 @@ public with sharing class AITM_AddTenderPackage {
         public @AuraEnabled Double packageContribution;
         public @AuraEnabled List<AITM_Tender_Location_Line_Item__c> locationLineItemsList;
             
+        /**
+         * @description returns wrapper having list of package customers after creation and edit package
+         * @param uniqueKey of type String
+         * @param location of type AITM_Location__c
+         * @param tenderLocation of type AITM_Tender_Location__c
+         * @param locationLineItemsList of type String
+         * @return List<locationInCustomersComponent> of type wrapper
+         */
         public locationInCustomersComponent(String uniqueKey, AITM_Location__c location, AITM_Tender_Location__c tenderLocation, List<AITM_Tender_Location_Line_Item__c> locationLineItemsList){
             this.locationLineItemsList = locationLineItemsList;
             this.iATAWithlocationName = tenderLocation.AITM_IATA_ICAO__c + ' - ' +location.Name;

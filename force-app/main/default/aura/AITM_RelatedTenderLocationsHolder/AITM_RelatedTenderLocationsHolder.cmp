@@ -1,6 +1,7 @@
 <aura:component controller="AITM_RelatedTenderLocationsHolderCntrl" implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:hasRecordId" extends="c:AITM_RelatedRecordsHolder">
     <aura:attribute name="showLocations" type="Boolean" description="Show Locations section on this page?" default="true"/>
     <aura:attribute name="showSummaryCountry" type="Boolean" description="Show Summary of Tender Locations section on this page?" default="false"/>
+    <aura:attribute name="showPackageDetailsInTab" type="Boolean" description="Show Package Tab" default="false"/>
     <aura:attribute name="showPackages" type="Boolean" description="Show Packages section on this page?" default="false"/>
     <aura:attribute name="bidsInBy" type="Date" description="Bids In By Date (from Tender)" />
     <aura:attribute name="displaySummaryByCountry" type="Boolean" description="Show tab SUMMARY BY COUNTRY on this page?" default="false" />
@@ -44,9 +45,11 @@
                  <c:AITM_RelatedTenderLocationsByCountry recordId="{!v.recordId}" selectedRound="{!v.selectedRound}" />          
             </aura:if>    
         </lightning:tab>
-        <aura:if isTrue="{!v.showPackages}">
-            <lightning:tab>
-                <aura:set attribute="label"><span class="tabHeader">PACKAGES</span></aura:set> 
+        <aura:if isTrue="{!v.showPackageDetailsInTab}">
+            <lightning:tab onactive="{!c.showPackages }" label="PACKAGES" id="packages">
+                <aura:if isTrue="{!v.showPackages}">
+                    <c:AITM_RelatedTenderLocationsByPackage recordId="{!v.recordId}"  />
+                </aura:if>
             </lightning:tab>
         </aura:if>
     </lightning:tabset>

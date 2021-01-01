@@ -23,6 +23,9 @@
     <aura:attribute name="isCheckedStraddle" type="boolean" default="false" />
     <aura:attribute name="isLocationStraddled" type="boolean" default="false" />
     <aura:attribute name="isConfirmUnStraddle" type="boolean" default="false" />
+    <aura:attribute name="showOfferTitleHover" type="boolean" default="false" />
+    <aura:attribute name="hoverRow" type="Integer" default="-1" />
+    <aura:attribute name="hoverRowLineId" type="String" />
     
    <force:recordData aura:id="recordLoaderAuraId"
                     layoutType="FULL"
@@ -206,6 +209,9 @@
                                 <td scope="col">
                                     Include In <br /> Revised <br /> Offer
                                 </td>
+                                <td scope="col" style="font-weight: bold;">
+                                     OFFER <br /> TITLE <br />
+                                </td>
                                 <aura:iteration items="{!v.tableMetadata}" var="tableField">
                                     <aura:if isTrue="{!tableField.AITM_Field_Name__c != 'AITM_Customer_Name__c'}">
                                         <aura:if isTrue="{!tableField.AITM_Is_Table_Footer_Field__c == false}">
@@ -216,7 +222,7 @@
                                     </aura:if>
                                 </aura:iteration>
                             </tr>
-                            <aura:iteration items="{!v.lineItems}" var="lineItem">
+                            <aura:iteration items="{!v.lineItems}" var="lineItem" indexVar="index">
                                 <aura:if isTrue="{!lineItem.AITM_Account__r.AITM_GRN__c == lineItemAcc.AITM_GRN__c}">
                                     <tr>
                                         <!--<div class="slds-form-element">-->
@@ -250,6 +256,28 @@
                                                 </div>
                                             </div>
                                         </td>
+                                        
+                                        <td scope="row" class="slds-text-align--left">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control"  >
+                                                    <p style="font-size:13px;font-weight: bold;" data-target="{!lineItem.Id}" onmouseover="{!c.showtooltip}" onmouseout="{!c.hidetooltip}" data-value="OfferTitle" data-index="{!index}" >{!lineItem.AITM_Offer_Title__c}</p>
+                                                    <aura:if isTrue="{!and(equals(lineItem.Id,v.hoverRowLineId), lineItem.AITM_Tender_Package__c != null)}">
+                                                        <div style="word-wrap: break-word;" aura:id="hover"
+                                                             class="slds-glutters slds-cell-wrap">
+                                                            <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left"
+                                                                 role="tooltip" id="help"
+                                                                 style="position:absolute;background:#ff3f6c;">
+                                                                <div class="slds-popover__body">
+                                                                    <aura:if isTrue="{!lineItem.AITM_Tender_Package__c != null}">
+                                                                        <lightning:formattedText value="{!lineItem.AITM_Tender_Package__r.Name}"/>
+                                                                    </aura:if>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </aura:if>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <!--</div>-->
                                         <aura:iteration items="{!v.tableMetadata}" var="tableField">
                                             <aura:if isTrue="{!tableField.AITM_Is_Table_Footer_Field__c == false}">
@@ -264,6 +292,7 @@
                                                 </td>
                                             </aura:if>
                                         </aura:iteration>
+                                        
                                     </tr>
                                 </aura:if>
                             </aura:iteration>

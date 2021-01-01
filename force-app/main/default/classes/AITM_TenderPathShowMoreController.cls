@@ -83,6 +83,8 @@ public with sharing class AITM_TenderPathShowMoreController {
         @AuraEnabled public String additionalNotesReportID;
         @auraEnabled public Boolean isTenderOld;
         @auraEnabled public Boolean isGenerateOfferButton;
+        @AuraEnabled public String actualStage;
+        @AuraEnabled public Boolean showPackageButton;
 
         private final Set<String> PROFILES_WITH_BUTTONS_VISIBILITY = new Set<String> {
             'Air_TMAccount Manager',
@@ -97,14 +99,16 @@ public with sharing class AITM_TenderPathShowMoreController {
          * @param  tenderId of type Id
          */
         public DefaultValuesToCheckboxes(Id tenderId) {
-            AITM_Tender__c tender = [SELECT OwnerId,AITM_Select_to_Apply_Old_Taxes_and_Fees__c, AITM_Produce_Customer_Email__c, AITM_Generate_Offer__c, AITM_No_Feedback_Progress_To_De_Brief__c FROM AITM_Tender__c WHERE Id = :tenderId LIMIT 1][0];
+            AITM_Tender__c tender = [SELECT AITM_Stage__c, OwnerId,AITM_Select_to_Apply_Old_Taxes_and_Fees__c, AITM_Produce_Customer_Email__c, AITM_Generate_Offer__c, AITM_No_Feedback_Progress_To_De_Brief__c FROM AITM_Tender__c WHERE Id = :tenderId LIMIT 1][0];
             feedbackToDebrief = tender.AITM_No_Feedback_Progress_To_De_Brief__c;
             isTenderOld = tender.AITM_Select_to_Apply_Old_Taxes_and_Fees__c;
             isGenerateOfferButton = tender.AITM_Generate_Offer__c;
+            actualStage = tender.AITM_Stage__c;
             showButtons = determineShowButtonsByProfile(tender.OwnerId);
             multipleLocations(tender.Id);
             showDownloadLABPExcel = AITM_BaseUtils.checkRunningUserIsLABP();
             showConga = (AITM_TenderPathShowMoreController.getLABPRunningUser(tender.OwnerId) ? true : AITM_BaseUtils.checkCongaPermission());
+            showPackageButton = AITM_RelatedTenderLocationsHolderCntrl.getPackageDetailsInTab();
             Report reportName = new AITM_TenderDao().getTenderReport('AirBPOffer');
             if(reportName != null) {
                 reportID = reportName.Id;

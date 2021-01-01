@@ -6,6 +6,7 @@
         this.getFilterOptions(component);
         this.getRounds(component);
         this.displaySummaryByCountry(component);
+        this.getPackageDetailsInTab(component);
     },
 
     onFilterChange : function(component) {
@@ -135,6 +136,20 @@
                 var returnValue = response.getReturnValue();
                 if (returnValue) {
                     component.set("v.displaySummaryByCountry",returnValue);
+                }
+            }
+        });
+        $A.enqueueAction(action);
+    },
+    
+    getPackageDetailsInTab: function(component) {
+        var action = component.get("c.getPackageDetailsInTab");
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            if (component.isValid() && state === "SUCCESS") {
+                var returnValue = response.getReturnValue();
+                if (returnValue) {
+                    component.set("v.showPackageDetailsInTab",returnValue);
                 }
             }
         });

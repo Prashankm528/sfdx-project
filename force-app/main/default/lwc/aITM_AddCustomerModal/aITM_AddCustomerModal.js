@@ -263,15 +263,15 @@ export default class AITM_AddCustomerModal extends LightningElement {
             console.log('lineItems Succesfully insert' +result);
             this.tenderlocationlist = [];
            // let params = {"listoflineItemsToClone" : listoflineItemsToClone}
-
+            alert('inside child')
         this.dispatchEvent(new CustomEvent('add', {bubbles: true, composed: true})); 
-            this.dispatchEvent(    
+           /* this.dispatchEvent(    
                 new ShowToastEvent({     
                     title: 'Success',
                     message: 'Line item inserted successfully!',
                     variant: 'Success'
                 })    
-            );
+            );*/
         })
         .catch(error=>{
             console.log('error saving line items ' + JSON.stringify(error));

@@ -22,6 +22,8 @@ public with sharing class AITM_RelatedTenderLocationsHolderCntrl {
     private @testVisible static String AD_HOC_FIELD_API_NAME = 'AITM_Ad_hoc_Volume__c';
     private static final String STATUS_NOT_REPRESENTED = 'Not Represented';
     private static final Set<String> PROFILES_WITH_SUMMARYCOUNTRY_TAB_VISIBILITY = new Set<String>{'Air_TMLABPLM','Air_TMLocation Manager','Air_TMLocationAdmin','System Administrator'};
+    private static final Set<String> PROFILES_WITH_PACKAGES_TAB_VISIBILITY = new Set<String>{'System Administrator','Air_TMAccount Manager'};
+    private static final Set<String> URL_TO_HIDE_LABP = new Set<String>{'labptendering'};
 
     /**
      * @description gets bidinby details for a tender
@@ -48,6 +50,24 @@ public with sharing class AITM_RelatedTenderLocationsHolderCntrl {
         displaySummaryByCountry = true;
       }
       return displaySummaryByCountry; 
+    }
+    
+    public static @AuraEnabled Boolean getPackageDetailsInTab() {
+      Boolean displayPackageTab = false;
+      String currentUserProfile = new AITM_UsersDao().getProfileName(UserInfo.getUserId());
+        if(PROFILES_WITH_PACKAGES_TAB_VISIBILITY.contains(currentUserProfile)) {
+        displayPackageTab = true;
+      }
+      return displayPackageTab; 
+    }
+    
+    public static @AuraEnabled Boolean checkURLIfLABP() {
+      Boolean hidelabp = true;
+      String currentURL = URL.getSalesforceBaseUrl().toExternalForm();
+      if(URL_TO_HIDE_LABP.contains(currentURL)) {
+        hidelabp = false;
+      }
+      return hidelabp; 
     }
 
     /**

@@ -528,6 +528,7 @@ export default class AITM_CreatePackage extends NavigationMixin(LightningElement
         
     }
     refreshlineItemview(event){
+        alert('add customers');
         this.isLoading = true; 
         let selectedPackageId = this.packId ? this.packId : this.PackageId ;
         this.AllLocations =[];

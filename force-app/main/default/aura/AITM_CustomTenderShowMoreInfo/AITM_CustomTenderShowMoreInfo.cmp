@@ -15,9 +15,12 @@
     <aura:handler event="c:AITM_CustomTenderSendStageEvent" action="{!c.handleCurrentStage}"/>
     <aura:handler event="c:AITM_ClosePathQuickAction" action="{!c.closePopup}"/>
     <aura:attribute name="targetFields" type="Object"/><!--Kunal-->
+    <aura:attribute name="actualStage" type="String"/>
+    <lightning:workspaceAPI aura:id="workspace" /><!--Prashank-->
     <aura:attribute name="isTenderOld" type="Boolean" />
     <aura:attribute name="isGenerateOfferButton" type="Boolean" default="false" />
     <aura:attribute name="additionalNotesReportID" type="String" />
+    <aura:attribute name="showPackageButton" type="Boolean" description="Show Package Tab" default="false"/>
     <force:recordData aura:id="recordLoaderId"
                     layoutType="FULL"
                     recordId="{!v.recordId}"
@@ -29,7 +32,8 @@
         <div class="cd-drawer drawer visibleSlide">
             <div class="stepBody">
                 <span class="runtime_sales_pathassistantPathAssistantBody--desktop runtime_sales_pathassistantPathAssistantBody">
-                    <aura:if isTrue="{!v.showButtons}">
+                    <!--<aura:if isTrue="{!v.showButtons}">-->
+                    <aura:if isTrue="{!and(v.showButtons, v.actualStage == 'Tender Created')}" >
                         <section class="pa-fields">
                             <div class="runtime_sales_pathassistantPathAssistantFields inlineEditEnabled">
                                 <span class="bodyHeader">
@@ -46,9 +50,6 @@
                                                             <lightning:button variant="brand" label="Add Group" onclick="{!c.addGroup}" />
                                                             <lightning:button variant="brand" label="Add Location" onclick="{!c.addLocation}" />
                                                             <lightning:button variant="brand" label="Upload Location" onclick="{!c.uploadLocation}" />
-                                                            <div  class="slds-p-top_x-small" >
-                                                             	 <lightning:button variant="brand" label=" Add Package" onclick="{!c.openCaseCloneTab}" /> <!--Added By Prashank-->
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -78,7 +79,8 @@
         <div class="cd-drawer drawer visibleSlide">
             <div class="stepBody">
                 <span class="runtime_sales_pathassistantPathAssistantBody--desktop runtime_sales_pathassistantPathAssistantBody">
-                    <aura:if isTrue="{!v.showButtons}">
+                    <!--<aura:if isTrue="{!v.showButtons}">-->
+                    <aura:if isTrue="{!and(v.showButtons, v.actualStage == 'Awaiting Price')}" >
                         <section class="pa-fields">
                             <div class="runtime_sales_pathassistantPathAssistantFields inlineEditEnabled">
                                 <span class="bodyHeader">
@@ -95,10 +97,15 @@
                                                             <lightning:button variant="brand" label="Add Location" onclick="{!c.addLocation}" />
                                                             <lightning:button variant="brand" label="Upload Location" onclick="{!c.uploadLocation}" />
                                                             <aura:if isTrue="{!v.showNonPolish}">
-                                                            <lightning:button variant="brand" label="Send Tender Invitation" onclick="{!c.chasePrices}" />
+                                                            	<lightning:button variant="brand" label="Send Tender Invitation" onclick="{!c.chasePrices}" />
                                                             </aura:if>
                                                             <aura:if isTrue="{!v.showPolish}">
-                                                            <lightning:button variant="brand" label="Send Tender Invitation Polish" onclick="{!c.chasePolishPrices}" />
+                                                            	<lightning:button variant="brand" label="Send Tender Invitation Polish" onclick="{!c.chasePolishPrices}" />
+                                                            </aura:if>
+                                                            <aura:if isTrue="{!v.showPackageButton}">
+                                                                <div class="slds-p-top_x-small" >
+                                                                    <lightning:button variant="brand" label="Add Package" onclick="{!c.openPackageCloneTab}" /> <!--Added By Prashank-->
+                                                                </div>
                                                             </aura:if>
                                                         </div>
                                                     </div>

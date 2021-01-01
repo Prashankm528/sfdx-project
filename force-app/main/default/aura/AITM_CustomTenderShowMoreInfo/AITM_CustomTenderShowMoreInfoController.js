@@ -93,20 +93,19 @@
            helper.createComponent(component, 'c:AITM_TenderOfferContainer');
        }
     },
-   // Added by Prashank to open a subtab for pakage in console 
-    openCaseCloneTab:function(component, event)
-   {
+    
+     // Added by Prashank to open a subtab for pakage in console 
+    openPackageCloneTab:function(component, event){
         var workspaceAPI = component.find("workspace");
         workspaceAPI.openSubtab({
             pageReference: {
                 "type": "standard__component",
                 "attributes": {
-                    "componentName": "c__AITM_CustomAddPackage"
-
+                    "componentName": "c__AITM_customAddPackage"
                 },
                 "state": {
                   c__crecordId: component.get("v.recordId")
-         }
+         		}
             },
             focus: true
         }).then(function(subtabId){
